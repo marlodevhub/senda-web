@@ -1,26 +1,268 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
+/*
+  Senda — tokens de marca.
+  Raíces/Flores/Ritmo son las 3 dimensiones de autoaceptación (D1/D2/D3);
+  cada color tiene un trabajo fijo y no se intercambia entre sí.
+  Ver Senda/docs/casos-de-uso/ para el significado de cada dimensión.
+*/
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-figtree);
+  --font-display: var(--font-baloo);
+  --font-heading: var(--font-baloo);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+
+  /* las 3 dimensiones + crecimiento, expuestas como utilidades Tailwind */
+  --color-bloom: var(--bloom);
+  --color-bloom-tint: var(--bloom-tint);
+  --color-bloom-ink: var(--bloom-ink);
+  --color-root: var(--root);
+  --color-root-tint: var(--root-tint);
+  --color-root-ink: var(--root-ink);
+  --color-flow: var(--flow);
+  --color-flow-tint: var(--flow-tint);
+  --color-flow-ink: var(--flow-ink);
+  --color-sprout: var(--sprout);
+  --color-sprout-tint: var(--sprout-tint);
+  --color-sprout-ink: var(--sprout-ink);
+
+  /* escala de radios: cada tamaño tiene un trabajo fijo, no es rounded-lg genérico */
+  --radius-sm: 0.75rem;   /* 12px — chips, etiquetas */
+  --radius-md: 1.25rem;   /* 20px — botones, inputs */
+  --radius-lg: 1.75rem;   /* 28px — tarjetas, pantallas */
+  --radius-xl: 1.75rem;
+  --radius-2xl: 2rem;
+  --radius-3xl: 2rem;
+  --radius-4xl: 2rem;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  --paper: #F2F4EA;
+  --paper-raised: #FFFFFF;
+  --paper-sunken: #E7EADD;
+  --ink: #2B2430;
+  --ink-soft: #6B5F6E;
+  --line: #DCDFCF;
+
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --card: var(--paper-raised);
+  --card-foreground: var(--ink);
+  --popover: var(--paper-raised);
+  --popover-foreground: var(--ink);
+
+  --bloom: #E8738A;
+  --bloom-ink: #7A2E3C;
+  --bloom-tint: #FBE4E8;
+  --root: #C77B4D;
+  --root-ink: #6B3A1C;
+  --root-tint: #F6E3D3;
+  --flow: #6E71AA;
+  --flow-ink: #34355C;
+  --flow-tint: #E4E4F3;
+  --sprout: #7A9471;
+  --sprout-ink: #33452E;
+  --sprout-tint: #E4EBDD;
+
+  --primary: var(--bloom);
+  --primary-foreground: #FFFFFF;
+  --secondary: var(--flow-tint);
+  --secondary-foreground: var(--flow-ink);
+  --muted: var(--paper-sunken);
+  --muted-foreground: var(--ink-soft);
+  --accent: var(--sprout-tint);
+  --accent-foreground: var(--sprout-ink);
+  --destructive: #C84A3C;
+  --destructive-foreground: #FFFFFF;
+  --border: var(--line);
+  --input: var(--line);
+  --ring: var(--bloom);
+
+  --chart-1: var(--bloom);
+  --chart-2: var(--root);
+  --chart-3: var(--flow);
+  --chart-4: var(--sprout);
+  --chart-5: var(--ink-soft);
+
+  --radius: 1.25rem;
+
+  --sidebar: var(--paper-sunken);
+  --sidebar-foreground: var(--ink);
+  --sidebar-primary: var(--flow);
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: var(--paper-raised);
+  --sidebar-accent-foreground: var(--ink);
+  --sidebar-border: var(--line);
+  --sidebar-ring: var(--flow);
+
+  --grad-dawn: linear-gradient(135deg, var(--bloom) 0%, var(--root) 100%);
+  --grad-dawn-soft: linear-gradient(135deg, var(--bloom-tint) 0%, var(--root-tint) 100%);
+  --grad-dusk: linear-gradient(135deg, var(--flow) 0%, var(--bloom) 100%);
+
+  --shadow-card: 0 1px 2px rgba(43, 36, 48, .05), 0 16px 32px -14px rgba(43, 36, 48, .16);
+  --shadow-bloom: 0 10px 24px -8px rgba(232, 115, 138, .55);
+  --shadow-flow: 0 10px 24px -8px rgba(110, 113, 170, .45);
+  --shadow-sprout: 0 10px 24px -8px rgba(122, 148, 113, .4);
+
+  color-scheme: light;
+}
+
+.dark {
+  --paper: #211C2B;
+  --paper-raised: #2B2436;
+  --paper-sunken: #190F22;
+  --ink: #F3EEE9;
+  --ink-soft: #C9BFC6;
+  --line: #3B3248;
+
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --card: var(--paper-raised);
+  --card-foreground: var(--ink);
+  --popover: var(--paper-raised);
+  --popover-foreground: var(--ink);
+
+  --bloom: #F0A0AF;
+  --bloom-ink: #FDE3E8;
+  --bloom-tint: #3E2530;
+  --root: #E3A06C;
+  --root-ink: #FBE8D4;
+  --root-tint: #3A2A1D;
+  --flow: #A3A6E0;
+  --flow-ink: #E7E7F7;
+  --flow-tint: #272645;
+  --sprout: #9DBB8E;
+  --sprout-ink: #E4EEDD;
+  --sprout-tint: #223023;
+
+  --primary: var(--bloom);
+  --primary-foreground: #2B1A20;
+  --secondary: var(--flow-tint);
+  --secondary-foreground: var(--flow-ink);
+  --muted: var(--paper-sunken);
+  --muted-foreground: var(--ink-soft);
+  --accent: var(--sprout-tint);
+  --accent-foreground: var(--sprout-ink);
+  --destructive: #E98B83;
+  --destructive-foreground: #2B1210;
+  --border: var(--line);
+  --input: var(--line);
+  --ring: var(--bloom);
+
+  --chart-1: var(--bloom);
+  --chart-2: var(--root);
+  --chart-3: var(--flow);
+  --chart-4: var(--sprout);
+  --chart-5: var(--ink-soft);
+
+  --sidebar: var(--paper-sunken);
+  --sidebar-foreground: var(--ink);
+  --sidebar-primary: var(--flow);
+  --sidebar-primary-foreground: #14132A;
+  --sidebar-accent: var(--paper-raised);
+  --sidebar-accent-foreground: var(--ink);
+  --sidebar-border: var(--line);
+  --sidebar-ring: var(--flow);
+
+  --grad-dawn: linear-gradient(135deg, var(--bloom) 0%, var(--root) 100%);
+  --grad-dawn-soft: linear-gradient(135deg, var(--bloom-tint) 0%, var(--root-tint) 100%);
+  --grad-dusk: linear-gradient(135deg, var(--flow) 0%, var(--bloom) 100%);
+
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, .3), 0 20px 40px -16px rgba(0, 0, 0, .55);
+  --shadow-bloom: 0 10px 26px -8px rgba(240, 160, 175, .35);
+  --shadow-flow: 0 10px 26px -8px rgba(163, 166, 224, .3);
+  --shadow-sprout: 0 10px 26px -8px rgba(157, 187, 142, .3);
+
+  color-scheme: dark;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer utilities {
+  .shadow-card { box-shadow: var(--shadow-card); }
+  .shadow-bloom { box-shadow: var(--shadow-bloom); }
+  .shadow-flow { box-shadow: var(--shadow-flow); }
+  .shadow-sprout { box-shadow: var(--shadow-sprout); }
+
+  .bg-grad-dawn { background-image: var(--grad-dawn); }
+  .bg-grad-dawn-soft { background-image: var(--grad-dawn-soft); }
+  .bg-grad-dusk { background-image: var(--grad-dusk); }
+
+  /* botón con borde degradado — mask trick, sin pseudo-duplicar el componente */
+  .border-grad {
+    position: relative;
+    background-clip: padding-box;
+    border: 2px solid transparent;
+  }
+  .border-grad::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    margin: -2px;
+    border-radius: inherit;
+    background-image: var(--grad-dusk);
+  }
+
+  .btn-hero {
+    background-image: var(--grad-dawn);
+    background-size: 160% 160%;
+    background-position: 0% 50%;
+    transition: background-position .5s ease, box-shadow .25s ease, transform .18s cubic-bezier(.34,1.56,.64,1);
+  }
+  .btn-hero:hover { background-position: 100% 50%; }
+
+  .animate-breathe { animation: senda-breathe 2.4s ease-in-out infinite; }
+  @keyframes senda-breathe {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.07); }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-breathe { animation: none; }
 }
