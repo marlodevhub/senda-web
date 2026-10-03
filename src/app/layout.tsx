@@ -1,4 +1,6 @@
 import type { Metadata, Viewport } from "next";
+import { NextIntlClientProvider } from "next-intl";
+import { Toaster } from "sonner";
 import { baloo, figtree } from "./fonts";
 import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
@@ -25,9 +27,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${baloo.variable} ${figtree.variable} antialiased`}
     >
       <body className="min-h-screen">
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {children}
-        </ThemeProvider>
+        <NextIntlClientProvider>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            {children}
+            <Toaster position="top-center" richColors />
+          </ThemeProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );
