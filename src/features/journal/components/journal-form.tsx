@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -10,7 +10,6 @@ import { cn } from "cn";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent } from "@/components/ui/card";
 import { MoodPicker } from "@/features/journal/components/mood-picker";
 import type { Mood } from "@/components/icons/mood-face";
 import { ContextPicker } from "@/features/journal/components/context-picker";
@@ -18,11 +17,11 @@ import { journalFormSchema, type JournalFormValues } from "@/features/journal/sc
 import { createJournalEntry } from "@/features/journal/api/create-entry";
 import { BffError } from "@/lib/api/client";
 import { errorMessageKey } from "@/lib/api/error-messages";
+import { saveFieldTexts } from "@/lib/field-texts-cache";
 
 export function JournalForm() {
   const t = useTranslations();
   const router = useRouter();
-  const [result, setResult] = useState<{ analysisStatus: string } | null>(null);
   // RS-TR-08: la misma clave en reintentos evita duplicar el registro si el envío se repite.
   const idempotencyKey = useMemo(() => crypto.randomUUID(), []);
 
@@ -43,7 +42,12 @@ export function JournalForm() {
   async function onSubmit(values: JournalFormValues) {
     try {
       const created = await createJournalEntry(values, idempotencyKey);
-      setResult({ analysisStatus: created.analysisStatus });
+      const fieldTexts: Record<string, string> =
+        values.mode === "GUIDED"
+          ? { Q1: values.q1 ?? "", Q2: values.q2 ?? "", Q3: values.q3 ?? "" }
+          : { FREE_TEXT: values.freeText ?? "" };
+      saveFieldTexts(created.journalEntryId, fieldTexts);
+      router.push(`/espejo/${created.journalEntryId}`);
     } catch (error) {
       if (error instanceof BffError) {
         if (error.code === "MISSING_SECOND_QUESTION") {
@@ -59,20 +63,6 @@ export function JournalForm() {
       }
       toast.error(t("common.unexpectedError"));
     }
-  }
-
-  if (result) {
-    return (
-      <Card>
-        <CardContent className="flex flex-col items-center gap-3 pt-2 text-center">
-          <h2 className="font-heading text-lg font-semibold text-foreground">{t("journal.pendingTitle")}</h2>
-          <p className="text-sm text-muted-foreground">{t("journal.pendingBody")}</p>
-          <Button variant="soft" onClick={() => router.push("/inicio")}>
-            {t("journal.backHome")}
-          </Button>
-        </CardContent>
-      </Card>
-    );
   }
 
   return (

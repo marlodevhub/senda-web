@@ -3,6 +3,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { Toaster } from "sonner";
 import { baloo, figtree } from "./fonts";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Providers } from "./providers";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -29,8 +30,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-screen">
         <NextIntlClientProvider>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            {children}
-            <Toaster position="top-center" richColors />
+            <Providers>
+              {children}
+              <Toaster position="top-center" richColors />
+            </Providers>
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>

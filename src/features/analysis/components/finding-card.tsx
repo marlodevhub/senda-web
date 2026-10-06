@@ -1,6 +1,5 @@
 import { cn } from "cn";
-
-export type Dimension = "D1" | "D2" | "D3";
+import type { Dimension } from "@/types/dimension";
 
 const DIMENSION_STYLE: Record<Dimension, string> = {
   D1: "bg-root-tint text-root-ink",

@@ -20,6 +20,11 @@ const CODE_TO_MESSAGE_KEY: Record<string, string> = {
   TEXT_TOO_LONG: "journal.textTooLong",
   DAILY_LIMIT_REACHED: "journal.dailyLimitReached",
   READ_ONLY_PERIOD: "journal.readOnlyPeriod",
+  REWRITE_TOO_SHORT: "rewrite.tooShort",
+  REWRITE_SAME_AS_ORIGINAL: "rewrite.same",
+  MAX_ATTEMPTS_REACHED: "rewrite.maxAttemptsReached",
+  REWRITE_NOT_ALLOWED: "rewrite.notAllowed",
+  FINDING_NOT_FOUND: "rewrite.findingNotFound",
 };
 
 export function errorMessageKey(code: string): string {

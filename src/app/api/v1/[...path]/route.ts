@@ -75,6 +75,10 @@ export async function PUT(request: Request, { params }: RouteContext) {
   return proxy(request, (await params).path);
 }
 
+export async function PATCH(request: Request, { params }: RouteContext) {
+  return proxy(request, (await params).path);
+}
+
 export async function DELETE(request: Request, { params }: RouteContext) {
   return proxy(request, (await params).path);
 }

@@ -70,14 +70,80 @@
     "missingSecondQuestion": "Cuéntanos qué te dijiste a ti mismo.",
     "textTooLong": "Tu registro no puede superar los 2000 caracteres.",
     "dailyLimitReached": "Hiciste muchos registros hoy. Vuelve mañana.",
-    "readOnlyPeriod": "Tus 28 días terminaron. Puedes ver todo lo que escribiste en tu historial.",
-    "pendingTitle": "Tu registro quedó guardado",
-    "pendingBody": "Lo estamos leyendo con calma. Vuelve más tarde para ver tu Espejo.",
-    "backHome": "Volver a Inicio"
+    "readOnlyPeriod": "Tus 28 días terminaron. Puedes ver todo lo que escribiste en tu historial."
   },
   "home": {
     "title": "Hola",
     "subtitle": "¿Listo para escribir tu momento de hoy?",
     "writeCta": "Escribir"
+  },
+  "analysis": {
+    "title": "Espejo",
+    "recognition": "Gracias por escribir hoy. Esto es lo que noté en tu voz interna:",
+    "confirmationQuestion": "¿Esto refleja lo que escribiste?",
+    "confirmYes": "Sí",
+    "confirmPartly": "En parte",
+    "confirmNo": "No",
+    "reinforcement": "Hoy tu voz interna fue amable contigo. Vale la pena notarlo.",
+    "pending": "Tu registro quedó guardado. Estamos leyéndolo; lo verás en tu historial.",
+    "failed": "Tu registro quedó guardado, pero esta vez no pudimos leerlo. Cuenta igual para tu meta.",
+    "care": "Gracias por contarlo. Lo que sientes importa. Si necesitas hablar con alguien ahora, puedes llamar gratis a la Línea 113, opción 5, las 24 horas. En una emergencia, llama al SAMU 106.",
+    "careLine113": "Línea 113, opción 5 (gratis, 24 horas)",
+    "careSamu106": "SAMU 106 (emergencias)",
+    "rewriteThisPhrase": "Reescribir esta frase",
+    "goHome": "Ir al inicio",
+    "goToProgress": "Ver mi progreso",
+    "patterns": {
+      "selfDisqualification": "Aquí te hablaste con dureza por un error.",
+      "errorOvergeneralization": "Aquí un error se volvió un \"siempre\" o un \"nunca\".",
+      "selfPunishment": "Aquí te exigiste pagar por equivocarte.",
+      "worthByPerformance": "Aquí tu valor dependió de un resultado.",
+      "socialComparison": "Aquí te mediste con otra persona.",
+      "needForApproval": "Aquí tu valor dependió de lo que otros piensen.",
+      "shouldAndPerfectionism": "Aquí apareció un \"debería\" muy exigente.",
+      "guiltForResting": "Aquí descansar se sintió como una falta.",
+      "allOrNothing": "Aquí solo había perfecto o fracaso.",
+      "generic": "Aquí tu voz interna sonó autocrítica."
+    },
+    "dimensionMessages": {
+      "d1": {
+        "low": "Hoy noté algún momento duro contigo por un error. Está bien, de eso también se aprende.",
+        "moderate": "Esta semana se repitió hablarte con dureza por tus errores. Vale la pena notarlo.",
+        "high": "Últimamente te has exigido mucho por tus errores. Practicar una frase más amable puede ayudar."
+      },
+      "d2": {
+        "low": "Hoy tu valor pareció depender de un resultado o de otros. Tu valor no depende de eso.",
+        "moderate": "Esta semana se repitió medir tu valor por resultados o comparaciones. Vale la pena notarlo.",
+        "high": "Últimamente tu valor ha dependido mucho de lo externo. Practicar reconocerte puede ayudar."
+      },
+      "d3": {
+        "low": "Hoy apareció algo de exigencia o culpa por descansar. Tu ritmo también cuenta.",
+        "moderate": "Esta semana se repitió la exigencia o la culpa por descansar. Vale la pena notarlo.",
+        "high": "Últimamente te has exigido mucho sin darte descanso. Practicar el equilibrio puede ayudar."
+      }
+    }
+  },
+  "rewrite": {
+    "title": "Di lo mismo como se lo dirías a un buen amigo",
+    "chooseAnotherPhrase": "Elegir otra frase",
+    "guideQuestionsLabel": "Preguntas para pensarlo",
+    "seeExample": "Ver un ejemplo",
+    "textLabel": "Tu reescritura",
+    "submit": "Listo",
+    "submitting": "Guardando…",
+    "tooShort": "Escribe un poco más; con 5 palabras basta.",
+    "same": "Prueba a cambiar alguna palabra; por ahora es la misma frase.",
+    "maxAttemptsReached": "Ya usaste tus 3 intentos con esta frase.",
+    "notAllowed": "No puedes reescribir en este registro.",
+    "findingNotFound": "Esa frase no existe o ya no está disponible.",
+    "softened": "Se suavizó. Así también se puede hablar contigo.",
+    "almost": "Vas bien. ¿Quieres probar una versión un poco más amable?",
+    "stillHard": "Todavía suena exigente. Piensa qué le dirías a un amigo y prueba otra vez.",
+    "pending": "La guardamos. Ahora no pudimos compararla; lo haremos en unos minutos.",
+    "thanks": "Gracias por intentarlo. Practicar esto ya es parte del cambio.",
+    "tryAgain": "Intentar otra vez",
+    "moodAfterLabel": "¿Cómo te sientes ahora?",
+    "saveInJar": "Guardar en mi frasco",
+    "goHome": "Ir al inicio"
   }
 }

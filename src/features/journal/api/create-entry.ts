@@ -3,7 +3,7 @@ import type { JournalContext, JournalFormValues } from "@/features/journal/schem
 
 export type CreateJournalEntryResult = {
   journalEntryId: number;
-  analysisStatus: "PENDING" | "DONE" | "RISK";
+  analysisStatus: "PENDING" | "COMPLETED" | "RISK" | "FAILED";
   mirror: unknown;
 };
 

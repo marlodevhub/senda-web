@@ -1,13 +1,14 @@
 "use client";
 
 import { cn } from "cn";
+import { useTranslations } from "next-intl";
 
 export type ConfirmationAnswer = "YES" | "PARTLY" | "NO";
 
-const OPTIONS: { value: ConfirmationAnswer; label: string }[] = [
-  { value: "YES", label: "Sí" },
-  { value: "PARTLY", label: "En parte" },
-  { value: "NO", label: "No" },
+const OPTIONS: { value: ConfirmationAnswer; labelKey: "analysis.confirmYes" | "analysis.confirmPartly" | "analysis.confirmNo" }[] = [
+  { value: "YES", labelKey: "analysis.confirmYes" },
+  { value: "PARTLY", labelKey: "analysis.confirmPartly" },
+  { value: "NO", labelKey: "analysis.confirmNo" },
 ];
 
 /**
@@ -18,11 +19,13 @@ export function ConfirmationPills({
   value,
   onChange,
 }: {
-  value?: ConfirmationAnswer;
+  value?: ConfirmationAnswer | null;
   onChange: (answer: ConfirmationAnswer) => void;
 }) {
+  const t = useTranslations();
+
   return (
-    <div className="flex gap-1.5" role="radiogroup" aria-label="¿Esto refleja lo que escribiste?">
+    <div className="flex gap-1.5" role="radiogroup" aria-label={t("analysis.confirmationQuestion")}>
       {OPTIONS.map((opt) => {
         const active = value === opt.value;
         return (
@@ -39,7 +42,7 @@ export function ConfirmationPills({
                 : "border-border bg-muted text-muted-foreground hover:border-sprout/50"
             )}
           >
-            {opt.label}
+            {t(opt.labelKey)}
           </button>
         );
       })}
