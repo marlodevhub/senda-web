@@ -1,15 +1,9 @@
 import { z } from "zod";
+import { JOURNAL_CONTEXTS, type JournalContext } from "@/types/journal-context";
 
-export const journalContextSchema = z.enum([
-  "STUDIES",
-  "FAMILY",
-  "FRIENDS_OR_PARTNER",
-  "BODY",
-  "WORK",
-  "OTHER",
-]);
+export const journalContextSchema = z.enum(JOURNAL_CONTEXTS);
 
-export type JournalContext = z.infer<typeof journalContextSchema>;
+export type { JournalContext };
 
 export const journalModeSchema = z.enum(["GUIDED", "FREE"]);
 

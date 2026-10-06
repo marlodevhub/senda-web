@@ -2,18 +2,9 @@
 
 import { cn } from "cn";
 import { useTranslations } from "next-intl";
-import type { JournalContext } from "@/features/journal/schemas/journal.schema";
+import { JOURNAL_CONTEXTS, JOURNAL_CONTEXT_LABEL_KEY, type JournalContext } from "@/types/journal-context";
 
-const OPTIONS: JournalContext[] = ["STUDIES", "FAMILY", "FRIENDS_OR_PARTNER", "BODY", "WORK", "OTHER"];
-
-const LABEL_KEY: Record<JournalContext, string> = {
-  STUDIES: "journal.contextStudies",
-  FAMILY: "journal.contextFamily",
-  FRIENDS_OR_PARTNER: "journal.contextFriendsOrPartner",
-  BODY: "journal.contextBody",
-  WORK: "journal.contextWork",
-  OTHER: "journal.contextOther",
-};
+const OPTIONS: JournalContext[] = [...JOURNAL_CONTEXTS];
 
 /** RN-DI-05: opcional, un solo valor. */
 export function ContextPicker({
@@ -43,7 +34,7 @@ export function ContextPicker({
                 : "border-border bg-muted text-muted-foreground hover:border-flow/50",
             )}
           >
-            {t(LABEL_KEY[option])}
+            {t(JOURNAL_CONTEXT_LABEL_KEY[option])}
           </button>
         );
       })}

@@ -9,14 +9,14 @@ type NavItem = { href: string; label: string; icon: typeof Home; enabled: boolea
 
 /**
  * Las 5 pestañas de la navegación del estudiante (sección 2 de
- * Senda/CLAUDE.md). Progreso/Historial/Perfil todavía no se construyeron
- * — se muestran para que la barra se vea completa, pero no navegan
+ * Senda/CLAUDE.md). Historial/Perfil todavía no se construyeron — se
+ * muestran para que la barra se vea completa, pero no navegan
  * (RS-TR: nunca un enlace roto).
  */
 const ITEMS: NavItem[] = [
   { href: "/inicio", label: "Inicio", icon: Home, enabled: true },
   { href: "/diario", label: "Diario", icon: NotebookPen, enabled: true },
-  { href: "/progreso", label: "Progreso", icon: Sprout, enabled: false },
+  { href: "/progreso", label: "Progreso", icon: Sprout, enabled: true },
   { href: "/historial", label: "Historial", icon: History, enabled: false },
   { href: "/perfil", label: "Perfil", icon: User, enabled: false },
 ];

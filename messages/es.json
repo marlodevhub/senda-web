@@ -145,5 +145,51 @@
     "moodAfterLabel": "¿Cómo te sientes ahora?",
     "saveInJar": "Guardar en mi frasco",
     "goHome": "Ir al inicio"
+  },
+  "progress": {
+    "title": "Progreso",
+    "tabGarden": "Jardín",
+    "tabStats": "Mis datos",
+    "dimensionShort": {
+      "d1": "Errores",
+      "d2": "Valoración",
+      "d3": "Exigencia"
+    },
+    "garden": {
+      "empty": "Tu jardín empieza con tu primer registro.",
+      "general": "Tu jardín",
+      "stage": "Etapa {stage}",
+      "zoneRaices": "Crece cada vez que le hablas con calma a un error.",
+      "zoneFlores": "Crece cada vez que te valoras sin condiciones.",
+      "zoneRitmo": "Crece cada vez que te exiges sin castigarte.",
+      "specialsTitle": "Esta semana",
+      "specialS1": "Banca de la semana 1",
+      "specialS2": "Farol de la semana 2",
+      "specialS3": "Mariposas de la semana 3",
+      "specialS4": "Fuente de la semana 4"
+    },
+    "stats": {
+      "notEnoughData": "Aún estamos reuniendo tus datos. Vuelve después de tu tercer registro.",
+      "noPairs": "Cuando reescribas una frase y marques cómo te sientes después, verás aquí la diferencia.",
+      "dayLabel": "Día {day}",
+      "weekLabel": "Semana {week}",
+      "moodTitle": "Mi ánimo",
+      "moodExplanation": "Así te has sentido estos días.",
+      "beforeAfterTitle": "Antes y después de reescribir",
+      "beforeAfterExplanation": "Así cambia cómo te sientes cuando te hablas con amabilidad.",
+      "beforeAfterBefore": "Antes",
+      "beforeAfterAfter": "Después",
+      "transformedTitle": "Frases transformadas",
+      "transformedExplanation": "Las frases que ya trabajaste.",
+      "transformedDetected": "Detectadas",
+      "transformedRewritten": "Reescritas",
+      "voiceByWeekTitle": "Mi voz interna por semana",
+      "voiceByWeekExplanation": "Qué tipo de autocrítica apareció cada semana.",
+      "byContextTitle": "Dónde aparece",
+      "byContextExplanation": "En qué situaciones tu voz interna se pone más exigente.",
+      "consistencyTitle": "Mi constancia",
+      "consistencyExplanation": "Cuántos días escribiste cada semana.",
+      "consistencyGoal": "Meta"
+    }
   }
 }
