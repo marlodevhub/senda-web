@@ -75,7 +75,8 @@
   "home": {
     "title": "Hola",
     "subtitle": "¿Listo para escribir tu momento de hoy?",
-    "writeCta": "Escribir"
+    "writeCta": "Escribir",
+    "seeMessages": "Ver mis mensajes"
   },
   "analysis": {
     "title": "Espejo",
@@ -191,5 +192,27 @@
       "consistencyExplanation": "Cuántos días escribiste cada semana.",
       "consistencyGoal": "Meta"
     }
+  },
+  "guidance": {
+    "title": "Mensajes para ti",
+    "empty": "Aún no tienes mensajes.",
+    "actionWrite": "Escribir",
+    "actionRewrite": "Reescribir"
+  },
+  "profile": {
+    "title": "Perfil",
+    "withdrawCta": "Retirarme del estudio",
+    "withdrawalExplanation": "Puedes retirarte cuando quieras, sin explicar por qué. Elige qué hacemos con tus datos.",
+    "withdrawalOptionsLabel": "Qué hacer con mis datos",
+    "keepDataTitle": "Conservar mis datos para el estudio",
+    "keepDataDescription": "Tus registros y reescrituras se quedan, pero borramos tu correo y pierdes el acceso.",
+    "deleteAllTitle": "Borrar todo",
+    "deleteAllDescription": "En hasta 7 días eliminamos tus textos, análisis, reescrituras y mensajes. Solo queda tu código y la fecha de retiro.",
+    "confirmPasswordLabel": "Confirma con tu contraseña",
+    "withdrawSubmit": "Retirarme del estudio",
+    "withdrawing": "Retirando…",
+    "withdrawalDone": "Te retiraste del estudio. Gracias por el tiempo que le dedicaste.",
+    "incorrectPassword": "Tu contraseña actual no es correcta.",
+    "withdrawalNotAllowed": "No puedes retirarte en este momento."
   }
 }

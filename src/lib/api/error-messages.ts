@@ -25,6 +25,8 @@ const CODE_TO_MESSAGE_KEY: Record<string, string> = {
   MAX_ATTEMPTS_REACHED: "rewrite.maxAttemptsReached",
   REWRITE_NOT_ALLOWED: "rewrite.notAllowed",
   FINDING_NOT_FOUND: "rewrite.findingNotFound",
+  INCORRECT_PASSWORD: "profile.incorrectPassword",
+  WITHDRAWAL_NOT_ALLOWED: "profile.withdrawalNotAllowed",
 };
 
 export function errorMessageKey(code: string): string {

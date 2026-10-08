@@ -5,4 +5,5 @@ export const queryKeys = {
     ["rewrite-guide", journalEntryId, findingId ?? null] as const,
   garden: () => ["garden"] as const,
   stats: () => ["stats"] as const,
+  messages: () => ["messages"] as const,
 };

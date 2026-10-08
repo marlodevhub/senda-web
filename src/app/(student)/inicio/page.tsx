@@ -20,6 +20,9 @@ export default async function InicioPage() {
       <Button asChild variant="hero" size="xl">
         <Link href="/diario">{t("home.writeCta")}</Link>
       </Button>
+      <Button asChild variant="soft">
+        <Link href="/mensajes">{t("home.seeMessages")}</Link>
+      </Button>
       <LogoutButton />
     </div>
   );
