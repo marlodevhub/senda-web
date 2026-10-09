@@ -6,4 +6,7 @@ export const queryKeys = {
   garden: () => ["garden"] as const,
   stats: () => ["stats"] as const,
   messages: () => ["messages"] as const,
+  adminCohorts: () => ["admin-cohorts"] as const,
+  adminParticipants: (cohortId: number) => ["admin-participants", cohortId] as const,
+  adminAdherence: (cohortId: number) => ["admin-adherence", cohortId] as const,
 };
