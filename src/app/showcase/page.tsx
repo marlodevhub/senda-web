@@ -8,7 +8,7 @@ import {
   PendingPhraseCard,
 } from "@/features/home/components/pending-phrase-card";
 import { WeeklyGoal } from "@/features/home/components/weekly-goal";
-import { FindingCard } from "@/features/analysis/components/finding-card";
+import { FindingCard } from "@/components/feedback/finding-card";
 import {
   ConfirmationPills,
   type ConfirmationAnswer,

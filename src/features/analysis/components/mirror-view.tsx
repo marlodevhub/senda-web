@@ -7,10 +7,10 @@ import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useMirror, useConfirmMirror } from "@/features/analysis/api/use-mirror";
 import type { MirrorFinding, AnalysisField } from "@/features/analysis/api/get-mirror";
-import { FindingCard } from "@/features/analysis/components/finding-card";
+import { FindingCard } from "@/components/feedback/finding-card";
 import { ConfirmationPills, type ConfirmationAnswer } from "@/features/analysis/components/confirmation-pills";
-import { CareMessage } from "@/features/analysis/components/care-message";
-import { patternLabelKey } from "@/features/analysis/pattern-labels";
+import { CareMessage } from "@/components/feedback/care-message";
+import { patternLabelKey } from "@/lib/pattern-labels";
 
 /** Las 3 preguntas del Diario guardan el texto por campo (RS-ES-06). */
 export type JournalFieldTexts = Partial<Record<AnalysisField, string>>;

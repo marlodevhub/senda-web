@@ -38,3 +38,17 @@ export const loginFormSchema = z.object({
 });
 
 export type LoginFormValues = z.infer<typeof loginFormSchema>;
+
+export const recoverFormSchema = z
+  .object({
+    code: activationCodeSchema,
+    recoveryCode: z.string().trim().toUpperCase().min(1, "Escribe tu código de recuperación."),
+    newPassword: passwordSchema,
+    newPasswordConfirm: z.string(),
+  })
+  .refine((data) => data.newPassword === data.newPasswordConfirm, {
+    message: "Las contraseñas no coinciden.",
+    path: ["newPasswordConfirm"],
+  });
+
+export type RecoverFormValues = z.infer<typeof recoverFormSchema>;

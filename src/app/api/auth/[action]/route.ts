@@ -23,6 +23,8 @@ export async function POST(request: Request, { params }: { params: Promise<{ act
       return handleActivate(request);
     case "login":
       return handleLogin(request);
+    case "recover":
+      return handleRecover(request);
     case "logout":
       return handleLogout();
     default:
@@ -36,6 +38,22 @@ export async function POST(request: Request, { params }: { params: Promise<{ act
 async function handleActivate(request: Request) {
   const body = await request.text();
   const res = await backendFetch("/api/v1/auth/activate", {
+    method: "POST",
+    headers: forwardedHeaders(request),
+    body,
+  });
+  const data = await readJsonSafely<ActivationResult & BackendErrorBody>(res);
+  if (!res.ok || !data) {
+    return NextResponse.json(data, { status: res.status });
+  }
+
+  await setStudentSession({ token: data.token, refreshToken: data.refreshToken });
+  return NextResponse.json({ recoveryCode: data.recoveryCode }, { status: res.status });
+}
+
+async function handleRecover(request: Request) {
+  const body = await request.text();
+  const res = await backendFetch("/api/v1/auth/recover", {
     method: "POST",
     headers: forwardedHeaders(request),
     body,

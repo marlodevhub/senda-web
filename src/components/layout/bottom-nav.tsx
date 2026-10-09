@@ -7,17 +7,12 @@ import { Home, NotebookPen, Sprout, History, User } from "lucide-react";
 
 type NavItem = { href: string; label: string; icon: typeof Home; enabled: boolean };
 
-/**
- * Las 5 pestañas de la navegación del estudiante (sección 2 de
- * Senda/CLAUDE.md). Historial todavía no se construyó — se muestra
- * para que la barra se vea completa, pero no navega (RS-TR: nunca un
- * enlace roto).
- */
+/** Las 5 pestañas de la navegación del estudiante (sección 2 de Senda/CLAUDE.md). */
 const ITEMS: NavItem[] = [
   { href: "/inicio", label: "Inicio", icon: Home, enabled: true },
   { href: "/diario", label: "Diario", icon: NotebookPen, enabled: true },
   { href: "/progreso", label: "Progreso", icon: Sprout, enabled: true },
-  { href: "/historial", label: "Historial", icon: History, enabled: false },
+  { href: "/historial", label: "Historial", icon: History, enabled: true },
   { href: "/perfil", label: "Perfil", icon: User, enabled: true },
 ];
 

@@ -27,6 +27,9 @@ const CODE_TO_MESSAGE_KEY: Record<string, string> = {
   FINDING_NOT_FOUND: "rewrite.findingNotFound",
   INCORRECT_PASSWORD: "profile.incorrectPassword",
   WITHDRAWAL_NOT_ALLOWED: "profile.withdrawalNotAllowed",
+  RECOVERY_FAILED: "access.recoverError",
+  SAME_AS_CURRENT_PASSWORD: "access.recoverSamePassword",
+  JOURNAL_ENTRY_NOT_FOUND: "common.notFound",
 };
 
 export function errorMessageKey(code: string): string {

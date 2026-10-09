@@ -5,6 +5,8 @@ import { useTranslations } from "next-intl";
  * RN-ES-11: registro en RIESGO → solo este mensaje neutro. Nada de
  * hallazgos, confirmación ni invitación a reescribir; nadie es
  * notificado (RN-TR-03) — la app solo ofrece los 2 números de siempre.
+ * Compartido porque lo usan `analysis` (Espejo en vivo) y `journal`
+ * (detalle del historial, CU-11, RN-HI-04).
  */
 export function CareMessage() {
   const t = useTranslations();

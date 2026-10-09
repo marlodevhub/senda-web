@@ -2,6 +2,8 @@
  * RN-ES-13: etiqueta amable fija por patrón. El backend solo manda el id
  * en inglés (p. ej. "self_disqualification"); el texto que ve el
  * estudiante vive en messages/es.json, como el resto de los textos de UI.
+ * Compartido porque lo usan `analysis` (Espejo en vivo) y `journal`
+ * (detalle del historial, CU-11).
  */
 const PATTERN_KEY: Record<string, string> = {
   self_disqualification: "selfDisqualification",

@@ -8,9 +8,10 @@ const DIMENSION_STYLE: Record<Dimension, string> = {
 };
 
 /**
- * Fragmento resaltado del Espejo (CU-03): el texto que escribió el
- * estudiante + su etiqueta amable (RN-ES-13) — nunca el nombre técnico
- * del patrón ("autodescalificación"), siempre la etiqueta en lenguaje natural.
+ * Fragmento resaltado del Espejo (CU-03) o del detalle del historial
+ * (CU-11): el texto que escribió el estudiante + su etiqueta amable
+ * (RN-ES-13) — nunca el nombre técnico del patrón, siempre la etiqueta
+ * en lenguaje natural. Compartido porque lo usan `analysis` y `journal`.
  */
 export function FindingCard({
   fragment,

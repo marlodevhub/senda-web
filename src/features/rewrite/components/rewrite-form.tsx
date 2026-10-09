@@ -16,7 +16,7 @@ import { useSubmitRewrite } from "@/features/rewrite/api/use-submit-rewrite";
 import { useRewriteFeedback } from "@/features/rewrite/api/use-rewrite-feedback";
 import { rewriteFormSchema, type RewriteFormValues } from "@/features/rewrite/schemas/rewrite.schema";
 import { RewriteResult } from "@/features/rewrite/components/rewrite-result";
-import { CareMessage } from "@/features/analysis/components/care-message";
+import { CareMessage } from "@/components/feedback/care-message";
 import type { SubmitRewriteResult } from "@/features/rewrite/api/submit-rewrite";
 import { BffError } from "@/lib/api/client";
 import { errorMessageKey } from "@/lib/api/error-messages";
