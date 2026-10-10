@@ -2,7 +2,7 @@
 
 Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS 4, shadcn/ui. Pantallas del estudiante (móvil) y panel del administrador (escritorio), y hace de **BFF**: guarda la sesión en cookies httpOnly y reenvía al backend. Ver [../CLAUDE.md](../CLAUDE.md) para la visión general (casos de uso, reglas RN/RS, roadmap).
 
-El navegador **nunca** llama directo a `senda-api` ni a `senda-pln` — solo al BFF propio (`/api/*` de este repo).
+El navegador **nunca** llama directo a `senda-api` ni al proveedor de LLM — solo al BFF propio (`/api/*` de este repo).
 
 ## 1. Tecnologías
 

@@ -85,14 +85,22 @@ export function EntryDetail({ journalEntryId }: { journalEntryId: number }) {
 
   const isRisk = entry.status === "RISK";
   const findings = entry.mirror?.findings ?? [];
+  const canRewrite = !isRisk && entry.status === "COMPLETED" && entry.rewrites.length < 2;
 
   return (
     <div className="flex flex-col gap-5">
-      <div className="flex items-center gap-3 rounded-xl bg-card p-3 shadow-card">
-        <MoodFace mood={entry.moodBefore as Mood} active className="size-10 text-flow" />
-        <span className="text-sm font-semibold text-foreground">
-          {t("history.dayLabel", { day: entry.interventionDay })}
-        </span>
+      <div className="flex items-center justify-between gap-3 rounded-xl bg-card p-3 shadow-card">
+        <div className="flex items-center gap-3">
+          <MoodFace mood={entry.moodBefore as Mood} active className="size-10 text-flow" />
+          <span className="text-sm font-semibold text-foreground">
+            {t("history.dayLabel", { day: entry.interventionDay })}
+          </span>
+        </div>
+        {canRewrite && (
+          <Button variant="hero" onClick={() => router.push(`/reescritura/${entry.id}`)}>
+            {t("home.pendingRewrite")}
+          </Button>
+        )}
       </div>
 
       {entry.mode === "GUIDED" ? (

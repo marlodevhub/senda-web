@@ -86,7 +86,21 @@
     "title": "Hola",
     "subtitle": "¿Listo para escribir tu momento de hoy?",
     "writeCta": "Escribir",
-    "seeMessages": "Ver mis mensajes"
+    "seeMessages": "Ver mis mensajes",
+    "greeting": "Hola. Hoy es tu día {day} de 28.",
+    "checkinQuestion": "¿Cómo estás hoy?",
+    "pendingLabel": "Frase pendiente",
+    "pendingRewrite": "Reescribir ✦",
+    "noPending": "No tienes frases pendientes. ¿Qué te dijiste hoy?",
+    "goalLabel": "Meta de la semana",
+    "goalMet": "Cumpliste tu meta de esta semana.",
+    "goalCount": "Esta semana escribiste {days} de {goal} días.",
+    "newMessages": "Tienes mensajes nuevos.",
+    "newSummary": "Ya está tu resumen de la semana.",
+    "finished": "Terminaste tus 28 días. Gracias por acompañarte así. Solo falta un último cuestionario.",
+    "posttestCta": "Responder el cuestionario final",
+    "goToProgress": "Ver mi progreso",
+    "goToHistory": "Ver mi historial"
   },
   "analysis": {
     "title": "Espejo",
