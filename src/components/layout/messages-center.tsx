@@ -62,8 +62,10 @@ export function MessagesCenterProvider({ children }: { children: React.ReactNode
       <Drawer open={isOpen} onOpenChange={setIsOpen} direction={isWide ? "right" : "bottom"}>
         <DrawerContent
           data-sheen={glass.sheen}
-          style={glassStyle(glass)}
-          className="glass data-[vaul-drawer-direction=bottom]:max-h-[85vh] data-[vaul-drawer-direction=right]:w-[min(26rem,100vw)] data-[vaul-drawer-direction=right]:sm:max-w-none"
+          // Flotante como el dock: separado de los bordes; vaul parte de fuera de la pantalla contando ese margen
+          // y sin su relleno ::after, que solo sirve para un panel pegado al borde.
+          style={{ ...glassStyle(glass), "--initial-transform": "calc(100% + 2rem)" } as React.CSSProperties}
+          className="glass rounded-[1.75rem] shadow-card after:hidden data-[vaul-drawer-direction=bottom]:inset-x-3 data-[vaul-drawer-direction=bottom]:bottom-[max(0.75rem,env(safe-area-inset-bottom))] data-[vaul-drawer-direction=bottom]:max-h-[85vh] data-[vaul-drawer-direction=bottom]:rounded-[1.75rem] data-[vaul-drawer-direction=right]:inset-y-3 data-[vaul-drawer-direction=right]:right-3 data-[vaul-drawer-direction=right]:w-[min(26rem,calc(100vw-1.5rem))] data-[vaul-drawer-direction=right]:rounded-[1.75rem] data-[vaul-drawer-direction=right]:sm:max-w-none"
         >
           <DrawerHeader className="flex-row items-center justify-between gap-2 text-left group-data-[vaul-drawer-direction=bottom]/drawer-content:text-left md:pt-6">
             <div className="flex flex-col gap-0.5">
@@ -77,7 +79,7 @@ export function MessagesCenterProvider({ children }: { children: React.ReactNode
               <X className="size-5" aria-hidden />
             </DrawerClose>
           </DrawerHeader>
-          <div className="overflow-y-auto px-4 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+          <div className="overflow-y-auto px-4 pb-4">
             <MessageInbox />
           </div>
         </DrawerContent>

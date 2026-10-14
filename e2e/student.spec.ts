@@ -205,7 +205,7 @@ test("en tablet la barra lateral es un riel de iconos con nombres accesibles", a
 test("los mensajes para ti se abren en un drawer: desde abajo en móvil, desde la derecha en escritorio", async ({ page }) => {
   await activateAndConsent(page);
 
-  // Móvil: la bandeja sube desde abajo, sobre el vidrio del dock.
+  // Móvil: la bandeja sube desde abajo y flota, sobre el vidrio del dock.
   await page.getByRole("button", { name: "Mensajes para ti" }).click();
   const drawer = page.getByRole("dialog", { name: "Mensajes para ti" });
   await expect(drawer).toBeVisible();
@@ -216,13 +216,13 @@ test("los mensajes para ti se abren en un drawer: desde abajo en móvil, desde l
   await drawer.getByRole("button", { name: "Cerrar mensajes" }).click();
   await expect(drawer).toBeHidden();
 
-  // Escritorio: la misma bandeja entra desde la derecha.
+  // Escritorio: la misma bandeja entra desde la derecha, flotando a 12 px del borde.
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.getByRole("button", { name: "Mensajes para ti" }).click();
   await expect(drawer).toHaveAttribute("data-vaul-drawer-direction", "right");
   await drawer.evaluate((el) => Promise.all(el.getAnimations().map((a) => a.finished)));
   const box = await drawer.boundingBox();
-  expect((box?.x ?? 0) + (box?.width ?? 0)).toBeCloseTo(1440, 0);
+  expect((box?.x ?? 0) + (box?.width ?? 0)).toBeCloseTo(1440 - 12, 0);
 });
 
 test("un mensaje nuevo se avisa con un toast una sola vez y abre la bandeja", async ({ page }) => {
