@@ -7,6 +7,7 @@ export const queryKeys = {
   profile: () => ["profile"] as const,
   garden: () => ["garden"] as const,
   stats: () => ["stats"] as const,
+  jar: () => ["jar"] as const,
   messages: () => ["messages"] as const,
   history: (filters: { week?: number; dimension?: string; context?: string }) =>
     ["history", filters.week ?? null, filters.dimension ?? null, filters.context ?? null] as const,

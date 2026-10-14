@@ -217,13 +217,24 @@
       "consistencyTitle": "Mi constancia",
       "consistencyExplanation": "Cuántos días escribiste cada semana.",
       "consistencyGoal": "Meta"
+    },
+    "tabJar": "Frasco",
+    "jar": {
+      "empty": "Tu frasco está vacío. Cuando reescribas una frase, toca 'Guardar en mi frasco' para tenerla aquí.",
+      "showOrigin": "Ver de dónde salió",
+      "favorite": "Marcar como favorita",
+      "unfavorite": "Quitar de favoritas",
+      "remove": "Quitar del frasco",
+      "removeConfirmTitle": "Quitar del frasco",
+      "removeConfirm": "¿Quitar esta frase del frasco? Seguirá en tu historial."
     }
   },
   "guidance": {
     "title": "Mensajes para ti",
     "empty": "Aún no tienes mensajes.",
     "actionWrite": "Escribir",
-    "actionRewrite": "Reescribir"
+    "actionRewrite": "Reescribir",
+    "actionJar": "Leer una frase de mi frasco"
   },
   "history": {
     "title": "Historial",

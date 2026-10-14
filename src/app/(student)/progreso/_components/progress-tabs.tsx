@@ -8,9 +8,10 @@ import { cn } from "cn";
 const TABS = [
   { href: "/progreso/jardin", labelKey: "progress.tabGarden" },
   { href: "/progreso/datos", labelKey: "progress.tabStats" },
+  { href: "/progreso/frasco", labelKey: "progress.tabJar" },
 ] as const;
 
-/** CU-07/CU-08: cambia entre Jardín y Mis datos sin salir de Progreso. */
+/** CU-07/CU-08/CU-09: cambia entre Jardín, Mis datos y Frasco sin salir de Progreso. */
 export function ProgressTabs() {
   const pathname = usePathname();
   const t = useTranslations();

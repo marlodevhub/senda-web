@@ -21,9 +21,17 @@ function actionHref(message: Message): string | null {
   if (message.actionType === "REWRITE" && message.actionJournalEntryId && message.actionFindingId) {
     return `/reescritura/${message.actionJournalEntryId}?findingId=${message.actionFindingId}`;
   }
-  // JAR_PHRASE: CU-09 (Frasco) todavía no se construyó — sin enlace roto (RS-TR).
+  if (message.actionType === "JAR_PHRASE") {
+    return "/progreso/frasco";
+  }
   return null;
 }
+
+const ACTION_LABEL_KEY: Record<string, string> = {
+  WRITE: "guidance.actionWrite",
+  REWRITE: "guidance.actionRewrite",
+  JAR_PHRASE: "guidance.actionJar",
+};
 
 /** CU-14: una tarjeta de la bandeja; tocarla la marca como abierta (RS-AA-06). */
 export function MessageCard({ message }: { message: Message }) {
@@ -57,7 +65,7 @@ export function MessageCard({ message }: { message: Message }) {
         {href && (
           <Button variant="soft" size="sm" className="self-start" asChild>
             <Link href={href} onClick={(e) => e.stopPropagation()}>
-              {t(message.actionType === "WRITE" ? "guidance.actionWrite" : "guidance.actionRewrite")}
+              {t(ACTION_LABEL_KEY[message.actionType] ?? "guidance.actionRewrite")}
             </Link>
           </Button>
         )}
