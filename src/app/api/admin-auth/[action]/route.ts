@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { rejectCrossOrigin } from "@/lib/server/same-origin";
 import { backendFetch, forwardedHeaders, readJsonSafely, type BackendErrorBody } from "@/lib/server/backend";
 import {
   clearAdminChallenge,
@@ -14,6 +15,10 @@ type SessionResult = { token: string };
 
 /** BFF de sesión del administrador (CU-23): el navegador nunca ve el desafío ni el JWT, solo cookies httpOnly. */
 export async function POST(request: Request, { params }: { params: Promise<{ action: string }> }) {
+  const crossOrigin = rejectCrossOrigin(request);
+  if (crossOrigin) {
+    return crossOrigin;
+  }
   const { action } = await params;
 
   switch (action) {

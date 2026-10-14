@@ -16,6 +16,17 @@ export function saveFieldTexts(journalEntryId: number, texts: Record<string, str
   }
 }
 
+/** Al cerrar sesión o si expira: no deja textos de esta persona en la pestaña. */
+export function clearFieldTexts(): void {
+  try {
+    Object.keys(sessionStorage)
+      .filter((key) => key.startsWith(PREFIX))
+      .forEach((key) => sessionStorage.removeItem(key));
+  } catch {
+    // Sin sessionStorage no hay nada que borrar.
+  }
+}
+
 export function readFieldTexts(journalEntryId: number): Record<string, string> {
   try {
     const raw = sessionStorage.getItem(`${PREFIX}${journalEntryId}`);

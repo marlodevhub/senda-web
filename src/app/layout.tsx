@@ -9,6 +9,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Senda",
   description: "Un acompañamiento diario para hablarte con más amabilidad.",
+  robots: { index: false, follow: false },
 };
 
 export const viewport: Viewport = {

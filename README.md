@@ -26,3 +26,15 @@ npm run dev                  # http://localhost:3000
 
 Las pruebas E2E levantan su propio entorno aislado: un LLM simulado, `senda-api` con la base `senda_e2e`
 (se recrea en cada corrida) y este frontend compilado, en puertos distintos a los de desarrollo.
+
+## Despliegue
+
+Imagen: `docker build -t senda-web .` (Node 24, salida `standalone`, sin privilegios, puerto 3000).
+
+| Variable | Qué es |
+| --- | --- |
+| `BACKEND_URL` | URL **interna** de senda-api (el navegador nunca la ve) |
+
+Se sirve detrás de HTTPS: en producción las cookies de sesión son `Secure` y la app envía HSTS, CSP y el
+resto de cabeceras de seguridad (`next.config.ts`). El BFF rechaza peticiones que cambian datos desde otro
+origen. La app no se indexa en buscadores (`noindex` y `robots.txt`).

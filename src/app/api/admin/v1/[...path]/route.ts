@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { rejectCrossOrigin } from "@/lib/server/same-origin";
 import { backendFetch, forwardedHeaders } from "@/lib/server/backend";
 import { getAdminSession } from "@/lib/server/admin-session";
 
@@ -11,6 +12,10 @@ import { getAdminSession } from "@/lib/server/admin-session";
  * descarga de la exportación.
  */
 async function proxy(request: Request, pathSegments: string[]) {
+  const crossOrigin = rejectCrossOrigin(request);
+  if (crossOrigin) {
+    return crossOrigin;
+  }
   const url = new URL(request.url);
   const targetPath = `/api/v1/admin/${pathSegments.join("/")}${url.search}`;
   const token = await getAdminSession();

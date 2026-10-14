@@ -233,6 +233,27 @@ test("la barra de vidrio se ajusta desde Perfil y se recuerda", async ({ page })
   await expectAccessible(page);
 });
 
+test("el diario guarda un borrador y lo recupera; al cerrar sesión se borra (RS-DI-03)", async ({ page }) => {
+  await activateAndConsent(page);
+  await page.goto("/diario");
+  await page.getByRole("radio", { name: "Libre" }).click();
+  await page.getByLabel("Escribe lo que quieras contar").fill("Un texto que todavía no envío");
+
+  // El borrador se guarda cada 10 s en este dispositivo.
+  await expect
+    .poll(() => page.evaluate(() => window.localStorage.getItem("senda:journal-draft")), { timeout: 15_000 })
+    .toContain("Un texto que todavía no envío");
+  await page.reload();
+  await expect(page.getByText("Recuperamos lo que estabas escribiendo.")).toBeVisible();
+  await expect(page.getByLabel("Escribe lo que quieras contar")).toHaveValue("Un texto que todavía no envío");
+
+  // Privacidad: al cerrar sesión no queda texto en el navegador.
+  await page.goto("/perfil");
+  await page.getByRole("button", { name: "Cerrar sesión" }).click();
+  await expect(page).toHaveURL(/\/login/);
+  expect(await page.evaluate(() => window.localStorage.getItem("senda:journal-draft"))).toBeNull();
+});
+
 test("sin sesión, las pantallas del estudiante llevan al inicio de sesión", async ({ page }) => {
   for (const route of ["/inicio", "/progreso/frasco", "/perfil", "/mensajes"]) {
     await page.goto(route);

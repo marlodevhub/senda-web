@@ -1,3 +1,5 @@
+import { clearLocalStudentData } from "@/lib/local-student-data";
+
 export class BffError extends Error {
   constructor(
     public status: number,
@@ -24,6 +26,9 @@ function redirectIfSessionLost(path: string, status: number, code: string | unde
   // (caché de TanStack Query incluida); este módulo tampoco tiene acceso al router.
   /* eslint-disable @next/next/no-location-assign-relative-destination */
   if (status === 401 && (code === "UNAUTHENTICATED" || code === "INVALID_REFRESH_TOKEN")) {
+    if (!isAdmin) {
+      clearLocalStudentData();
+    }
     window.location.assign(isAdmin ? "/admin/login" : "/login");
   } else if (!isAdmin && status === 403 && code === "CONSENT_REQUIRED") {
     window.location.assign("/consentimiento");

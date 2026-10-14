@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { rejectCrossOrigin } from "@/lib/server/same-origin";
 import { backendFetch, forwardedHeaders, readJsonSafely } from "@/lib/server/backend";
 import { clearStudentSession, getStudentSession, setStudentSession } from "@/lib/server/session";
 
@@ -10,6 +11,10 @@ import { clearStudentSession, getStudentSession, setStudentSession } from "@/lib
  * 30 min (RS-AC-05).
  */
 async function proxy(request: Request, pathSegments: string[]) {
+  const crossOrigin = rejectCrossOrigin(request);
+  if (crossOrigin) {
+    return crossOrigin;
+  }
   const url = new URL(request.url);
   const targetPath = `/api/v1/${pathSegments.join("/")}${url.search}`;
   const { token, refreshToken } = await getStudentSession();

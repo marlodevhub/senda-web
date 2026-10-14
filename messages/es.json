@@ -77,7 +77,9 @@
     "missingSecondQuestion": "Cuéntanos qué te dijiste a ti mismo.",
     "textTooLong": "Tu registro no puede superar los 2000 caracteres.",
     "dailyLimitReached": "Hiciste muchos registros hoy. Vuelve mañana.",
-    "readOnlyPeriod": "Tus 28 días terminaron. Puedes ver todo lo que escribiste en tu historial."
+    "readOnlyPeriod": "Tus 28 días terminaron. Puedes ver todo lo que escribiste en tu historial.",
+    "draftRecovered": "Recuperamos lo que estabas escribiendo.",
+    "offline": "Parece que no hay conexión. Tu texto quedó guardado en este dispositivo; envíalo cuando vuelvas a tener señal."
   },
   "home": {
     "writeCta": "Escribir",
@@ -514,5 +516,13 @@
     "startDateRequired": "Elige una fecha de inicio.",
     "codesMin": "Al menos 1 código.",
     "codesMax": "Como máximo 150 códigos."
+  },
+  "errors": {
+    "notFoundTitle": "No encontramos esta página",
+    "notFoundBody": "Puede que el enlace esté mal escrito o que lo que buscabas ya no exista.",
+    "goHome": "Ir al inicio",
+    "unexpectedTitle": "Algo salió mal",
+    "unexpectedBody": "No es tu culpa. Vuelve a intentarlo en un momento; lo que ya guardaste está a salvo.",
+    "retry": "Intentar de nuevo"
   }
 }

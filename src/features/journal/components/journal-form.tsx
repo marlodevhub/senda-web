@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm, useWatch, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,6 +19,7 @@ import { createJournalEntry } from "@/features/journal/api/create-entry";
 import { BffError } from "@/lib/api/client";
 import { errorMessageKey } from "@/lib/api/error-messages";
 import { saveFieldTexts } from "@/lib/field-texts-cache";
+import { DRAFT_INTERVAL_MS, clearDraft, hasText, loadDraft, saveDraft } from "@/features/journal/draft";
 
 export function JournalForm() {
   const t = useTranslations();
@@ -32,10 +33,26 @@ export function JournalForm() {
     handleSubmit,
     formState: { errors, isSubmitting },
     setError,
+    getValues,
+    reset,
   } = useForm<JournalFormValues>({
     resolver: zodResolver(journalFormSchema),
     defaultValues: { mode: "GUIDED" },
   });
+  const [draftRecovered, setDraftRecovered] = useState(false);
+
+  // RS-DI-03: recupera el borrador al abrir y lo guarda cada 10 s.
+  useEffect(() => {
+    const draft = loadDraft();
+    if (draft && hasText(draft)) {
+      reset({ mode: "GUIDED", ...draft });
+      // El borrador solo existe en el navegador: leerlo después de montar evita un desajuste de hidratación.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setDraftRecovered(true);
+    }
+    const interval = window.setInterval(() => saveDraft(getValues()), DRAFT_INTERVAL_MS);
+    return () => window.clearInterval(interval);
+  }, [getValues, reset]);
 
   const mode = useWatch({ control, name: "mode" });
 
@@ -47,6 +64,7 @@ export function JournalForm() {
           ? { Q1: values.q1 ?? "", Q2: values.q2 ?? "", Q3: values.q3 ?? "" }
           : { FREE_TEXT: values.freeText ?? "" };
       saveFieldTexts(created.journalEntryId, fieldTexts);
+      clearDraft();
       router.push(`/espejo/${created.journalEntryId}`);
     } catch (error) {
       if (error instanceof BffError) {
@@ -61,12 +79,19 @@ export function JournalForm() {
         toast.error(t(errorMessageKey(error.code)));
         return;
       }
-      toast.error(t("common.unexpectedError"));
+      // CU-01 5b: sin conexión, el texto no se pierde (queda en el borrador).
+      saveDraft(getValues());
+      toast.error(t(navigator.onLine ? "common.unexpectedError" : "journal.offline"));
     }
   }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5" noValidate>
+      {draftRecovered && (
+        <p role="status" className="rounded-md bg-sprout-tint p-3 text-sm text-sprout-ink">
+          {t("journal.draftRecovered")}
+        </p>
+      )}
       <div className="flex flex-col gap-2">
         <Label>{t("journal.moodLabel")}</Label>
         <Controller

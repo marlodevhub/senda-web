@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { rejectCrossOrigin } from "@/lib/server/same-origin";
 import {
   backendFetch,
   forwardedHeaders,
@@ -16,6 +17,10 @@ type LoginResult = { token: string; refreshToken: string; destination: string };
  * cliente solo recibe lo que la pantalla necesita mostrar.
  */
 export async function POST(request: Request, { params }: { params: Promise<{ action: string }> }) {
+  const crossOrigin = rejectCrossOrigin(request);
+  if (crossOrigin) {
+    return crossOrigin;
+  }
   const { action } = await params;
 
   switch (action) {
