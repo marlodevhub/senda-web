@@ -1,19 +1,13 @@
 import "server-only";
 import { cookies } from "next/headers";
 
-const ACCESS_COOKIE = "senda_access_token";
-const REFRESH_COOKIE = "senda_refresh_token";
-
-// RS-AC-05: 30 min de acceso + 7 días de renovación — los mismos plazos que emite senda-api.
-const ACCESS_TTL_SECONDS = 30 * 60;
-const REFRESH_TTL_SECONDS = 7 * 24 * 60 * 60;
-
-const baseCookie = {
-  httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
-  sameSite: "lax" as const,
-  path: "/",
-};
+import {
+  STUDENT_ACCESS_COOKIE as ACCESS_COOKIE,
+  STUDENT_ACCESS_TTL_SECONDS as ACCESS_TTL_SECONDS,
+  STUDENT_REFRESH_COOKIE as REFRESH_COOKIE,
+  STUDENT_REFRESH_TTL_SECONDS as REFRESH_TTL_SECONDS,
+  studentCookieOptions as baseCookie,
+} from "@/lib/session-cookies";
 
 export type StudentTokens = { token: string; refreshToken: string };
 

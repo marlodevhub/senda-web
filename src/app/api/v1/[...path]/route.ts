@@ -4,16 +4,17 @@ import { clearStudentSession, getStudentSession, setStudentSession } from "@/lib
 
 /**
  * Reenvía cualquier ruta autenticada del estudiante a senda-api con el
- * token que corresponda. Si el access token ya expiró (401), intenta
- * renovarlo una vez con el refresh token antes de rendirse — así ninguna
- * pantalla tiene que saber que el JWT dura solo 30 min (RS-AC-05).
+ * token que corresponda. Si el access token ya expiró (401) o su cookie ya
+ * no existe, intenta renovarlo una vez con el refresh token antes de
+ * rendirse — así ninguna pantalla tiene que saber que el JWT dura solo
+ * 30 min (RS-AC-05).
  */
 async function proxy(request: Request, pathSegments: string[]) {
   const url = new URL(request.url);
   const targetPath = `/api/v1/${pathSegments.join("/")}${url.search}`;
   const { token, refreshToken } = await getStudentSession();
 
-  if (!token) {
+  if (!token && !refreshToken) {
     return NextResponse.json(
       { code: "UNAUTHENTICATED", message: "Inicia sesión para continuar." },
       { status: 401 },
@@ -35,23 +36,30 @@ async function proxy(request: Request, pathSegments: string[]) {
       body,
     });
 
-  let response = await forward(token);
-
-  if (response.status === 401 && refreshToken) {
+  const refreshAndRetry = async (): Promise<Response> => {
     const refreshResponse = await backendFetch("/api/v1/auth/refresh", {
       method: "POST",
       body: JSON.stringify({ refreshToken }),
     });
-
-    if (refreshResponse.ok) {
-      const refreshed = await readJsonSafely<{ token: string; refreshToken: string }>(refreshResponse);
-      if (refreshed) {
-        await setStudentSession(refreshed);
-        response = await forward(refreshed.token);
-      }
-    } else {
+    const refreshed = refreshResponse.ok
+      ? await readJsonSafely<{ token: string; refreshToken: string }>(refreshResponse)
+      : null;
+    if (!refreshed) {
       await clearStudentSession();
+      return NextResponse.json(
+        { code: "UNAUTHENTICATED", message: "Inicia sesión para continuar." },
+        { status: 401 },
+      );
     }
+    await setStudentSession(refreshed);
+    return forward(refreshed.token);
+  };
+
+  // La cookie de acceso dura 30 min y la de renovación 7 días: sin acceso, se renueva antes de llamar.
+  let response = token ? await forward(token) : await refreshAndRetry();
+
+  if (token && response.status === 401 && refreshToken) {
+    response = await refreshAndRetry();
   }
 
   const data = await readJsonSafely(response);

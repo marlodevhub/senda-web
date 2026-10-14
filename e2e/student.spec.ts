@@ -118,6 +118,28 @@ test("la bienvenida es solo la primera vez y se repasa desde Ayuda e informació
   await expect(page).toHaveURL(/\/inicio/);
 });
 
+test("con la sesión iniciada, las pantallas de ingreso llevan a Inicio", async ({ page }) => {
+  await activateAndConsent(page);
+
+  for (const route of ["/login", "/", "/activar"]) {
+    await page.goto(route);
+    await expect(page).toHaveURL(/\/inicio/);
+  }
+});
+
+test("al vencer la cookie de acceso (30 min), la sesión se renueva sola", async ({ page, context }) => {
+  await activateAndConsent(page);
+  const accessCookie = (await context.cookies()).find((c) => c.name === "senda_access_token");
+  expect(accessCookie).toBeDefined();
+
+  // Simula los 30 minutos: queda solo la cookie de renovación (7 días).
+  await context.clearCookies({ name: "senda_access_token" });
+  await page.goto("/inicio");
+
+  await expect(page.getByText("Hola. Hoy es tu día 3 de 28.")).toBeVisible();
+  expect((await context.cookies()).some((c) => c.name === "senda_access_token")).toBe(true);
+});
+
 test("sin sesión, las pantallas del estudiante llevan al inicio de sesión", async ({ page }) => {
   for (const route of ["/inicio", "/progreso/frasco", "/perfil", "/mensajes"]) {
     await page.goto(route);
