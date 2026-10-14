@@ -9,7 +9,7 @@ export const rewriteFormSchema = z.object({
   guideAnswer1: z.string().optional(),
   guideAnswer2: z.string().optional(),
   guideAnswer3: z.string().optional(),
-  text: z.string().min(1),
+  text: z.string().min(1, "rewrite.tooShort"),
 });
 
 export type RewriteFormValues = z.infer<typeof rewriteFormSchema>;

@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
+import { FieldError } from "@/components/forms/field-error";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -54,7 +55,7 @@ export function TotpForm() {
           aria-invalid={Boolean(errors.code)}
           {...register("code")}
         />
-        {errors.code && <p className="text-sm text-destructive">{errors.code.message}</p>}
+        <FieldError message={errors.code?.message} />
       </div>
 
       <Button type="submit" disabled={isSubmitting}>

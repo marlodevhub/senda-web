@@ -4,15 +4,10 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { cn } from "cn";
+import { cn } from "@/lib/utils";
 import type { Message } from "@/features/guidance/api/get-messages";
 import { useOpenMessage } from "@/features/guidance/api/use-messages";
-
-const DATE_FORMATTER = new Intl.DateTimeFormat("es-PE", {
-  timeZone: "America/Lima",
-  day: "numeric",
-  month: "short",
-});
+import { formatShortDate } from "@/lib/format/dates";
 
 function actionHref(message: Message): string | null {
   if (message.actionType === "WRITE") {
@@ -61,7 +56,7 @@ export function MessageCard({ message }: { message: Message }) {
           <p className="text-sm text-foreground">{message.text}</p>
           {!message.opened && <span className="mt-1 size-2 shrink-0 rounded-full bg-bloom" aria-hidden />}
         </div>
-        <span className="text-xs text-muted-foreground">{DATE_FORMATTER.format(new Date(message.createdAt))}</span>
+        <span className="text-xs text-muted-foreground">{formatShortDate(message.createdAt)}</span>
         {href && (
           <Button variant="soft" size="sm" className="self-start" asChild>
             <Link href={href} onClick={(e) => e.stopPropagation()}>

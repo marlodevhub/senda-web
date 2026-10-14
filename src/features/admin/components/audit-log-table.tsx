@@ -3,12 +3,7 @@
 import { useTranslations } from "next-intl";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import type { AuditLogEntry } from "@/features/admin/api/audit";
-
-const DATE_TIME = new Intl.DateTimeFormat("es-PE", {
-  dateStyle: "short",
-  timeStyle: "short",
-  timeZone: "America/Lima",
-});
+import { formatDateTime } from "@/lib/format/dates";
 
 /** CU-27 paso 2: fecha, actor, acción, entidad y código del participante. Nunca textos (RN-AD-04). */
 export function AuditLogTable({ items }: { items: AuditLogEntry[] }) {
@@ -32,7 +27,7 @@ export function AuditLogTable({ items }: { items: AuditLogEntry[] }) {
       <TableBody>
         {items.map((item, index) => (
           <TableRow key={`${item.createdAt}-${index}`}>
-            <TableCell className="whitespace-nowrap">{DATE_TIME.format(new Date(item.createdAt))}</TableCell>
+            <TableCell className="whitespace-nowrap">{formatDateTime(item.createdAt)}</TableCell>
             <TableCell>{item.actor}</TableCell>
             <TableCell>{t(`admin.audit.actions.${item.action}`)}</TableCell>
             <TableCell>

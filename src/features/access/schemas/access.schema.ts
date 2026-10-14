@@ -1,40 +1,31 @@
 import { z } from "zod";
+import { newPasswordSchema, passwordsMatch } from "@/lib/validation/password";
 
 /**
  * RS-AC-01: el formato real (Luhn mod N sobre un alfabeto de 32 símbolos
  * sin O/0/I/1) lo valida el servidor — esto solo evita un viaje de red
  * por un error de tipeo obvio, nunca es la fuente de verdad.
  */
-export const activationCodeSchema = z
+const activationCodeSchema = z
   .string()
   .trim()
   .toUpperCase()
-  .min(1, "Escribe tu código.")
-  .regex(/^C\d+-[A-Z0-9]{4}-[A-Z0-9]$/, "Ese código no tiene el formato esperado.");
-
-/** RN-AC-04. */
-export const passwordSchema = z
-  .string()
-  .min(8, "Tu contraseña necesita 8 caracteres o más.")
-  .regex(/[A-Za-z]/, "Tu contraseña necesita al menos una letra.")
-  .regex(/[0-9]/, "Tu contraseña necesita al menos un número.");
+  .min(1, "validation.codeRequired")
+  .regex(/^C\d+-[A-Z0-9]{4}-[A-Z0-9]$/, "validation.codeFormat");
 
 export const activateFormSchema = z
   .object({
     code: activationCodeSchema,
-    password: passwordSchema,
+    password: newPasswordSchema,
     passwordConfirm: z.string(),
   })
-  .refine((data) => data.password === data.passwordConfirm, {
-    message: "Las contraseñas no coinciden.",
-    path: ["passwordConfirm"],
-  });
+  .refine(...passwordsMatch<{ password: string; passwordConfirm: string }>("password", "passwordConfirm"));
 
 export type ActivateFormValues = z.infer<typeof activateFormSchema>;
 
 export const loginFormSchema = z.object({
   code: activationCodeSchema,
-  password: z.string().min(1, "Escribe tu contraseña."),
+  password: z.string().min(1, "validation.passwordRequired"),
 });
 
 export type LoginFormValues = z.infer<typeof loginFormSchema>;
@@ -42,13 +33,12 @@ export type LoginFormValues = z.infer<typeof loginFormSchema>;
 export const recoverFormSchema = z
   .object({
     code: activationCodeSchema,
-    recoveryCode: z.string().trim().toUpperCase().min(1, "Escribe tu código de recuperación."),
-    newPassword: passwordSchema,
+    recoveryCode: z.string().trim().toUpperCase().min(1, "validation.recoveryCodeRequired"),
+    newPassword: newPasswordSchema,
     newPasswordConfirm: z.string(),
   })
-  .refine((data) => data.newPassword === data.newPasswordConfirm, {
-    message: "Las contraseñas no coinciden.",
-    path: ["newPasswordConfirm"],
-  });
+  .refine(
+    ...passwordsMatch<{ newPassword: string; newPasswordConfirm: string }>("newPassword", "newPasswordConfirm"),
+  );
 
 export type RecoverFormValues = z.infer<typeof recoverFormSchema>;

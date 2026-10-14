@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
+import { FieldError } from "@/components/forms/field-error";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -34,11 +35,11 @@ export function ActivateForm() {
     } catch (error) {
       if (error instanceof BffError) {
         if (error.code === "INVALID_CODE" || error.code === "ACTIVATION_NOT_POSSIBLE") {
-          setError("code", { message: t(errorMessageKey(error.code)) });
+          setError("code", { message: errorMessageKey(error.code) });
           return;
         }
         if (error.code === "WEAK_PASSWORD") {
-          setError("password", { message: t(errorMessageKey(error.code)) });
+          setError("password", { message: errorMessageKey(error.code) });
           return;
         }
         toast.error(t(errorMessageKey(error.code)));
@@ -86,7 +87,7 @@ export function ActivateForm() {
           aria-invalid={Boolean(errors.code)}
           {...register("code")}
         />
-        {errors.code && <p className="text-sm text-destructive">{errors.code.message}</p>}
+        <FieldError message={errors.code?.message} />
       </div>
 
       <div className="flex flex-col gap-1.5">
@@ -99,7 +100,7 @@ export function ActivateForm() {
           {...register("password")}
         />
         {errors.password ? (
-          <p className="text-sm text-destructive">{errors.password.message}</p>
+          <FieldError message={errors.password.message} />
         ) : (
           <p className="text-xs text-muted-foreground">{t("access.passwordHint")}</p>
         )}
@@ -114,9 +115,7 @@ export function ActivateForm() {
           aria-invalid={Boolean(errors.passwordConfirm)}
           {...register("passwordConfirm")}
         />
-        {errors.passwordConfirm && (
-          <p className="text-sm text-destructive">{errors.passwordConfirm.message}</p>
-        )}
+        <FieldError message={errors.passwordConfirm?.message} />
       </div>
 
       <Button type="submit" variant="hero" size="xl" disabled={isSubmitting} className="mt-2">

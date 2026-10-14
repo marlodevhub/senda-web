@@ -1,8 +1,6 @@
 {
   "common": {
-    "appName": "Senda",
     "loading": "Cargando…",
-    "continue": "Continuar",
     "back": "Volver",
     "cancel": "Cancelar",
     "unexpectedError": "Algo salió mal de nuestro lado. Inténtalo de nuevo.",
@@ -32,7 +30,6 @@
     "accountLocked": "Demasiados intentos. Tu cuenta se desbloqueará en 15 minutos.",
     "consentRequired": "Para usar la app necesitamos tu consentimiento. Puedes volver cuando quieras.",
     "weakPassword": "Tu contraseña necesita 8 caracteres o más, con letras y números, y no puede ser igual a tu código.",
-    "passwordMismatch": "Las contraseñas no coinciden.",
     "sessionExpired": "Tu sesión expiró. Inicia sesión de nuevo.",
     "forgotPassword": "Olvidé mi contraseña",
     "recoverTitle": "Recuperar contraseña",
@@ -83,10 +80,7 @@
     "readOnlyPeriod": "Tus 28 días terminaron. Puedes ver todo lo que escribiste en tu historial."
   },
   "home": {
-    "title": "Hola",
-    "subtitle": "¿Listo para escribir tu momento de hoy?",
     "writeCta": "Escribir",
-    "seeMessages": "Ver mis mensajes",
     "greeting": "Hola. Hoy es tu día {day} de 28.",
     "checkinQuestion": "¿Cómo estás hoy?",
     "pendingLabel": "Frase pendiente",
@@ -95,7 +89,6 @@
     "goalLabel": "Meta de la semana",
     "goalMet": "Cumpliste tu meta de esta semana.",
     "goalCount": "Esta semana escribiste {days} de {goal} días.",
-    "newMessages": "Tienes mensajes nuevos.",
     "newSummary": "Ya está tu resumen de la semana.",
     "finished": "Terminaste tus 28 días. Gracias por acompañarte así. Solo falta un último cuestionario.",
     "posttestCta": "Responder el cuestionario final",
@@ -152,7 +145,6 @@
   },
   "rewrite": {
     "title": "Di lo mismo como se lo dirías a un buen amigo",
-    "chooseAnotherPhrase": "Elegir otra frase",
     "guideQuestionsLabel": "Preguntas para pensarlo",
     "seeExample": "Ver un ejemplo",
     "textLabel": "Tu reescritura",
@@ -249,9 +241,6 @@
     "filterWeekLabel": "Semana",
     "filterDimensionLabel": "Dimensión",
     "filterContextLabel": "Contexto",
-    "allWeeks": "Todas",
-    "allDimensions": "Todas",
-    "allContexts": "Todos",
     "weekLabel": "Semana {week}",
     "dayLabel": "Día {day}",
     "findingsCount": "{count, plural, =0 {Sin frases} one {# frase} other {# frases}}",
@@ -380,14 +369,12 @@
       "readOnlyCount": "Solo lectura",
       "withdrawnCount": "Retirados",
       "closeCta": "Cerrar cohorte",
-      "closing": "Cerrando…",
       "closed": "Cohorte cerrada.",
       "viewCta": "Ver",
       "codesTitle": "Códigos de acceso",
       "codesCountLabel": "Cantidad de códigos",
       "codesGenerateSubmit": "Generar códigos",
       "codesGenerating": "Generando…",
-      "codesGeneratedTitle": "Códigos generados",
       "codesGeneratedHint": "Entrega cada código una sola vez; no se van a volver a mostrar.",
       "codesCopyAll": "Copiar todos",
       "codesCopied": "Copiados.",
@@ -407,8 +394,6 @@
       "statusActive": "Activo",
       "statusReadOnly": "Solo lectura",
       "statusWithdrawn": "Retirado",
-      "goalMet": "Cumplida",
-      "goalNotMet": "Pendiente",
       "never": "Nunca",
       "empty": "No hay participantes en esta cohorte.",
       "resetCta": "Restablecer acceso",
@@ -416,9 +401,7 @@
       "resetConfirmBody": "Se va a generar un código de recuperación nuevo para {code}. El anterior deja de funcionar.",
       "resetConfirm": "Sí, restablecer",
       "resetting": "Restableciendo…",
-      "resetCodeTitle": "Código de recuperación generado",
-      "resetCodeHint": "Entrégalo ahora; no se va a volver a mostrar.",
-      "resetDone": "Acceso restablecido."
+      "resetCodeHint": "Entrégalo ahora; no se va a volver a mostrar."
     },
     "adherence": {
       "title": "Adherencia",
@@ -513,5 +496,23 @@
     "journey": "Tu senda",
     "dayOf": "Día {day} de {total}",
     "goalShort": "{days} de {goal} días"
+  },
+  "validation": {
+    "codeRequired": "Escribe tu código.",
+    "codeFormat": "Ese código no tiene el formato esperado.",
+    "passwordRequired": "Escribe tu contraseña.",
+    "currentPasswordRequired": "Escribe tu contraseña actual.",
+    "passwordTooShort": "Tu contraseña necesita 8 caracteres o más.",
+    "passwordNeedsLetter": "Tu contraseña necesita al menos una letra.",
+    "passwordNeedsNumber": "Tu contraseña necesita al menos un número.",
+    "passwordMismatch": "Las contraseñas no coinciden.",
+    "recoveryCodeRequired": "Escribe tu código de recuperación.",
+    "emailRequired": "Escribe tu correo.",
+    "emailFormat": "Escribe un correo válido.",
+    "totpFormat": "Escribe los 6 dígitos de tu app autenticadora.",
+    "nameRequired": "Escribe un nombre.",
+    "startDateRequired": "Elige una fecha de inicio.",
+    "codesMin": "Al menos 1 código.",
+    "codesMax": "Como máximo 150 códigos."
   }
 }

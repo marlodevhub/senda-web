@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { cn } from "cn";
+import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 import { Users2, ClipboardList, LogOut, Sprout, ScrollText } from "lucide-react";
 import { Button } from "@/components/ui/button";

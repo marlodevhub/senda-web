@@ -3,6 +3,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
+import { FieldError } from "@/components/forms/field-error";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -43,13 +44,13 @@ export function CohortForm() {
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="name">{t("admin.cohorts.nameLabel")}</Label>
         <Input id="name" aria-invalid={Boolean(errors.name)} {...register("name")} />
-        {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
+        <FieldError message={errors.name?.message} />
       </div>
 
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="startDate">{t("admin.cohorts.startDateLabel")}</Label>
         <Input id="startDate" type="date" aria-invalid={Boolean(errors.startDate)} {...register("startDate")} />
-        {errors.startDate && <p className="text-sm text-destructive">{errors.startDate.message}</p>}
+        <FieldError message={errors.startDate?.message} />
       </div>
 
       <Button type="submit" disabled={isSubmitting}>

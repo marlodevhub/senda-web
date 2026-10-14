@@ -4,12 +4,7 @@ import { useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { useCurrentConfig } from "@/features/admin/api/use-audit";
-
-const DATE_TIME = new Intl.DateTimeFormat("es-PE", {
-  dateStyle: "short",
-  timeStyle: "short",
-  timeZone: "America/Lima",
-});
+import { formatDateTime } from "@/lib/format/dates";
 
 /** CU-27 paso 3: lo que corre ahora y la etiqueta congelada de cada cohorte (HU-27.1). */
 export function ConfigStatusCard() {
@@ -63,7 +58,7 @@ export function ConfigStatusCard() {
                       <span className="font-mono text-xs text-muted-foreground">{cohort.configVersion}</span>
                       {cohort.frozenAt && (
                         <span className="text-xs text-muted-foreground">
-                          {t("admin.audit.frozenAt", { date: DATE_TIME.format(new Date(cohort.frozenAt)) })}
+                          {t("admin.audit.frozenAt", { date: formatDateTime(cohort.frozenAt) })}
                         </span>
                       )}
                     </div>

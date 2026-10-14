@@ -4,7 +4,7 @@ import path from "node:path";
 /** Datos de prueba directo en la base `senda_e2e` (solo E2E; nunca toca la base de desarrollo). */
 const COMPOSE_FILE = path.resolve(__dirname, "../../senda-api/compose.yaml");
 
-export function sql(statement: string): string {
+function sql(statement: string): string {
   return execFileSync(
     "docker",
     ["compose", "-f", COMPOSE_FILE, "exec", "-T", "postgres", "psql", "-U", "senda", "-d", "senda_e2e", "-tAq", "-c", statement],
@@ -15,7 +15,7 @@ export function sql(statement: string): string {
 const ALPHABET = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ";
 
 /** Mismo formato y dígito verificador que `ActivationCodeFormat` del backend (RN-AC-01). */
-export function newParticipantCode(): string {
+function newParticipantCode(): string {
   let payload = "";
   for (let i = 0; i < 4; i++) {
     payload += ALPHABET[Math.floor(Math.random() * ALPHABET.length)];

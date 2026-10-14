@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { PenLine, Sprout } from "lucide-react";
-import { cn } from "cn";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { STUDENT_NAV_ITEMS } from "@/components/layout/student-nav-items";
 import { useHome } from "@/features/home/api/use-home";

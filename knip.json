@@ -1,0 +1,9 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "entry": ["e2e/**/*.spec.ts", "e2e/mock-llm.mjs"],
+  "project": ["src/**/*.{ts,tsx}", "e2e/**/*.{ts,mjs}"],
+  "ignore": ["src/components/ui/**"],
+  "ignoreDependencies": ["postcss", "tailwindcss", "tw-animate-css", "shadcn"],
+  "ignoreExportsUsedInFile": true,
+  "rules": { "types": "off" }
+}

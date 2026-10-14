@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { cn } from "cn";
+import { cn } from "@/lib/utils";
 
 const TABS = [
   { href: "/progreso/jardin", labelKey: "progress.tabGarden" },

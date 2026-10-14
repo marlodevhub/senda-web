@@ -3,6 +3,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
+import { FieldError } from "@/components/forms/field-error";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -55,7 +56,7 @@ export function NotificationsForm({ enabled }: { enabled: boolean }) {
 
   async function onSubmit(values: NotificationsFormValues) {
     if (!values.email) {
-      setError("email", { message: t("profile.emailRequired") });
+      setError("email", { message: "profile.emailRequired" });
       return;
     }
     await save({ enabled: true, email: values.email });
@@ -75,7 +76,7 @@ export function NotificationsForm({ enabled }: { enabled: boolean }) {
           aria-invalid={Boolean(errors.email)}
           {...register("email")}
         />
-        {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
+        <FieldError message={errors.email?.message} />
       </div>
       <Button type="submit" variant="outline" disabled={isSubmitting}>
         {isSubmitting ? t("profile.saving") : t("profile.enableNotifications")}

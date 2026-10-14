@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "cn";
+import { cn } from "@/lib/utils";
 import { MoodFace, type Mood } from "@/components/icons/mood-face";
 
 /**

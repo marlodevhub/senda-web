@@ -11,15 +11,12 @@ import { AUDIT_ACTIONS, type AuditAction } from "@/features/admin/api/audit";
 import { useAuditLogs } from "@/features/admin/api/use-audit";
 import { AuditLogTable } from "@/features/admin/components/audit-log-table";
 import { ConfigStatusCard } from "@/features/admin/components/config-status-card";
+import { limaIsoDay } from "@/lib/format/dates";
 
 const ALL_ACTIONS = "ALL";
 /** RS-AD-08. */
 const MAX_DAYS = 90;
 const DAY_MS = 24 * 60 * 60 * 1000;
-
-function limaDate(offsetDays = 0): string {
-  return new Intl.DateTimeFormat("en-CA", { timeZone: "America/Lima" }).format(new Date(Date.now() + offsetDays * DAY_MS));
-}
 
 function daysBetween(from: string, to: string): number {
   return Math.round((Date.parse(to) - Date.parse(from)) / DAY_MS) + 1;
@@ -28,8 +25,8 @@ function daysBetween(from: string, to: string): number {
 /** CU-27 Consultar auditoría y configuración vigente (solo lectura, RN-AD-10). */
 export default function AdminAuditPage() {
   const t = useTranslations();
-  const [from, setFrom] = useState(() => limaDate(-29));
-  const [to, setTo] = useState(() => limaDate());
+  const [from, setFrom] = useState(() => limaIsoDay(-29));
+  const [to, setTo] = useState(() => limaIsoDay());
   const [action, setAction] = useState<AuditAction | undefined>(undefined);
   const [page, setPage] = useState(1);
 

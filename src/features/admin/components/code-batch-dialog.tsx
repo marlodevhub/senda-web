@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { z } from "zod";
 import { useTranslations } from "next-intl";
+import { FieldError } from "@/components/forms/field-error";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -105,7 +106,7 @@ export function CodeBatchDialog({ cohortId }: { cohortId: number }) {
                 aria-invalid={Boolean(errors.count)}
                 {...register("count")}
               />
-              {errors.count && <p className="text-sm text-destructive">{errors.count.message}</p>}
+              <FieldError message={errors.count?.message} />
             </div>
             <DialogFooter>
               <Button type="submit" disabled={isSubmitting}>

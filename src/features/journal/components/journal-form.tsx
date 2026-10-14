@@ -2,11 +2,12 @@
 
 import { useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, useWatch, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
+import { FieldError } from "@/components/forms/field-error";
 import { toast } from "sonner";
-import { cn } from "cn";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -29,7 +30,6 @@ export function JournalForm() {
     control,
     register,
     handleSubmit,
-    watch,
     formState: { errors, isSubmitting },
     setError,
   } = useForm<JournalFormValues>({
@@ -37,7 +37,7 @@ export function JournalForm() {
     defaultValues: { mode: "GUIDED" },
   });
 
-  const mode = watch("mode");
+  const mode = useWatch({ control, name: "mode" });
 
   async function onSubmit(values: JournalFormValues) {
     try {
@@ -51,11 +51,11 @@ export function JournalForm() {
     } catch (error) {
       if (error instanceof BffError) {
         if (error.code === "MISSING_SECOND_QUESTION") {
-          setError("q2", { message: t(errorMessageKey(error.code)) });
+          setError("q2", { message: errorMessageKey(error.code) });
           return;
         }
         if (error.code === "ENTRY_TOO_SHORT" || error.code === "TEXT_TOO_LONG") {
-          setError(mode === "GUIDED" ? "q1" : "freeText", { message: t(errorMessageKey(error.code)) });
+          setError(mode === "GUIDED" ? "q1" : "freeText", { message: errorMessageKey(error.code) });
           return;
         }
         toast.error(t(errorMessageKey(error.code)));
@@ -76,7 +76,7 @@ export function JournalForm() {
             <MoodPicker value={field.value as Mood | undefined} onChange={(mood) => field.onChange(mood)} />
           )}
         />
-        {errors.moodBefore && <p className="text-sm text-destructive">{t("journal.missingMood")}</p>}
+        {errors.moodBefore && <FieldError message="journal.missingMood" />}
       </div>
 
       <Controller
@@ -152,7 +152,7 @@ function Field({
     <div className="flex flex-col gap-1.5">
       <Label htmlFor={id}>{label}</Label>
       {children}
-      {error && <p className="text-sm text-destructive">{error}</p>}
+      <FieldError message={error} />
     </div>
   );
 }

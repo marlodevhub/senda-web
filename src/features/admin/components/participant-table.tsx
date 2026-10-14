@@ -18,6 +18,7 @@ import { BffError } from "@/lib/api/client";
 import { adminErrorMessageKey } from "@/features/admin/api/error-messages";
 import { useAccessReset } from "@/features/admin/api/use-participants";
 import type { AdminParticipant } from "@/features/admin/api/participants";
+import { formatNumericDate } from "@/lib/format/dates";
 
 const STATUS_KEY: Record<string, string> = {
   PENDING: "admin.participants.statusPending",
@@ -88,7 +89,7 @@ export function ParticipantTable({ participants }: { participants: AdminParticip
               </TableCell>
               <TableCell>
                 {participant.lastActivityAt
-                  ? new Date(participant.lastActivityAt).toLocaleDateString("es-PE")
+                  ? formatNumericDate(participant.lastActivityAt)
                   : t("admin.participants.never")}
               </TableCell>
               <TableCell>

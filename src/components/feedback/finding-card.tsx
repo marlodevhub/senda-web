@@ -1,4 +1,4 @@
-import { cn } from "cn";
+import { cn } from "@/lib/utils";
 import type { Dimension } from "@/types/dimension";
 
 const DIMENSION_STYLE: Record<Dimension, string> = {

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
+import { FieldError } from "@/components/forms/field-error";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -39,11 +40,11 @@ export function RecoverForm() {
     } catch (error) {
       if (error instanceof BffError) {
         if (error.code === "RECOVERY_FAILED") {
-          setError("recoveryCode", { message: t(errorMessageKey(error.code)) });
+          setError("recoveryCode", { message: errorMessageKey(error.code) });
           return;
         }
         if (error.code === "WEAK_PASSWORD" || error.code === "SAME_AS_CURRENT_PASSWORD") {
-          setError("newPassword", { message: t(errorMessageKey(error.code)) });
+          setError("newPassword", { message: errorMessageKey(error.code) });
           return;
         }
         toast.error(t(errorMessageKey(error.code)));
@@ -86,7 +87,7 @@ export function RecoverForm() {
           aria-invalid={Boolean(errors.code)}
           {...register("code")}
         />
-        {errors.code && <p className="text-sm text-destructive">{errors.code.message}</p>}
+        <FieldError message={errors.code?.message} />
       </div>
 
       <div className="flex flex-col gap-1.5">
@@ -98,7 +99,7 @@ export function RecoverForm() {
           {...register("recoveryCode")}
         />
         {errors.recoveryCode ? (
-          <p className="text-sm text-destructive">{errors.recoveryCode.message}</p>
+          <FieldError message={errors.recoveryCode.message} />
         ) : (
           <p className="text-xs text-muted-foreground">{t("access.noCodeHint")}</p>
         )}
@@ -114,7 +115,7 @@ export function RecoverForm() {
           {...register("newPassword")}
         />
         {errors.newPassword ? (
-          <p className="text-sm text-destructive">{errors.newPassword.message}</p>
+          <FieldError message={errors.newPassword.message} />
         ) : (
           <p className="text-xs text-muted-foreground">{t("access.passwordHint")}</p>
         )}
@@ -129,9 +130,7 @@ export function RecoverForm() {
           aria-invalid={Boolean(errors.newPasswordConfirm)}
           {...register("newPasswordConfirm")}
         />
-        {errors.newPasswordConfirm && (
-          <p className="text-sm text-destructive">{errors.newPasswordConfirm.message}</p>
-        )}
+        <FieldError message={errors.newPasswordConfirm?.message} />
       </div>
 
       <Button type="submit" variant="hero" size="xl" disabled={isSubmitting} className="mt-2">

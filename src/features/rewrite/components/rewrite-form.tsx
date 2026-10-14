@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
+import { FieldError } from "@/components/forms/field-error";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -64,7 +65,7 @@ export function RewriteForm({ journalEntryId, findingId }: { journalEntryId: num
     } catch (error) {
       if (error instanceof BffError) {
         if (error.code === "REWRITE_TOO_SHORT" || error.code === "REWRITE_SAME_AS_ORIGINAL") {
-          setError("text", { message: t(errorMessageKey(error.code)) });
+          setError("text", { message: errorMessageKey(error.code) });
           return;
         }
       }
@@ -125,7 +126,7 @@ export function RewriteForm({ journalEntryId, findingId }: { journalEntryId: num
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="text">{t("rewrite.textLabel")}</Label>
         <Textarea id="text" rows={4} autoComplete="off" {...register("text")} />
-        {errors.text && <p className="text-sm text-destructive">{errors.text.message}</p>}
+        <FieldError message={errors.text?.message} />
       </div>
 
       <Button type="submit" variant="hero" size="xl" disabled={isSubmitting}>

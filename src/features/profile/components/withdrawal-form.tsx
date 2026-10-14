@@ -2,11 +2,12 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
+import { FieldError } from "@/components/forms/field-error";
 import { toast } from "sonner";
-import { cn } from "cn";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -35,7 +36,7 @@ export function WithdrawalForm() {
   const {
     register,
     handleSubmit,
-    watch,
+    control,
     setValue,
     setError,
     formState: { errors, isSubmitting },
@@ -43,7 +44,7 @@ export function WithdrawalForm() {
     resolver: zodResolver(withdrawFormSchema),
     defaultValues: { option: "KEEP_DATA" },
   });
-  const selectedOption = watch("option");
+  const selectedOption = useWatch({ control, name: "option" });
 
   async function onSubmit(values: WithdrawFormValues) {
     try {
@@ -53,7 +54,7 @@ export function WithdrawalForm() {
     } catch (error) {
       if (error instanceof BffError) {
         if (error.code === "INCORRECT_PASSWORD") {
-          setError("password", { message: t(errorMessageKey(error.code)) });
+          setError("password", { message: errorMessageKey(error.code) });
           return;
         }
         toast.error(t(errorMessageKey(error.code)));
@@ -109,7 +110,7 @@ export function WithdrawalForm() {
           aria-invalid={Boolean(errors.password)}
           {...register("password")}
         />
-        {errors.password && <p className="text-sm text-destructive">{errors.password.message}</p>}
+        <FieldError message={errors.password?.message} />
       </div>
 
       <Button type="submit" variant="destructive" disabled={isSubmitting}>

@@ -1,11 +1,11 @@
 import { z } from "zod";
 import { JOURNAL_CONTEXTS, type JournalContext } from "@/types/journal-context";
 
-export const journalContextSchema = z.enum(JOURNAL_CONTEXTS);
+const journalContextSchema = z.enum(JOURNAL_CONTEXTS);
 
 export type { JournalContext };
 
-export const journalModeSchema = z.enum(["GUIDED", "FREE"]);
+const journalModeSchema = z.enum(["GUIDED", "FREE"]);
 
 /**
  * RN-DI-03/04 se validan de verdad en el servidor (incluido el conteo de

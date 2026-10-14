@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Star } from "lucide-react";
 import { toast } from "sonner";
-import { cn } from "cn";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -18,8 +18,7 @@ import {
 import type { JarCard } from "@/features/progress/api/jar";
 import { useUpdateJarCard } from "@/features/progress/api/use-jar";
 import { DIMENSION_COLOR } from "@/features/progress/dimension-style";
-
-const DATE_FORMATTER = new Intl.DateTimeFormat("es-PE", { day: "numeric", month: "long", timeZone: "UTC" });
+import { formatCalendarDay } from "@/lib/format/dates";
 
 /**
  * CU-09: las frases que el estudiante guardó, favoritas primero (RN-PR-09,
@@ -62,7 +61,7 @@ export function JarView({ cards }: { cards: JarCard[] }) {
               </button>
             </div>
             <span className="text-xs text-muted-foreground">
-              {DATE_FORMATTER.format(new Date(`${card.date}T00:00:00Z`))}
+              {formatCalendarDay(card.date)}
             </span>
             <details className="text-sm text-muted-foreground">
               <summary className="cursor-pointer py-1 font-semibold text-foreground">

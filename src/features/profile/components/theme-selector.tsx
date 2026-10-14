@@ -4,7 +4,7 @@ import { useSyncExternalStore } from "react";
 import { useTheme } from "next-themes";
 import { useTranslations } from "next-intl";
 import { Monitor, Moon, Sun } from "lucide-react";
-import { cn } from "cn";
+import { cn } from "@/lib/utils";
 
 const OPTIONS = [
   { value: "light", labelKey: "profile.themeLight", icon: Sun },

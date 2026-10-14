@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
+import { FieldError } from "@/components/forms/field-error";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -48,7 +49,7 @@ export function AdminLoginForm() {
           aria-invalid={Boolean(errors.email)}
           {...register("email")}
         />
-        {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
+        <FieldError message={errors.email?.message} />
       </div>
 
       <div className="flex flex-col gap-1.5">
@@ -60,7 +61,7 @@ export function AdminLoginForm() {
           aria-invalid={Boolean(errors.password)}
           {...register("password")}
         />
-        {errors.password && <p className="text-sm text-destructive">{errors.password.message}</p>}
+        <FieldError message={errors.password?.message} />
       </div>
 
       <Button type="submit" disabled={isSubmitting}>

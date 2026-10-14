@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
+import { FieldError } from "@/components/forms/field-error";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -42,11 +43,11 @@ export function ChangePasswordForm() {
       router.push("/login");
     } catch (error) {
       if (error instanceof BffError && error.code === "INCORRECT_PASSWORD") {
-        setError("currentPassword", { message: t("profile.currentPasswordError") });
+        setError("currentPassword", { message: "profile.currentPasswordError" });
         return;
       }
       if (error instanceof BffError && error.code === "WEAK_PASSWORD") {
-        setError("newPassword", { message: t(errorMessageKey(error.code)) });
+        setError("newPassword", { message: errorMessageKey(error.code) });
         return;
       }
       toast.error(t(error instanceof BffError ? errorMessageKey(error.code) : "common.unexpectedError"));
@@ -64,7 +65,7 @@ export function ChangePasswordForm() {
           aria-invalid={Boolean(errors.currentPassword)}
           {...register("currentPassword")}
         />
-        {errors.currentPassword && <p className="text-sm text-destructive">{errors.currentPassword.message}</p>}
+        <FieldError message={errors.currentPassword?.message} />
       </div>
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="newPassword">{t("access.newPasswordLabel")}</Label>
@@ -79,7 +80,7 @@ export function ChangePasswordForm() {
         <p id="newPasswordHint" className="text-xs text-muted-foreground">
           {t("access.passwordHint")}
         </p>
-        {errors.newPassword && <p className="text-sm text-destructive">{errors.newPassword.message}</p>}
+        <FieldError message={errors.newPassword?.message} />
       </div>
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="newPasswordConfirm">{t("access.passwordConfirmLabel")}</Label>
@@ -90,9 +91,7 @@ export function ChangePasswordForm() {
           aria-invalid={Boolean(errors.newPasswordConfirm)}
           {...register("newPasswordConfirm")}
         />
-        {errors.newPasswordConfirm && (
-          <p className="text-sm text-destructive">{errors.newPasswordConfirm.message}</p>
-        )}
+        <FieldError message={errors.newPasswordConfirm?.message} />
       </div>
       <Button type="submit" disabled={isSubmitting}>
         {isSubmitting ? t("profile.saving") : t("profile.changePasswordSubmit")}

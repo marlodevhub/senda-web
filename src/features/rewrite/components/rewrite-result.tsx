@@ -1,4 +1,4 @@
-import { cn } from "cn";
+import { cn } from "@/lib/utils";
 import { Check } from "lucide-react";
 import { useTranslations } from "next-intl";
 
