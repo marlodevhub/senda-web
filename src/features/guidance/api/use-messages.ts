@@ -3,11 +3,15 @@ import { getMessages } from "@/features/guidance/api/get-messages";
 import { openMessage } from "@/features/guidance/api/open-message";
 import { queryKeys } from "@/lib/api/query-keys";
 
+/** Cada cuánto se busca un mensaje nuevo mientras la app está abierta (aviso con toast). */
+const MESSAGES_POLL_MS = 60_000;
+
 /** CU-14: bandeja, solo mensajes ENVIADO (RN-AA-16). */
 export function useMessages() {
   return useQuery({
     queryKey: queryKeys.messages(),
     queryFn: getMessages,
+    refetchInterval: MESSAGES_POLL_MS,
   });
 }
 

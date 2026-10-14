@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { NextIntlClientProvider } from "next-intl";
-import { Toaster } from "sonner";
+import { Toaster } from "@/components/ui/sonner";
 import { baloo, figtree } from "./fonts";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Providers } from "./providers";

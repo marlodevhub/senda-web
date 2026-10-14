@@ -1,6 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
-import { seedPendingParticipant } from "./db";
+import { seedPendingParticipant, seedSentMessage } from "./db";
 
 const PASSWORD = "Compasion1";
 const ENTRY =
@@ -9,6 +9,15 @@ const ENTRY =
 
 /** WCAG 2.1 AA (RS-TR): sin violaciones de axe en la pantalla actual. */
 async function expectAccessible(page: Page) {
+  // axe mide colores reales: espera a que terminen las animaciones finitas (toasts, drawers, temas).
+  await page.evaluate(() =>
+    Promise.all(
+      document
+        .getAnimations()
+        .filter((a) => a.effect?.getComputedTiming().endTime !== Infinity)
+        .map((a) => a.finished.catch(() => undefined)),
+    ),
+  );
   const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"]).analyze();
   const details = results.violations.flatMap((v) =>
     v.nodes.map((n) => `${v.id}: ${n.target.join(" ")} — ${n.failureSummary?.split("\n").slice(1).join(" ")}`),
@@ -193,28 +202,45 @@ test("en tablet la barra lateral es un riel de iconos con nombres accesibles", a
   await expectAccessible(page);
 });
 
-test("los mensajes para ti se abren desde la campana: pantalla completa en móvil, panel en escritorio", async ({ page }) => {
+test("los mensajes para ti se abren en un drawer: desde abajo en móvil, desde la derecha en escritorio", async ({ page }) => {
   await activateAndConsent(page);
 
-  // Móvil: la bandeja ocupa toda la pantalla, sobre el vidrio del dock.
+  // Móvil: la bandeja sube desde abajo, sobre el vidrio del dock.
   await page.getByRole("button", { name: "Mensajes para ti" }).click();
-  const sheet = page.getByRole("dialog", { name: "Mensajes para ti" });
-  await expect(sheet).toBeVisible();
-  await expect(sheet).toHaveClass(/glass/);
-  await expect(sheet.getByText("Aún no tienes mensajes.")).toBeVisible();
-  const box = await sheet.boundingBox();
-  expect(box?.width).toBe(360);
-  // axe mide colores reales: se espera a que termine la animación de entrada.
-  await sheet.evaluate((el) => Promise.all(el.getAnimations({ subtree: true }).map((a) => a.finished)));
+  const drawer = page.getByRole("dialog", { name: "Mensajes para ti" });
+  await expect(drawer).toBeVisible();
+  await expect(drawer).toHaveClass(/glass/);
+  await expect(drawer).toHaveAttribute("data-vaul-drawer-direction", "bottom");
+  await expect(drawer.getByText("Aún no tienes mensajes.")).toBeVisible();
   await expectAccessible(page);
-  await sheet.getByRole("button", { name: "Cerrar mensajes" }).click();
-  await expect(sheet).toBeHidden();
+  await drawer.getByRole("button", { name: "Cerrar mensajes" }).click();
+  await expect(drawer).toBeHidden();
 
-  // Escritorio: panel flotante junto a la campana, con acceso a la bandeja completa.
+  // Escritorio: la misma bandeja entra desde la derecha.
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.getByRole("button", { name: "Mensajes para ti" }).click();
-  await page.getByRole("link", { name: "Ver todos los mensajes" }).click();
-  await expect(page).toHaveURL(/\/mensajes/);
+  await expect(drawer).toHaveAttribute("data-vaul-drawer-direction", "right");
+  await drawer.evaluate((el) => Promise.all(el.getAnimations().map((a) => a.finished)));
+  const box = await drawer.boundingBox();
+  expect((box?.x ?? 0) + (box?.width ?? 0)).toBeCloseTo(1440, 0);
+});
+
+test("un mensaje nuevo se avisa con un toast una sola vez y abre la bandeja", async ({ page }) => {
+  const code = await activateAndConsent(page);
+  seedSentMessage(code);
+  await page.reload();
+
+  const toast = page.locator("[data-sonner-toast]").filter({ hasText: "Tu diario te espera cuando tengas 5 minutos." });
+  await expect(toast).toBeVisible();
+  await expect(page.getByRole("button", { name: "Mensajes para ti, 1 nuevo" })).toBeVisible();
+  await toast.getByRole("button", { name: "Ver" }).click();
+  const drawer = page.getByRole("dialog", { name: "Mensajes para ti" });
+  await expect(drawer.getByText("Tu diario te espera cuando tengas 5 minutos.")).toBeVisible();
+
+  // Ya avisado: al volver no se repite.
+  await page.reload();
+  await expect(page.getByRole("button", { name: "Mensajes para ti, 1 nuevo" })).toBeVisible();
+  await expect(page.locator("[data-sonner-toast]")).toHaveCount(0);
 });
 
 test("la barra de vidrio se ajusta desde Perfil y se recuerda", async ({ page }) => {

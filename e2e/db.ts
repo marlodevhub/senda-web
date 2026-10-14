@@ -45,3 +45,12 @@ export function seedPendingParticipant(): string {
   sql(`INSERT INTO participant (code, cohort_id) VALUES ('${code}', ${cohortId});`);
   return code;
 }
+
+/** Un mensaje R7 ENVIADO, como si lo hubiera dejado la revisión de las 19:00 (CU-13). */
+export function seedSentMessage(participantCode: string): void {
+  sql(
+    "INSERT INTO message (participant_id, decision_date, moment, rule, variant_index, catalog_version, result, " +
+      "action_type, created_at) SELECT id, CURRENT_DATE, 'EVENING_REVIEW', 'R7', 0, 'v1', 'SENT', 'WRITE', now() " +
+      `FROM participant WHERE code = '${participantCode}';`,
+  );
+}
