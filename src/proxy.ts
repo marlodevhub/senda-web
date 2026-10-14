@@ -6,7 +6,17 @@ const REFRESH_COOKIE = "senda_refresh_token";
 const ADMIN_ACCESS_COOKIE = "senda_admin_access";
 
 /** Rutas del estudiante que exigen sesión iniciada (CU-18). */
-const PROTECTED_PREFIXES = ["/inicio", "/diario", "/consentimiento", "/historial"];
+const PROTECTED_PREFIXES = [
+  "/inicio",
+  "/diario",
+  "/consentimiento",
+  "/espejo",
+  "/reescritura",
+  "/progreso",
+  "/historial",
+  "/mensajes",
+  "/perfil",
+];
 
 /** RS-AD-04: nunca se enlazan desde las del estudiante; /login y /verificar quedan públicas (CU-23 pasos 1-3). */
 const ADMIN_PROTECTED_PREFIXES = ["/admin/cohortes", "/admin/participantes", "/admin/adherencia"];
@@ -40,7 +50,12 @@ export const config = {
     "/inicio/:path*",
     "/diario/:path*",
     "/consentimiento/:path*",
+    "/espejo/:path*",
+    "/reescritura/:path*",
+    "/progreso/:path*",
     "/historial/:path*",
+    "/mensajes/:path*",
+    "/perfil/:path*",
     "/admin/cohortes/:path*",
     "/admin/participantes/:path*",
     "/admin/adherencia/:path*",
