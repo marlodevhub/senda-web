@@ -140,6 +140,26 @@ test("al vencer la cookie de acceso (30 min), la sesión se renueva sola", async
   expect((await context.cookies()).some((c) => c.name === "senda_access_token")).toBe(true);
 });
 
+test("el modo oscuro se elige en Perfil, se mantiene y es accesible", async ({ page }) => {
+  await activateAndConsent(page);
+
+  await page.goto("/perfil");
+  await page.getByRole("radio", { name: "Oscuro" }).click();
+  await expect(page.locator("html")).toHaveClass(/dark/);
+  await expectAccessible(page);
+
+  // Se guarda en el dispositivo: sigue oscuro al navegar y recargar.
+  await page.goto("/inicio");
+  await expect(page.locator("html")).toHaveClass(/dark/);
+  await expectAccessible(page);
+  await page.goto("/diario");
+  await expectAccessible(page);
+
+  await page.goto("/perfil");
+  await page.getByRole("radio", { name: "Claro" }).click();
+  await expect(page.locator("html")).not.toHaveClass(/dark/);
+});
+
 test("sin sesión, las pantallas del estudiante llevan al inicio de sesión", async ({ page }) => {
   for (const route of ["/inicio", "/progreso/frasco", "/perfil", "/mensajes"]) {
     await page.goto(route);

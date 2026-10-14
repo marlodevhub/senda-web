@@ -315,7 +315,11 @@
     "readConsent": "Leer el consentimiento",
     "consentTitle": "Consentimiento",
     "consentAcceptedVersion": "Versión {version}",
-    "backToProfile": "Volver a mi perfil"
+    "backToProfile": "Volver a mi perfil",
+    "themeTitle": "Apariencia",
+    "themeLight": "Claro",
+    "themeDark": "Oscuro",
+    "themeSystem": "Según el sistema"
   },
   "admin": {
     "loginTitle": "Panel de administración",

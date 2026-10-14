@@ -10,6 +10,7 @@ import { useProfile } from "@/features/profile/api/use-profile";
 import { ChangePasswordForm } from "@/features/profile/components/change-password-form";
 import { NotificationsForm } from "@/features/profile/components/notifications-form";
 import { RecoveryCodeForm } from "@/features/profile/components/recovery-code-form";
+import { ThemeSelector } from "@/features/profile/components/theme-selector";
 import { StartingPointForm } from "@/features/welcome/components/starting-point-form";
 
 /**
@@ -47,6 +48,10 @@ export function ProfilePageClient() {
 
       <Section title={t("profile.recoveryTitle")}>
         <RecoveryCodeForm />
+      </Section>
+
+      <Section title={t("profile.themeTitle")}>
+        <ThemeSelector />
       </Section>
 
       <Section title={t("profile.helpTitle")}>
