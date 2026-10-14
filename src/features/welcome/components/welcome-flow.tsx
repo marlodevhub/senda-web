@@ -15,16 +15,28 @@ const MAX_STARTING_POINT = 500;
 
 /**
  * CU-17 Completar bienvenida: 3 pantallas fijas (RN-AC-09) — qué es, qué no
- * es (con Línea 113 y SAMU 106) y cómo se usa —, la pregunta opcional "Mi
- * punto de partida" y "Empezar", que lleva a Inicio.
+ * es (con Línea 113 y SAMU 106) y cómo se usa.
+ * - `first-time`: se puede saltar a la pregunta opcional "Mi punto de
+ *   partida"; "Empezar" la marca como vista y lleva a Inicio.
+ * - `review` (desde Perfil, RN-AC-13): solo las 3 pantallas; "Listo" vuelve a
+ *   Perfil sin guardar nada.
  */
-export function WelcomeFlow({ initialStartingPoint }: { initialStartingPoint?: string | null }) {
+export function WelcomeFlow({
+  mode = "first-time",
+  initialStartingPoint,
+}: {
+  mode?: "first-time" | "review";
+  initialStartingPoint?: string | null;
+}) {
   const t = useTranslations();
   const router = useRouter();
   const complete = useCompleteWelcome();
   const [step, setStep] = useState(0);
   const [startingPoint, setStartingPoint] = useState(initialStartingPoint ?? "");
-  const onQuestion = step === SCREENS.length;
+  const review = mode === "review";
+  const steps = review ? SCREENS.length : SCREENS.length + 1;
+  const onQuestion = !review && step === SCREENS.length;
+  const onLastScreen = step === steps - 1;
 
   async function start() {
     try {
@@ -37,8 +49,8 @@ export function WelcomeFlow({ initialStartingPoint }: { initialStartingPoint?: s
 
   return (
     <div className="flex flex-col gap-5">
-      <ol className="flex justify-center gap-2" aria-label={t("welcome.progressLabel", { step: step + 1, total: SCREENS.length + 1 })}>
-        {[...SCREENS, "question"].map((screen, index) => (
+      <ol className="flex justify-center gap-2" aria-label={t("welcome.progressLabel", { step: step + 1, total: steps })}>
+        {[...SCREENS, "question"].slice(0, steps).map((screen, index) => (
           <li
             key={screen}
             aria-current={index === step ? "step" : undefined}
@@ -79,7 +91,11 @@ export function WelcomeFlow({ initialStartingPoint }: { initialStartingPoint?: s
             {t("common.back")}
           </Button>
         )}
-        {onQuestion ? (
+        {review && onLastScreen ? (
+          <Button className="flex-1" onClick={() => router.push("/perfil")}>
+            {t("welcome.done")}
+          </Button>
+        ) : onQuestion ? (
           <Button variant="hero" className="flex-1" disabled={complete.isPending} onClick={start}>
             {complete.isPending ? t("welcome.starting") : t("welcome.start")}
           </Button>
@@ -89,6 +105,13 @@ export function WelcomeFlow({ initialStartingPoint }: { initialStartingPoint?: s
           </Button>
         )}
       </div>
+
+      {/* NN/g: el tutorial se puede saltar la primera vez y volver a ver desde Perfil. */}
+      {!review && !onQuestion && (
+        <Button variant="ghost" className="self-center" onClick={() => setStep(SCREENS.length)}>
+          {t("welcome.skip")}
+        </Button>
+      )}
     </div>
   );
 }

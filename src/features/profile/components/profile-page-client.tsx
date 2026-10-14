@@ -14,8 +14,10 @@ import { StartingPointForm } from "@/features/welcome/components/starting-point-
 
 /**
  * CU-20 Gestionar perfil (RN-AC-13): notificaciones por correo, contraseña,
- * código de recuperación, punto de partida y bienvenida (CU-17), cerrar
- * sesión y retirarse (CU-21).
+ * código de recuperación, punto de partida (CU-17), ayuda e información
+ * (volver a ver la bienvenida y leer el consentimiento), cerrar sesión y
+ * retirarse (CU-21). Sin botón de "Necesito ayuda": Senda no es un servicio
+ * de crisis (sección 15 del CLAUDE.md raíz).
  */
 export function ProfilePageClient() {
   const t = useTranslations();
@@ -45,6 +47,17 @@ export function ProfilePageClient() {
 
       <Section title={t("profile.recoveryTitle")}>
         <RecoveryCodeForm />
+      </Section>
+
+      <Section title={t("profile.helpTitle")}>
+        <nav aria-label={t("profile.helpTitle")} className="flex flex-col gap-1">
+          <Button asChild variant="ghost" className="justify-start">
+            <Link href="/perfil/bienvenida">{t("profile.seeWelcome")}</Link>
+          </Button>
+          <Button asChild variant="ghost" className="justify-start">
+            <Link href="/perfil/consentimiento">{t("profile.readConsent")}</Link>
+          </Button>
+        </nav>
       </Section>
 
       <div className="flex flex-col gap-2">

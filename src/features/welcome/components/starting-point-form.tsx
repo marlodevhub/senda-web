@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -9,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useUpdateStartingPoint, useWelcome } from "@/features/welcome/api/use-welcome";
 
-/** RN-AC-13: editar "Mi punto de partida" (hasta el día 28) y volver a ver la bienvenida. */
+/** RN-AC-13: editar "Mi punto de partida" (hasta el día 28). */
 export function StartingPointForm() {
   const t = useTranslations();
   const { data: welcome } = useWelcome();
@@ -43,9 +42,6 @@ export function StartingPointForm() {
           {update.isPending ? t("profile.saving") : t("profile.saveStartingPoint")}
         </Button>
       )}
-      <Button asChild variant="ghost" className="self-start">
-        <Link href="/bienvenida">{t("profile.seeWelcome")}</Link>
-      </Button>
     </div>
   );
 }

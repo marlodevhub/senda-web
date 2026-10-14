@@ -310,7 +310,12 @@
     "recoverySubmit": "Generar código nuevo",
     "startingPointTitle": "Mi punto de partida",
     "saveStartingPoint": "Guardar mi punto de partida",
-    "seeWelcome": "Ver la bienvenida otra vez"
+    "seeWelcome": "¿Qué es Senda? Ver la bienvenida",
+    "helpTitle": "Ayuda e información",
+    "readConsent": "Leer el consentimiento",
+    "consentTitle": "Consentimiento",
+    "consentAcceptedVersion": "Versión {version}",
+    "backToProfile": "Volver a mi perfil"
   },
   "admin": {
     "loginTitle": "Panel de administración",
@@ -476,6 +481,8 @@
     "startingPointHint": "Puedes dejarlo en blanco o cambiarlo después desde tu perfil.",
     "next": "Siguiente",
     "start": "Empezar",
-    "starting": "Entrando…"
+    "starting": "Entrando…",
+    "skip": "Saltar",
+    "done": "Listo"
   }
 }

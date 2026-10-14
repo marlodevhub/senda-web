@@ -41,4 +41,29 @@ describe("WelcomeFlow", () => {
     );
     expect(push).toHaveBeenCalledWith("/inicio");
   });
+
+  it("deja saltar las pantallas directo a la pregunta opcional", async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<WelcomeFlow />);
+
+    await user.click(screen.getByRole("button", { name: "Saltar" }));
+
+    expect(screen.getByLabelText("¿Qué te gustaría cambiar en cómo te hablas? (opcional)")).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Saltar" })).not.toBeInTheDocument();
+  });
+
+  it("en modo repaso muestra solo las 3 pantallas y vuelve al perfil sin guardar (RN-AC-13)", async () => {
+    const fetchMock = vi.spyOn(globalThis, "fetch");
+    const user = userEvent.setup();
+    renderWithProviders(<WelcomeFlow mode="review" />);
+
+    expect(screen.queryByRole("button", { name: "Saltar" })).not.toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Siguiente" }));
+    await user.click(screen.getByRole("button", { name: "Siguiente" }));
+    expect(screen.getByRole("heading", { name: "Cómo se usa" })).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Listo" }));
+
+    expect(push).toHaveBeenCalledWith("/perfil");
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
 });

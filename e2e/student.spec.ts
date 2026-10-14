@@ -92,6 +92,32 @@ test("ciclo diario completo: activar → diario → espejo → reescritura → f
   await expectAccessible(page);
 });
 
+test("la bienvenida es solo la primera vez y se repasa desde Ayuda e información", async ({ page }) => {
+  const code = await activateAndConsent(page);
+
+  // RN-AC-13: repaso desde Perfil, sin la pregunta inicial.
+  await page.goto("/perfil");
+  await page.getByRole("link", { name: "¿Qué es Senda? Ver la bienvenida" }).click();
+  await expect(page.getByRole("heading", { name: "Qué es Senda" })).toBeVisible();
+  await page.getByRole("button", { name: "Siguiente" }).click();
+  await page.getByRole("button", { name: "Siguiente" }).click();
+  await page.getByRole("button", { name: "Listo" }).click();
+  await expect(page).toHaveURL(/\/perfil$/);
+
+  await page.getByRole("link", { name: "Leer el consentimiento" }).click();
+  await expect(page.getByRole("heading", { name: "Consentimiento" })).toBeVisible();
+  await expectAccessible(page);
+
+  // Usuario habitual: al volver a iniciar sesión va directo a Inicio, sin bienvenida.
+  await page.goto("/perfil");
+  await page.getByRole("button", { name: "Cerrar sesión" }).click();
+  await expect(page).toHaveURL(/\/login/);
+  await page.getByLabel("Código de participante").fill(code);
+  await page.getByLabel("Contraseña").fill(PASSWORD);
+  await page.getByRole("button", { name: "Iniciar sesión" }).click();
+  await expect(page).toHaveURL(/\/inicio/);
+});
+
 test("sin sesión, las pantallas del estudiante llevan al inicio de sesión", async ({ page }) => {
   for (const route of ["/inicio", "/progreso/frasco", "/perfil", "/mensajes"]) {
     await page.goto(route);
