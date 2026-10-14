@@ -36,6 +36,17 @@ async function activateAndConsent(page: Page): Promise<string> {
   });
   await page.getByLabel("Leí y acepto").check();
   await page.getByRole("button", { name: "Acepto", exact: true }).click();
+
+  // CU-17: bienvenida de 3 pantallas y punto de partida opcional.
+  await expect(page).toHaveURL(/\/bienvenida/);
+  await expect(page.getByRole("heading", { name: "Qué es Senda" })).toBeVisible();
+  await expectAccessible(page);
+  await page.getByRole("button", { name: "Siguiente" }).click();
+  await expect(page.getByText(/Línea 113, opción 5/)).toBeVisible();
+  await page.getByRole("button", { name: "Siguiente" }).click();
+  await page.getByRole("button", { name: "Siguiente" }).click();
+  await page.getByLabel("¿Qué te gustaría cambiar en cómo te hablas? (opcional)").fill("Dejar de llamarme inútil");
+  await page.getByRole("button", { name: "Empezar" }).click();
   await expect(page).toHaveURL(/\/inicio/);
   return code;
 }

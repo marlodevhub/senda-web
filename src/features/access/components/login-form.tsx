@@ -16,8 +16,7 @@ import { login, type LoginDestination } from "@/features/access/api/login";
 
 const DESTINATION_ROUTE: Record<LoginDestination, string> = {
   CONSENT: "/consentimiento",
-  // CU-17 (Bienvenida) todavía no se construyó; por ahora ambos llegan a Inicio.
-  WELCOME: "/inicio",
+  WELCOME: "/bienvenida",
   HOME: "/inicio",
 };
 

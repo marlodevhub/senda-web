@@ -307,7 +307,10 @@
     "passwordChanged": "Listo, guardamos tus cambios. Inicia sesión con tu contraseña nueva.",
     "recoveryTitle": "Código de recuperación",
     "recoveryDescription": "Genera un código nuevo si perdiste el anterior. El anterior deja de servir.",
-    "recoverySubmit": "Generar código nuevo"
+    "recoverySubmit": "Generar código nuevo",
+    "startingPointTitle": "Mi punto de partida",
+    "saveStartingPoint": "Guardar mi punto de partida",
+    "seeWelcome": "Ver la bienvenida otra vez"
   },
   "admin": {
     "loginTitle": "Panel de administración",
@@ -460,5 +463,19 @@
         "DAILY_CLOSING_FAILED": "Cierre diario fallido"
       }
     }
+  },
+  "welcome": {
+    "progressLabel": "Paso {step} de {total}",
+    "whatItIsTitle": "Qué es Senda",
+    "whatItIsBody": "Senda te acompaña 28 días a escuchar cómo te hablas. Escribes un momento de tu día, ves en el espejo las frases donde fuiste duro contigo, puedes reescribirlas con más amabilidad y ves cómo avanzas.",
+    "whatItIsNotTitle": "Qué no es",
+    "whatItIsNotBody": "Senda no te diagnostica, no es un chatbot y no es un servicio de ayuda en crisis: nadie lee lo que escribes ni te va a contactar. Si alguna vez sientes que no puedes más, llama gratis a la Línea 113, opción 5, las 24 horas. En una emergencia, llama al SAMU 106.",
+    "howToUseTitle": "Cómo se usa",
+    "howToUseBody": "Con 5 a 10 minutos basta. La meta es escribir 3 días por semana, no todos los días. Los días que no escribas, puedes marcar cómo estás con una carita en Inicio.",
+    "startingPoint": "¿Qué te gustaría cambiar en cómo te hablas? (opcional)",
+    "startingPointHint": "Puedes dejarlo en blanco o cambiarlo después desde tu perfil.",
+    "next": "Siguiente",
+    "start": "Empezar",
+    "starting": "Entrando…"
   }
 }

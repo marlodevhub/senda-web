@@ -10,11 +10,12 @@ import { useProfile } from "@/features/profile/api/use-profile";
 import { ChangePasswordForm } from "@/features/profile/components/change-password-form";
 import { NotificationsForm } from "@/features/profile/components/notifications-form";
 import { RecoveryCodeForm } from "@/features/profile/components/recovery-code-form";
+import { StartingPointForm } from "@/features/welcome/components/starting-point-form";
 
 /**
  * CU-20 Gestionar perfil (RN-AC-13): notificaciones por correo, contraseña,
- * código de recuperación, cerrar sesión y retirarse (CU-21). Editar el punto
- * de partida y ver la bienvenida llegan con CU-17.
+ * código de recuperación, punto de partida y bienvenida (CU-17), cerrar
+ * sesión y retirarse (CU-21).
  */
 export function ProfilePageClient() {
   const t = useTranslations();
@@ -32,6 +33,10 @@ export function ProfilePageClient() {
         ) : (
           <NotificationsForm enabled={profile.notificationsEnabled} />
         )}
+      </Section>
+
+      <Section title={t("profile.startingPointTitle")}>
+        <StartingPointForm />
       </Section>
 
       <Section title={t("profile.passwordTitle")}>

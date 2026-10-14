@@ -34,7 +34,8 @@ export function ConsentView({ consent }: { consent: ConsentContent }) {
     setIsSubmitting(true);
     try {
       await acceptConsent({ version: consent.version, useForEvaluation });
-      router.push("/inicio");
+      // CU-17: después del consentimiento, la bienvenida (RN-AC-11).
+      router.push("/bienvenida");
     } catch (error) {
       if (error instanceof BffError) {
         toast.error(t(errorMessageKey(error.code)));

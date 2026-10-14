@@ -42,6 +42,6 @@ export function seedPendingParticipant(): string {
     "INSERT INTO cohort (name, start_date, end_date, status) " +
       "VALUES ('Cohorte E2E', CURRENT_DATE - 2, CURRENT_DATE + 25, 'IN_PROGRESS') RETURNING id;",
   );
-  sql(`INSERT INTO participant (code, cohort_id, welcome_seen) VALUES ('${code}', ${cohortId}, true);`);
+  sql(`INSERT INTO participant (code, cohort_id) VALUES ('${code}', ${cohortId});`);
   return code;
 }
