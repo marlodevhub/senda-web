@@ -282,13 +282,13 @@
 /*
  * Vidrio (estilo iOS 26) para la barra inferior y el botón de mensajes:
  * tinte plano, desenfoque y un borde fino y parejo, sin degradados ni
- * relieve. Opacidad y desenfoque vienen de Perfil → Apariencia
- * (--glass-alpha, --glass-blur); data-sheen suma una línea de luz plana arriba.
+ * relieve. Desenfoque fijo de 16 px; la opacidad viene de Perfil →
+ * Apariencia (--glass-alpha) y data-sheen suma una línea de luz plana arriba.
  */
 .glass {
   background: color-mix(in oklab, var(--card) var(--glass-alpha, 70%), transparent);
-  -webkit-backdrop-filter: blur(var(--glass-blur, 20px)) saturate(160%);
-  backdrop-filter: blur(var(--glass-blur, 20px)) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  backdrop-filter: blur(16px) saturate(160%);
   border: 1px solid color-mix(in oklab, var(--foreground) 10%, transparent);
   box-shadow: 0 8px 24px -12px rgba(43, 36, 48, 0.25);
 }

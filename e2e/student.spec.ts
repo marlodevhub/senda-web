@@ -209,14 +209,14 @@ test("la barra de vidrio se ajusta desde Perfil y se recuerda", async ({ page })
   await page.goto("/perfil");
 
   await page.getByLabel("Opacidad").fill("90");
-  await page.getByLabel("Desenfoque").fill("8");
   await page.getByLabel("Línea de luz en el borde").uncheck();
 
   const bar = page.getByRole("navigation", { name: "Navegación principal" }).locator(".glass");
   await expect(bar).toHaveAttribute("data-sheen", "false");
   await expect(bar).toHaveAttribute("style", /--glass-alpha: 90%/);
   await page.reload();
-  await expect(bar).toHaveAttribute("style", /--glass-blur: 8px/);
+  await expect(bar).toHaveAttribute("style", /--glass-alpha: 90%/);
+  await expect(page.getByLabel("Desenfoque")).toHaveCount(0);
   await expectAccessible(page);
 });
 

@@ -3,15 +3,15 @@
 import { useSyncExternalStore } from "react";
 
 /**
- * Apariencia del vidrio (barra inferior y botón de mensajes): opacidad,
- * desenfoque y reflejo. Preferencia de este dispositivo: vive en
+ * Apariencia del vidrio (barra inferior y botón de mensajes): opacidad y
+ * línea de luz. El desenfoque es fijo (16 px, en globals.css). Preferencia de este dispositivo: vive en
  * localStorage, nunca en el servidor; si el almacenamiento falla (modo
  * privado, bloqueado) se usan los valores por defecto.
  */
-export type GlassSettings = { opacity: number; blur: number; sheen: boolean };
+export type GlassSettings = { opacity: number; sheen: boolean };
 
-export const GLASS_DEFAULTS: GlassSettings = { opacity: 70, blur: 20, sheen: true };
-export const GLASS_LIMITS = { opacity: { min: 40, max: 100, step: 5 }, blur: { min: 0, max: 32, step: 2 } } as const;
+export const GLASS_DEFAULTS: GlassSettings = { opacity: 70, sheen: true };
+export const GLASS_LIMITS = { opacity: { min: 40, max: 100, step: 5 } } as const;
 
 const STORAGE_KEY = "senda.glass";
 const CHANGE_EVENT = "senda:glass-change";
@@ -41,7 +41,6 @@ function read(): GlassSettings {
     const parsed = raw ? (JSON.parse(raw) as Partial<GlassSettings>) : {};
     cachedSettings = {
       opacity: clamp(parsed.opacity, GLASS_LIMITS.opacity.min, GLASS_LIMITS.opacity.max, GLASS_DEFAULTS.opacity),
-      blur: clamp(parsed.blur, GLASS_LIMITS.blur.min, GLASS_LIMITS.blur.max, GLASS_DEFAULTS.blur),
       sheen: typeof parsed.sheen === "boolean" ? parsed.sheen : GLASS_DEFAULTS.sheen,
     };
   } catch {
@@ -76,8 +75,5 @@ export function saveGlassSettings(settings: GlassSettings) {
 
 /** Las variables CSS que lee la clase `.glass` de globals.css. */
 export function glassStyle(settings: GlassSettings): React.CSSProperties {
-  return {
-    "--glass-alpha": `${settings.opacity}%`,
-    "--glass-blur": `${settings.blur}px`,
-  } as React.CSSProperties;
+  return { "--glass-alpha": `${settings.opacity}%` } as React.CSSProperties;
 }

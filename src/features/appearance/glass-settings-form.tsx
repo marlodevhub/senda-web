@@ -33,20 +33,6 @@ export function GlassSettingsForm() {
           className="h-11 w-full accent-[var(--bloom-ink)]"
         />
       </div>
-      <div className="flex flex-col gap-1.5">
-        <div className="flex justify-between text-sm">
-          <Label htmlFor="glassBlur">{t("profile.glassBlur")}</Label>
-          <span className="tabular-nums text-muted-foreground">{settings.blur} px</span>
-        </div>
-        <input
-          id="glassBlur"
-          type="range"
-          {...GLASS_LIMITS.blur}
-          value={settings.blur}
-          onChange={(e) => saveGlassSettings({ ...settings, blur: Number(e.target.value) })}
-          className="h-11 w-full accent-[var(--bloom-ink)]"
-        />
-      </div>
       <div className="flex items-center gap-3">
         <Checkbox
           id="glassSheen"
