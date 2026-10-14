@@ -11,6 +11,8 @@ export type ConsistencyWeek = { week: number; daysWithEntry: number; goal: numbe
 
 export type Stats = {
   hasEnoughData: boolean;
+  /** CU-08 1a: "Mi ánimo" aparece con 3 días con registro o check-in. */
+  hasEnoughMoodData: boolean;
   mood: MoodPoint[];
   beforeAfter: BeforeAfterPoint[];
   transformed: TransformedWeek[];

@@ -11,21 +11,32 @@ import { ConsistencyChart } from "@/features/progress/components/charts/consiste
 /**
  * CU-08: los 6 gráficos en el orden de RN-PR-08 (transformadas antes que
  * voz interna). RN-PR-07: con menos de 3 registros completados se
- * muestra `datos.reuniendo` en vez de los gráficos. Presentacional —
+ * muestra `datos.reuniendo` en vez de los gráficos basados en registros;
+ * "Mi ánimo" aparece antes si ya hay 3 días con registro o check-in
+ * (CU-08 1a). Presentacional —
  * `StatsPageClient` resuelve la carga y los errores.
  */
 export function StatsView({ stats }: { stats: Stats }) {
   const t = useTranslations();
 
+  const moodCard = (
+    <ChartCard title={t("progress.stats.moodTitle")} explanation={t("progress.stats.moodExplanation")}>
+      <MoodChart data={stats.mood} />
+    </ChartCard>
+  );
+
   if (!stats.hasEnoughData) {
-    return <p className="py-10 text-center text-sm text-muted-foreground">{t("progress.stats.notEnoughData")}</p>;
+    return (
+      <div className="flex flex-col gap-4">
+        {stats.hasEnoughMoodData && moodCard}
+        <p className="py-10 text-center text-sm text-muted-foreground">{t("progress.stats.notEnoughData")}</p>
+      </div>
+    );
   }
 
   return (
     <div className="flex flex-col gap-4">
-      <ChartCard title={t("progress.stats.moodTitle")} explanation={t("progress.stats.moodExplanation")}>
-        <MoodChart data={stats.mood} />
-      </ChartCard>
+      {moodCard}
 
       <ChartCard
         title={t("progress.stats.beforeAfterTitle")}

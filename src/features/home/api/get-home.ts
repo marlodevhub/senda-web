@@ -18,6 +18,8 @@ export type Home = {
   day: number;
   status: HomeParticipantStatus;
   checkinToday: boolean;
+  /** CU-06: la cara marcada hoy (1..5), o null si todavía no marcó. */
+  checkinMood: 1 | 2 | 3 | 4 | 5 | null;
   pendingPhrase: HomePendingPhrase | null;
   goal: HomeGoal | null;
   newMessages: boolean;

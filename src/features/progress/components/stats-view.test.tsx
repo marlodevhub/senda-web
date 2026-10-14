@@ -6,6 +6,7 @@ import type { Stats } from "@/features/progress/api/get-stats";
 
 const BASE_STATS: Stats = {
   hasEnoughData: true,
+  hasEnoughMoodData: true,
   mood: [{ interventionDay: 1, averageMood: 3 }],
   beforeAfter: [],
   transformed: [{ week: 1, detected: 2, rewritten: 1 }],
@@ -16,12 +17,19 @@ const BASE_STATS: Stats = {
 
 describe("StatsView", () => {
   it("muestra el mensaje de datos insuficientes antes del 3er registro (RN-PR-07)", () => {
-    renderWithProviders(<StatsView stats={{ ...BASE_STATS, hasEnoughData: false }} />);
+    renderWithProviders(<StatsView stats={{ ...BASE_STATS, hasEnoughData: false, hasEnoughMoodData: false }} />);
 
     expect(
       screen.getByText("Aún estamos reuniendo tus datos. Vuelve después de tu tercer registro."),
     ).toBeInTheDocument();
     expect(screen.queryByText("Mi ánimo")).not.toBeInTheDocument();
+  });
+
+  it("muestra solo \"Mi ánimo\" con 3 días de ánimo pero menos de 3 registros (CU-08 1a)", () => {
+    renderWithProviders(<StatsView stats={{ ...BASE_STATS, hasEnoughData: false }} />);
+
+    expect(screen.getByText("Mi ánimo")).toBeInTheDocument();
+    expect(screen.queryByText("Mi constancia")).not.toBeInTheDocument();
   });
 
   it("muestra los 6 gráficos cuando hay datos suficientes", () => {

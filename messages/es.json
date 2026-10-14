@@ -100,7 +100,9 @@
     "finished": "Terminaste tus 28 días. Gracias por acompañarte así. Solo falta un último cuestionario.",
     "posttestCta": "Responder el cuestionario final",
     "goToProgress": "Ver mi progreso",
-    "goToHistory": "Ver mi historial"
+    "goToHistory": "Ver mi historial",
+    "checkinThanks": "Gracias por contarnos.",
+    "checkinInvitation": "Parece un día difícil. Si quieres, escribir un momento puede ayudarte a ordenarlo."
   },
   "analysis": {
     "title": "Espejo",

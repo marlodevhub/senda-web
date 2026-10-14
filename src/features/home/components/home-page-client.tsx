@@ -8,16 +8,15 @@ import { Button } from "@/components/ui/button";
 import { useHome } from "@/features/home/api/use-home";
 import { PendingPhraseCard, NoPendingPhrase } from "@/features/home/components/pending-phrase-card";
 import { WeeklyGoal } from "@/features/home/components/weekly-goal";
+import { CheckIn } from "@/features/home/components/check-in";
 
 /**
  * CU-05 Inicio (RN-IN-01): saludo con "Día N de 28", botón Escribir, frase
  * pendiente (RN-IN-02), meta de la semana (RN-IN-07) y avisos de mensajes
  * nuevos (CU-14) y resumen nuevo (CU-10). En SOLO_LECTURA (RN-IN-06) muestra
  * `inicio.terminaste`, el enlace a la posprueba y los accesos a Progreso e
- * Historial, sin acciones de escritura.
- *
- * El check-in (CU-06) todavía no existe, así que Inicio no lo muestra todavía;
- * cuando se construya, va entre el saludo y el botón Escribir (RN-IN-01).
+ * Historial, sin acciones de escritura. El check-in (CU-06) va entre el
+ * saludo y el botón Escribir (RN-IN-01) y no se muestra en SOLO_LECTURA.
  */
 export function HomePageClient() {
   const t = useTranslations();
@@ -62,6 +61,8 @@ export function HomePageClient() {
         </div>
       ) : (
         <>
+          <CheckIn initialMood={home.checkinMood} />
+
           <Button asChild variant="hero" size="xl">
             <Link href="/diario">{t("home.writeCta")}</Link>
           </Button>
