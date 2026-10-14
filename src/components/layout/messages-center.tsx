@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Bell, X } from "lucide-react";
 import { toast } from "sonner";
@@ -33,8 +34,13 @@ export function MessagesCenterProvider({ children }: { children: React.ReactNode
   const t = useTranslations();
   const glass = useGlassSettings();
   const isWide = useMediaQuery("(min-width: 768px)");
-  const [isOpen, setIsOpen] = useState(false);
   const { data: messages } = useMessages();
+  const pathname = usePathname();
+  // Se recuerda en qué pantalla se abrió: la acción de un mensaje (Escribir, Reescribir, Frasco) lleva a otra
+  // y la bandeja queda cerrada al llegar.
+  const [openedAt, setOpenedAt] = useState<string | null>(null);
+  const isOpen = openedAt === pathname;
+  const setIsOpen = (open: boolean) => setOpenedAt(open ? pathname : null);
 
   useEffect(() => {
     if (!messages) {
@@ -52,7 +58,8 @@ export function MessagesCenterProvider({ children }: { children: React.ReactNode
     toast(fresh.length === 1 ? fresh[0].text : t("guidance.toastMany", { count: fresh.length }), {
       icon: <Bell className="size-4" aria-hidden />,
       duration: 8000,
-      action: { label: t("guidance.toastOpen"), onClick: () => setIsOpen(true) },
+      // El toast puede tocarse en otra pantalla que la que lo mostró: se abre donde esté ahora.
+      action: { label: t("guidance.toastOpen"), onClick: () => setOpenedAt(window.location.pathname) },
     });
   }, [messages, isOpen, t]);
 
@@ -79,7 +86,7 @@ export function MessagesCenterProvider({ children }: { children: React.ReactNode
               <X className="size-5" aria-hidden />
             </DrawerClose>
           </DrawerHeader>
-          <div className="overflow-y-auto px-4 pb-4">
+          <div className="overflow-y-auto px-4 pt-2 pb-4">
             <MessageInbox />
           </div>
         </DrawerContent>

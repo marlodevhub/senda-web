@@ -225,7 +225,7 @@ test("los mensajes para ti se abren en un drawer: desde abajo en móvil, desde l
   expect((box?.x ?? 0) + (box?.width ?? 0)).toBeCloseTo(1440 - 12, 0);
 });
 
-test("un mensaje nuevo se avisa con un toast una sola vez y abre la bandeja", async ({ page }) => {
+test("un mensaje nuevo se avisa con un toast una sola vez; su acción lleva a la pantalla y cierra la bandeja", async ({ page }) => {
   const code = await activateAndConsent(page);
   seedSentMessage(code);
   await page.reload();
@@ -241,6 +241,13 @@ test("un mensaje nuevo se avisa con un toast una sola vez y abre la bandeja", as
   await page.reload();
   await expect(page.getByRole("button", { name: "Mensajes para ti, 1 nuevo" })).toBeVisible();
   await expect(page.locator("[data-sonner-toast]")).toHaveCount(0);
+
+  // Su acción lleva al Diario, cierra la bandeja y cuenta como abrir el mensaje.
+  await page.getByRole("button", { name: "Mensajes para ti, 1 nuevo" }).click();
+  await drawer.getByRole("link", { name: "Escribir" }).click();
+  await expect(page).toHaveURL(/\/diario/);
+  await expect(drawer).toBeHidden();
+  await expect(page.getByRole("button", { name: "Mensajes para ti", exact: true })).toBeVisible();
 });
 
 test("la barra de vidrio se ajusta desde Perfil y se recuerda", async ({ page }) => {

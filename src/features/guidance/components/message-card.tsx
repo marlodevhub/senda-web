@@ -48,7 +48,8 @@ export function MessageCard({ message }: { message: Message }) {
       onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && handleOpen()}
       className={cn(
         "cursor-pointer transition-colors",
-        !message.opened && "ring-1 ring-bloom shadow-bloom",
+        // shadow-(--shadow-bloom) se suma al ring; la clase .shadow-bloom lo reemplazaría y borraría el borde.
+        !message.opened && "ring-1 ring-bloom shadow-(--shadow-bloom)",
       )}
     >
       <CardContent className="flex flex-col gap-2">
@@ -59,7 +60,14 @@ export function MessageCard({ message }: { message: Message }) {
         <span className="text-xs text-muted-foreground">{formatShortDate(message.createdAt)}</span>
         {href && (
           <Button variant="soft" size="sm" className="self-start" asChild>
-            <Link href={href} onClick={(e) => e.stopPropagation()}>
+            <Link
+              href={href}
+              onClick={(e) => {
+                // Usar la acción también cuenta como abrir el mensaje (CU-14).
+                e.stopPropagation();
+                handleOpen();
+              }}
+            >
               {t(ACTION_LABEL_KEY[message.actionType] ?? "guidance.actionRewrite")}
             </Link>
           </Button>
