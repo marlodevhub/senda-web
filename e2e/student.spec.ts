@@ -177,6 +177,21 @@ test("en escritorio la navegación es una barra lateral accesible", async ({ pag
   await expectAccessible(page);
 });
 
+test("en tablet la barra lateral es un riel de iconos con nombres accesibles", async ({ page }) => {
+  await activateAndConsent(page);
+  await page.setViewportSize({ width: 834, height: 1112 });
+  await page.goto("/inicio");
+
+  const rail = page.getByRole("navigation", { name: "Navegación principal" });
+  await expect(rail).toHaveCount(1); // sin barra inferior en tablet
+  // Los textos no se ven, pero cada ícono conserva su nombre (lector de pantalla y tooltip).
+  await expect(page.getByText("Tu senda")).toBeHidden();
+  await expect(rail.getByRole("link", { name: "Historial" })).toHaveAttribute("title", "Historial");
+  await rail.getByRole("link", { name: "Progreso" }).click();
+  await expect(page).toHaveURL(/\/progreso/);
+  await expectAccessible(page);
+});
+
 test("sin sesión, las pantallas del estudiante llevan al inicio de sesión", async ({ page }) => {
   for (const route of ["/inicio", "/progreso/frasco", "/perfil", "/mensajes"]) {
     await page.goto(route);

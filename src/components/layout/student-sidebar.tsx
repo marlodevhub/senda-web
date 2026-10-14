@@ -12,9 +12,12 @@ import { useHome } from "@/features/home/api/use-home";
 const INTERVENTION_DAYS = 28;
 
 /**
- * Escritorio (`lg`): panel lateral flotante. Muestra el recorrido de 28 días
- * como avance en días ("tu senda") y la meta de la semana en días — nunca un
- * puntaje ni un porcentaje de mejora (regla de coherencia 1, RN-TR-04).
+ * Navegación lateral del estudiante:
+ * - Tablet (`md`): riel compacto, solo iconos; el nombre de cada uno sigue
+ *   en el árbol de accesibilidad (`sr-only`) y aparece como tooltip.
+ * - Escritorio (`lg`): panel completo con el recorrido de 28 días ("tu
+ *   senda") y la meta de la semana — en días, nunca un puntaje ni un
+ *   porcentaje de mejora (regla de coherencia 1, RN-TR-04).
  */
 export function StudentSidebar() {
   const t = useTranslations();
@@ -24,29 +27,40 @@ export function StudentSidebar() {
   const readOnly = home?.status === "READ_ONLY";
   const day = home ? Math.min(Math.max(home.day, 1), INTERVENTION_DAYS) : null;
   const items: StudentNavItem[] = [...STUDENT_NAV_ITEMS.slice(0, 4), MESSAGES_NAV_ITEM, STUDENT_NAV_ITEMS[4]];
+  const journeyLabel = day !== null ? t("sidebar.dayOf", { day, total: INTERVENTION_DAYS }) : "";
 
   return (
-    <aside className="sticky top-0 hidden h-screen w-72 shrink-0 p-4 lg:block">
-      <div className="flex h-full flex-col gap-7 overflow-y-auto rounded-lg bg-card p-5 shadow-card">
-        <Link href="/inicio" className="flex items-center gap-3 rounded-md focus-visible:outline-2 focus-visible:outline-ring">
-          <span className="flex size-10 items-center justify-center rounded-full bg-[image:var(--grad-dawn)] text-primary-foreground shadow-bloom">
+    <aside className="sticky top-0 hidden h-screen shrink-0 p-3 md:block md:w-24 lg:w-72 lg:p-4">
+      <div className="flex h-full flex-col items-center gap-6 overflow-y-auto rounded-lg bg-card px-2 py-5 shadow-card lg:items-stretch lg:gap-7 lg:p-5">
+        <Link
+          href="/inicio"
+          title="Senda"
+          className="flex items-center gap-3 rounded-md focus-visible:outline-2 focus-visible:outline-ring"
+        >
+          <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-[image:var(--grad-dawn)] text-primary-foreground shadow-bloom">
             <Sprout className="size-5" aria-hidden />
           </span>
-          <span className="flex flex-col">
+          <span className="sr-only lg:not-sr-only lg:flex lg:flex-col">
             <span className="font-heading text-2xl leading-none font-extrabold text-foreground">Senda</span>
             <span className="text-xs text-muted-foreground">{t("sidebar.tagline")}</span>
           </span>
         </Link>
 
         {day !== null && (
-          <section aria-labelledby="sidebar-journey" className="flex flex-col gap-2 rounded-md bg-muted p-3.5">
-            <div className="flex items-baseline justify-between">
-              <h2 id="sidebar-journey" className="text-xs font-semibold tracking-wide text-muted-foreground">
+          <section
+            aria-labelledby="sidebar-journey"
+            title={journeyLabel}
+            className="flex w-full flex-col items-center gap-2 rounded-md bg-muted p-2 lg:items-stretch lg:p-3.5"
+          >
+            <div className="flex w-full items-baseline justify-center lg:justify-between">
+              <h2 id="sidebar-journey" className="sr-only text-xs font-semibold tracking-wide text-muted-foreground lg:not-sr-only">
                 {t("sidebar.journey")}
               </h2>
-              <span className="text-sm font-bold tabular-nums text-foreground">
-                {t("sidebar.dayOf", { day, total: INTERVENTION_DAYS })}
+              {/* Tablet: "3/28"; escritorio: "Día 3 de 28". */}
+              <span aria-hidden className="text-sm font-bold tabular-nums text-foreground lg:hidden">
+                {day}/{INTERVENTION_DAYS}
               </span>
+              <span className="sr-only text-sm font-bold tabular-nums text-foreground lg:not-sr-only">{journeyLabel}</span>
             </div>
             <div
               role="progressbar"
@@ -54,7 +68,8 @@ export function StudentSidebar() {
               aria-valuemin={1}
               aria-valuemax={INTERVENTION_DAYS}
               aria-valuenow={day}
-              className="h-1.5 overflow-hidden rounded-full bg-background"
+              aria-valuetext={journeyLabel}
+              className="h-1.5 w-full overflow-hidden rounded-full bg-background"
             >
               <div
                 className="h-full rounded-full bg-[image:var(--grad-dawn)] transition-[width] duration-700 ease-out"
@@ -65,26 +80,35 @@ export function StudentSidebar() {
         )}
 
         {!readOnly && (
-          <Button asChild variant="hero" size="lg" className="w-full">
+          <Button
+            asChild
+            variant="hero"
+            size="lg"
+            title={t("home.writeCta")}
+            className="size-12 rounded-full p-0 lg:h-auto lg:w-full lg:rounded-[var(--radius-md)] lg:px-4 lg:py-2.5"
+          >
             <Link href="/diario">
-              <PenLine className="size-4" aria-hidden />
-              {t("home.writeCta")}
+              <PenLine className="size-5 lg:size-4" aria-hidden />
+              <span className="sr-only lg:not-sr-only">{t("home.writeCta")}</span>
             </Link>
           </Button>
         )}
 
-        <nav aria-label={t("nav.label")} className="flex flex-col gap-1">
+        <nav aria-label={t("nav.label")} className="flex w-full flex-col items-center gap-1 lg:items-stretch">
           {items.map((item) => {
             const active = pathname.startsWith(item.href);
             const Icon = item.icon;
+            const label = t(item.labelKey);
             const unread = item.href === MESSAGES_NAV_ITEM.href && home?.newMessages;
             return (
               <Link
                 key={item.href}
                 href={item.href}
+                title={label}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "group relative flex min-h-11 items-center gap-3 rounded-md px-3 text-[0.9375rem] font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-ring",
+                  "relative flex size-12 items-center justify-center rounded-md text-[0.9375rem] font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-ring",
+                  "lg:min-h-11 lg:w-full lg:justify-start lg:gap-3 lg:px-3",
                   active ? "bg-bloom-tint text-bloom-ink" : "text-muted-foreground hover:bg-muted hover:text-foreground",
                 )}
               >
@@ -92,9 +116,9 @@ export function StudentSidebar() {
                   <span aria-hidden className="absolute top-2 bottom-2 left-0 w-1 rounded-full bg-[image:var(--grad-dawn)]" />
                 )}
                 <Icon className="size-5" aria-hidden />
-                <span className="flex-1">{t(item.labelKey)}</span>
+                <span className="sr-only lg:not-sr-only lg:flex-1">{label}</span>
                 {unread && (
-                  <span className="size-2 rounded-full bg-bloom">
+                  <span className="absolute top-2.5 right-2.5 size-2 rounded-full bg-bloom lg:static">
                     <span className="sr-only">{t("sidebar.newMessages")}</span>
                   </span>
                 )}
@@ -104,11 +128,15 @@ export function StudentSidebar() {
         </nav>
 
         {home?.goal && (
-          <section aria-labelledby="sidebar-goal" className="mt-auto flex flex-col gap-2 border-t border-border pt-4">
-            <h2 id="sidebar-goal" className="text-xs font-semibold tracking-wide text-muted-foreground">
+          <section
+            aria-labelledby="sidebar-goal"
+            title={t("sidebar.goalShort", { days: home.goal.daysWithEntry, goal: home.goal.goal })}
+            className="mt-auto flex w-full flex-col items-center gap-2 border-t border-border pt-4 lg:items-stretch"
+          >
+            <h2 id="sidebar-goal" className="sr-only text-xs font-semibold tracking-wide text-muted-foreground lg:not-sr-only">
               {t("home.goalLabel")}
             </h2>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-col items-center gap-1.5 lg:flex-row lg:gap-2">
               {Array.from({ length: home.goal.goal }, (_, index) => (
                 <span
                   key={index}
@@ -119,7 +147,7 @@ export function StudentSidebar() {
                   )}
                 />
               ))}
-              <span className="ml-1 text-sm text-foreground">
+              <span className="sr-only text-sm text-foreground lg:not-sr-only lg:ml-1">
                 {home.goal.daysWithEntry >= home.goal.goal
                   ? t("home.goalMet")
                   : t("sidebar.goalShort", { days: home.goal.daysWithEntry, goal: home.goal.goal })}

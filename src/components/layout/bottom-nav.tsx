@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { cn } from "cn";
 import { STUDENT_NAV_ITEMS } from "@/components/layout/student-nav-items";
 
-/** Móvil: las 5 pestañas abajo. Desde `lg` la reemplaza `StudentSidebar`. */
+/** Móvil: las 5 pestañas abajo. Desde `md` la reemplaza `StudentSidebar` (riel en tablet, panel en escritorio). */
 export function BottomNav() {
   const pathname = usePathname();
   const t = useTranslations();
@@ -14,7 +14,7 @@ export function BottomNav() {
   return (
     <nav
       aria-label={t("nav.label")}
-      className="fixed inset-x-0 bottom-0 z-10 flex justify-center border-t border-border bg-card/95 backdrop-blur-sm lg:hidden"
+      className="fixed inset-x-0 bottom-0 z-10 flex justify-center border-t border-border bg-card/95 backdrop-blur-sm md:hidden"
     >
       <div className="flex w-full max-w-md justify-between px-2 py-1.5">
         {STUDENT_NAV_ITEMS.map((item) => {
