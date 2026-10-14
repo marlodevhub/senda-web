@@ -25,7 +25,7 @@ export function FindingCard({
   return (
     <div className={cn("rounded-sm p-3 text-sm font-semibold leading-snug", DIMENSION_STYLE[dimension])}>
       <p className="before:content-['“'] after:content-['”']">{fragment}</p>
-      <p className="mt-1.5 text-xs font-bold uppercase tracking-wide opacity-85">
+      <p className="mt-1.5 text-xs font-semibold opacity-85">
         {label}
       </p>
     </div>
