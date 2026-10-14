@@ -326,7 +326,7 @@
     "glassHint": "Ajusta el vidrio de la barra de abajo y del botón de mensajes. Se guarda en este dispositivo.",
     "glassOpacity": "Opacidad",
     "glassBlur": "Desenfoque",
-    "glassSheen": "Reflejo de cristal",
+    "glassSheen": "Línea de luz en el borde",
     "glassReset": "Restablecer"
   },
   "admin": {

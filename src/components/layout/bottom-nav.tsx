@@ -8,7 +8,7 @@ import { STUDENT_NAV_ITEMS } from "@/components/layout/student-nav-items";
 import { glassStyle, useGlassSettings } from "@/features/appearance/glass-settings";
 
 /**
- * Móvil: cápsula flotante de vidrio líquido con las 5 pestañas (opacidad,
+ * Móvil: cápsula flotante de vidrio con las 5 pestañas (opacidad,
  * desenfoque y reflejo se ajustan en Perfil → Apariencia). Desde `md` la
  * reemplaza `StudentSidebar`.
  */
@@ -40,9 +40,7 @@ export function BottomNav() {
               <span
                 className={cn(
                   "flex flex-col items-center gap-0.5 rounded-full px-1 py-1.5 text-[0.6875rem] font-semibold transition-all duration-300",
-                  active
-                    ? "bg-bloom-tint/80 text-bloom-ink shadow-[inset_0_1px_0_rgba(255,255,255,0.6)]"
-                    : "text-foreground/75",
+                  active ? "bg-bloom-tint text-bloom-ink" : "text-foreground/75",
                 )}
               >
                 <Icon className={cn("size-5 transition-transform duration-300", active && "scale-110")} aria-hidden />

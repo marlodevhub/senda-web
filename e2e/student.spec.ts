@@ -210,7 +210,7 @@ test("la barra de vidrio se ajusta desde Perfil y se recuerda", async ({ page })
 
   await page.getByLabel("Opacidad").fill("90");
   await page.getByLabel("Desenfoque").fill("8");
-  await page.getByLabel("Reflejo de cristal").uncheck();
+  await page.getByLabel("Línea de luz en el borde").uncheck();
 
   const bar = page.getByRole("navigation", { name: "Navegación principal" }).locator(".glass");
   await expect(bar).toHaveAttribute("data-sheen", "false");

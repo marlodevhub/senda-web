@@ -30,7 +30,7 @@ export function MessagesButton() {
         title={t("guidance.title")}
         data-sheen={glass.sheen}
         style={glassStyle(glass)}
-        className="glass flex size-11 items-center justify-center rounded-full text-foreground focus-visible:outline-2 focus-visible:outline-ring"
+        className="glass relative flex size-11 items-center justify-center rounded-full text-foreground focus-visible:outline-2 focus-visible:outline-ring"
       >
         <Bell className="size-5" aria-hidden />
         {unread > 0 && (
