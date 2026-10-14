@@ -32,7 +32,7 @@ export function BottomNav() {
             <span
               className={cn(
                 "flex flex-1 flex-col items-center gap-0.5 rounded-lg px-2 py-1.5 text-[0.6875rem] font-semibold transition-colors",
-                active && "text-bloom",
+                active && "text-bloom-ink",
                 !active && item.enabled && "text-muted-foreground",
                 !item.enabled && "text-muted-foreground/40",
               )}

@@ -99,7 +99,8 @@
   --sprout-tint: #E4EBDD;
 
   --primary: var(--bloom);
-  --primary-foreground: #FFFFFF;
+  /* WCAG 2.1 AA (RS-TR): el blanco sobre bloom da 2,9:1; este vino oscuro da 5,7:1 (igual que en modo oscuro). */
+  --primary-foreground: #2B1A20;
   --secondary: var(--flow-tint);
   --secondary-foreground: var(--flow-ink);
   --muted: var(--paper-sunken);
@@ -265,4 +266,15 @@
 
 @media (prefers-reduced-motion: reduce) {
   .animate-breathe { animation: none; }
+}
+
+/*
+ * WCAG 2.1 AA (RS-TR): los colores "rich" de Sonner por defecto dan 4,34:1 en
+ * el aviso de error (#e60000 sobre #fff0f0). Se oscurece el texto de cada tipo.
+ */
+:root [data-sonner-toaster][data-sonner-theme="light"] {
+  --error-text: #b3001b;
+  --success-text: #1f6b3a;
+  --warning-text: #8a4b00;
+  --info-text: #1e4fa3;
 }
