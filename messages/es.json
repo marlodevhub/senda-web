@@ -236,7 +236,9 @@
     "actionRewrite": "Reescribir",
     "actionJar": "Leer una frase de mi frasco",
     "bellLabel": "{count, plural, =0 {Mensajes para ti} one {Mensajes para ti, # nuevo} other {Mensajes para ti, # nuevos}}",
-    "seeAll": "Ver todos los mensajes"
+    "seeAll": "Ver todos los mensajes",
+    "close": "Cerrar mensajes",
+    "description": "Los mensajes de apoyo que Senda te envió, del más reciente al más antiguo."
   },
   "history": {
     "title": "Historial",

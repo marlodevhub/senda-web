@@ -22,7 +22,7 @@ export default async function StudentLayout({ children }: { children: React.Reac
       <StudentSidebar />
       {/* Tablet y escritorio: la campana flota arriba a la derecha. */}
       <div className="fixed top-5 right-6 z-20 hidden md:block">
-        <MessagesButton />
+        <MessagesButton variant="popover" />
       </div>
       <div className="min-w-0 flex-1 pb-28 md:pb-0">
         {/* Móvil: la marca a la izquierda y la campana a la derecha. */}
@@ -33,7 +33,7 @@ export default async function StudentLayout({ children }: { children: React.Reac
             </span>
             <span className="font-heading text-xl font-extrabold text-foreground">Senda</span>
           </span>
-          <MessagesButton />
+          <MessagesButton variant="sheet" />
         </header>
         <main
           id="contenido"

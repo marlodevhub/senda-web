@@ -193,13 +193,26 @@ test("en tablet la barra lateral es un riel de iconos con nombres accesibles", a
   await expectAccessible(page);
 });
 
-test("los mensajes para ti se abren desde la campana de arriba", async ({ page }) => {
+test("los mensajes para ti se abren desde la campana: pantalla completa en móvil, panel en escritorio", async ({ page }) => {
   await activateAndConsent(page);
 
+  // Móvil: la bandeja ocupa toda la pantalla, sobre el vidrio del dock.
   await page.getByRole("button", { name: "Mensajes para ti" }).click();
-  await expect(page.getByRole("heading", { name: "Mensajes para ti" })).toBeVisible();
-  await expect(page.getByText("Aún no tienes mensajes.")).toBeVisible();
+  const sheet = page.getByRole("dialog", { name: "Mensajes para ti" });
+  await expect(sheet).toBeVisible();
+  await expect(sheet).toHaveClass(/glass/);
+  await expect(sheet.getByText("Aún no tienes mensajes.")).toBeVisible();
+  const box = await sheet.boundingBox();
+  expect(box?.width).toBe(360);
+  // axe mide colores reales: se espera a que termine la animación de entrada.
+  await sheet.evaluate((el) => Promise.all(el.getAnimations({ subtree: true }).map((a) => a.finished)));
   await expectAccessible(page);
+  await sheet.getByRole("button", { name: "Cerrar mensajes" }).click();
+  await expect(sheet).toBeHidden();
+
+  // Escritorio: panel flotante junto a la campana, con acceso a la bandeja completa.
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.getByRole("button", { name: "Mensajes para ti" }).click();
   await page.getByRole("link", { name: "Ver todos los mensajes" }).click();
   await expect(page).toHaveURL(/\/mensajes/);
 });
