@@ -20,11 +20,15 @@ function redirectIfSessionLost(path: string, status: number, code: string | unde
     return;
   }
   const isAdmin = path.startsWith("/api/admin");
+  // Recarga completa a propósito: al perder la sesión se descarta todo el estado en memoria
+  // (caché de TanStack Query incluida); este módulo tampoco tiene acceso al router.
+  /* eslint-disable @next/next/no-location-assign-relative-destination */
   if (status === 401 && (code === "UNAUTHENTICATED" || code === "INVALID_REFRESH_TOKEN")) {
     window.location.assign(isAdmin ? "/admin/login" : "/login");
   } else if (!isAdmin && status === 403 && code === "CONSENT_REQUIRED") {
     window.location.assign("/consentimiento");
   }
+  /* eslint-enable @next/next/no-location-assign-relative-destination */
 }
 
 /**
