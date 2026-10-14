@@ -11,6 +11,7 @@ import { ChangePasswordForm } from "@/features/profile/components/change-passwor
 import { NotificationsForm } from "@/features/profile/components/notifications-form";
 import { RecoveryCodeForm } from "@/features/profile/components/recovery-code-form";
 import { ThemeSelector } from "@/features/profile/components/theme-selector";
+import { GlassSettingsForm } from "@/features/appearance/glass-settings-form";
 import { StartingPointForm } from "@/features/welcome/components/starting-point-form";
 
 /**
@@ -52,6 +53,10 @@ export function ProfilePageClient() {
 
       <Section title={t("profile.themeTitle")}>
         <ThemeSelector />
+      </Section>
+
+      <Section title={t("profile.glassTitle")}>
+        <GlassSettingsForm />
       </Section>
 
       <Section title={t("profile.helpTitle")}>

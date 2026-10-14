@@ -234,7 +234,9 @@
     "empty": "Aún no tienes mensajes.",
     "actionWrite": "Escribir",
     "actionRewrite": "Reescribir",
-    "actionJar": "Leer una frase de mi frasco"
+    "actionJar": "Leer una frase de mi frasco",
+    "bellLabel": "{count, plural, =0 {Mensajes para ti} one {Mensajes para ti, # nuevo} other {Mensajes para ti, # nuevos}}",
+    "seeAll": "Ver todos los mensajes"
   },
   "history": {
     "title": "Historial",
@@ -319,7 +321,13 @@
     "themeTitle": "Apariencia",
     "themeLight": "Claro",
     "themeDark": "Oscuro",
-    "themeSystem": "Según el sistema"
+    "themeSystem": "Según el sistema",
+    "glassTitle": "Barra del celular",
+    "glassHint": "Ajusta el vidrio de la barra de abajo y del botón de mensajes. Se guarda en este dispositivo.",
+    "glassOpacity": "Opacidad",
+    "glassBlur": "Desenfoque",
+    "glassSheen": "Reflejo de cristal",
+    "glassReset": "Restablecer"
   },
   "admin": {
     "loginTitle": "Panel de administración",
@@ -503,7 +511,6 @@
     "tagline": "Escucha cómo te hablas",
     "journey": "Tu senda",
     "dayOf": "Día {day} de {total}",
-    "goalShort": "{days} de {goal} días",
-    "newMessages": "Tienes mensajes nuevos"
+    "goalShort": "{days} de {goal} días"
   }
 }

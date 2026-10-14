@@ -169,9 +169,9 @@ test("en escritorio la navegación es una barra lateral accesible", async ({ pag
   await expect(sidebar).toHaveCount(1); // la barra inferior queda oculta en escritorio
   await expect(page.getByText("Tu senda")).toBeVisible();
   await expect(page.getByText("Día 3 de 28", { exact: true })).toBeVisible();
-  await sidebar.getByRole("link", { name: "Mensajes" }).click();
-  await expect(page).toHaveURL(/\/mensajes/);
-  await expect(sidebar.getByRole("link", { name: "Mensajes" })).toHaveAttribute("aria-current", "page");
+  await sidebar.getByRole("link", { name: "Historial" }).click();
+  await expect(page).toHaveURL(/\/historial/);
+  await expect(sidebar.getByRole("link", { name: "Historial" })).toHaveAttribute("aria-current", "page");
   await expectAccessible(page);
   await page.goto("/inicio");
   await expectAccessible(page);
@@ -185,10 +185,38 @@ test("en tablet la barra lateral es un riel de iconos con nombres accesibles", a
   const rail = page.getByRole("navigation", { name: "Navegación principal" });
   await expect(rail).toHaveCount(1); // sin barra inferior en tablet
   // Los textos no se ven, pero cada ícono conserva su nombre (lector de pantalla y tooltip).
-  await expect(page.getByText("Tu senda")).toBeHidden();
+  const journeyTitle = await page.getByText("Tu senda").boundingBox();
+  expect(journeyTitle?.width ?? 0).toBeLessThanOrEqual(1); // solo para lectores de pantalla
   await expect(rail.getByRole("link", { name: "Historial" })).toHaveAttribute("title", "Historial");
   await rail.getByRole("link", { name: "Progreso" }).click();
   await expect(page).toHaveURL(/\/progreso/);
+  await expectAccessible(page);
+});
+
+test("los mensajes para ti se abren desde la campana de arriba", async ({ page }) => {
+  await activateAndConsent(page);
+
+  await page.getByRole("button", { name: "Mensajes para ti" }).click();
+  await expect(page.getByRole("heading", { name: "Mensajes para ti" })).toBeVisible();
+  await expect(page.getByText("Aún no tienes mensajes.")).toBeVisible();
+  await expectAccessible(page);
+  await page.getByRole("link", { name: "Ver todos los mensajes" }).click();
+  await expect(page).toHaveURL(/\/mensajes/);
+});
+
+test("la barra de vidrio se ajusta desde Perfil y se recuerda", async ({ page }) => {
+  await activateAndConsent(page);
+  await page.goto("/perfil");
+
+  await page.getByLabel("Opacidad").fill("90");
+  await page.getByLabel("Desenfoque").fill("8");
+  await page.getByLabel("Reflejo de cristal").uncheck();
+
+  const bar = page.getByRole("navigation", { name: "Navegación principal" }).locator(".glass");
+  await expect(bar).toHaveAttribute("data-sheen", "false");
+  await expect(bar).toHaveAttribute("style", /--glass-alpha: 90%/);
+  await page.reload();
+  await expect(bar).toHaveAttribute("style", /--glass-blur: 8px/);
   await expectAccessible(page);
 });
 

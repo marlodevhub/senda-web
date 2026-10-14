@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { PenLine, Sprout } from "lucide-react";
 import { cn } from "cn";
 import { Button } from "@/components/ui/button";
-import { MESSAGES_NAV_ITEM, STUDENT_NAV_ITEMS, type StudentNavItem } from "@/components/layout/student-nav-items";
+import { STUDENT_NAV_ITEMS } from "@/components/layout/student-nav-items";
 import { useHome } from "@/features/home/api/use-home";
 
 const INTERVENTION_DAYS = 28;
@@ -26,7 +26,6 @@ export function StudentSidebar() {
 
   const readOnly = home?.status === "READ_ONLY";
   const day = home ? Math.min(Math.max(home.day, 1), INTERVENTION_DAYS) : null;
-  const items: StudentNavItem[] = [...STUDENT_NAV_ITEMS.slice(0, 4), MESSAGES_NAV_ITEM, STUDENT_NAV_ITEMS[4]];
   const journeyLabel = day !== null ? t("sidebar.dayOf", { day, total: INTERVENTION_DAYS }) : "";
 
   return (
@@ -95,11 +94,10 @@ export function StudentSidebar() {
         )}
 
         <nav aria-label={t("nav.label")} className="flex w-full flex-col items-center gap-1 lg:items-stretch">
-          {items.map((item) => {
+          {STUDENT_NAV_ITEMS.map((item) => {
             const active = pathname.startsWith(item.href);
             const Icon = item.icon;
             const label = t(item.labelKey);
-            const unread = item.href === MESSAGES_NAV_ITEM.href && home?.newMessages;
             return (
               <Link
                 key={item.href}
@@ -117,11 +115,6 @@ export function StudentSidebar() {
                 )}
                 <Icon className="size-5" aria-hidden />
                 <span className="sr-only lg:not-sr-only lg:flex-1">{label}</span>
-                {unread && (
-                  <span className="absolute top-2.5 right-2.5 size-2 rounded-full bg-bloom lg:static">
-                    <span className="sr-only">{t("sidebar.newMessages")}</span>
-                  </span>
-                )}
               </Link>
             );
           })}

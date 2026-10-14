@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { Loader2, Bell } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useHome } from "@/features/home/api/use-home";
 import { PendingPhraseCard, NoPendingPhrase } from "@/features/home/components/pending-phrase-card";
@@ -58,7 +58,7 @@ export function HomePageClient() {
               <Link href="/historial">{t("home.goToHistory")}</Link>
             </Button>
           </div>
-          <HomeNotices newMessages={home.newMessages} newSummary={home.newSummary} />
+          <HomeNotices newSummary={home.newSummary} />
         </div>
       ) : (
         // Escritorio: a la izquierda lo de hoy (check-in, escribir); a la derecha lo pendiente y la meta.
@@ -85,7 +85,7 @@ export function HomePageClient() {
 
             {home.goal && <WeeklyGoal daysWithEntry={home.goal.daysWithEntry} goal={home.goal.goal} />}
 
-            <HomeNotices newMessages={home.newMessages} newSummary={home.newSummary} />
+            <HomeNotices newSummary={home.newSummary} />
           </div>
         </div>
       )}
@@ -93,20 +93,11 @@ export function HomePageClient() {
   );
 }
 
-/** Avisos de mensajes nuevos (CU-14) y resumen nuevo (CU-10). */
-function HomeNotices({ newMessages, newSummary }: { newMessages: boolean; newSummary: boolean }) {
+/** Aviso de resumen nuevo (CU-10). Los mensajes nuevos (CU-14) los avisa el botón de la campana. */
+function HomeNotices({ newSummary }: { newSummary: boolean }) {
   const t = useTranslations();
   return (
     <>
-      {newMessages && (
-        <Link
-          href="/mensajes"
-          className="flex items-center gap-3 rounded-lg bg-card p-4 text-sm font-semibold text-foreground shadow-card"
-        >
-          <Bell className="size-5 text-bloom" aria-hidden />
-          {t("home.newMessages")}
-        </Link>
-      )}
       {newSummary && (
         <Link
           href="/progreso"
