@@ -14,4 +14,7 @@ export const queryKeys = {
   adminCohorts: () => ["admin-cohorts"] as const,
   adminParticipants: (cohortId: number) => ["admin-participants", cohortId] as const,
   adminAdherence: (cohortId: number) => ["admin-adherence", cohortId] as const,
+  adminAuditLogs: (filters: { from: string; to: string; action?: string; page: number }) =>
+    ["admin-audit-logs", filters.from, filters.to, filters.action ?? null, filters.page] as const,
+  adminConfig: () => ["admin-config"] as const,
 };

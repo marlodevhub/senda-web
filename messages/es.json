@@ -326,7 +326,8 @@
     "sidebar": {
       "cohorts": "Cohortes",
       "participants": "Participantes",
-      "adherence": "Adherencia"
+      "adherence": "Adherencia",
+      "audit": "Auditoría"
     },
     "cohorts": {
       "title": "Cohortes",
@@ -404,6 +405,49 @@
       "exportCta": "Exportar a Excel",
       "empty": "Todavía no hay datos de adherencia para esta cohorte.",
       "noCohortSelected": "Elige una cohorte para ver su adherencia."
+    },
+    "audit": {
+      "title": "Auditoría",
+      "fromLabel": "Desde",
+      "toLabel": "Hasta",
+      "actionLabel": "Tipo de acción",
+      "allActions": "Todas las acciones",
+      "invalidRange": "Elige un periodo de 1 a 90 días.",
+      "empty": "No hay acciones en ese periodo.",
+      "dateColumn": "Fecha",
+      "actorColumn": "Actor",
+      "actionColumn": "Acción",
+      "entityColumn": "Entidad",
+      "participantColumn": "Código",
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "pageLabel": "Página {page}",
+      "configTitle": "Configuración vigente",
+      "fingerprint": "Huella actual",
+      "promptVersion": "Prompt",
+      "lexiconVersion": "Filtro léxico",
+      "provider": "Proveedor",
+      "model": "Modelo",
+      "noFrozenCohorts": "Ninguna cohorte tiene la configuración congelada todavía.",
+      "frozenAt": "Congelada el {date}",
+      "matchesRunning": "Sin cambios desde el congelamiento",
+      "differsFromRunning": "Cambió desde el congelamiento",
+      "actions": {
+        "ADMIN_LOGIN_SUCCEEDED": "Ingreso de administrador",
+        "ADMIN_LOGIN_FAILED": "Ingreso fallido de administrador",
+        "ADMIN_LOGOUT": "Salida de administrador",
+        "COHORT_CREATED": "Cohorte creada",
+        "COHORT_UPDATED": "Cohorte editada",
+        "COHORT_CLOSED": "Cohorte cerrada",
+        "CODES_GENERATED": "Códigos generados",
+        "PARTICIPANT_ACCESS_RESET": "Acceso restablecido",
+        "ADHERENCE_EXPORTED": "Exportación descargada",
+        "CONFIG_FROZEN": "Configuración congelada",
+        "COHORT_START_VERIFICATION_FAILED": "Verificación de inicio fallida",
+        "PARTICIPANT_WITHDRAWN": "Retiro del estudio",
+        "PARTICIPANT_DATA_PURGED": "Datos borrados por retiro",
+        "DAILY_CLOSING_FAILED": "Cierre diario fallido"
+      }
     }
   }
 }

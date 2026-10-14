@@ -19,7 +19,7 @@ const PROTECTED_PREFIXES = [
 ];
 
 /** RS-AD-04: nunca se enlazan desde las del estudiante; /login y /verificar quedan públicas (CU-23 pasos 1-3). */
-const ADMIN_PROTECTED_PREFIXES = ["/admin/cohortes", "/admin/participantes", "/admin/adherencia"];
+const ADMIN_PROTECTED_PREFIXES = ["/admin/cohortes", "/admin/participantes", "/admin/adherencia", "/admin/auditoria"];
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -59,5 +59,6 @@ export const config = {
     "/admin/cohortes/:path*",
     "/admin/participantes/:path*",
     "/admin/adherencia/:path*",
+    "/admin/auditoria/:path*",
   ],
 };

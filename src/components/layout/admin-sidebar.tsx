@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "cn";
 import { useTranslations } from "next-intl";
-import { Users2, ClipboardList, LogOut, Sprout } from "lucide-react";
+import { Users2, ClipboardList, LogOut, Sprout, ScrollText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 type NavItem = { href: string; label: string; icon: typeof Users2 };
@@ -17,6 +17,7 @@ export function AdminSidebar({ onLogout }: { onLogout: () => void }) {
     { href: "/admin/cohortes", label: t("admin.sidebar.cohorts"), icon: Sprout },
     { href: "/admin/participantes", label: t("admin.sidebar.participants"), icon: Users2 },
     { href: "/admin/adherencia", label: t("admin.sidebar.adherence"), icon: ClipboardList },
+    { href: "/admin/auditoria", label: t("admin.sidebar.audit"), icon: ScrollText },
   ];
 
   return (
