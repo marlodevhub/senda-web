@@ -36,7 +36,7 @@ export function HomePageClient() {
 
   return (
     <div className="flex flex-col gap-5">
-      <h1 className="font-heading text-xl font-bold leading-snug text-foreground">
+      <h1 className="font-heading text-xl font-bold leading-snug text-foreground lg:text-3xl">
         {t("home.greeting", { day: home.day })}
       </h1>
 
@@ -58,31 +58,47 @@ export function HomePageClient() {
               <Link href="/historial">{t("home.goToHistory")}</Link>
             </Button>
           </div>
+          <HomeNotices newMessages={home.newMessages} newSummary={home.newSummary} />
         </div>
       ) : (
-        <>
-          <CheckIn initialMood={home.checkinMood} />
+        // Escritorio: a la izquierda lo de hoy (check-in, escribir); a la derecha lo pendiente y la meta.
+        <div className="flex flex-col gap-5 lg:grid lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:items-start lg:gap-8">
+          <div className="flex flex-col gap-5">
+            <CheckIn initialMood={home.checkinMood} />
 
-          <Button asChild variant="hero" size="xl">
-            <Link href="/diario">{t("home.writeCta")}</Link>
-          </Button>
+            <Button asChild variant="hero" size="xl">
+              <Link href="/diario">{t("home.writeCta")}</Link>
+            </Button>
+          </div>
 
-          {pending ? (
-            <PendingPhraseCard
-              fragment={pending.fragment}
-              onRewrite={() =>
-                router.push(`/reescritura/${pending.journalEntryId}?findingId=${pending.findingId}`)
-              }
-            />
-          ) : (
-            <NoPendingPhrase />
-          )}
+          <div className="flex flex-col gap-4">
+            {pending ? (
+              <PendingPhraseCard
+                fragment={pending.fragment}
+                onRewrite={() =>
+                  router.push(`/reescritura/${pending.journalEntryId}?findingId=${pending.findingId}`)
+                }
+              />
+            ) : (
+              <NoPendingPhrase />
+            )}
 
-          {home.goal && <WeeklyGoal daysWithEntry={home.goal.daysWithEntry} goal={home.goal.goal} />}
-        </>
+            {home.goal && <WeeklyGoal daysWithEntry={home.goal.daysWithEntry} goal={home.goal.goal} />}
+
+            <HomeNotices newMessages={home.newMessages} newSummary={home.newSummary} />
+          </div>
+        </div>
       )}
+    </div>
+  );
+}
 
-      {home.newMessages && (
+/** Avisos de mensajes nuevos (CU-14) y resumen nuevo (CU-10). */
+function HomeNotices({ newMessages, newSummary }: { newMessages: boolean; newSummary: boolean }) {
+  const t = useTranslations();
+  return (
+    <>
+      {newMessages && (
         <Link
           href="/mensajes"
           className="flex items-center gap-3 rounded-lg bg-card p-4 text-sm font-semibold text-foreground shadow-card"
@@ -91,8 +107,7 @@ export function HomePageClient() {
           {t("home.newMessages")}
         </Link>
       )}
-
-      {home.newSummary && (
+      {newSummary && (
         <Link
           href="/progreso"
           className="flex items-center gap-3 rounded-lg bg-card p-4 text-sm font-semibold text-foreground shadow-card"
@@ -100,6 +115,6 @@ export function HomePageClient() {
           {t("home.newSummary")}
         </Link>
       )}
-    </div>
+    </>
   );
 }

@@ -488,5 +488,22 @@
     "starting": "Entrando…",
     "skip": "Saltar",
     "done": "Listo"
+  },
+  "nav": {
+    "label": "Navegación principal",
+    "skipToContent": "Saltar al contenido",
+    "home": "Inicio",
+    "journal": "Diario",
+    "progress": "Progreso",
+    "history": "Historial",
+    "messages": "Mensajes",
+    "profile": "Perfil"
+  },
+  "sidebar": {
+    "tagline": "Escucha cómo te hablas",
+    "journey": "Tu senda",
+    "dayOf": "Día {day} de {total}",
+    "goalShort": "{days} de {goal} días",
+    "newMessages": "Tienes mensajes nuevos"
   }
 }

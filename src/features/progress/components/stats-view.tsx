@@ -34,8 +34,9 @@ export function StatsView({ stats }: { stats: Stats }) {
     );
   }
 
+  // Escritorio: los gráficos en cuadrícula de 2; "Mi ánimo" ocupa el ancho completo arriba.
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 lg:grid lg:grid-cols-2 lg:gap-5 lg:[&>:first-child]:col-span-2">
       {moodCard}
 
       <ChartCard

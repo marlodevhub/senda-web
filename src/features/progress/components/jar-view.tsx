@@ -44,7 +44,7 @@ export function JarView({ cards }: { cards: JarCard[] }) {
   }
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3 sm:grid sm:grid-cols-2 sm:items-start">
       {cards.map((card) => (
         <Card key={card.rewriteId} style={{ borderLeft: `4px solid ${DIMENSION_COLOR[card.dimension]}` }}>
           <CardContent className="flex flex-col gap-2">

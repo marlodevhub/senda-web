@@ -160,6 +160,23 @@ test("el modo oscuro se elige en Perfil, se mantiene y es accesible", async ({ p
   await expect(page.locator("html")).not.toHaveClass(/dark/);
 });
 
+test("en escritorio la navegación es una barra lateral accesible", async ({ page }) => {
+  await activateAndConsent(page);
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/inicio");
+
+  const sidebar = page.getByRole("navigation", { name: "Navegación principal" });
+  await expect(sidebar).toHaveCount(1); // la barra inferior queda oculta en escritorio
+  await expect(page.getByText("Tu senda")).toBeVisible();
+  await expect(page.getByText("Día 3 de 28", { exact: true })).toBeVisible();
+  await sidebar.getByRole("link", { name: "Mensajes" }).click();
+  await expect(page).toHaveURL(/\/mensajes/);
+  await expect(sidebar.getByRole("link", { name: "Mensajes" })).toHaveAttribute("aria-current", "page");
+  await expectAccessible(page);
+  await page.goto("/inicio");
+  await expectAccessible(page);
+});
+
 test("sin sesión, las pantallas del estudiante llevan al inicio de sesión", async ({ page }) => {
   for (const route of ["/inicio", "/progreso/frasco", "/perfil", "/mensajes"]) {
     await page.goto(route);
