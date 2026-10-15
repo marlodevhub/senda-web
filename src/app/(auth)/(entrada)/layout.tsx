@@ -28,7 +28,10 @@ export default async function EntradaLayout({ children }: { children: React.Reac
           </div>
           <div className="flex flex-col items-center gap-2">
             <AuthCast className="lg:hidden" />
-            <main className="w-full max-w-md rounded-[2rem] bg-card p-6 shadow-card sm:p-10">{children}</main>
+            {/* Móvil: el formulario va directo sobre el fondo; desde tablet, en una tarjeta. */}
+            <main className="w-full max-w-md px-1 pt-2 sm:rounded-[2rem] sm:bg-card sm:p-10 sm:shadow-card">
+              {children}
+            </main>
           </div>
         </div>
       </div>
