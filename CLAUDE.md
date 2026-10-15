@@ -53,7 +53,7 @@ senda-web/
 └── src/
     ├── app/                          SOLO rutas, layouts y route handlers
     │   ├── (auth)/                   sin barra inferior
-    │   │   ├── (entrada)/            paisaje de fondo + formulario (_components/senda-landscape.tsx)
+    │   │   ├── (entrada)/            personajes de emociones + formulario (_components/auth-hero.tsx)
     │   │   │   └── activar/ · login/ · recuperar/
     │   │   └── (onboarding)/         tarjeta centrada
     │   │       └── consentimiento/ · bienvenida/
