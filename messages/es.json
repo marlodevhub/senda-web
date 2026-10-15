@@ -97,7 +97,15 @@
     "dailyLimitReached": "Hiciste muchos registros hoy. Vuelve mañana.",
     "readOnlyPeriod": "Tus 28 días terminaron. Puedes ver todo lo que escribiste en tu historial.",
     "draftRecovered": "Recuperamos lo que estabas escribiendo.",
-    "offline": "Parece que no hay conexión. Tu texto quedó guardado en este dispositivo; envíalo cuando vuelvas a tener señal."
+    "offline": "Parece que no hay conexión. Tu texto quedó guardado en este dispositivo; envíalo cuando vuelvas a tener señal.",
+    "tagline": "Tu momento, a tu manera.",
+    "q1Placeholder": "Cuéntalo con tus palabras…",
+    "q2Placeholder": "Lo que pasó por tu cabeza…",
+    "q3Placeholder": "Lo que sentiste…",
+    "freeTextPlaceholder": "Escribe con calma, aquí nadie te apura…",
+    "handNote": "Escribe sin apuro ♡",
+    "wordCount": "{count, plural, one {# palabra} other {# palabras}}",
+    "wordHint": "con 15 ya está bien"
   },
   "home": {
     "writeCta": "Escribir",

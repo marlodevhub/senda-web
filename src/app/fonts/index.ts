@@ -18,3 +18,21 @@ export const figtree = localFont({
   variable: "--font-figtree",
   display: "swap",
 });
+
+/** Diario: serif suave para lo que escribe el estudiante y las preguntas (se lee como un cuaderno). OFL. */
+export const lora = localFont({
+  src: [
+    { path: "./Lora-400.woff2", weight: "400", style: "normal" },
+    { path: "./Lora-400-italic.woff2", weight: "400", style: "italic" },
+    { path: "./Lora-500.woff2", weight: "500", style: "normal" },
+  ],
+  variable: "--font-lora",
+  display: "swap",
+});
+
+/** Notas manuscritas decorativas del Diario. OFL. */
+export const caveat = localFont({
+  src: [{ path: "./Caveat-500.woff2", weight: "500", style: "normal" }],
+  variable: "--font-caveat",
+  display: "swap",
+});

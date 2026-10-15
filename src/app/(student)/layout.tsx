@@ -30,7 +30,8 @@ export default async function StudentLayout({ children }: { children: React.Reac
           </div>
           <div className="min-w-0 flex-1 pb-28 md:pb-0">
             {/* Móvil: la marca a la izquierda y la campana a la derecha. */}
-            <header className="flex items-center justify-between px-4 pt-4 md:hidden">
+            {/* relative z-10: queda sobre los fondos a pantalla completa (cielo del Diario, jardín). */}
+          <header className="relative z-10 flex items-center justify-between px-4 pt-4 md:hidden">
               <span className="flex items-center gap-2">
                 <span className="flex size-8 items-center justify-center rounded-full bg-[image:var(--grad-dawn)] text-primary-foreground">
                   <Sprout className="size-4" aria-hidden />

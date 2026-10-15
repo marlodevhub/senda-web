@@ -9,8 +9,8 @@ import { FieldError } from "@/components/forms/field-error";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { Feather, Send, Sparkles } from "lucide-react";
+import { EmotionCharacter, EmotionDefs } from "@/components/illustrations/emotion-characters";
 import { MoodPicker } from "@/features/journal/components/mood-picker";
 import type { Mood } from "@/components/icons/mood-orb";
 import { ContextPicker } from "@/features/journal/components/context-picker";
@@ -85,15 +85,58 @@ export function JournalForm() {
     }
   }
 
+  const texts = useWatch({ control, name: ["q1", "q2", "q3", "freeText"] });
+  const written = mode === "GUIDED" ? texts.slice(0, 3).join(" ") : (texts[3] ?? "");
+  const words = countWords(written);
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5" noValidate>
+      <EmotionDefs />
       {draftRecovered && (
-        <p role="status" className="rounded-md bg-sprout-tint p-3 text-sm text-sprout-ink">
+        <p role="status" className="rounded-full bg-sprout-tint px-4 py-2 text-center text-base text-sprout-ink">
           {t("journal.draftRecovered")}
         </p>
       )}
-      <div className="flex flex-col gap-2">
-        <Label>{t("journal.moodLabel")}</Label>
+
+      <Controller
+        control={control}
+        name="mode"
+        render={({ field }) => (
+          <div
+            role="radiogroup"
+            aria-label={t("journal.title")}
+            className="mx-auto flex w-full max-w-sm gap-1 rounded-full bg-card/80 p-1 shadow-card backdrop-blur"
+          >
+            {(["GUIDED", "FREE"] as const).map((option) => {
+              const Icon = option === "GUIDED" ? Sparkles : Feather;
+              const active = field.value === option;
+              return (
+                <button
+                  key={option}
+                  type="button"
+                  role="radio"
+                  aria-checked={active}
+                  onClick={() => field.onChange(option)}
+                  className={cn(
+                    "flex flex-1 items-center justify-center gap-2 rounded-full py-2.5 text-base font-semibold transition-all focus-visible:outline-2 focus-visible:outline-ring",
+                    active
+                      ? "bg-[linear-gradient(135deg,var(--flow-tint),var(--bloom-tint))] text-foreground shadow-card"
+                      : "text-muted-foreground hover:text-foreground",
+                  )}
+                >
+                  <Icon className="size-4" aria-hidden />
+                  {option === "GUIDED" ? t("journal.modeGuided") : t("journal.modeFree")}
+                </button>
+              );
+            })}
+          </div>
+        )}
+      />
+
+      <section aria-labelledby="journal-mood" className="flex flex-col gap-2">
+        <h2 id="journal-mood" className="text-center font-journal text-lg text-foreground italic">
+          {t("journal.moodLabel")}
+        </h2>
         <Controller
           control={control}
           name="moodBefore"
@@ -102,71 +145,86 @@ export function JournalForm() {
               label={t("journal.moodLabel")}
               value={field.value as Mood | undefined}
               onChange={(mood) => field.onChange(mood)}
+              className="bg-card/80 backdrop-blur"
             />
           )}
         />
         {errors.moodBefore && <FieldError message="journal.missingMood" />}
-      </div>
+      </section>
 
-      <Controller
-        control={control}
-        name="mode"
-        render={({ field }) => (
-          <div className="flex gap-1.5 rounded-full bg-muted p-1" role="radiogroup" aria-label={t("journal.title")}>
-            {(["GUIDED", "FREE"] as const).map((option) => (
-              <button
-                key={option}
-                type="button"
-                role="radio"
-                aria-checked={field.value === option}
-                onClick={() => field.onChange(option)}
-                className={cn(
-                  "flex-1 rounded-full py-2 text-sm font-semibold transition-colors",
-                  field.value === option ? "bg-card text-foreground shadow-card" : "text-muted-foreground",
-                )}
-              >
-                {option === "GUIDED" ? t("journal.modeGuided") : t("journal.modeFree")}
-              </button>
-            ))}
+      {/* La hoja del diario: sin cajas con borde, letra de cuaderno y aire para escribir. */}
+      <div className="relative flex min-h-80 flex-col gap-2 rounded-[2rem] bg-card/85 p-5 shadow-card backdrop-blur-xl md:p-8">
+        {mode === "GUIDED" ? (
+          <>
+            <Prompt id="q1" label={t("journal.q1Label")} error={errors.q1?.message}>
+              <JournalTextarea id="q1" rows={2} placeholder={t("journal.q1Placeholder")} {...register("q1")} />
+            </Prompt>
+            <Prompt id="q2" label={t("journal.q2Label")} error={errors.q2?.message}>
+              <JournalTextarea id="q2" rows={3} placeholder={t("journal.q2Placeholder")} {...register("q2")} />
+            </Prompt>
+            <Prompt id="q3" label={t("journal.q3Label")} error={errors.q3?.message}>
+              <JournalTextarea id="q3" rows={2} placeholder={t("journal.q3Placeholder")} {...register("q3")} />
+            </Prompt>
+          </>
+        ) : (
+          <Prompt id="freeText" label={t("journal.freeTextLabel")} error={errors.freeText?.message}>
+            <JournalTextarea
+              id="freeText"
+              rows={8}
+              placeholder={t("journal.freeTextPlaceholder")}
+              {...register("freeText")}
+            />
+          </Prompt>
+        )}
+
+        {/* Compañía mientras la hoja está en blanco; se va al empezar a escribir. */}
+        {words === 0 && (
+          <div
+            aria-hidden
+            className="pointer-events-none flex flex-col items-center gap-1 self-center pt-2 motion-safe:animate-in motion-safe:fade-in-0"
+          >
+            <EmotionCharacter emotion="calm" className="w-16" />
+            <p className="-rotate-3 font-hand text-2xl text-muted-foreground">{t("journal.handNote")}</p>
           </div>
         )}
-      />
 
-      {mode === "GUIDED" ? (
-        <>
-          <Field id="q1" label={t("journal.q1Label")} error={errors.q1?.message}>
-            <Textarea id="q1" rows={2} {...register("q1")} />
-          </Field>
-          <Field id="q2" label={t("journal.q2Label")} error={errors.q2?.message}>
-            <Textarea id="q2" rows={3} {...register("q2")} />
-          </Field>
-          <Field id="q3" label={t("journal.q3Label")} error={errors.q3?.message}>
-            <Textarea id="q3" rows={2} {...register("q3")} />
-          </Field>
-        </>
-      ) : (
-        <Field id="freeText" label={t("journal.freeTextLabel")} error={errors.freeText?.message}>
-          <Textarea id="freeText" rows={6} {...register("freeText")} />
-        </Field>
-      )}
+        <div className="mt-auto flex items-center justify-between gap-3 pt-4">
+          <p className="text-base text-muted-foreground">
+            <span className="font-semibold text-foreground tabular-nums">
+              {t("journal.wordCount", { count: words })}
+            </span>
+            {words < MIN_WORDS && <span> · {t("journal.wordHint")}</span>}
+          </p>
+          <Button type="submit" variant="hero" size="xl" disabled={isSubmitting} className="shrink-0 rounded-full px-6">
+            <Send className="size-4" aria-hidden />
+            {isSubmitting ? t("journal.submitting") : t("journal.submit")}
+          </Button>
+        </div>
+      </div>
 
-      <div className="flex flex-col gap-2">
-        <Label>{t("journal.contextLabel")}</Label>
+      <section aria-labelledby="journal-context" className="flex flex-col gap-2">
+        <h2 id="journal-context" className="text-center font-journal text-lg text-foreground italic">
+          {t("journal.contextLabel")}
+        </h2>
         <Controller
           control={control}
           name="context"
           render={({ field }) => <ContextPicker value={field.value} onChange={field.onChange} />}
         />
-      </div>
-
-      <Button type="submit" variant="hero" size="xl" disabled={isSubmitting} className="mt-2">
-        {isSubmitting ? t("journal.submitting") : t("journal.submit")}
-      </Button>
+      </section>
     </form>
   );
 }
 
-function Field({
+/** RS-DI-02 se valida en el servidor; este conteo solo acompaña mientras se escribe. */
+const MIN_WORDS = 15;
+
+function countWords(text: string): number {
+  return text.trim().split(/\s+/).filter(Boolean).length;
+}
+
+/** Una pregunta del diario: la pregunta en cursiva y, debajo, el renglón para escribir. */
+function Prompt({
   id,
   label,
   error,
@@ -178,10 +236,25 @@ function Field({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-col gap-1.5">
-      <Label htmlFor={id}>{label}</Label>
+    // El foco se ve en todo el bloque: el campo no tiene borde propio.
+    <div className="-mx-3 flex flex-col gap-1 rounded-2xl px-3 py-2 transition-colors focus-within:bg-flow-tint/45">
+      <label htmlFor={id} className="font-journal text-xl text-foreground italic">
+        {label}
+      </label>
       {children}
       <FieldError message={error} />
     </div>
+  );
+}
+
+function JournalTextarea({ className, ...props }: React.ComponentProps<"textarea">) {
+  return (
+    <textarea
+      className={cn(
+        "field-sizing-content w-full resize-none bg-transparent font-journal text-lg leading-relaxed text-foreground outline-none placeholder:text-muted-foreground/80",
+        className,
+      )}
+      {...props}
+    />
   );
 }
