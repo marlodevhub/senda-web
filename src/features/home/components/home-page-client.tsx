@@ -72,16 +72,17 @@ export function HomePageClient() {
           </div>
 
           <div className="flex flex-col gap-4">
-            {pending ? (
-              <PendingPhraseCard
-                fragment={pending.fragment}
-                onRewrite={() =>
-                  router.push(`/reescritura/${pending.journalEntryId}?findingId=${pending.findingId}`)
-                }
-              />
-            ) : (
-              <NoPendingPhrase />
-            )}
+            {/* El tutorial ilumina aquí el camino a la Reescritura. */}
+            <div data-tour="frase-pendiente">
+              {pending ? (
+                <PendingPhraseCard
+                  fragment={pending.fragment}
+                  onRewrite={() => router.push(`/reescritura/${pending.journalEntryId}?findingId=${pending.findingId}`)}
+                />
+              ) : (
+                <NoPendingPhrase />
+              )}
+            </div>
 
             {home.goal && <WeeklyGoal daysWithEntry={home.goal.daysWithEntry} goal={home.goal.goal} />}
 

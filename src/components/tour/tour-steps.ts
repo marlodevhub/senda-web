@@ -7,8 +7,15 @@ export type TourStep = {
   id: string;
   /** Quién habla: un personaje o, al abrir y al cerrar, todos. */
   cast: Emotion[];
-  /** `data-tour` del elemento que se ilumina (pestaña o campana); sin él, la tarjeta va al centro. */
-  target?: string;
+  /**
+   * `data-tour` de lo que se ilumina (pestaña, campana o tarjeta): el primero
+   * que esté a la vista. Sin ninguno, la tarjeta va al centro.
+   */
+  target?: string[];
+  /** En móvil, si debe iluminar otra cosa (junto a una tarjeta de Inicio no cabe la del tutorial). */
+  mobileTarget?: string[];
+  /** Un ejemplo de cómo se ve la pantalla, para las que no tienen pestaña propia. */
+  preview?: "mirror" | "rewrite";
   /** Muestra las 5 caras del check-in. */
   moods?: boolean;
 };
@@ -20,14 +27,21 @@ export type TourStep = {
  */
 export const TOUR_STEPS: TourStep[] = [
   { id: "welcome", cast: ALL },
-  { id: "home", cast: ["calm"], target: "inicio", moods: true },
-  { id: "journal", cast: ["hope"], target: "diario" },
-  { id: "mirror", cast: ["nerves"] },
-  { id: "rewrite", cast: ["spark"] },
-  { id: "progress", cast: ["joy"], target: "progreso" },
-  { id: "messages", cast: ["sad"], target: "mensajes" },
-  { id: "history", cast: ["calm"], target: "historial" },
-  { id: "profile", cast: ["hope"], target: "perfil" },
+  { id: "home", cast: ["calm"], target: ["inicio"], moods: true },
+  { id: "journal", cast: ["hope"], target: ["diario"] },
+  // Espejo y Reescritura no tienen pestaña: se ilumina desde dónde se llega a ellos.
+  { id: "mirror", cast: ["nerves"], target: ["diario"], preview: "mirror" },
+  {
+    id: "rewrite",
+    cast: ["spark"],
+    target: ["frase-pendiente", "historial"],
+    mobileTarget: ["historial"],
+    preview: "rewrite",
+  },
+  { id: "progress", cast: ["joy"], target: ["progreso"] },
+  { id: "messages", cast: ["sad"], target: ["mensajes"] },
+  { id: "history", cast: ["calm"], target: ["historial"] },
+  { id: "profile", cast: ["hope"], target: ["perfil"] },
   { id: "done", cast: ALL },
 ];
 

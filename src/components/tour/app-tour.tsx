@@ -24,41 +24,47 @@ export function useTour(): Tour | null {
 const AUTO_START_MS = 700;
 const SPOT_PADDING = 6;
 
+const MARGIN = 16;
+
 type Layout = { rect: DOMRect | null; vw: number; vh: number };
 
-/** El elemento visible con ese `data-tour` (la barra inferior y la lateral tienen cada una el suyo). */
-function findTarget(target: string | undefined): DOMRect | null {
-  if (!target) {
-    return null;
-  }
-  for (const el of document.querySelectorAll(`[data-tour="${target}"]`)) {
-    const rect = el.getBoundingClientRect();
-    if (rect.width > 0 && rect.height > 0) {
-      return rect;
+/** El primero de esos `data-tour` que esté a la vista (la barra inferior y la lateral tienen cada una el suyo). */
+function findTarget(targets: string[] | undefined): DOMRect | null {
+  for (const target of targets ?? []) {
+    for (const el of document.querySelectorAll(`[data-tour="${target}"]`)) {
+      const rect = el.getBoundingClientRect();
+      if (rect.width > 0 && rect.height > 0) {
+        return rect;
+      }
     }
   }
   return null;
 }
 
 /**
- * Dónde va la tarjeta: al lado de la barra lateral (tablet y escritorio),
- * encima del dock (móvil), debajo de la campana o al centro si no ilumina nada.
+ * Dónde va la tarjeta, según su alto real (`cardHeight`): al lado de la barra
+ * lateral (tablet y escritorio), si no debajo o encima de lo iluminado (donde
+ * haya más lugar, con scroll si aun así no cabe), o al centro si no ilumina nada.
  */
-function cardPlacement({ rect, vw, vh }: Layout): React.CSSProperties {
+function cardPlacement({ rect, vw, vh }: Layout, cardHeight: number): React.CSSProperties {
   if (!rect) {
-    return { left: "50%", top: "50%", transform: "translate(-50%, -50%)" };
+    return { left: "50%", top: "50%", transform: "translate(-50%, -50%)", maxHeight: vh - MARGIN * 2 };
   }
   if (vw >= 768 && rect.right < vw / 2) {
-    const top = Math.min(Math.max(rect.top + rect.height / 2, 260), vh - 260);
-    return { left: rect.right + 24, top, transform: "translateY(-50%)" };
+    const centered = rect.top + rect.height / 2 - cardHeight / 2;
+    return { left: rect.right + 24, top: Math.max(MARGIN, Math.min(centered, vh - cardHeight - MARGIN)) };
   }
-  if (rect.top > vh / 2) {
-    return { left: "50%", bottom: vh - rect.top + 16, transform: "translateX(-50%)" };
+  // En móvil la tarjeta ocupa casi todo el ancho: siempre centrada.
+  const horizontal: React.CSSProperties =
+    vw >= 768 && rect.left > vw / 2
+      ? { right: Math.max(vw - rect.right, MARGIN) }
+      : { left: "50%", transform: "translateX(-50%)" };
+  const below = vh - rect.bottom - MARGIN * 2;
+  const above = rect.top - MARGIN * 2;
+  if (cardHeight <= below || below >= above) {
+    return { ...horizontal, top: rect.bottom + MARGIN, maxHeight: below };
   }
-  if (rect.left > vw / 2) {
-    return { right: Math.max(vw - rect.right, 16), top: rect.bottom + 16 };
-  }
-  return { left: "50%", top: rect.bottom + 16, transform: "translateX(-50%)" };
+  return { ...horizontal, bottom: vh - rect.top + MARGIN, maxHeight: above };
 }
 
 /**
@@ -99,18 +105,35 @@ function TourOverlay({ step, onStep, onClose }: { step: number; onStep: (step: n
   const isFirst = step === 0;
   const isLast = step === TOUR_STEPS.length - 1;
   const [layout, setLayout] = useState<Layout | null>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [cardHeight, setCardHeight] = useState(0);
 
   // La posición de lo que se ilumina se mide en el navegador y se vuelve a medir al cambiar el tamaño.
   useEffect(() => {
-    const measure = () =>
-      setLayout({ rect: findTarget(current.target), vw: window.innerWidth, vh: window.innerHeight });
+    const measure = () => {
+      const vw = window.innerWidth;
+      const targets = vw < 768 && current.mobileTarget ? current.mobileTarget : current.target;
+      setLayout({ rect: findTarget(targets), vw, vh: window.innerHeight });
+      setCardHeight(cardRef.current?.scrollHeight ?? 0);
+    };
     const frame = window.requestAnimationFrame(measure);
     window.addEventListener("resize", measure);
     return () => {
       window.cancelAnimationFrame(frame);
       window.removeEventListener("resize", measure);
     };
-  }, [current.target]);
+  }, [current]);
+
+  // El alto de la tarjeta cambia con cada paso: se usa para que nunca se salga de la pantalla.
+  useEffect(() => {
+    const card = cardRef.current;
+    if (!card) {
+      return;
+    }
+    const observer = new ResizeObserver(() => setCardHeight(card.scrollHeight));
+    observer.observe(card);
+    return () => observer.disconnect();
+  }, []);
 
   const rect = layout?.rect ?? null;
   const speaker = current.cast.length === 1 ? t(SPEAKER_KEY[current.cast[0]]) : t("tour.speakerAll");
@@ -140,8 +163,9 @@ function TourOverlay({ step, onStep, onClose }: { step: number; onStep: (step: n
           }}
           // Un toque fuera no lo cierra: para salir está "Omitir".
           onPointerDownOutside={(event) => event.preventDefault()}
-          style={layout ? cardPlacement(layout) : { visibility: "hidden" }}
-          className="fixed z-50 w-[min(24rem,calc(100vw-2rem))] overflow-hidden rounded-[1.75rem] bg-card text-card-foreground shadow-card outline-none"
+          ref={cardRef}
+          style={layout ? cardPlacement(layout, cardHeight) : { visibility: "hidden" }}
+          className="fixed z-50 w-[min(24rem,calc(100vw-2rem))] overflow-y-auto rounded-[1.75rem] bg-card text-card-foreground shadow-card outline-none"
         >
           <div
             key={current.id}
@@ -178,6 +202,7 @@ function TourOverlay({ step, onStep, onClose }: { step: number; onStep: (step: n
                   ))}
                 </div>
               )}
+              {current.preview && <ScreenPreview kind={current.preview} />}
             </div>
           </div>
 
@@ -219,5 +244,31 @@ function TourOverlay({ step, onStep, onClose }: { step: number; onStep: (step: n
         </DialogPrimitive.Content>
       </DialogPrimitive.Portal>
     </DialogPrimitive.Root>
+  );
+}
+
+/** Un ejemplo de Espejo o Reescritura, que no tienen pestaña propia. Decorativo: el texto del paso ya lo explica. */
+function ScreenPreview({ kind }: { kind: "mirror" | "rewrite" }) {
+  const t = useTranslations();
+  const phrase = t("tour.previewPhrase");
+
+  if (kind === "mirror") {
+    return (
+      <div aria-hidden className="flex flex-col gap-2 rounded-[1.25rem] bg-muted p-4 text-sm text-foreground">
+        <p>
+          {t("tour.previewEntry")}{" "}
+          <mark className="rounded bg-root-tint px-1 font-semibold text-root-ink">{phrase}</mark>
+        </p>
+        <span className="self-start rounded-full bg-root-tint px-2.5 py-0.5 text-xs font-semibold text-root-ink">
+          {t("tour.previewDimension")}
+        </span>
+      </div>
+    );
+  }
+  return (
+    <div aria-hidden className="flex flex-col gap-2 rounded-[1.25rem] bg-muted p-4 text-sm">
+      <p className="text-muted-foreground line-through decoration-2">{phrase}</p>
+      <p className="rounded-xl bg-sprout-tint px-3 py-2 font-semibold text-sprout-ink">{t("tour.previewRewrite")}</p>
+    </div>
   );
 }
