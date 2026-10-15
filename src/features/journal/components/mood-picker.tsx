@@ -56,7 +56,7 @@ export function MoodPicker({
             <span
               key={active ? "on" : "off"}
               className={cn(
-                "inline-flex rounded-full transition-[scale,filter] duration-300 ease-[cubic-bezier(.34,1.56,.64,1)] group-hover:scale-110",
+                "relative z-10 inline-flex rounded-full transition-[scale,filter] duration-300 ease-[cubic-bezier(.34,1.56,.64,1)] group-hover:scale-110",
                 active && "mood-pop scale-115 ring-4 ring-bloom-tint",
                 // Sin transparencia: sobre el fondo oscuro quedaría turbia.
                 value !== undefined && !active && "scale-90 saturate-50",
@@ -70,8 +70,8 @@ export function MoodPicker({
               <span
                 key={bubble.taps}
                 aria-hidden
-                // Sale por encima de la carita (no la tapa) y del color de ese ánimo.
-                className="mood-bubble pointer-events-none absolute bottom-[calc(100%+0.25rem)] left-1/2 z-10 rounded-full px-3 py-1 text-base font-semibold whitespace-nowrap shadow-card"
+                // Nace detrás de la carita (z-0, ella va en z-10), sale disparada hacia arriba y queda por encima sin taparla.
+                className="mood-bubble pointer-events-none absolute bottom-[calc(100%+0.25rem)] left-1/2 z-0 rounded-full px-3 py-1 text-base font-semibold whitespace-nowrap shadow-card"
                 style={{ background: moodGradient(mood), color: MOOD_INK }}
               >
                 {t(`mood.${mood}`)}

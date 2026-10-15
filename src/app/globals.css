@@ -412,17 +412,17 @@
     animation: emo-blink 4.5s infinite;
   }
   .mood-pop {
-    animation: mood-pop 0.5s cubic-bezier(.34, 1.56, .64, 1);
+    animation: mood-pop 0.55s ease-out;
   }
   .mood-bubble {
-    animation: mood-bubble 1.3s cubic-bezier(.2, .8, .3, 1) forwards;
+    animation: mood-bubble 1.5s linear forwards;
   }
 }
 
 /* Con menos movimiento la burbuja no sube: solo aparece y se desvanece. */
 @media (prefers-reduced-motion: reduce) {
   .mood-bubble {
-    animation: mood-bubble-fade 1.3s ease-out forwards;
+    animation: mood-bubble-fade 1.5s ease-out forwards;
   }
 }
 
@@ -430,13 +430,18 @@
   translate: -50% 0;
 }
 
-/* Aparece de golpe (en ~0,1 s) y luego sube despacio mientras se desvanece. */
+/*
+ * La carita la dispara: nace detrás de ella (más abajo y chica), sale hacia
+ * arriba con un arranque muy rápido que frena en seco, rebota un poco y
+ * después flota mientras se desvanece. Cada tramo lleva su propia curva.
+ */
 @keyframes mood-bubble {
-  0% { opacity: 0; transform: translateY(4px) scale(0.8); }
-  8% { opacity: 1; transform: translateY(-4px) scale(1.05); }
-  15% { transform: translateY(-6px) scale(1); }
-  70% { opacity: 1; transform: translateY(-18px); }
-  100% { opacity: 0; transform: translateY(-30px); }
+  0% { opacity: 0; transform: translateY(44px) scale(0.3); animation-timing-function: cubic-bezier(.05, .9, .25, 1); }
+  20% { opacity: 1; transform: translateY(-16px) scale(1.1); animation-timing-function: ease-in-out; }
+  30% { transform: translateY(-8px) scale(0.97); animation-timing-function: ease-out; }
+  38% { transform: translateY(-10px) scale(1); animation-timing-function: ease-in; }
+  75% { opacity: 1; transform: translateY(-22px); }
+  100% { opacity: 0; transform: translateY(-34px); }
 }
 
 @keyframes mood-bubble-fade {
@@ -477,10 +482,13 @@
   70% { transform: translateY(-4%) scale(1, 1); }
 }
 
+/* El empujón de la carita al elegirla: se encoge, se estira con fuerza (dispara la burbuja) y vuelve. */
 @keyframes mood-pop {
-  0% { transform: scale(0.85); }
-  60% { transform: scale(1.12); }
-  100% { transform: scale(1); }
+  0% { transform: scale(1, 1); }
+  15% { transform: scale(1.12, 0.82); }
+  35% { transform: scale(0.9, 1.22) translateY(-6%); }
+  60% { transform: scale(1.06, 0.95); }
+  100% { transform: scale(1, 1); }
 }
 
 /* Personajes de emociones (pantallas de entrada y tutorial). */
