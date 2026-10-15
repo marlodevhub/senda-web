@@ -313,3 +313,100 @@
     backdrop-filter: none;
   }
 }
+
+/*
+ * Jardín (CU-07): cielo de amanecer y colina en el modo claro; cielo de noche
+ * en el oscuro. El texto del panel verde y del cielo cumple AA sobre su fondo.
+ */
+.garden-scene {
+  --garden-sky-top: #c8efe4;
+  --garden-sky-bottom: #f1f8ec;
+  --garden-sky-ink: #1e4d33;
+  --garden-cloud: #ffffff;
+  --garden-far-tree: #a9d9b4;
+  --garden-far-trunk: #8fb79a;
+  --garden-hill-top: #8fd39c;
+  --garden-hill-mid: #4f9e64;
+  --garden-hill-deep: #2b6a41;
+  --garden-glow: #c8f0b8;
+  --garden-grass: #3f8a55;
+  --garden-shadow: rgb(30 77 51 / 0.22);
+  --garden-soil: #8a6a4c;
+  --garden-leaf: #3f8a55;
+  --garden-trunk: #8a5a3b;
+  --garden-canopy-root: #4f9a7e;
+  --garden-canopy-bloom: #5fae6e;
+  --garden-sun: #f6cf6b;
+  --garden-wood: #9a6a45;
+  --garden-stone: #c9cbbf;
+  --garden-panel-ink: #ffffff;
+  --garden-panel-accent: #dcf7c4;
+  background: linear-gradient(to bottom, var(--garden-sky-top), var(--garden-sky-bottom) 55%);
+}
+
+.dark .garden-scene {
+  --garden-sky-top: #1c2140;
+  --garden-sky-bottom: #2f3a5c;
+  --garden-sky-ink: #e6ecff;
+  --garden-cloud: #c9cfe6;
+  --garden-far-tree: #3e5a6e;
+  --garden-far-trunk: #34495a;
+  --garden-hill-top: #4e8f63;
+  --garden-hill-mid: #2f6845;
+  --garden-hill-deep: #1d4a30;
+  --garden-glow: #7fbf8c;
+  --garden-grass: #7fc08f;
+  --garden-shadow: rgb(0 0 0 / 0.28);
+  --garden-leaf: #8fd09d;
+  --garden-canopy-root: #3f8571;
+  --garden-canopy-bloom: #4c9a5c;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .garden-petal {
+    animation: garden-petal-fall linear infinite;
+  }
+  .garden-drop {
+    animation: garden-drop 1.4s ease-in infinite;
+  }
+  .garden-sway {
+    animation: garden-sway 4s ease-in-out infinite alternate;
+  }
+  .garden-flutter {
+    animation: garden-flutter 0.6s ease-in-out infinite alternate;
+  }
+}
+
+.garden-petal {
+  opacity: 0;
+}
+
+@keyframes garden-petal-fall {
+  0% { transform: translate(0, -12px) rotate(0deg); opacity: 0; }
+  10% { opacity: 0.85; }
+  85% { opacity: 0.85; }
+  100% { transform: translate(-36px, 270px) rotate(320deg); opacity: 0; }
+}
+
+@keyframes garden-drop {
+  0% { transform: translateY(-4px); opacity: 0; }
+  30% { opacity: 1; }
+  100% { transform: translateY(10px); opacity: 0; }
+}
+
+@keyframes garden-sway {
+  from { transform: rotate(-3deg); }
+  to { transform: rotate(3deg); }
+}
+
+@keyframes garden-flutter {
+  from { transform: scaleX(1); }
+  to { transform: scaleX(0.55); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .garden-petal {
+    opacity: 0.7;
+    transform: translateY(var(--petal-rest, 60px)) rotate(30deg);
+  }
+}

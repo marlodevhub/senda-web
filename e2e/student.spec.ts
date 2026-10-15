@@ -60,7 +60,7 @@ async function activateAndConsent(page: Page): Promise<string> {
   return code;
 }
 
-test("ciclo diario completo: activar → diario → espejo → reescritura → frasco", async ({ page }) => {
+test("ciclo diario completo: activar → diario → espejo → reescritura → frasco → jardín", async ({ page }) => {
   await activateAndConsent(page);
 
   // CU-05/CU-06: Inicio con el check-in del día.
@@ -98,6 +98,13 @@ test("ciclo diario completo: activar → diario → espejo → reescritura → f
   // CU-09: la frase queda en el frasco.
   await page.goto("/progreso/frasco");
   await expect(page.getByText("Hoy me costó, pero equivocarme no me hace inútil", { exact: false })).toBeVisible();
+  await expectAccessible(page);
+
+  // CU-07: el registro riega todo el jardín y la reescritura de D1 hace brotar Raíces.
+  await page.getByRole("tab", { name: "Jardín" }).click();
+  await expect(page.getByRole("heading", { name: "Mi jardín" })).toBeVisible();
+  await expect(page.getByText("Lo regaste con")).toBeVisible();
+  await expect(page.getByText(/Brote · 1 brote/)).toBeVisible();
   await expectAccessible(page);
 });
 
