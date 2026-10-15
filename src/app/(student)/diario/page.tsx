@@ -13,7 +13,7 @@ export default async function DiarioPage() {
       />
       <div className="relative z-[1] mx-auto flex w-full max-w-2xl flex-col gap-6">
         <header className="flex flex-col items-center gap-1 pt-2 text-center">
-          <h1 className="font-journal text-3xl font-medium text-foreground md:text-4xl">{t("journal.subtitle")}</h1>
+          <h1 className="font-heading text-3xl font-extrabold text-foreground md:text-4xl">{t("journal.subtitle")}</h1>
           <p className="text-base text-muted-foreground">{t("journal.tagline")}</p>
         </header>
         <JournalForm />

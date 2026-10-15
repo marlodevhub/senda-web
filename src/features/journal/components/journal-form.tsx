@@ -134,7 +134,7 @@ export function JournalForm() {
       />
 
       <section aria-labelledby="journal-mood" className="flex flex-col gap-2">
-        <h2 id="journal-mood" className="text-center font-journal text-lg text-foreground italic">
+        <h2 id="journal-mood" className="text-center text-base font-semibold text-foreground">
           {t("journal.moodLabel")}
         </h2>
         <Controller
@@ -203,7 +203,7 @@ export function JournalForm() {
       </div>
 
       <section aria-labelledby="journal-context" className="flex flex-col gap-2">
-        <h2 id="journal-context" className="text-center font-journal text-lg text-foreground italic">
+        <h2 id="journal-context" className="text-center text-base font-semibold text-foreground">
           {t("journal.contextLabel")}
         </h2>
         <Controller
@@ -223,7 +223,7 @@ function countWords(text: string): number {
   return text.trim().split(/\s+/).filter(Boolean).length;
 }
 
-/** Una pregunta del diario: la pregunta en cursiva y, debajo, el renglón para escribir. */
+/** Una pregunta del diario: la pregunta y, debajo, el renglón para escribir, ambos en letra manuscrita. */
 function Prompt({
   id,
   label,
@@ -238,7 +238,7 @@ function Prompt({
   return (
     // El foco se ve en todo el bloque: el campo no tiene borde propio.
     <div className="-mx-3 flex flex-col gap-1 rounded-2xl px-3 py-2 transition-colors focus-within:bg-flow-tint/45">
-      <label htmlFor={id} className="font-journal text-xl text-foreground italic">
+      <label htmlFor={id} className="font-hand text-3xl leading-tight text-foreground">
         {label}
       </label>
       {children}
@@ -251,7 +251,8 @@ function JournalTextarea({ className, ...props }: React.ComponentProps<"textarea
   return (
     <textarea
       className={cn(
-        "field-sizing-content w-full resize-none bg-transparent font-journal text-lg leading-relaxed text-foreground outline-none placeholder:text-muted-foreground/80",
+        // Caveat se ve más chica que una letra normal: a 26 px se lee como unos 18 px de Figtree.
+        "field-sizing-content w-full resize-none bg-transparent font-hand text-[1.625rem] leading-snug text-foreground outline-none placeholder:text-muted-foreground/80",
         className,
       )}
       {...props}
