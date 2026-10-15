@@ -9,7 +9,7 @@ import { FieldError } from "@/components/forms/field-error";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Feather, Send, Sparkles } from "lucide-react";
+import { Check, Feather, Send, Sparkles } from "lucide-react";
 import { EmotionCharacter, EmotionDefs } from "@/components/illustrations/emotion-characters";
 import { MoodPicker } from "@/features/journal/components/mood-picker";
 import type { Mood } from "@/components/icons/mood-orb";
@@ -19,7 +19,14 @@ import { createJournalEntry } from "@/features/journal/api/create-entry";
 import { BffError } from "@/lib/api/client";
 import { errorMessageKey } from "@/lib/api/error-messages";
 import { saveFieldTexts } from "@/lib/field-texts-cache";
-import { DRAFT_INTERVAL_MS, clearDraft, hasText, loadDraft, saveDraft } from "@/features/journal/draft";
+import {
+  DRAFT_DEBOUNCE_MS,
+  DRAFT_INTERVAL_MS,
+  clearDraft,
+  hasText,
+  loadDraft,
+  saveDraft,
+} from "@/features/journal/draft";
 
 export function JournalForm() {
   const t = useTranslations();
@@ -40,8 +47,9 @@ export function JournalForm() {
     defaultValues: { mode: "GUIDED" },
   });
   const [draftRecovered, setDraftRecovered] = useState(false);
+  const [draftSaved, setDraftSaved] = useState(false);
 
-  // RS-DI-03: recupera el borrador al abrir y lo guarda cada 10 s.
+  // RS-DI-03: recupera el borrador al abrir y lo guarda cada 10 s (respaldo de los guardados de abajo).
   useEffect(() => {
     const draft = loadDraft();
     if (draft && hasText(draft)) {
@@ -53,6 +61,26 @@ export function JournalForm() {
     const interval = window.setInterval(() => saveDraft(getValues()), DRAFT_INTERVAL_MS);
     return () => window.clearInterval(interval);
   }, [getValues, reset]);
+
+  // Para no perder lo escrito si se cierra el navegador: guarda al dejar de escribir...
+  const formValues = useWatch({ control });
+  useEffect(() => {
+    const timer = window.setTimeout(() => setDraftSaved(saveDraft(getValues())), DRAFT_DEBOUNCE_MS);
+    return () => window.clearTimeout(timer);
+  }, [formValues, getValues]);
+
+  // ...y al salir de la página. pagehide: cerrar la pestaña o el navegador; visibilitychange: cambiar de app o
+  // bloquear el celular.
+  useEffect(() => {
+    const saveNow = () => saveDraft(getValues());
+    const onVisibility = () => document.visibilityState === "hidden" && saveNow();
+    window.addEventListener("pagehide", saveNow);
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => {
+      window.removeEventListener("pagehide", saveNow);
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
+  }, [getValues]);
 
   const mode = useWatch({ control, name: "mode" });
 
@@ -181,7 +209,7 @@ export function JournalForm() {
           </Prompt>
         )}
 
-        <div className="mt-auto flex items-end justify-between gap-3 pt-4">
+        <div className="mt-auto flex flex-wrap items-end justify-between gap-3 pt-4">
           <div className="flex flex-col gap-1">
             {/* Siempre en el mismo lugar: la hoja no cambia de tamaño al empezar a escribir. */}
             <div aria-hidden className="pointer-events-none flex -rotate-2 items-center gap-2">
@@ -193,8 +221,20 @@ export function JournalForm() {
                 {t("journal.wordCount", { count: words })}
               </span>
             </p>
+            {draftSaved && words > 0 && (
+              <p className="flex items-center gap-1 text-base text-sprout-ink">
+                <Check className="size-4" aria-hidden />
+                {t("journal.draftSaved")}
+              </p>
+            )}
           </div>
-          <Button type="submit" variant="hero" size="xl" disabled={isSubmitting} className="shrink-0 rounded-full px-6">
+          <Button
+            type="submit"
+            variant="hero"
+            size="xl"
+            disabled={isSubmitting}
+            className="ms-auto shrink-0 rounded-full px-6"
+          >
             <Send className="size-4" aria-hidden />
             {isSubmitting ? t("journal.submitting") : t("journal.submit")}
           </Button>

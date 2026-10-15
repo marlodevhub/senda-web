@@ -361,13 +361,20 @@ test("el diario guarda un borrador y lo recupera; al cerrar sesión se borra (RS
   await page.getByRole("radio", { name: "Libre" }).click();
   await page.getByLabel("Escribe lo que quieras contar").fill("Un texto que todavía no envío");
 
-  // El borrador se guarda cada 10 s en este dispositivo.
-  await expect
-    .poll(() => page.evaluate(() => window.localStorage.getItem("senda:journal-draft")), { timeout: 15_000 })
-    .toContain("Un texto que todavía no envío");
+  // El borrador se guarda en este dispositivo al dejar de escribir (no hay que esperar los 10 s).
+  await expect(page.getByText("Borrador guardado")).toBeVisible({ timeout: 3_000 });
+  expect(await page.evaluate(() => window.localStorage.getItem("senda:journal-draft"))).toContain(
+    "Un texto que todavía no envío",
+  );
   await page.reload();
   await expect(page.getByText("Recuperamos lo que estabas escribiendo.")).toBeVisible();
   await expect(page.getByLabel("Escribe lo que quieras contar")).toHaveValue("Un texto que todavía no envío");
+
+  // Si se sale de golpe (cerrar la pestaña, cambiar de app) sin esperar, también se guarda.
+  await page.getByLabel("Escribe lo que quieras contar").fill("Escribí esto y cerré enseguida");
+  await page.goto("/inicio");
+  await page.goto("/diario");
+  await expect(page.getByLabel("Escribe lo que quieras contar")).toHaveValue("Escribí esto y cerré enseguida");
 
   // Privacidad: al cerrar sesión no queda texto en el navegador.
   await page.goto("/perfil");

@@ -106,7 +106,8 @@
     "freeTextPlaceholder": "Escribe con calma, aquí nadie te apura…",
     "handNote": "Escribe sin apuro",
     "wordCount": "{count, plural, one {# palabra} other {# palabras}}",
-    "missingContext": "Elige con qué tiene que ver lo que escribiste."
+    "missingContext": "Elige con qué tiene que ver lo que escribiste.",
+    "draftSaved": "Borrador guardado"
   },
   "home": {
     "writeCta": "Escribir",
