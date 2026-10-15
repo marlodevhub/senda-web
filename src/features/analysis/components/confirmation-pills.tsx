@@ -5,7 +5,10 @@ import { useTranslations } from "next-intl";
 
 export type ConfirmationAnswer = "YES" | "PARTLY" | "NO";
 
-const OPTIONS: { value: ConfirmationAnswer; labelKey: "analysis.confirmYes" | "analysis.confirmPartly" | "analysis.confirmNo" }[] = [
+const OPTIONS: {
+  value: ConfirmationAnswer;
+  labelKey: "analysis.confirmYes" | "analysis.confirmPartly" | "analysis.confirmNo";
+}[] = [
   { value: "YES", labelKey: "analysis.confirmYes" },
   { value: "PARTLY", labelKey: "analysis.confirmPartly" },
   { value: "NO", labelKey: "analysis.confirmNo" },
@@ -39,7 +42,7 @@ export function ConfirmationPills({
               "flex-1 rounded-full border px-2 py-2 text-xs font-bold transition-colors duration-200",
               active
                 ? "border-sprout bg-sprout text-white shadow-sprout"
-                : "border-border bg-muted text-muted-foreground hover:border-sprout/50"
+                : "border-border bg-muted text-muted-foreground hover:border-sprout/50",
             )}
           >
             {t(opt.labelKey)}

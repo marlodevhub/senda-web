@@ -10,6 +10,7 @@ import type { MirrorFinding, AnalysisField } from "@/features/analysis/api/get-m
 import { FindingCard } from "@/components/feedback/finding-card";
 import { ConfirmationPills, type ConfirmationAnswer } from "@/features/analysis/components/confirmation-pills";
 import { CareMessage } from "@/components/feedback/care-message";
+import { MirrorMoment } from "@/features/analysis/components/mirror-moment";
 import { patternLabelKey } from "@/lib/pattern-labels";
 
 /** Las 3 preguntas del Diario guardan el texto por campo (RS-ES-06). */
@@ -33,13 +34,7 @@ const INTENSITY_KEY: Record<string, "low" | "moderate" | "high"> = {
  * RN-ES-12), o los fragmentos resaltados con su etiqueta, el mensaje de
  * la dimensión predominante y la confirmación (RN-ES-14).
  */
-export function MirrorView({
-  journalEntryId,
-  fieldTexts,
-}: {
-  journalEntryId: number;
-  fieldTexts: JournalFieldTexts;
-}) {
+export function MirrorView({ journalEntryId, fieldTexts }: { journalEntryId: number; fieldTexts: JournalFieldTexts }) {
   const t = useTranslations();
   const router = useRouter();
   const { data: mirror, isPending } = useMirror(journalEntryId);
@@ -65,25 +60,14 @@ export function MirrorView({
     );
   }
 
-  if (mirror.status === "PENDING") {
+  if (mirror.status === "PENDING" || mirror.status === "FAILED") {
+    const pending = mirror.status === "PENDING";
     return (
-      <div className="flex flex-col gap-4 text-center">
-        <p className="text-sm text-muted-foreground">{t("analysis.pending")}</p>
-        <Button variant="soft" onClick={() => router.push("/inicio")}>
+      <MirrorMoment emotion={pending ? "calm" : "hope"} message={t(pending ? "analysis.pending" : "analysis.failed")}>
+        <Button variant="soft" size="xl" onClick={() => router.push("/inicio")}>
           {t("analysis.goHome")}
         </Button>
-      </div>
-    );
-  }
-
-  if (mirror.status === "FAILED") {
-    return (
-      <div className="flex flex-col gap-4 text-center">
-        <p className="text-sm text-muted-foreground">{t("analysis.failed")}</p>
-        <Button variant="soft" onClick={() => router.push("/inicio")}>
-          {t("analysis.goHome")}
-        </Button>
-      </div>
+      </MirrorMoment>
     );
   }
 
@@ -91,25 +75,20 @@ export function MirrorView({
 
   if (findings.length === 0) {
     return (
-      <div className="flex flex-col gap-4">
-        <p className="font-display text-lg leading-snug text-foreground">{t("analysis.reinforcement")}</p>
-        <div className="flex flex-col gap-2">
-          <Button variant="soft" asChild>
-            <Link href="/progreso">{t("analysis.goToProgress")}</Link>
-          </Button>
-          <Button variant="outline" onClick={() => router.push("/inicio")}>
-            {t("analysis.goHome")}
-          </Button>
-        </div>
-      </div>
+      <MirrorMoment emotion="joy" message={t("analysis.reinforcement")} celebrate>
+        <Button variant="hero" size="xl" className="rounded-full" asChild>
+          <Link href="/progreso">{t("analysis.goToProgress")}</Link>
+        </Button>
+        <Button variant="ghost" size="xl" onClick={() => router.push("/inicio")}>
+          {t("analysis.goHome")}
+        </Button>
+      </MirrorMoment>
     );
   }
 
   const dimensionMessage =
     mirror.predominantDimension && mirror.intensity
-      ? t(
-          `analysis.dimensionMessages.${DIMENSION_KEY[mirror.predominantDimension]}.${INTENSITY_KEY[mirror.intensity]}`,
-        )
+      ? t(`analysis.dimensionMessages.${DIMENSION_KEY[mirror.predominantDimension]}.${INTENSITY_KEY[mirror.intensity]}`)
       : null;
 
   return (
@@ -124,12 +103,7 @@ export function MirrorView({
               label={t(patternLabelKey(finding.pattern))}
               dimension={finding.dimension}
             />
-            <Button
-              variant="outline"
-              size="sm"
-              className="self-start"
-              asChild
-            >
+            <Button variant="outline" size="sm" className="self-start" asChild>
               <Link href={`/reescritura/${journalEntryId}?findingId=${finding.findingId}`}>
                 {t("analysis.rewriteThisPhrase")}
               </Link>
