@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { AUTH_INPUT } from "@/features/access/components/auth-input";
 import { Card, CardContent } from "@/components/ui/card";
 import { BffError } from "@/lib/api/client";
 import { errorMessageKey } from "@/lib/api/error-messages";
@@ -58,9 +59,7 @@ export function RecoverForm() {
     return (
       <Card>
         <CardContent className="flex flex-col gap-4 pt-2">
-          <h2 className="font-heading text-lg font-semibold text-foreground">
-            {t("access.recoveryCodeTitle")}
-          </h2>
+          <h2 className="font-heading text-lg font-semibold text-foreground">{t("access.recoveryCodeTitle")}</h2>
           <p className="text-sm text-muted-foreground">{t("access.recoveryCodeBody")}</p>
           <p
             data-testid="recovery-code"
@@ -81,6 +80,7 @@ export function RecoverForm() {
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="code">{t("access.codeLabel")}</Label>
         <Input
+          className={AUTH_INPUT}
           id="code"
           autoComplete="off"
           placeholder={t("access.codePlaceholder")}
@@ -93,6 +93,7 @@ export function RecoverForm() {
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="recoveryCode">{t("access.recoveryCodeLabel")}</Label>
         <Input
+          className={AUTH_INPUT}
           id="recoveryCode"
           autoComplete="off"
           aria-invalid={Boolean(errors.recoveryCode)}
@@ -108,6 +109,7 @@ export function RecoverForm() {
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="newPassword">{t("access.newPasswordLabel")}</Label>
         <Input
+          className={AUTH_INPUT}
           id="newPassword"
           type="password"
           autoComplete="new-password"
@@ -124,6 +126,7 @@ export function RecoverForm() {
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="newPasswordConfirm">{t("access.passwordConfirmLabel")}</Label>
         <Input
+          className={AUTH_INPUT}
           id="newPasswordConfirm"
           type="password"
           autoComplete="new-password"
@@ -133,7 +136,7 @@ export function RecoverForm() {
         <FieldError message={errors.newPasswordConfirm?.message} />
       </div>
 
-      <Button type="submit" variant="hero" size="xl" disabled={isSubmitting} className="mt-2">
+      <Button type="submit" variant="hero" size="xl" disabled={isSubmitting} className="mt-2 h-12 rounded-full">
         {isSubmitting ? t("access.recovering") : t("access.recoverSubmit")}
       </Button>
     </form>

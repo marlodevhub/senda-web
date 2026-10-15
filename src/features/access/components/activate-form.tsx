@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { AUTH_INPUT } from "@/features/access/components/auth-input";
 import { Card, CardContent } from "@/components/ui/card";
 import { BffError } from "@/lib/api/client";
 import { errorMessageKey } from "@/lib/api/error-messages";
@@ -53,9 +54,7 @@ export function ActivateForm() {
     return (
       <Card>
         <CardContent className="flex flex-col gap-4 pt-2">
-          <h2 className="font-heading text-lg font-semibold text-foreground">
-            {t("access.recoveryCodeTitle")}
-          </h2>
+          <h2 className="font-heading text-lg font-semibold text-foreground">{t("access.recoveryCodeTitle")}</h2>
           <p className="text-sm text-muted-foreground">{t("access.recoveryCodeBody")}</p>
           <p
             data-testid="recovery-code"
@@ -63,12 +62,7 @@ export function ActivateForm() {
           >
             {recoveryCode}
           </p>
-          <Button
-            type="button"
-            variant="hero"
-            size="xl"
-            onClick={() => router.push("/consentimiento")}
-          >
+          <Button type="button" variant="hero" size="xl" onClick={() => router.push("/consentimiento")}>
             {t("access.recoveryCodeSaved")}
           </Button>
         </CardContent>
@@ -81,6 +75,7 @@ export function ActivateForm() {
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="code">{t("access.codeLabel")}</Label>
         <Input
+          className={AUTH_INPUT}
           id="code"
           autoComplete="off"
           placeholder={t("access.codePlaceholder")}
@@ -93,6 +88,7 @@ export function ActivateForm() {
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="password">{t("access.passwordLabel")}</Label>
         <Input
+          className={AUTH_INPUT}
           id="password"
           type="password"
           autoComplete="new-password"
@@ -109,6 +105,7 @@ export function ActivateForm() {
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="passwordConfirm">{t("access.passwordConfirmLabel")}</Label>
         <Input
+          className={AUTH_INPUT}
           id="passwordConfirm"
           type="password"
           autoComplete="new-password"
@@ -118,7 +115,7 @@ export function ActivateForm() {
         <FieldError message={errors.passwordConfirm?.message} />
       </div>
 
-      <Button type="submit" variant="hero" size="xl" disabled={isSubmitting} className="mt-2">
+      <Button type="submit" variant="hero" size="xl" disabled={isSubmitting} className="mt-2 h-12 rounded-full">
         {isSubmitting ? t("access.activating") : t("access.activateSubmit")}
       </Button>
     </form>

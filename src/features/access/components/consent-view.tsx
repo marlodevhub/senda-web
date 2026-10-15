@@ -55,9 +55,7 @@ export function ConsentView({ consent }: { consent: ConsentContent }) {
   if (declined) {
     return (
       <div className="flex flex-col items-center gap-3 text-center">
-        <h2 className="font-heading text-lg font-semibold text-foreground">
-          {t("consent.declinedTitle")}
-        </h2>
+        <h2 className="font-heading text-lg font-semibold text-foreground">{t("consent.declinedTitle")}</h2>
         <p className="text-sm text-muted-foreground">{t("consent.declinedBody")}</p>
         <Button variant="soft" onClick={() => router.push("/login")}>
           {t("common.goToLogin")}

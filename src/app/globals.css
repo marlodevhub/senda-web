@@ -381,6 +381,9 @@
   .garden-flutter {
     animation: garden-flutter 0.6s ease-in-out infinite alternate;
   }
+  .auth-float {
+    animation: auth-float 6s ease-in-out infinite alternate;
+  }
 }
 
 .garden-petal {
@@ -403,6 +406,11 @@
 @keyframes garden-sway {
   from { transform: rotate(-3deg); }
   to { transform: rotate(3deg); }
+}
+
+@keyframes auth-float {
+  from { transform: translateY(0); }
+  to { transform: translateY(-10px); }
 }
 
 @keyframes garden-flutter {

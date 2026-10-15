@@ -53,8 +53,10 @@ senda-web/
 └── src/
     ├── app/                          SOLO rutas, layouts y route handlers
     │   ├── (auth)/                   sin barra inferior
-    │   │   ├── layout.tsx
-    │   │   └── activar/ · login/ · recuperar/ · consentimiento/ · bienvenida/
+    │   │   ├── (entrada)/            formulario + jardín ilustrado (_components/auth-showcase.tsx)
+    │   │   │   └── activar/ · login/ · recuperar/
+    │   │   └── (onboarding)/         tarjeta centrada
+    │   │       └── consentimiento/ · bienvenida/
     │   ├── (student)/                con barra inferior
     │   │   ├── layout.tsx
     │   │   ├── inicio/ · diario/ · resumen/ · mensajes/ · perfil/

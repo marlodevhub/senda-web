@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { AUTH_INPUT } from "@/features/access/components/auth-input";
 import { BffError } from "@/lib/api/client";
 import { errorMessageKey } from "@/lib/api/error-messages";
 import { loginFormSchema, type LoginFormValues } from "@/features/access/schemas/access.schema";
@@ -54,6 +55,7 @@ export function LoginForm() {
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="code">{t("access.codeLabel")}</Label>
         <Input
+          className={AUTH_INPUT}
           id="code"
           autoComplete="username"
           placeholder={t("access.codePlaceholder")}
@@ -66,6 +68,7 @@ export function LoginForm() {
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="password">{t("access.passwordLabel")}</Label>
         <Input
+          className={AUTH_INPUT}
           id="password"
           type="password"
           autoComplete="current-password"
@@ -73,15 +76,17 @@ export function LoginForm() {
           {...register("password")}
         />
         <FieldError message={errors.password?.message} />
+        <Link
+          href="/recuperar"
+          className="self-end text-sm font-semibold text-muted-foreground underline-offset-4 hover:underline"
+        >
+          {t("access.forgotPassword")}
+        </Link>
       </div>
 
-      <Button type="submit" variant="hero" size="xl" disabled={isSubmitting} className="mt-2">
+      <Button type="submit" variant="hero" size="xl" disabled={isSubmitting} className="mt-2 h-12 rounded-full">
         {isSubmitting ? t("access.loggingIn") : t("access.loginSubmit")}
       </Button>
-
-      <Link href="/recuperar" className="text-center text-sm text-muted-foreground underline-offset-4 hover:underline">
-        {t("access.forgotPassword")}
-      </Link>
     </form>
   );
 }
