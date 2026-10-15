@@ -17,7 +17,7 @@ export function ProgressTabs() {
   const t = useTranslations();
 
   return (
-    <div role="tablist" aria-label={t("progress.title")} className="flex gap-1.5 rounded-md bg-muted p-1">
+    <div role="tablist" aria-label={t("progress.title")} className="relative z-10 flex gap-1.5 rounded-md bg-muted p-1">
       {TABS.map((tab) => {
         const active = pathname.startsWith(tab.href);
         return (

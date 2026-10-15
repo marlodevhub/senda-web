@@ -29,7 +29,7 @@ export function StudentSidebar() {
   const journeyLabel = day !== null ? t("sidebar.dayOf", { day, total: INTERVENTION_DAYS }) : "";
 
   return (
-    <aside className="sticky top-0 hidden h-screen shrink-0 p-3 md:block md:w-24 lg:w-72 lg:p-4">
+    <aside className="sticky top-0 z-10 hidden h-screen shrink-0 p-3 md:block md:w-24 lg:w-72 lg:p-4">
       <div className="flex h-full flex-col items-center gap-6 overflow-y-auto rounded-lg bg-card px-2 py-5 shadow-card lg:items-stretch lg:gap-7 lg:p-5">
         <Link
           href="/inicio"
