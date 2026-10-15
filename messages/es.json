@@ -49,7 +49,6 @@
     "showcaseMood": "¿Cómo llegas hoy?",
     "showcaseJarTitle": "Mi frasco",
     "showcaseJarPhrase": "Hice lo que pude, y eso también cuenta.",
-    "showcaseJarTag": "Valoración",
     "showcaseTagline": "Escucha lo que sientes, con amabilidad.",
     "showcasePoint1": "De 5 a 10 minutos al día",
     "showcasePoint2": "Tus textos se guardan cifrados",
@@ -523,7 +522,6 @@
     "journal": "Diario",
     "progress": "Progreso",
     "history": "Historial",
-    "messages": "Mensajes",
     "profile": "Perfil"
   },
   "sidebar": {

@@ -80,7 +80,7 @@ senda-web/
     │   │   └── v1/[...path]/route.ts          reenvía a senda-api con el token que corresponda; renueva (solo estudiante)
     │   └── layout.tsx · globals.css · not-found.tsx · error.tsx
     ├── features/                     mismos nombres que los módulos del backend
-    │   ├── access/            api/{activate,login,recover}.ts · components/{activate-form,login-form,consent-view,welcome-steps}.tsx · schemas/access.schema.ts (RN-AC-01, RN-AC-04)
+    │   ├── access/            api/{activate,login,recover}.ts · components/{activate-form,login-form,recover-form,consent-view,logout-button}.tsx · schemas/access.schema.ts (RN-AC-01, RN-AC-04)
     │   ├── journal/           journal-form, mood-picker, entry-list, entry-detail · use-create-entry, use-entries, use-check-in
     │   ├── analysis/          mirror-view, finding-card, care-message · use-mirror (consulta cada 2 s si PENDING)
     │   ├── rewrite/           rewrite-form, rewrite-result · use-rewrite-guide, use-submit-rewrite
@@ -94,10 +94,10 @@ senda-web/
     │       └── schemas/admin.schema.ts (RN-AD-01 a RN-AD-04)
     ├── components/
     │   ├── ui/                       shadcn/ui
-    │   ├── layout/                   bottom-nav.tsx, page-header.tsx, admin-sidebar.tsx
+    │   ├── layout/                   bottom-nav.tsx, student-sidebar.tsx, messages-center.tsx, admin-sidebar.tsx
     │   ├── illustrations/            emotion-characters.tsx (personajes de emociones)
     │   ├── tour/                     tutorial guiado por las emociones (app-tour.tsx, tour-steps.ts)
-    │   └── feedback/                 empty-state.tsx, error-state.tsx
+    │   └── feedback/                 care-message.tsx, finding-card.tsx
     ├── hooks/                        hooks compartidos
     ├── lib/
     │   ├── api/                      client.ts (fetch al BFF), errors.ts, query-keys.ts
