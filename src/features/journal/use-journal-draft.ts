@@ -9,8 +9,13 @@ import { DRAFT_DEBOUNCE_MS, DRAFT_INTERVAL_MS, hasText, loadDraft, saveDraft } f
  * RS-DI-03: el borrador del Diario, para no perder lo escrito si se cierra el
  * navegador. Lo recupera al abrir (avisa con `onRecovered`) y lo guarda medio
  * segundo después de dejar de escribir, al salir de la página y, de respaldo,
- * cada 10 s. Devuelve si lo escrito ya quedó guardado.
+ * cada 10 s. Devuelve el estado del borrador: sin texto, guardando (se está
+ * escribiendo) o guardado.
  */
+export type DraftStatus = "empty" | "pending" | "saved";
+
+const RECOVERED_NOTICE_DELAY_MS = 400;
+
 export function useJournalDraft({
   control,
   getValues,
@@ -21,8 +26,9 @@ export function useJournalDraft({
   getValues: UseFormGetValues<JournalFormValues>;
   reset: UseFormReset<JournalFormValues>;
   onRecovered: () => void;
-}): { draftSaved: boolean } {
-  const [draftSaved, setDraftSaved] = useState(false);
+}): DraftStatus {
+  // Lo último guardado; si difiere de lo que hay en pantalla, todavía se está escribiendo.
+  const [savedSnapshot, setSavedSnapshot] = useState<string | null>(null);
   const notifyRecovered = useEffectEvent(onRecovered);
 
   // Al abrir: el borrador solo existe en el navegador, así que se lee después de montar (sin desajuste de hidratación).
@@ -30,16 +36,23 @@ export function useJournalDraft({
     const draft = loadDraft();
     if (draft && hasText(draft)) {
       reset({ mode: "GUIDED", ...draft });
-      notifyRecovered();
     }
+    // El aviso espera a que la página ya esté pintada: lanzado al cargar, el toast se salta su animación de entrada.
+    const notice = draft && hasText(draft) ? window.setTimeout(() => notifyRecovered(), RECOVERED_NOTICE_DELAY_MS) : 0;
     const interval = window.setInterval(() => saveDraft(getValues()), DRAFT_INTERVAL_MS);
-    return () => window.clearInterval(interval);
+    return () => {
+      window.clearTimeout(notice);
+      window.clearInterval(interval);
+    };
   }, [getValues, reset]);
 
   // Al dejar de escribir.
   const values = useWatch({ control });
   useEffect(() => {
-    const timer = window.setTimeout(() => setDraftSaved(saveDraft(getValues())), DRAFT_DEBOUNCE_MS);
+    const timer = window.setTimeout(() => {
+      const current = getValues();
+      setSavedSnapshot(saveDraft(current) ? JSON.stringify(current) : null);
+    }, DRAFT_DEBOUNCE_MS);
     return () => window.clearTimeout(timer);
   }, [values, getValues]);
 
@@ -56,5 +69,8 @@ export function useJournalDraft({
     };
   }, [getValues]);
 
-  return { draftSaved };
+  if (!hasText(values)) {
+    return "empty";
+  }
+  return savedSnapshot === JSON.stringify(getValues()) ? "saved" : "pending";
 }

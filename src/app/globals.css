@@ -268,6 +268,16 @@
  * WCAG 2.1 AA (RS-TR): los colores "rich" de Sonner por defecto dan 4,34:1 en
  * el aviso de error (#e60000 sobre #fff0f0). Se oscurece el texto de cada tipo.
  */
+/* Distancia de los toasts al borde de abajo: por encima del dock flotante en móvil (ver components/ui/sonner). */
+:root {
+  --toast-offset-bottom: calc(6rem + env(safe-area-inset-bottom));
+}
+@media (min-width: 768px) {
+  :root {
+    --toast-offset-bottom: 24px;
+  }
+}
+
 :root [data-sonner-toaster][data-sonner-theme="light"] {
   --error-text: #b3001b;
   --success-text: #1f6b3a;

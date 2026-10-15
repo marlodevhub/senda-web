@@ -107,7 +107,8 @@
     "handNote": "Escribe sin apuro",
     "wordCount": "{count, plural, one {# palabra} other {# palabras}}",
     "missingContext": "Elige con qué tiene que ver lo que escribiste.",
-    "draftSaved": "Borrador guardado"
+    "draftSaved": "Borrador guardado",
+    "draftSaving": "Guardando borrador…"
   },
   "home": {
     "writeCta": "Escribir",

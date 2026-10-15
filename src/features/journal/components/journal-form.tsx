@@ -6,12 +6,13 @@ import { useForm, useWatch, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { Check, RotateCcw, Send } from "lucide-react";
+import { RotateCcw, Send } from "lucide-react";
 import { FieldError } from "@/components/forms/field-error";
 import { Button } from "@/components/ui/button";
 import { EmotionCharacter, EmotionDefs } from "@/components/illustrations/emotion-characters";
 import type { Mood } from "@/components/icons/mood-orb";
 import { ContextPicker } from "@/features/journal/components/context-picker";
+import { DraftStatusIcon } from "@/features/journal/components/draft-status";
 import { JournalModeToggle } from "@/features/journal/components/journal-mode-toggle";
 import { JournalPrompt, JournalTextarea } from "@/features/journal/components/journal-prompt";
 import { MoodPicker } from "@/features/journal/components/mood-picker";
@@ -62,7 +63,7 @@ export function JournalForm() {
     defaultValues: { mode: "GUIDED" },
   });
 
-  const { draftSaved } = useJournalDraft({
+  const draftStatus = useJournalDraft({
     control,
     getValues,
     reset,
@@ -134,6 +135,7 @@ export function JournalForm() {
 
       {/* La hoja del diario: sin cajas con borde, letra de cuaderno y aire para escribir. */}
       <div className="relative flex min-h-80 flex-col gap-2 rounded-[2rem] bg-card p-5 shadow-card md:p-8">
+        <DraftStatusIcon status={draftStatus} className="absolute top-4 right-4 md:top-6 md:right-6" />
         {mode === "GUIDED" ? (
           <>
             <JournalPrompt id="q1" label={t("journal.q1Label")} error={errors.q1?.message}>
@@ -167,12 +169,6 @@ export function JournalForm() {
             <p className="text-base font-semibold text-foreground tabular-nums">
               {t("journal.wordCount", { count: words })}
             </p>
-            {draftSaved && words > 0 && (
-              <p className="flex items-center gap-1 text-base text-sprout-ink">
-                <Check className="size-4" aria-hidden />
-                {t("journal.draftSaved")}
-              </p>
-            )}
           </div>
           <Button
             type="submit"

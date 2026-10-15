@@ -362,7 +362,7 @@ test("el diario guarda un borrador y lo recupera; al cerrar sesión se borra (RS
   await page.getByLabel("Escribe lo que quieras contar").fill("Un texto que todavía no envío");
 
   // El borrador se guarda en este dispositivo al dejar de escribir (no hay que esperar los 10 s).
-  await expect(page.getByText("Borrador guardado")).toBeVisible({ timeout: 3_000 });
+  await expect(page.getByRole("img", { name: "Borrador guardado" })).toBeVisible({ timeout: 3_000 });
   expect(await page.evaluate(() => window.localStorage.getItem("senda:journal-draft"))).toContain(
     "Un texto que todavía no envío",
   );
