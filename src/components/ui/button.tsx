@@ -19,7 +19,7 @@ const buttonVariants = cva(
           "bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40",
         link: "text-bloom-ink underline-offset-4 hover:underline",
         /* Senda — app del estudiante: acción principal del día (Escribir, Reescribir) */
-        hero: "btn-hero border-0 text-primary-foreground shadow-bloom font-semibold active:scale-[0.96]",
+        hero: "btn-hero border-0 text-white shadow-bloom font-semibold active:scale-[0.96]",
         /* Senda — acción secundaria cálida (Ver mi progreso, Leer una frase) */
         soft: "bg-accent text-accent-foreground hover:bg-sprout hover:text-foreground hover:shadow-sprout font-semibold",
         /* Senda — borde degradado, para acciones opcionales que aún se sienten especiales (Guardar en el frasco) */

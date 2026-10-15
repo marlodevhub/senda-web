@@ -132,6 +132,8 @@
 
   --grad-dawn: linear-gradient(135deg, var(--bloom) 0%, var(--root) 100%);
   --grad-dawn-soft: linear-gradient(135deg, var(--bloom-tint) 0%, var(--root-tint) 100%);
+  /* Botón principal: más profundo que --grad-dawn para que la letra blanca pase AA (≥ 4,7:1 en todo el degradado). */
+  --grad-hero: linear-gradient(135deg, #C4466A 0%, #B4593A 100%);
   --grad-dusk: linear-gradient(135deg, var(--flow) 0%, var(--bloom) 100%);
 
   --shadow-card: 0 1px 2px rgba(43, 36, 48, .05), 0 16px 32px -14px rgba(43, 36, 48, .16);
@@ -250,7 +252,7 @@
   }
 
   .btn-hero {
-    background-image: var(--grad-dawn);
+    background-image: var(--grad-hero);
     background-size: 160% 160%;
     background-position: 0% 50%;
     transition: background-position .5s ease, box-shadow .25s ease, transform .18s cubic-bezier(.34,1.56,.64,1);
