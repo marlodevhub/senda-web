@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { BookOpen, Briefcase, House, PersonStanding, Sparkles, Users, type LucideIcon } from "lucide-react";
+import { BookOpen, Briefcase, Heart, House, PersonStanding, Sparkles, Users, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { JOURNAL_CONTEXTS, JOURNAL_CONTEXT_LABEL_KEY, type JournalContext } from "@/types/journal-context";
 
@@ -10,7 +10,8 @@ const OPTIONS: JournalContext[] = [...JOURNAL_CONTEXTS];
 const ICONS: Record<JournalContext, { icon: LucideIcon; tone: string }> = {
   STUDIES: { icon: BookOpen, tone: "text-flow-ink bg-flow-tint" },
   FAMILY: { icon: House, tone: "text-root-ink bg-root-tint" },
-  FRIENDS_OR_PARTNER: { icon: Users, tone: "text-bloom-ink bg-bloom-tint" },
+  FRIENDS: { icon: Users, tone: "text-flow-ink bg-flow-tint" },
+  PARTNER: { icon: Heart, tone: "text-bloom-ink bg-bloom-tint" },
   BODY: { icon: PersonStanding, tone: "text-root-ink bg-root-tint" },
   WORK: { icon: Briefcase, tone: "text-sprout-ink bg-sprout-tint" },
   OTHER: { icon: Sparkles, tone: "text-flow-ink bg-flow-tint" },
@@ -27,7 +28,8 @@ export function ContextPicker({
   const t = useTranslations();
 
   return (
-    <div className="grid grid-cols-3 gap-2 sm:grid-cols-6" role="radiogroup" aria-label={t("journal.contextLabel")}>
+    // 7 opciones: 4 + 3 centradas en móvil, todas en una fila desde sm.
+    <div className="flex flex-wrap justify-center gap-2" role="radiogroup" aria-label={t("journal.contextLabel")}>
       {OPTIONS.map((option) => {
         const active = value === option;
         const { icon: Icon, tone } = ICONS[option];
@@ -40,7 +42,7 @@ export function ContextPicker({
             onClick={() => onChange(active ? undefined : option)}
             className={cn(
               // shadow-(--shadow-card) y no .shadow-card: la clase propia pisaría el anillo del elegido.
-              "flex flex-col items-center gap-1.5 rounded-[1.25rem] px-2 py-3 text-base font-semibold text-foreground shadow-(--shadow-card) backdrop-blur transition-all duration-200 hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-ring",
+              "flex w-[calc((100%-1.5rem)/4)] flex-col items-center gap-1.5 rounded-[1.25rem] px-1 py-3 sm:w-[calc((100%-3rem)/7)] text-base font-semibold text-foreground shadow-(--shadow-card) backdrop-blur transition-all duration-200 hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-ring",
               active ? "bg-flow-tint ring-2 ring-flow" : "bg-card/80",
             )}
           >
