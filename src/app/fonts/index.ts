@@ -19,9 +19,12 @@ export const figtree = localFont({
   display: "swap",
 });
 
-/** Diario: letra manuscrita para las preguntas y lo que escribe el estudiante (se siente como un cuaderno). OFL. */
-export const caveat = localFont({
-  src: [{ path: "./Caveat-500.woff2", weight: "500", style: "normal" }],
-  variable: "--font-caveat",
+/** Diario: letra escolar manuscrita, muy legible, para las preguntas y lo que escribe el estudiante. OFL. */
+export const eduHand = localFont({
+  src: [
+    { path: "./EduQLDHand-400.woff2", weight: "400", style: "normal" },
+    { path: "./EduQLDHand-500.woff2", weight: "500", style: "normal" },
+  ],
+  variable: "--font-edu-hand",
   display: "swap",
 });
