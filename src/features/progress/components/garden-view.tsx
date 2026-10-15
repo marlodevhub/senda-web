@@ -8,9 +8,24 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 import { cn } from "@/lib/utils";
 
 const ZONES = [
-  { id: "raices", nameKey: "progress.garden.raices", dimensionKey: "progress.garden.dimRaices", textKey: "progress.garden.zoneRaices" },
-  { id: "flores", nameKey: "progress.garden.flores", dimensionKey: "progress.garden.dimFlores", textKey: "progress.garden.zoneFlores" },
-  { id: "ritmo", nameKey: "progress.garden.ritmo", dimensionKey: "progress.garden.dimRitmo", textKey: "progress.garden.zoneRitmo" },
+  {
+    id: "raices",
+    nameKey: "progress.garden.raices",
+    dimensionKey: "progress.garden.dimRaices",
+    textKey: "progress.garden.zoneRaices",
+  },
+  {
+    id: "flores",
+    nameKey: "progress.garden.flores",
+    dimensionKey: "progress.garden.dimFlores",
+    textKey: "progress.garden.zoneFlores",
+  },
+  {
+    id: "ritmo",
+    nameKey: "progress.garden.ritmo",
+    dimensionKey: "progress.garden.dimRitmo",
+    textKey: "progress.garden.zoneRitmo",
+  },
 ] as const;
 
 const SPECIAL_CONFIG: Record<string, { icon: typeof Lamp; labelKey: string }> = {
@@ -34,7 +49,7 @@ const PETALS = [
  * dimensión y los elementos especiales de cada meta semanal (RN-PR-01/02).
  * Describe, no califica: sin puntajes ni comparaciones (RN-PR-05), y nunca
  * se marchita (RN-PR-04). Presentacional — `GardenPageClient` carga los datos.
- * - Móvil: escena y datos apilados, de borde a borde.
+ * - Móvil: el cielo a pantalla completa; escena y datos apilados, de borde a borde.
  * - Tablet: el jardín a pantalla completa detrás de la barra lateral y sus
  *   datos debajo, sobre el pasto.
  * - Escritorio (≥ 1280 px): a pantalla completa con los datos en un panel a
@@ -55,7 +70,12 @@ function Petals() {
         <span
           key={petal.left}
           className="garden-petal absolute top-0 h-2.5 w-4 rounded-[60%_40%_60%_40%]"
-          style={{ left: petal.left, background: petal.color, animationDelay: petal.delay, animationDuration: petal.duration }}
+          style={{
+            left: petal.left,
+            background: petal.color,
+            animationDelay: petal.delay,
+            animationDuration: petal.duration,
+          }}
         />
       ))}
     </div>
@@ -84,8 +104,18 @@ function GardenHeading({ garden, className }: { garden: Garden; className?: stri
 
 /** Tonos del texto según el fondo: blanco sobre la colina (móvil) o el de la app sobre un panel. */
 const TONES = {
-  hill: { ink: "text-(--garden-panel-ink)", accent: "text-(--garden-panel-accent)", line: "bg-(--garden-panel-accent)/60", chip: "bg-white/15 ring-1 ring-white/25" },
-  panel: { ink: "text-foreground", accent: "text-sprout-ink", line: "bg-sprout/50", chip: "bg-sprout-tint text-sprout-ink" },
+  hill: {
+    ink: "text-(--garden-panel-ink)",
+    accent: "text-(--garden-panel-accent)",
+    line: "bg-(--garden-panel-accent)/60",
+    chip: "bg-white/15 ring-1 ring-white/25",
+  },
+  panel: {
+    ink: "text-foreground",
+    accent: "text-sprout-ink",
+    line: "bg-sprout/50",
+    chip: "bg-sprout-tint text-sprout-ink",
+  },
 } as const;
 
 type Tone = keyof typeof TONES | "wide";
@@ -140,7 +170,13 @@ function GardenInfo({ garden, tone }: { garden: Garden; tone: Tone }) {
               if (!config) return null;
               const Icon = config.icon;
               return (
-                <li key={code} className={cn("flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold", colors.chip)}>
+                <li
+                  key={code}
+                  className={cn(
+                    "flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold",
+                    colors.chip,
+                  )}
+                >
                   <Icon className="size-3.5" aria-hidden />
                   {t(config.labelKey)}
                 </li>
@@ -156,23 +192,28 @@ function GardenInfo({ garden, tone }: { garden: Garden; tone: Tone }) {
 /** Móvil: de borde a borde, el verde llega hasta detrás del dock. */
 function GardenStacked({ garden }: { garden: Garden }) {
   return (
-    <section
-      aria-labelledby="garden-title"
-      className="garden-scene relative isolate -mx-4 -mb-[8.5rem] overflow-hidden rounded-t-[1.75rem]"
-    >
-      <Petals />
-      <GardenHeading garden={garden} className="relative px-5 pt-6 text-(--garden-sky-ink)" />
-      <div className="relative -mt-2">
-        <GardenScene garden={garden} />
+    <>
+      {/* El cielo cubre toda la pantalla, también detrás de la marca, el título y las pestañas (z-10). */}
+      <div aria-hidden className="garden-scene fixed inset-0 z-0">
+        <Petals />
       </div>
-      <div className="relative -mt-px bg-[linear-gradient(to_bottom,var(--garden-hill-mid),var(--garden-hill-deep)_45%,var(--garden-hill-deep))] px-5 pt-2 pb-[calc(2.5rem+8.5rem)]">
-        <GardenInfo garden={garden} tone="hill" />
-        <p aria-hidden className="mt-10 flex items-center justify-center gap-1.5 font-heading text-lg font-bold text-(--garden-panel-ink) opacity-60">
-          <Sprout className="size-5" />
-          Senda
-        </p>
-      </div>
-    </section>
+      <section aria-labelledby="garden-title" className="garden-tokens relative z-0 -mx-4 -mb-[8.5rem] overflow-hidden">
+        <GardenHeading garden={garden} className="relative px-5 pt-6 text-(--garden-sky-ink)" />
+        <div className="relative -mt-2">
+          <GardenScene garden={garden} />
+        </div>
+        <div className="relative -mt-px bg-[linear-gradient(to_bottom,var(--garden-hill-mid),var(--garden-hill-deep)_45%,var(--garden-hill-deep))] px-5 pt-2 pb-[calc(2.5rem+8.5rem)]">
+          <GardenInfo garden={garden} tone="hill" />
+          <p
+            aria-hidden
+            className="mt-10 flex items-center justify-center gap-1.5 font-heading text-lg font-bold text-(--garden-panel-ink) opacity-60"
+          >
+            <Sprout className="size-5" />
+            Senda
+          </p>
+        </div>
+      </section>
+    </>
   );
 }
 
