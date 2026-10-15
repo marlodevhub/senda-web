@@ -13,7 +13,7 @@ export function FieldError({ message }: { message?: string }) {
     return null;
   }
   return (
-    <p role="alert" className="text-sm text-destructive">
+    <p role="alert" className="text-base text-destructive">
       {t(message)}
     </p>
   );

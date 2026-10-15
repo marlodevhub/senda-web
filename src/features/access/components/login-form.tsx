@@ -78,7 +78,7 @@ export function LoginForm() {
         <FieldError message={errors.password?.message} />
         <Link
           href="/recuperar"
-          className="self-end text-sm font-semibold text-muted-foreground underline-offset-4 hover:underline"
+          className="self-end py-1.5 text-base font-semibold text-muted-foreground underline-offset-4 hover:underline"
         >
           {t("access.forgotPassword")}
         </Link>

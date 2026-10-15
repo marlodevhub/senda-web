@@ -37,8 +37,6 @@ export const recoverFormSchema = z
     newPassword: newPasswordSchema,
     newPasswordConfirm: z.string(),
   })
-  .refine(
-    ...passwordsMatch<{ newPassword: string; newPasswordConfirm: string }>("newPassword", "newPasswordConfirm"),
-  );
+  .refine(...passwordsMatch<{ newPassword: string; newPasswordConfirm: string }>("newPassword", "newPasswordConfirm"));
 
 export type RecoverFormValues = z.infer<typeof recoverFormSchema>;

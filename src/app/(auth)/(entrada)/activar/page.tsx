@@ -10,9 +10,12 @@ export default async function ActivarPage() {
     <div className="flex flex-col gap-8">
       <AuthHeading title={t("access.activateTitle")} subtitle={t("access.activateSubtitle")} />
       <ActivateForm />
-      <p className="text-center text-sm text-muted-foreground">
+      <p className="text-center text-base text-muted-foreground">
         {t("access.alreadyActive")}{" "}
-        <Link href="/login" className="font-semibold text-sprout-ink underline-offset-4 hover:underline">
+        <Link
+          href="/login"
+          className="inline-block py-2 font-semibold text-sprout-ink underline-offset-4 hover:underline"
+        >
           {t("access.loginLink")}
         </Link>
       </p>

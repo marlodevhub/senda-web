@@ -34,7 +34,14 @@ export async function AuthHero({ className }: { className?: string }) {
   const t = await getTranslations();
 
   return (
-    <div aria-hidden className={cn("relative aspect-square w-full max-w-[36rem]", className)}>
+    <div
+      aria-hidden
+      className={cn(
+        // Crece con el ancho, pero sin pasar del alto disponible (escritorios bajos, 1280×720).
+        "relative aspect-square w-full max-w-[min(36rem,calc(100dvh-16rem))]",
+        className,
+      )}
+    >
       <EmotionDefs />
       <div className="absolute inset-[12%] rounded-full bg-[radial-gradient(circle_at_35%_30%,var(--card),var(--bloom-tint)_55%,var(--flow-tint))] opacity-90" />
 
@@ -91,7 +98,8 @@ export function AuthCast({ className }: { className?: string }) {
           key={emotion}
           emotion={emotion}
           delay={`${-index * 0.7}s`}
-          className={emotion === "joy" ? "w-24 sm:w-32" : "w-16 sm:w-24"}
+          // Caben en 320 px sin scroll horizontal (RS-TR); crecen desde 400 px y en tablet.
+          className={emotion === "joy" ? "w-20 min-[400px]:w-24 sm:w-32" : "w-11 min-[400px]:w-16 sm:w-24"}
         />
       ))}
     </div>

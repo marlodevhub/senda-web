@@ -56,7 +56,7 @@ export function ConsentView({ consent }: { consent: ConsentContent }) {
     return (
       <div className="flex flex-col items-center gap-3 text-center">
         <h2 className="font-heading text-lg font-semibold text-foreground">{t("consent.declinedTitle")}</h2>
-        <p className="text-sm text-muted-foreground">{t("consent.declinedBody")}</p>
+        <p className="text-base text-muted-foreground">{t("consent.declinedBody")}</p>
         <Button variant="soft" onClick={() => router.push("/login")}>
           {t("common.goToLogin")}
         </Button>
@@ -69,11 +69,11 @@ export function ConsentView({ consent }: { consent: ConsentContent }) {
       <div
         ref={scrollRef}
         onScroll={handleScroll}
-        className="max-h-80 overflow-y-auto rounded-lg bg-muted p-4 text-sm leading-relaxed whitespace-pre-line text-foreground"
+        className="max-h-80 overflow-y-auto rounded-lg bg-muted p-4 text-base leading-relaxed whitespace-pre-line text-foreground"
       >
         {consent.text}
       </div>
-      {!reachedEnd && <p className="text-xs text-muted-foreground">{t("consent.scrollHint")}</p>}
+      {!reachedEnd && <p className="text-base text-muted-foreground">{t("consent.scrollHint")}</p>}
 
       <div className="flex items-center gap-2">
         <Checkbox

@@ -55,7 +55,7 @@ export function ActivateForm() {
       <Card>
         <CardContent className="flex flex-col gap-4 pt-2">
           <h2 className="font-heading text-lg font-semibold text-foreground">{t("access.recoveryCodeTitle")}</h2>
-          <p className="text-sm text-muted-foreground">{t("access.recoveryCodeBody")}</p>
+          <p className="text-base text-muted-foreground">{t("access.recoveryCodeBody")}</p>
           <p
             data-testid="recovery-code"
             className="rounded-lg bg-muted px-4 py-3 text-center font-mono text-xl font-bold tracking-widest text-foreground"
@@ -98,7 +98,7 @@ export function ActivateForm() {
         {errors.password ? (
           <FieldError message={errors.password.message} />
         ) : (
-          <p className="text-xs text-muted-foreground">{t("access.passwordHint")}</p>
+          <p className="text-base text-muted-foreground">{t("access.passwordHint")}</p>
         )}
       </div>
 

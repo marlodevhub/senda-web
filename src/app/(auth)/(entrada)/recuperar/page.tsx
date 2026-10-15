@@ -12,7 +12,7 @@ export default async function RecoverPage() {
       <RecoverForm />
       <Link
         href="/login"
-        className="text-center text-sm font-semibold text-sprout-ink underline-offset-4 hover:underline"
+        className="self-center py-2 text-center text-base font-semibold text-sprout-ink underline-offset-4 hover:underline"
       >
         {t("access.backToLogin")}
       </Link>
