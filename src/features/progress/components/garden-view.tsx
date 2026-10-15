@@ -48,7 +48,7 @@ export function GardenView({ garden }: { garden: Garden }) {
   return <GardenStacked garden={garden} />;
 }
 
-export function Petals() {
+function Petals() {
   return (
     <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-80 overflow-hidden">
       {PETALS.map((petal) => (

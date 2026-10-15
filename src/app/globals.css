@@ -368,6 +368,56 @@
   --garden-canopy-bloom: #4c9a5c;
 }
 
+/* Paisaje de las pantallas de entrada (login, activar, recuperar). */
+.senda-landscape {
+  --sl-sky-top: #f8d7de;
+  --sl-sky-mid: #f9e3d4;
+  --sl-sky-low: #f2f4ea;
+  --sl-sun: #f6b88f;
+  --sl-bird: #6b5f6e;
+  --sl-far: #dcdcef;
+  --sl-mid: #c9c7e3;
+  --sl-hill-1: #c7d8b9;
+  --sl-hill-2: #a5be96;
+  --sl-hill-3: #6f8a66;
+  --sl-tree: #5e7a56;
+  --sl-trunk: #8a5a3c;
+  --sl-path-far: #efd9c2;
+  --sl-path: #f8ecdf;
+  --sl-stone: #d8bfa5;
+  --sl-shadow: rgb(43 36 48 / 0.15);
+  --sl-ink: #2b2430;
+  --sl-skin: #c98f6b;
+  --sl-walker-a: var(--bloom);
+  --sl-walker-b: var(--flow);
+  --sl-flower: #fbe4e8;
+  --sl-flower-alt: #f6cf7a;
+  background: var(--sl-sky-low);
+}
+
+.dark .senda-landscape {
+  --sl-sky-top: #1b1630;
+  --sl-sky-mid: #33264a;
+  --sl-sky-low: #3e2f4f;
+  --sl-sun: #f3e3c7;
+  --sl-bird: #c9bfc6;
+  --sl-far: #3a3560;
+  --sl-mid: #2f2b52;
+  --sl-hill-1: #2e4838;
+  --sl-hill-2: #243c2e;
+  --sl-hill-3: #1a2f22;
+  --sl-tree: #17291d;
+  --sl-trunk: #3a2a22;
+  --sl-path-far: #5d4c62;
+  --sl-path: #7a6577;
+  --sl-stone: #5a4858;
+  --sl-shadow: rgb(0 0 0 / 0.3);
+  --sl-ink: #f3eee9;
+  --sl-skin: #b07a5c;
+  --sl-flower: #e8738a;
+  --sl-flower-alt: #e9c46a;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .garden-petal {
     animation: garden-petal-fall linear infinite;

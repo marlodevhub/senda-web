@@ -1,28 +1,31 @@
 import { Sprout } from "lucide-react";
-import { AuthBanner, AuthShowcase } from "@/app/(auth)/(entrada)/_components/auth-showcase";
+import { AuthCompanions } from "@/app/(auth)/(entrada)/_components/auth-companions";
+import { SendaLandscape } from "@/app/(auth)/(entrada)/_components/senda-landscape";
 
 /**
- * Entrada del estudiante (login, activar, recuperar): el formulario a la
- * izquierda y el jardín ilustrado a la derecha; en móvil y tablet, el jardín
- * va en una franja sobre el formulario.
+ * Entrada del estudiante (login, activar, recuperar): el paisaje de la senda
+ * cubre el fondo y el formulario va encima, en una tarjeta de vidrio; en
+ * escritorio, a la izquierda, con caras de ánimo y frases sobre el paisaje.
  */
 export default function EntradaLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-dvh bg-card p-3 lg:p-4">
-      <div className="mx-auto grid min-h-[calc(100dvh-1.5rem)] max-w-7xl gap-4 lg:min-h-[calc(100dvh-2rem)] lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)]">
-        <main className="flex flex-col gap-6 px-2 pt-2 pb-8 sm:px-8 lg:px-12 lg:py-8">
+    <div className="senda-landscape relative isolate min-h-dvh overflow-hidden">
+      <SendaLandscape />
+      <div className="relative grid min-h-dvh lg:grid-cols-[minmax(0,34rem)_minmax(0,1fr)]">
+        <main className="flex flex-col gap-6 p-4 sm:p-8 lg:p-10">
           <p className="flex items-center gap-2 font-heading text-2xl font-extrabold text-foreground">
-            <span className="flex size-10 items-center justify-center rounded-full bg-sprout-tint text-sprout-ink">
+            <span className="flex size-10 items-center justify-center rounded-full bg-card text-sprout-ink shadow-card">
               <Sprout className="size-5" aria-hidden />
             </span>
             Senda
           </p>
-          <AuthBanner />
-          <div className="flex flex-1 items-center justify-center">
-            <div className="w-full max-w-sm">{children}</div>
+          <div className="flex flex-1 items-center justify-center pb-24 lg:pb-0">
+            <div className="w-full max-w-md rounded-[2rem] bg-card/85 p-6 shadow-card backdrop-blur-xl sm:p-10">
+              {children}
+            </div>
           </div>
         </main>
-        <AuthShowcase />
+        <AuthCompanions className="hidden lg:block" />
       </div>
     </div>
   );
