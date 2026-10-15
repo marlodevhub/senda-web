@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 
 /**
- * Personajes de emociones de las pantallas de entrada: formas suaves con cara,
+ * Personajes de emociones (pantallas de entrada y guías del tutorial): formas suaves con cara,
  * en la paleta de Senda. Respiran, parpadean y se mecen (solo si no se pide
  * menos movimiento; ver `.emo-*` en globals.css). Decorativos.
  *

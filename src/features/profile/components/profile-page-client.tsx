@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { useTour } from "@/components/tour/app-tour";
 import { LogoutButton } from "@/features/access/components/logout-button";
 import { useProfile } from "@/features/profile/api/use-profile";
 import { ChangePasswordForm } from "@/features/profile/components/change-password-form";
@@ -17,13 +18,14 @@ import { StartingPointForm } from "@/features/welcome/components/starting-point-
 /**
  * CU-20 Gestionar perfil (RN-AC-13): notificaciones por correo, contraseña,
  * código de recuperación, punto de partida (CU-17), ayuda e información
- * (volver a ver la bienvenida y leer el consentimiento), cerrar sesión y
+ * (volver a ver la bienvenida o el tutorial y leer el consentimiento), cerrar sesión y
  * retirarse (CU-21). Sin botón de "Necesito ayuda": Senda no es un servicio
  * de crisis (sección 15 del CLAUDE.md raíz).
  */
 export function ProfilePageClient() {
   const t = useTranslations();
   const { data: profile, isPending, isError } = useProfile();
+  const tour = useTour();
 
   return (
     <div className="flex flex-col gap-5">
@@ -63,6 +65,9 @@ export function ProfilePageClient() {
         <nav aria-label={t("profile.helpTitle")} className="flex flex-col gap-1">
           <Button asChild variant="ghost" className="justify-start">
             <Link href="/perfil/bienvenida">{t("profile.seeWelcome")}</Link>
+          </Button>
+          <Button variant="ghost" className="justify-start" onClick={() => tour?.start()}>
+            {t("profile.seeTour")}
           </Button>
           <Button asChild variant="ghost" className="justify-start">
             <Link href="/perfil/consentimiento">{t("profile.readConsent")}</Link>

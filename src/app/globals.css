@@ -407,7 +407,7 @@
   }
 }
 
-/* Personajes de emociones de las pantallas de entrada. */
+/* Personajes de emociones (pantallas de entrada y tutorial). */
 :root {
   --emo-ink: #2b2a5e;
 }

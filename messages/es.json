@@ -351,7 +351,8 @@
     "glassHint": "Ajusta el vidrio de la barra de abajo y del botón de mensajes. Se guarda en este dispositivo.",
     "glassOpacity": "Opacidad",
     "glassSheen": "Línea de luz en el borde",
-    "glassReset": "Restablecer"
+    "glassReset": "Restablecer",
+    "seeTour": "Ver el tutorial"
   },
   "admin": {
     "loginTitle": "Panel de administración",
@@ -556,5 +557,39 @@
     "unexpectedTitle": "Algo salió mal",
     "unexpectedBody": "No es tu culpa. Vuelve a intentarlo en un momento; lo que ya guardaste está a salvo.",
     "retry": "Intentar de nuevo"
+  },
+  "tour": {
+    "stepOf": "Paso {current} de {total}",
+    "next": "Siguiente",
+    "back": "Atrás",
+    "skip": "Omitir",
+    "finish": "¡Empezar!",
+    "speakerAll": "Las emociones de Senda",
+    "speakerCalm": "Calma",
+    "speakerJoy": "Alegría",
+    "speakerSad": "Tristeza",
+    "speakerSpark": "Ilusión",
+    "speakerHope": "Esperanza",
+    "speakerNerves": "Nervios",
+    "welcomeTitle": "¡Hola! Te acompañamos en tu senda",
+    "welcomeBody": "Somos algunas de las emociones que vas a ir reconociendo estos 28 días. En un minuto te mostramos cómo usar Senda, paso a paso.",
+    "homeTitle": "1. Empieza en Inicio",
+    "homeBody": "Cada día, elige la cara que mejor diga cómo llegas. Te toma un segundo y, con los días, te muestra cómo va tu ánimo.",
+    "journalTitle": "2. Escribe en tu Diario",
+    "journalBody": "Cuenta qué pasó, qué te dijiste y cómo te sentiste. Bastan de 5 a 10 minutos, y tu texto se guarda cifrado.",
+    "mirrorTitle": "3. Mírate en el Espejo",
+    "mirrorBody": "Al guardar, te mostramos hasta 3 frases en las que tu voz interna fue dura contigo. Tú nos dices si refleja lo que escribiste.",
+    "rewriteTitle": "4. Reescríbelo con amabilidad",
+    "rewriteBody": "Si quieres, eliges una frase y la escribes de nuevo, como se la dirías a un amigo. Es opcional: tú decides.",
+    "progressTitle": "5. Mira tu Progreso",
+    "progressBody": "Cada registro riega tu jardín y cada reescritura hace brotar una flor. Tu jardín nunca se marchita.",
+    "messagesTitle": "6. Mensajes para ti",
+    "messagesBody": "Algunos días te dejamos aquí un mensaje de ánimo o un recordatorio. Cuando llegue uno nuevo, lo verás en la campana.",
+    "historyTitle": "7. Vuelve a lo que escribiste",
+    "historyBody": "En Historial están todos tus registros: puedes releerlos o borrarlos cuando quieras.",
+    "profileTitle": "8. Tu Perfil",
+    "profileBody": "Cambia la apariencia, relee el consentimiento o vuelve a ver este tutorial cuando lo necesites.",
+    "doneTitle": "¡Listo para empezar!",
+    "doneBody": "Tu meta es escribir 3 días por semana, no todos. Si un día no puedes, no pasa nada: tu senda sigue aquí."
   }
 }

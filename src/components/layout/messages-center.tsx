@@ -106,6 +106,7 @@ export function MessagesBell() {
   return (
     <button
       type="button"
+      data-tour="mensajes"
       onClick={() => center?.open()}
       aria-label={t("guidance.bellLabel", { count: unread })}
       title={t("guidance.title")}

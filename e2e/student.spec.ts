@@ -25,6 +25,13 @@ async function expectAccessible(page: Page) {
   expect(details).toEqual([]);
 }
 
+// El tutorial se abre solo la primera vez en Inicio: los demás flujos lo dan por visto.
+test.beforeEach(async ({ context }, testInfo) => {
+  if (!testInfo.tags.includes("@tutorial")) {
+    await context.addInitScript(() => window.localStorage.setItem("senda:tour-seen", "1"));
+  }
+});
+
 async function activateAndConsent(page: Page): Promise<string> {
   const code = seedPendingParticipant();
 
@@ -39,10 +46,13 @@ async function activateAndConsent(page: Page): Promise<string> {
 
   // CU-16: el consentimiento solo se acepta después de leerlo hasta el final.
   await expect(page).toHaveURL(/\/consentimiento/);
-  await page.locator("div.overflow-y-auto").first().evaluate((el) => {
-    el.scrollTop = el.scrollHeight;
-    el.dispatchEvent(new Event("scroll"));
-  });
+  await page
+    .locator("div.overflow-y-auto")
+    .first()
+    .evaluate((el) => {
+      el.scrollTop = el.scrollHeight;
+      el.dispatchEvent(new Event("scroll"));
+    });
   await page.getByLabel("Leí y acepto").check();
   await page.getByRole("button", { name: "Acepto", exact: true }).click();
 
@@ -89,7 +99,9 @@ test("ciclo diario completo: activar → diario → espejo → reescritura → f
   // CU-04: reescribir la frase.
   await page.getByRole("link", { name: "Reescribir esta frase" }).click();
   await expect(page).toHaveURL(/\/reescritura\/\d+/);
-  await page.getByLabel("Tu reescritura").fill("Hoy me costó, pero equivocarme no me hace inútil; puedo repasar con calma.");
+  await page
+    .getByLabel("Tu reescritura")
+    .fill("Hoy me costó, pero equivocarme no me hace inútil; puedo repasar con calma.");
   await page.getByRole("button", { name: "Listo" }).click();
   await expect(page.getByText("Se suavizó.", { exact: false })).toBeVisible();
   await page.getByRole("radio", { name: "Bien", exact: true }).click();
@@ -133,6 +145,45 @@ test("la bienvenida es solo la primera vez y se repasa desde Ayuda e informació
   await page.getByRole("button", { name: "Iniciar sesión" }).click();
   await expect(page).toHaveURL(/\/inicio/);
 });
+
+test(
+  "el tutorial se abre la primera vez en Inicio, avanza, retrocede y se repite desde Perfil",
+  { tag: "@tutorial" },
+  async ({ page }) => {
+    await activateAndConsent(page);
+
+    const tour = page.getByRole("dialog");
+    await expect(tour.getByRole("heading", { name: "¡Hola! Te acompañamos en tu senda" })).toBeVisible();
+    await expectAccessible(page);
+
+    // Cada paso ilumina la pestaña de la que habla (en móvil, la del dock).
+    await tour.getByRole("button", { name: "Siguiente" }).click();
+    await expect(tour.getByRole("heading", { name: "1. Empieza en Inicio" })).toBeVisible();
+    await expectAccessible(page);
+    await tour.getByRole("button", { name: "Atrás" }).click();
+    await expect(tour.getByRole("heading", { name: "¡Hola! Te acompañamos en tu senda" })).toBeVisible();
+
+    for (let i = 0; i < 9; i++) {
+      await tour.getByRole("button", { name: "Siguiente" }).click();
+    }
+    await expect(tour.getByRole("heading", { name: "¡Listo para empezar!" })).toBeVisible();
+    await tour.getByRole("button", { name: "¡Empezar!" }).click();
+    await expect(tour).toBeHidden();
+
+    // Ya visto: no vuelve a abrirse solo.
+    await page.reload();
+    await expect(page.getByText("Hola. Hoy es tu día 3 de 28.")).toBeVisible();
+    await page.waitForTimeout(1200);
+    await expect(page.getByRole("dialog")).toBeHidden();
+
+    // Se repite desde Perfil y se puede omitir.
+    await page.goto("/perfil");
+    await page.getByRole("button", { name: "Ver el tutorial" }).click();
+    await expect(tour.getByRole("heading", { name: "¡Hola! Te acompañamos en tu senda" })).toBeVisible();
+    await tour.getByRole("button", { name: "Omitir" }).click();
+    await expect(tour).toBeHidden();
+  },
+);
 
 test("con la sesión iniciada, las pantallas de ingreso llevan a Inicio", async ({ page }) => {
   await activateAndConsent(page);
@@ -209,7 +260,9 @@ test("en tablet la barra lateral es un riel de iconos con nombres accesibles", a
   await expectAccessible(page);
 });
 
-test("los mensajes para ti se abren en un drawer: desde abajo en móvil, desde la derecha en escritorio", async ({ page }) => {
+test("los mensajes para ti se abren en un drawer: desde abajo en móvil, desde la derecha en escritorio", async ({
+  page,
+}) => {
   await activateAndConsent(page);
 
   // Móvil: la bandeja sube desde abajo y flota, sobre el vidrio del dock.
@@ -232,7 +285,9 @@ test("los mensajes para ti se abren en un drawer: desde abajo en móvil, desde l
   expect((box?.x ?? 0) + (box?.width ?? 0)).toBeCloseTo(1440 - 12, 0);
 });
 
-test("un mensaje nuevo se avisa con un toast una sola vez; su acción lleva a la pantalla y cierra la bandeja", async ({ page }) => {
+test("un mensaje nuevo se avisa con un toast una sola vez; su acción lleva a la pantalla y cierra la bandeja", async ({
+  page,
+}) => {
   const code = await activateAndConsent(page);
   seedSentMessage(code);
   await page.reload();

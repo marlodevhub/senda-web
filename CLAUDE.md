@@ -95,6 +95,8 @@ senda-web/
     ├── components/
     │   ├── ui/                       shadcn/ui
     │   ├── layout/                   bottom-nav.tsx, page-header.tsx, admin-sidebar.tsx
+    │   ├── illustrations/            emotion-characters.tsx (personajes de emociones)
+    │   ├── tour/                     tutorial guiado por las emociones (app-tour.tsx, tour-steps.ts)
     │   └── feedback/                 empty-state.tsx, error-state.tsx
     ├── hooks/                        hooks compartidos
     ├── lib/

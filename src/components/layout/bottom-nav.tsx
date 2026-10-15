@@ -34,6 +34,7 @@ export function BottomNav() {
             <Link
               key={item.href}
               href={item.href}
+              data-tour={item.href.slice(1)}
               aria-current={active ? "page" : undefined}
               className="flex-1 rounded-full focus-visible:outline-2 focus-visible:outline-ring"
             >

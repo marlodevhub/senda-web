@@ -1,7 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { Check, Sparkles } from "lucide-react";
 import { MoodFace, type Mood } from "@/components/icons/mood-face";
-import { EmotionCharacter, EmotionDefs, type Emotion } from "@/app/(auth)/(entrada)/_components/emotion-characters";
+import { EmotionCharacter, EmotionDefs, type Emotion } from "@/components/illustrations/emotion-characters";
 import { cn } from "@/lib/utils";
 
 /** Dónde va cada personaje alrededor del círculo y su etiqueta (en % del cuadro). */
