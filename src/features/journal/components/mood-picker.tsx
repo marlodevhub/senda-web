@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
-import { MoodOrb, type Mood } from "@/components/icons/mood-orb";
+import { MOOD_INK, MoodOrb, moodGradient, type Mood } from "@/components/icons/mood-orb";
 
 const MOODS: Mood[] = [1, 2, 3, 4, 5];
 
@@ -70,7 +70,9 @@ export function MoodPicker({
               <span
                 key={bubble.taps}
                 aria-hidden
-                className="mood-bubble pointer-events-none absolute bottom-full left-1/2 z-10 rounded-full bg-foreground px-3 py-1 text-base font-semibold whitespace-nowrap text-background shadow-card"
+                // Sale por encima de la carita (no la tapa) y del color de ese ánimo.
+                className="mood-bubble pointer-events-none absolute bottom-[calc(100%+0.25rem)] left-1/2 z-10 rounded-full px-3 py-1 text-base font-semibold whitespace-nowrap shadow-card"
+                style={{ background: moodGradient(mood), color: MOOD_INK }}
               >
                 {t(`mood.${mood}`)}
               </span>

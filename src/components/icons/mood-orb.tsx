@@ -17,6 +17,15 @@ const ORB_COLORS: Record<Mood, { light: string; base: string }> = {
 
 const INK = "#3b2a3a";
 
+/** El degradado de cada ánimo, para lo que lo acompaña (la burbuja con su nombre al elegirlo). */
+export function moodGradient(mood: Mood): string {
+  const { light, base } = ORB_COLORS[mood];
+  return `linear-gradient(135deg, ${light}, ${base})`;
+}
+
+/** Tinta de las caras: oscura sobre cualquiera de los colores (contraste ≥ 4,5:1). */
+export const MOOD_INK = INK;
+
 function Mouth({ mood }: { mood: Mood }) {
   const d = {
     1: "M17 33 Q24 26 31 33",
