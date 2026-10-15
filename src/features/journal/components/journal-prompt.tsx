@@ -14,12 +14,11 @@ export function JournalPrompt({
   children: React.ReactNode;
 }) {
   return (
-    // Preguntas en el rojo de la paleta. El campo no tiene borde ni cambia de fondo: el foco se ve en la pregunta,
-    // que se subraya (WCAG 2.4.7).
+    // Preguntas en el rojo de la paleta (--prompt-red); el campo no tiene borde ni fondo, el foco lo marca el cursor.
     <div className="group flex flex-col gap-1 py-2">
       <label
         htmlFor={id}
-        className="font-hand text-2xl leading-tight font-medium text-bloom-ink decoration-bloom/60 decoration-2 underline-offset-6 group-focus-within:underline"
+        className="font-hand text-2xl leading-tight font-medium text-(--prompt-red)"
       >
         {label}
       </label>

@@ -102,6 +102,8 @@
   --leaf-from: #dcf5e1;
   --leaf-to: #b5e5c0;
   --leaf-ink: #1e4d33;
+  /* Preguntas del Diario: el rojo del botón principal (4,8:1 sobre la hoja blanca). */
+  --prompt-red: #C4466A;
 
   --primary: var(--bloom);
   /* WCAG 2.1 AA (RS-TR): el blanco sobre bloom da 2,9:1; este vino oscuro da 5,7:1 (igual que en modo oscuro). */
@@ -178,6 +180,7 @@
   --leaf-from: #2c5a3e;
   --leaf-to: #3d7a52;
   --leaf-ink: #e8f6ec;
+  --prompt-red: #F0A0AF;
 
   --primary: var(--bloom);
   --primary-foreground: #2B1A20;
