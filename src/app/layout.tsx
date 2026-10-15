@@ -33,7 +33,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
             <Providers>
               {children}
-              <Toaster position="top-center" richColors />
+              <Toaster position="bottom-right" richColors />
             </Providers>
           </ThemeProvider>
         </NextIntlClientProvider>
