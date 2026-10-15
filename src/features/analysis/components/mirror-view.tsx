@@ -74,8 +74,9 @@ export function MirrorView({ journalEntryId, fieldTexts }: { journalEntryId: num
   const findings = mirror.findings ?? [];
 
   if (findings.length === 0) {
+    // Sin hallazgos no prueba que la voz fue amable (puede ser un texto solo de hechos): calma, sin celebrar.
     return (
-      <MirrorMoment emotion="joy" message={t("analysis.reinforcement")} celebrate>
+      <MirrorMoment emotion="calm" message={t("analysis.reinforcement")}>
         <Button variant="hero" size="xl" className="rounded-full" asChild>
           <Link href="/progreso">{t("analysis.goToProgress")}</Link>
         </Button>

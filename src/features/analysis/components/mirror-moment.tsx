@@ -1,4 +1,3 @@
-import { Sparkles } from "lucide-react";
 import { EmotionCharacter, EmotionDefs, type Emotion } from "@/components/illustrations/emotion-characters";
 
 /**
@@ -10,13 +9,10 @@ import { EmotionCharacter, EmotionDefs, type Emotion } from "@/components/illust
 export function MirrorMoment({
   emotion,
   message,
-  celebrate = false,
   children,
 }: {
   emotion: Emotion;
   message: string;
-  /** Destellos alrededor de la emoción: solo para el refuerzo (RN-ES-12). */
-  celebrate?: boolean;
   children: React.ReactNode;
 }) {
   return (
@@ -25,13 +21,6 @@ export function MirrorMoment({
       <div className="relative motion-safe:animate-in motion-safe:zoom-in-50 motion-safe:fade-in-0 motion-safe:duration-500 motion-safe:ease-[cubic-bezier(.34,1.56,.64,1)]">
         <div aria-hidden className="absolute inset-0 -z-10 scale-150 rounded-full bg-bloom-tint/70 blur-2xl" />
         <EmotionCharacter emotion={emotion} className="w-32 md:w-36" />
-        {celebrate && (
-          <div aria-hidden>
-            <Sparkles className="auth-float absolute -top-2 -left-6 size-6 text-root" />
-            <Sparkles className="auth-float absolute top-4 -right-7 size-5 text-bloom [animation-delay:-2s]" />
-            <Sparkles className="auth-float absolute -bottom-1 -left-3 size-4 text-flow [animation-delay:-4s]" />
-          </div>
-        )}
       </div>
       <p
         role="status"
