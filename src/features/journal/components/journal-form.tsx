@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { MoodPicker } from "@/features/journal/components/mood-picker";
-import type { Mood } from "@/components/icons/mood-face";
+import type { Mood } from "@/components/icons/mood-orb";
 import { ContextPicker } from "@/features/journal/components/context-picker";
 import { journalFormSchema, type JournalFormValues } from "@/features/journal/schemas/journal.schema";
 import { createJournalEntry } from "@/features/journal/api/create-entry";
@@ -98,7 +98,11 @@ export function JournalForm() {
           control={control}
           name="moodBefore"
           render={({ field }) => (
-            <MoodPicker value={field.value as Mood | undefined} onChange={(mood) => field.onChange(mood)} />
+            <MoodPicker
+              label={t("journal.moodLabel")}
+              value={field.value as Mood | undefined}
+              onChange={(mood) => field.onChange(mood)}
+            />
           )}
         />
         {errors.moodBefore && <FieldError message="journal.missingMood" />}

@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Dialog as DialogPrimitive } from "radix-ui";
 import { Button } from "@/components/ui/button";
-import { MoodFace, type Mood } from "@/components/icons/mood-face";
+import { MoodOrb, type Mood } from "@/components/icons/mood-orb";
 import { EmotionCharacter, EmotionDefs } from "@/components/illustrations/emotion-characters";
 import { isTourSeen, markTourSeen } from "@/components/tour/tour-seen";
 import { SPEAKER_KEY, TOUR_STEPS } from "@/components/tour/tour-steps";
@@ -198,7 +198,7 @@ function TourOverlay({ step, onStep, onClose }: { step: number; onStep: (step: n
               {current.moods && (
                 <div aria-hidden className="flex justify-between px-2 text-flow-ink">
                   {([1, 2, 3, 4, 5] as Mood[]).map((mood) => (
-                    <MoodFace key={mood} mood={mood} active className="size-9" />
+                    <MoodOrb key={mood} mood={mood} decorative animated className="size-9" />
                   ))}
                 </div>
               )}

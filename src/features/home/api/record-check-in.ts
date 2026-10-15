@@ -1,5 +1,5 @@
 import { callBff } from "@/lib/api/client";
-import type { Mood } from "@/components/icons/mood-face";
+import type { Mood } from "@/components/icons/mood-orb";
 
 export type CheckInResult = { mood: Mood; interventionDay: number; invitesToWrite: boolean };
 

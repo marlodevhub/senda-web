@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { MoodFace, type Mood } from "@/components/icons/mood-face";
+import { MoodOrb, type Mood } from "@/components/icons/mood-orb";
 import { FindingCard } from "@/components/feedback/finding-card";
 import { CareMessage } from "@/components/feedback/care-message";
 import {
@@ -30,8 +30,18 @@ const RESULT_KEY: Record<string, string> = {
   PENDING: "history.resultPending",
 };
 
-function fragmentOf(finding: EntryMirrorFinding, texts: { q1: string | null; q2: string | null; q3: string | null; freeText: string | null }) {
-  const source = finding.field === "Q1" ? texts.q1 : finding.field === "Q2" ? texts.q2 : finding.field === "Q3" ? texts.q3 : texts.freeText;
+function fragmentOf(
+  finding: EntryMirrorFinding,
+  texts: { q1: string | null; q2: string | null; q3: string | null; freeText: string | null },
+) {
+  const source =
+    finding.field === "Q1"
+      ? texts.q1
+      : finding.field === "Q2"
+        ? texts.q2
+        : finding.field === "Q3"
+          ? texts.q3
+          : texts.freeText;
   return (source ?? "").slice(finding.start, finding.end);
 }
 
@@ -48,7 +58,7 @@ function RewriteRow({ rewrite }: { rewrite: EntryRewrite }) {
       {rewrite.moodAfter != null && (
         <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
           <span>{t("history.moodAfterLabel")}</span>
-          <MoodFace mood={rewrite.moodAfter as Mood} active className="size-5" />
+          <MoodOrb mood={rewrite.moodAfter as Mood} className="size-6" />
         </div>
       )}
       {rewrite.inJar && <span className="text-xs text-muted-foreground">{t("history.inJar")}</span>}
@@ -91,7 +101,7 @@ export function EntryDetail({ journalEntryId }: { journalEntryId: number }) {
     <div className="flex flex-col gap-5">
       <div className="flex items-center justify-between gap-3 rounded-xl bg-card p-3 shadow-card">
         <div className="flex items-center gap-3">
-          <MoodFace mood={entry.moodBefore as Mood} active className="size-10 text-flow" />
+          <MoodOrb mood={entry.moodBefore as Mood} className="size-10" />
           <span className="text-sm font-semibold text-foreground">
             {t("history.dayLabel", { day: entry.interventionDay })}
           </span>

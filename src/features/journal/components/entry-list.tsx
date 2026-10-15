@@ -5,7 +5,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
-import { MoodFace, type Mood } from "@/components/icons/mood-face";
+import { MoodOrb, type Mood } from "@/components/icons/mood-orb";
 import { useHistory } from "@/features/journal/api/use-entries";
 import { JOURNAL_CONTEXTS, JOURNAL_CONTEXT_LABEL_KEY, type JournalContext } from "@/types/journal-context";
 
@@ -113,9 +113,7 @@ export function EntryList() {
 
       {!isPending && items.length === 0 && (
         <div className="flex flex-col items-center gap-3 py-10 text-center">
-          <p className="text-sm text-muted-foreground">
-            {hasFilters ? t("history.noResults") : t("history.empty")}
-          </p>
+          <p className="text-sm text-muted-foreground">{hasFilters ? t("history.noResults") : t("history.empty")}</p>
           {!hasFilters && (
             <Button variant="soft" asChild>
               <Link href="/diario">{t("history.writeCta")}</Link>
@@ -131,7 +129,7 @@ export function EntryList() {
               href={`/historial/${item.id}`}
               className="flex items-center gap-3 rounded-xl bg-card p-3 shadow-card transition-shadow hover:shadow-md"
             >
-              <MoodFace mood={item.moodBefore as Mood} active className="size-9 shrink-0 text-flow" />
+              <MoodOrb mood={item.moodBefore as Mood} className="size-9" />
               <div className="flex min-w-0 flex-1 flex-col gap-0.5">
                 <span className="text-sm font-semibold text-foreground">
                   {t("history.dayLabel", { day: item.interventionDay })}

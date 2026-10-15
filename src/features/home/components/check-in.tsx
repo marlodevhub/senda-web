@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import type { Mood } from "@/components/icons/mood-face";
+import type { Mood } from "@/components/icons/mood-orb";
 import { MoodPicker } from "@/features/journal/components/mood-picker";
 import { useRecordCheckIn } from "@/features/home/api/use-record-check-in";
 import { BffError } from "@/lib/api/client";
@@ -39,7 +39,7 @@ export function CheckIn({ initialMood }: { initialMood: Mood | null }) {
       <h2 id="checkin-question" className="text-sm font-semibold text-foreground">
         {t("home.checkinQuestion")}
       </h2>
-      <MoodPicker value={mood ?? undefined} onChange={handleChange} />
+      <MoodPicker label={t("home.checkinQuestion")} value={mood ?? undefined} onChange={handleChange} />
       <div aria-live="polite" className="flex flex-col gap-2">
         {justSaved && <p className="text-sm text-muted-foreground">{t("home.checkinThanks")}</p>}
         {mood !== null && mood <= 2 && (

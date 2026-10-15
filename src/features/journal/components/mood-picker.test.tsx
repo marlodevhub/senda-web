@@ -1,12 +1,13 @@
 import { describe, expect, it, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { renderWithProviders, screen } from "@/testing/test-utils";
 import { MoodPicker } from "./mood-picker";
 
 describe("MoodPicker", () => {
   it("muestra las 5 caras y marca la seleccionada como activa", () => {
-    render(<MoodPicker value={3} onChange={() => {}} />);
+    renderWithProviders(<MoodPicker label="¿Cómo estás hoy?" value={3} onChange={() => {}} />);
 
+    expect(screen.getByRole("radiogroup", { name: "¿Cómo estás hoy?" })).toBeInTheDocument();
     const options = screen.getAllByRole("radio");
     expect(options).toHaveLength(5);
     expect(options[2]).toHaveAttribute("aria-checked", "true");
@@ -16,7 +17,7 @@ describe("MoodPicker", () => {
   it("llama a onChange con el ánimo tocado (RN-DI-03)", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    render(<MoodPicker value={3} onChange={onChange} />);
+    renderWithProviders(<MoodPicker label="¿Cómo estás hoy?" value={3} onChange={onChange} />);
 
     await user.click(screen.getByRole("radio", { name: "Muy bien" }));
 
@@ -25,7 +26,7 @@ describe("MoodPicker", () => {
   });
 
   it("no tiene un ánimo activo cuando value es undefined (check-in del día sin responder)", () => {
-    render(<MoodPicker onChange={() => {}} />);
+    renderWithProviders(<MoodPicker label="¿Cómo estás hoy?" onChange={() => {}} />);
 
     const options = screen.getAllByRole("radio");
     options.forEach((opt) => expect(opt).toHaveAttribute("aria-checked", "false"));

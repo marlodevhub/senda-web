@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { Check, Sparkles } from "lucide-react";
-import { MoodFace, type Mood } from "@/components/icons/mood-face";
+import { MoodOrb, type Mood } from "@/components/icons/mood-orb";
 import { EmotionCharacter, EmotionDefs, type Emotion } from "@/components/illustrations/emotion-characters";
 import { cn } from "@/lib/utils";
 
@@ -63,7 +63,13 @@ export async function AuthHero({ className }: { className?: string }) {
         <p className="text-sm font-semibold text-foreground">{t("access.showcaseMood")}</p>
         <div className="mt-2 flex gap-1.5 text-flow-ink">
           {([1, 2, 3, 4, 5] as Mood[]).map((mood) => (
-            <MoodFace key={mood} mood={mood} active={mood === 4} className="size-7" />
+            <MoodOrb
+              key={mood}
+              mood={mood}
+              decorative
+              animated={mood === 4}
+              className={mood === 4 ? "size-8" : "size-7 opacity-60"}
+            />
           ))}
         </div>
       </div>

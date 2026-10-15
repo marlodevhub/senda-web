@@ -599,5 +599,12 @@
     "profileBody": "Cambia la apariencia, relee el consentimiento o vuelve a ver este tutorial cuando lo necesites.",
     "doneTitle": "¡Listo para empezar!",
     "doneBody": "Tu meta es escribir 3 días por semana, no todos. Si un día no puedes, no pasa nada: tu senda sigue aquí."
+  },
+  "mood": {
+    "1": "Muy mal",
+    "2": "Mal",
+    "3": "Regular",
+    "4": "Bien",
+    "5": "Muy bien"
   }
 }

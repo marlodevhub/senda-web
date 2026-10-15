@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { MoodPicker } from "@/features/journal/components/mood-picker";
-import type { Mood } from "@/components/icons/mood-face";
+import type { Mood } from "@/components/icons/mood-orb";
 import { useRewriteGuide } from "@/features/rewrite/api/use-rewrite-guide";
 import { useSubmitRewrite } from "@/features/rewrite/api/use-submit-rewrite";
 import { useRewriteFeedback } from "@/features/rewrite/api/use-rewrite-feedback";
@@ -161,8 +161,7 @@ function RewriteOutcomeView({
   }
 
   const canRetry =
-    (created.result === "ALMOST" || created.result === "STILL_HARD") &&
-    created.attemptNumber < created.maxAttempts;
+    (created.result === "ALMOST" || created.result === "STILL_HARD") && created.attemptNumber < created.maxAttempts;
 
   return (
     <div className="flex flex-col gap-5">
@@ -187,6 +186,7 @@ function RewriteOutcomeView({
       <div className="flex flex-col gap-2">
         <Label>{t("rewrite.moodAfterLabel")}</Label>
         <MoodPicker
+          label={t("rewrite.moodAfterLabel")}
           value={mood}
           onChange={(value) => {
             setMood(value);
