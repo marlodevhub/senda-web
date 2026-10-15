@@ -135,7 +135,6 @@ export function JournalForm() {
 
       {/* La hoja del diario: sin cajas con borde, letra de cuaderno y aire para escribir. */}
       <div className="relative flex min-h-80 flex-col gap-2 rounded-[2rem] bg-card p-5 shadow-card md:p-8">
-        <DraftStatusIcon status={draftStatus} className="absolute top-4 right-4 md:top-6 md:right-6" />
         {mode === "GUIDED" ? (
           <>
             <JournalPrompt id="q1" label={t("journal.q1Label")} error={errors.q1?.message}>
@@ -166,9 +165,17 @@ export function JournalForm() {
               <p className="font-hand text-2xl whitespace-nowrap text-muted-foreground">{t("journal.handNote")}</p>
               <EmotionCharacter emotion="calm" className="w-9" />
             </div>
-            <p className="text-base font-semibold text-foreground tabular-nums">
-              {t("journal.wordCount", { count: words })}
-            </p>
+            <div className="flex h-9 items-center gap-2">
+              <p className="text-base font-semibold text-foreground tabular-nums">
+                {t("journal.wordCount", { count: words })}
+              </p>
+              {draftStatus !== "empty" && (
+                <>
+                  <span aria-hidden className="h-5 w-px bg-border" />
+                  <DraftStatusIcon status={draftStatus} />
+                </>
+              )}
+            </div>
           </div>
           <Button
             type="submit"

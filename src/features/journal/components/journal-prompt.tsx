@@ -18,7 +18,7 @@ export function JournalPrompt({
     <div className="group flex flex-col gap-1 py-2">
       <label
         htmlFor={id}
-        className="pe-10 font-hand text-3xl leading-tight text-foreground transition-colors group-focus-within:text-bloom-ink"
+        className="font-hand text-3xl leading-tight text-foreground transition-colors group-focus-within:text-bloom-ink"
       >
         {label}
       </label>

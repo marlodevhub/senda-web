@@ -7,7 +7,7 @@ import type { DraftStatus } from "@/features/journal/use-journal-draft";
 import { cn } from "@/lib/utils";
 
 /**
- * RS-DI-03: un ícono discreto en la esquina de la hoja (gris mientras se escribe, verde al quedar guardado) para
+ * RS-DI-03: un ícono discreto junto al contador de palabras (gris mientras se escribe, verde al quedar guardado) para
  * no distraer; el texto aparece al pasar el mouse o al enfocarlo con el teclado.
  */
 export function DraftStatusIcon({ status, className }: { status: DraftStatus; className?: string }) {
@@ -28,7 +28,7 @@ export function DraftStatusIcon({ status, className }: { status: DraftStatus; cl
             role="img"
             aria-label={label}
             className={cn(
-              "flex size-9 items-center justify-center rounded-full transition-colors duration-500 focus-visible:outline-2 focus-visible:outline-ring",
+              "flex size-8 items-center justify-center rounded-full transition-colors duration-500 focus-visible:outline-2 focus-visible:outline-ring",
               saved ? "bg-sprout-tint text-sprout-ink" : "text-muted-foreground",
               className,
             )}
@@ -36,7 +36,7 @@ export function DraftStatusIcon({ status, className }: { status: DraftStatus; cl
             <Icon className="size-5" aria-hidden />
           </span>
         </TooltipTrigger>
-        <TooltipContent side="left" className="text-base">
+        <TooltipContent side="right" className="text-base">
           {label}
         </TooltipContent>
       </Tooltip>

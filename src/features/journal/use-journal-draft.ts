@@ -7,7 +7,7 @@ import { DRAFT_DEBOUNCE_MS, DRAFT_INTERVAL_MS, hasText, loadDraft, saveDraft } f
 
 /**
  * RS-DI-03: el borrador del Diario, para no perder lo escrito si se cierra el
- * navegador. Lo recupera al abrir (avisa con `onRecovered`) y lo guarda medio
+ * navegador. Lo recupera al abrir (avisa con `onRecovered` solo la primera vez por carga) y lo guarda medio
  * segundo después de dejar de escribir, al salir de la página y, de respaldo,
  * cada 10 s. Devuelve el estado del borrador: sin texto, guardando (se está
  * escribiendo) o guardado.
@@ -15,6 +15,13 @@ import { DRAFT_DEBOUNCE_MS, DRAFT_INTERVAL_MS, hasText, loadDraft, saveDraft } f
 export type DraftStatus = "empty" | "pending" | "saved";
 
 const RECOVERED_NOTICE_DELAY_MS = 400;
+
+/**
+ * El aviso de borrador recuperado sale una vez por carga de la app (al entrar o al recargar la página): este
+ * estado del módulo sobrevive a la navegación entre pestañas, así que al volver al Diario el borrador se
+ * recupera en silencio.
+ */
+let recoveredNoticeShown = false;
 
 export function useJournalDraft({
   control,
@@ -34,11 +41,18 @@ export function useJournalDraft({
   // Al abrir: el borrador solo existe en el navegador, así que se lee después de montar (sin desajuste de hidratación).
   useEffect(() => {
     const draft = loadDraft();
-    if (draft && hasText(draft)) {
+    const recovered = draft !== null && hasText(draft);
+    if (recovered) {
       reset({ mode: "GUIDED", ...draft });
     }
     // El aviso espera a que la página ya esté pintada: lanzado al cargar, el toast se salta su animación de entrada.
-    const notice = draft && hasText(draft) ? window.setTimeout(() => notifyRecovered(), RECOVERED_NOTICE_DELAY_MS) : 0;
+    const notice =
+      recovered && !recoveredNoticeShown
+        ? window.setTimeout(() => {
+            recoveredNoticeShown = true;
+            notifyRecovered();
+          }, RECOVERED_NOTICE_DELAY_MS)
+        : 0;
     const interval = window.setInterval(() => saveDraft(getValues()), DRAFT_INTERVAL_MS);
     return () => {
       window.clearTimeout(notice);

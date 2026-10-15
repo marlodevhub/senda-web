@@ -368,6 +368,14 @@ test("el diario guarda un borrador y lo recupera; al cerrar sesión se borra (RS
   );
   await page.reload();
   await expect(page.getByText("Recuperamos tu borrador.")).toBeVisible();
+  // Al moverse entre pestañas (sin recargar) el borrador vuelve en silencio: el aviso es solo al entrar.
+  await expect(page.getByText("Recuperamos tu borrador.")).toBeHidden({ timeout: 8_000 });
+  await page.getByRole("navigation", { name: "Navegación principal" }).getByRole("link", { name: "Inicio" }).click();
+  await expect(page).toHaveURL(/\/inicio/);
+  await page.getByRole("navigation", { name: "Navegación principal" }).getByRole("link", { name: "Diario" }).click();
+  await expect(page.getByLabel("Escribe lo que quieras contar")).toHaveValue("Un texto que todavía no envío");
+  await page.waitForTimeout(800);
+  await expect(page.getByText("Recuperamos tu borrador.")).toHaveCount(0);
   await expect(page.getByLabel("Escribe lo que quieras contar")).toHaveValue("Un texto que todavía no envío");
 
   // Si se sale de golpe (cerrar la pestaña, cambiar de app) sin esperar, también se guarda.
