@@ -106,14 +106,11 @@ export function StudentSidebar() {
                 title={label}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "relative flex size-12 items-center justify-center rounded-md text-[0.9375rem] font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-ring",
+                  "flex size-12 items-center justify-center rounded-md text-[0.9375rem] font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-ring",
                   "lg:min-h-11 lg:w-full lg:justify-start lg:gap-3 lg:px-3",
                   active ? "bg-bloom-tint text-bloom-ink" : "text-muted-foreground hover:bg-muted hover:text-foreground",
                 )}
               >
-                {active && (
-                  <span aria-hidden className="absolute top-2 bottom-2 left-0 w-1 rounded-full bg-[image:var(--grad-dawn)]" />
-                )}
                 <Icon className="size-5" aria-hidden />
                 <span className="sr-only lg:not-sr-only lg:flex-1">{label}</span>
               </Link>
