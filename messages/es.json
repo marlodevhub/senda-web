@@ -103,7 +103,7 @@
     "q2Placeholder": "Lo que pasó por tu cabeza…",
     "q3Placeholder": "Lo que sentiste…",
     "freeTextPlaceholder": "Escribe con calma, aquí nadie te apura…",
-    "handNote": "Escribe sin apuro ♡",
+    "handNote": "Escribe sin apuro",
     "wordCount": "{count, plural, one {# palabra} other {# palabras}}",
     "wordHint": "con 15 ya está bien"
   },

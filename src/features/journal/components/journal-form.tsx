@@ -153,7 +153,7 @@ export function JournalForm() {
       </section>
 
       {/* La hoja del diario: sin cajas con borde, letra de cuaderno y aire para escribir. */}
-      <div className="relative flex min-h-80 flex-col gap-2 rounded-[2rem] bg-card/85 p-5 shadow-card backdrop-blur-xl md:p-8">
+      <div className="relative flex min-h-80 flex-col gap-2 rounded-[2rem] bg-card p-5 shadow-card md:p-8">
         {mode === "GUIDED" ? (
           <>
             <Prompt id="q1" label={t("journal.q1Label")} error={errors.q1?.message}>
@@ -181,10 +181,10 @@ export function JournalForm() {
         {words === 0 && (
           <div
             aria-hidden
-            className="pointer-events-none flex flex-col items-center gap-1 self-center pt-2 motion-safe:animate-in motion-safe:fade-in-0"
+            className="pointer-events-none flex -rotate-3 items-center gap-2 self-center pt-2 motion-safe:animate-in motion-safe:fade-in-0"
           >
-            <EmotionCharacter emotion="calm" className="w-16" />
-            <p className="-rotate-3 font-hand text-2xl text-muted-foreground">{t("journal.handNote")}</p>
+            <p className="font-hand text-2xl text-muted-foreground">{t("journal.handNote")}</p>
+            <EmotionCharacter emotion="calm" className="w-10" />
           </div>
         )}
 
@@ -236,9 +236,12 @@ function Prompt({
   children: React.ReactNode;
 }) {
   return (
-    // El foco se ve en todo el bloque: el campo no tiene borde propio.
-    <div className="-mx-3 flex flex-col gap-1 rounded-2xl px-3 py-2 transition-colors focus-within:bg-flow-tint/45">
-      <label htmlFor={id} className="font-hand text-3xl leading-tight text-foreground">
+    // El campo no tiene borde ni cambia de fondo: el foco se ve en la pregunta, que toma el color de acento.
+    <div className="group flex flex-col gap-1 py-2">
+      <label
+        htmlFor={id}
+        className="font-hand text-3xl leading-tight text-foreground transition-colors group-focus-within:text-bloom-ink"
+      >
         {label}
       </label>
       {children}
