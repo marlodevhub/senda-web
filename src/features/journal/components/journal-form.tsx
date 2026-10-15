@@ -9,7 +9,7 @@ import { FieldError } from "@/components/forms/field-error";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Check, Feather, Send, Sparkles } from "lucide-react";
+import { Check, Feather, RotateCcw, Send, Sparkles } from "lucide-react";
 import { EmotionCharacter, EmotionDefs } from "@/components/illustrations/emotion-characters";
 import { MoodPicker } from "@/features/journal/components/mood-picker";
 import type { Mood } from "@/components/icons/mood-orb";
@@ -124,12 +124,6 @@ export function JournalForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5" noValidate>
       <EmotionDefs />
-      {draftRecovered && (
-        <p role="status" className="rounded-full bg-sprout-tint px-4 py-2 text-center text-base text-sprout-ink">
-          {t("journal.draftRecovered")}
-        </p>
-      )}
-
       <Controller
         control={control}
         name="mode"
@@ -186,6 +180,16 @@ export function JournalForm() {
 
       {/* La hoja del diario: sin cajas con borde, letra de cuaderno y aire para escribir. */}
       <div className="relative flex min-h-80 flex-col gap-2 rounded-[2rem] bg-card p-5 shadow-card md:p-8">
+        {/* Aviso de borrador recuperado: arriba a la derecha de la hoja, en su renglón para no tapar la pregunta. */}
+        {draftRecovered && (
+          <p
+            role="status"
+            className="-mt-1 inline-flex items-center gap-1.5 self-end rounded-full bg-sprout-tint px-3 py-1 text-base text-sprout-ink md:-mt-3"
+          >
+            <RotateCcw className="size-4" aria-hidden />
+            {t("journal.draftRecovered")}
+          </p>
+        )}
         {mode === "GUIDED" ? (
           <>
             <Prompt id="q1" label={t("journal.q1Label")} error={errors.q1?.message}>

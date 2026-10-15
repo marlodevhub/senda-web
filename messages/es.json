@@ -97,7 +97,7 @@
     "textTooLong": "Tu registro no puede superar los 2000 caracteres.",
     "dailyLimitReached": "Hiciste muchos registros hoy. Vuelve mañana.",
     "readOnlyPeriod": "Tus 28 días terminaron. Puedes ver todo lo que escribiste en tu historial.",
-    "draftRecovered": "Recuperamos lo que estabas escribiendo.",
+    "draftRecovered": "Recuperamos tu borrador.",
     "offline": "Parece que no hay conexión. Tu texto quedó guardado en este dispositivo; envíalo cuando vuelvas a tener señal.",
     "tagline": "Tu momento, a tu manera.",
     "q1Placeholder": "Cuéntalo con tus palabras…",

@@ -367,7 +367,7 @@ test("el diario guarda un borrador y lo recupera; al cerrar sesión se borra (RS
     "Un texto que todavía no envío",
   );
   await page.reload();
-  await expect(page.getByText("Recuperamos lo que estabas escribiendo.")).toBeVisible();
+  await expect(page.getByText("Recuperamos tu borrador.")).toBeVisible();
   await expect(page.getByLabel("Escribe lo que quieras contar")).toHaveValue("Un texto que todavía no envío");
 
   // Si se sale de golpe (cerrar la pestaña, cambiar de app) sin esperar, también se guarda.
