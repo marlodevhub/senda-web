@@ -351,7 +351,16 @@
     "glassOpacity": "Opacidad",
     "glassSheen": "Línea de luz en el borde",
     "glassReset": "Restablecer",
-    "seeTour": "Ver el tutorial"
+    "seeTour": "Ver el tutorial",
+    "subtitle": "Tu cuenta, tus preferencias y la ayuda de Senda, en un solo lugar.",
+    "groupJourney": "Mi senda",
+    "groupSecurity": "Cuenta y seguridad",
+    "groupSession": "Sesión",
+    "themeMode": "Modo de color",
+    "sessionHint": "Cierra la sesión en este dispositivo. Si quieres dejar el estudio, puedes retirarte cuando quieras.",
+    "helpWelcomeHint": "Qué es Senda y qué no es.",
+    "helpTourHint": "Recorre la app paso a paso con las emociones.",
+    "helpConsentHint": "Lo que aceptaste y cómo cuidamos tus datos."
   },
   "admin": {
     "loginTitle": "Panel de administración",

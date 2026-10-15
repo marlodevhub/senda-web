@@ -46,7 +46,7 @@ export function NotificationsForm({ enabled }: { enabled: boolean }) {
   if (enabled) {
     return (
       <div className="flex flex-col gap-3">
-        <p className="text-sm text-foreground">{t("profile.notificationsOn")}</p>
+        <p className="text-base text-foreground">{t("profile.notificationsOn")}</p>
         <Button type="button" variant="outline" disabled={update.isPending} onClick={() => save({ enabled: false })}>
           {update.isPending ? t("profile.saving") : t("profile.disableNotifications")}
         </Button>
@@ -64,7 +64,7 @@ export function NotificationsForm({ enabled }: { enabled: boolean }) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4" noValidate>
-      <p className="text-sm text-muted-foreground">{t("profile.notificationsOffDescription")}</p>
+      <p className="text-base text-muted-foreground">{t("profile.notificationsOffDescription")}</p>
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="email">{t("profile.emailLabel")}</Label>
         <Input

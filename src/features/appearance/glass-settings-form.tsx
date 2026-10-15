@@ -18,9 +18,9 @@ export function GlassSettingsForm() {
 
   return (
     <div className="flex flex-col gap-4">
-      <p className="text-sm text-muted-foreground">{t("profile.glassHint")}</p>
+      <p className="text-base text-muted-foreground">{t("profile.glassHint")}</p>
       <div className="flex flex-col gap-1.5">
-        <div className="flex justify-between text-sm">
+        <div className="flex justify-between text-base">
           <Label htmlFor="glassOpacity">{t("profile.glassOpacity")}</Label>
           <span className="tabular-nums text-muted-foreground">{settings.opacity} %</span>
         </div>

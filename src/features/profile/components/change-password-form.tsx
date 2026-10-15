@@ -77,7 +77,7 @@ export function ChangePasswordForm() {
           aria-describedby="newPasswordHint"
           {...register("newPassword")}
         />
-        <p id="newPasswordHint" className="text-xs text-muted-foreground">
+        <p id="newPasswordHint" className="text-base text-muted-foreground">
           {t("access.passwordHint")}
         </p>
         <FieldError message={errors.newPassword?.message} />

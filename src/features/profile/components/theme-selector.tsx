@@ -42,7 +42,7 @@ export function ThemeSelector() {
             aria-checked={active}
             onClick={() => setTheme(value)}
             className={cn(
-              "flex min-h-11 flex-col items-center justify-center gap-1 rounded-md border p-2 text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-ring",
+              "flex min-h-11 flex-col items-center justify-center gap-1 rounded-md border p-2 text-base font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-ring",
               active ? "border-bloom bg-bloom-tint text-bloom-ink" : "border-border bg-card text-foreground",
             )}
           >

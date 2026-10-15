@@ -48,7 +48,7 @@ export function RecoveryCodeForm() {
   if (recoveryCode) {
     return (
       <div className="flex flex-col gap-3">
-        <p className="text-sm text-muted-foreground">{t("access.recoveryCodeBody")}</p>
+        <p className="text-base text-muted-foreground">{t("access.recoveryCodeBody")}</p>
         <p
           data-testid="recovery-code"
           className="rounded-lg bg-muted px-4 py-3 text-center font-mono text-xl font-bold tracking-widest text-foreground"
@@ -64,7 +64,7 @@ export function RecoveryCodeForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4" noValidate>
-      <p className="text-sm text-muted-foreground">{t("profile.recoveryDescription")}</p>
+      <p className="text-base text-muted-foreground">{t("profile.recoveryDescription")}</p>
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="recoveryPassword">{t("profile.confirmPasswordLabel")}</Label>
         <Input
