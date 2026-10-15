@@ -177,24 +177,20 @@ export function JournalForm() {
           </Prompt>
         )}
 
-        {/* Compañía mientras la hoja está en blanco; se va al empezar a escribir. */}
-        {words === 0 && (
-          <div
-            aria-hidden
-            className="pointer-events-none flex -rotate-3 items-center gap-2 self-center pt-2 motion-safe:animate-in motion-safe:fade-in-0"
-          >
-            <p className="font-hand text-2xl text-muted-foreground">{t("journal.handNote")}</p>
-            <EmotionCharacter emotion="calm" className="w-10" />
+        <div className="mt-auto flex items-end justify-between gap-3 pt-4">
+          <div className="flex flex-col gap-1">
+            {/* Siempre en el mismo lugar: la hoja no cambia de tamaño al empezar a escribir. */}
+            <div aria-hidden className="pointer-events-none flex -rotate-2 items-center gap-2">
+              <p className="font-hand text-2xl text-muted-foreground">{t("journal.handNote")}</p>
+              <EmotionCharacter emotion="calm" className="w-9" />
+            </div>
+            <p className="text-base text-muted-foreground">
+              <span className="font-semibold text-foreground tabular-nums">
+                {t("journal.wordCount", { count: words })}
+              </span>
+              {words < MIN_WORDS && <span> · {t("journal.wordHint")}</span>}
+            </p>
           </div>
-        )}
-
-        <div className="mt-auto flex items-center justify-between gap-3 pt-4">
-          <p className="text-base text-muted-foreground">
-            <span className="font-semibold text-foreground tabular-nums">
-              {t("journal.wordCount", { count: words })}
-            </span>
-            {words < MIN_WORDS && <span> · {t("journal.wordHint")}</span>}
-          </p>
           <Button type="submit" variant="hero" size="xl" disabled={isSubmitting} className="shrink-0 rounded-full px-6">
             <Send className="size-4" aria-hidden />
             {isSubmitting ? t("journal.submitting") : t("journal.submit")}
