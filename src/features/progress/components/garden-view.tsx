@@ -34,14 +34,18 @@ const PETALS = [
  * dimensión y los elementos especiales de cada meta semanal (RN-PR-01/02).
  * Describe, no califica: sin puntajes ni comparaciones (RN-PR-05), y nunca
  * se marchita (RN-PR-04). Presentacional — `GardenPageClient` carga los datos.
- * - Móvil y tablet: escena y datos apilados (en móvil, de borde a borde).
- * - Escritorio (≥ 1280 px): el jardín ocupa toda la pantalla detrás de la
- *   barra lateral, y sus datos van en un panel a la derecha. Más angosto, la
- *   colina quedaría diminuta entre la barra y el panel.
+ * - Móvil: escena y datos apilados, de borde a borde.
+ * - Tablet: el jardín a pantalla completa detrás de la barra lateral y sus
+ *   datos debajo, sobre el pasto.
+ * - Escritorio (≥ 1280 px): a pantalla completa con los datos en un panel a
+ *   la derecha (más angosto, la colina quedaría diminuta junto al panel).
  */
 export function GardenView({ garden }: { garden: Garden }) {
-  const isWide = useMediaQuery("(min-width: 1280px)");
-  return isWide ? <GardenFullscreen garden={garden} /> : <GardenStacked garden={garden} />;
+  const isTablet = useMediaQuery("(min-width: 768px)");
+  const isDesktop = useMediaQuery("(min-width: 1280px)");
+  if (isDesktop) return <GardenFullscreen garden={garden} />;
+  if (isTablet) return <GardenTablet garden={garden} />;
+  return <GardenStacked garden={garden} />;
 }
 
 function Petals() {
@@ -78,15 +82,18 @@ function GardenHeading({ garden, className }: { garden: Garden; className?: stri
   );
 }
 
-/** Tonos del texto según el fondo: blanco sobre la colina (móvil) o el de la app sobre el panel. */
+/** Tonos del texto según el fondo: blanco sobre la colina (móvil) o el de la app sobre un panel. */
 const TONES = {
   hill: { ink: "text-(--garden-panel-ink)", accent: "text-(--garden-panel-accent)", line: "bg-(--garden-panel-accent)/60", chip: "bg-white/15 ring-1 ring-white/25" },
   panel: { ink: "text-foreground", accent: "text-sprout-ink", line: "bg-sprout/50", chip: "bg-sprout-tint text-sprout-ink" },
 } as const;
 
-function GardenInfo({ garden, tone }: { garden: Garden; tone: keyof typeof TONES }) {
+type Tone = keyof typeof TONES | "wide";
+
+/** `wide`: el panel de tablet, con las 3 zonas en columnas. */
+function GardenInfo({ garden, tone }: { garden: Garden; tone: Tone }) {
   const t = useTranslations();
-  const colors = TONES[tone];
+  const colors = TONES[tone === "wide" ? "panel" : tone];
 
   return (
     <div className={colors.ink}>
@@ -105,7 +112,7 @@ function GardenInfo({ garden, tone }: { garden: Garden; tone: keyof typeof TONES
         )}
       </div>
 
-      <ul className={cn("mt-8 grid gap-6 text-left", tone === "hill" && "md:grid-cols-3 md:gap-5")}>
+      <ul className={cn("mt-8 grid gap-6 text-left", tone === "wide" && "sm:grid-cols-3 sm:gap-5")}>
         {ZONES.map((zone) => {
           const data = garden[zone.id];
           return (
@@ -146,19 +153,19 @@ function GardenInfo({ garden, tone }: { garden: Garden; tone: keyof typeof TONES
   );
 }
 
-/** Móvil: de borde a borde, el verde llega hasta detrás del dock. Tablet: una tarjeta. */
+/** Móvil: de borde a borde, el verde llega hasta detrás del dock. */
 function GardenStacked({ garden }: { garden: Garden }) {
   return (
     <section
       aria-labelledby="garden-title"
-      className="garden-scene relative isolate -mx-4 -mb-[8.5rem] overflow-hidden rounded-t-[1.75rem] md:mx-0 md:mb-0 md:rounded-[1.75rem] md:shadow-card"
+      className="garden-scene relative isolate -mx-4 -mb-[8.5rem] overflow-hidden rounded-t-[1.75rem]"
     >
       <Petals />
-      <GardenHeading garden={garden} className="relative px-5 pt-6 text-(--garden-sky-ink) md:px-8 md:pt-8" />
+      <GardenHeading garden={garden} className="relative px-5 pt-6 text-(--garden-sky-ink)" />
       <div className="relative -mt-2">
         <GardenScene garden={garden} />
       </div>
-      <div className="relative -mt-px bg-[linear-gradient(to_bottom,var(--garden-hill-mid),var(--garden-hill-deep)_45%,var(--garden-hill-deep))] px-5 pt-2 pb-[calc(2.5rem+8.5rem)] md:px-8 md:pb-8">
+      <div className="relative -mt-px bg-[linear-gradient(to_bottom,var(--garden-hill-mid),var(--garden-hill-deep)_45%,var(--garden-hill-deep))] px-5 pt-2 pb-[calc(2.5rem+8.5rem)]">
         <GardenInfo garden={garden} tone="hill" />
         <p aria-hidden className="mt-10 flex items-center justify-center gap-1.5 font-heading text-lg font-bold text-(--garden-panel-ink) opacity-60">
           <Sprout className="size-5" />
@@ -170,7 +177,45 @@ function GardenStacked({ garden }: { garden: Garden }) {
 }
 
 /**
- * Tablet y escritorio: el jardín cubre la pantalla; la barra lateral flota
+ * Tablet: el cielo cubre toda la pantalla detrás de la barra lateral; la
+ * colina ocupa el ancho de la columna (de la barra al borde) y el primer
+ * alto de pantalla; los datos siguen debajo, en un panel sobre el pasto.
+ */
+function GardenTablet({ garden }: { garden: Garden }) {
+  return (
+    <>
+      <div aria-hidden className="garden-scene fixed inset-0 z-0">
+        <Petals />
+      </div>
+      {/*
+        Sale de main a todo el ancho de la pantalla, también por debajo de la barra lateral
+        (z-0: la barra, z-10, queda encima). El contenido se centra en la columna con pl = ancho de la barra.
+      */}
+      <section
+        aria-labelledby="garden-title"
+        className="garden-tokens relative left-1/2 z-0 -mb-8 w-screen -translate-x-[calc(50%+3rem)] overflow-hidden pl-24 lg:-mb-10 lg:-translate-x-[calc(50%+9rem)] lg:pl-72"
+      >
+        <div className="flex min-h-[calc(100dvh-11rem)] flex-col justify-between">
+          <GardenHeading garden={garden} className="px-8 pt-4 text-(--garden-sky-ink)" />
+          {/* En vertical, la escena crece con el alto de la pantalla (los lados se recortan). */}
+          <div className="flex justify-center">
+            <div className="w-[min(125%,calc((100dvh-14rem)*1.6))] max-w-none min-w-full shrink-0">
+              <GardenScene garden={garden} />
+            </div>
+          </div>
+        </div>
+        <div className="-mt-px -ml-24 bg-[linear-gradient(to_bottom,var(--garden-hill-mid),var(--garden-hill-deep)_40%,var(--garden-hill-deep))] pt-4 pr-8 pb-12 pl-32 lg:-ml-72 lg:pl-80">
+          <div className="mx-auto max-w-3xl rounded-[1.75rem] bg-card/85 p-8 shadow-card backdrop-blur-xl">
+            <GardenInfo garden={garden} tone="wide" />
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}
+
+/**
+ * Escritorio: el jardín cubre la pantalla; la barra lateral flota
  * encima, la colina queda entre ella y el panel de datos de la derecha.
  */
 function GardenFullscreen({ garden }: { garden: Garden }) {

@@ -318,7 +318,8 @@
  * Jardín (CU-07): cielo de amanecer y colina en el modo claro; cielo de noche
  * en el oscuro. El texto del panel verde y del cielo cumple AA sobre su fondo.
  */
-.garden-scene {
+.garden-scene,
+.garden-tokens {
   --garden-sky-top: #c8efe4;
   --garden-sky-bottom: #f1f8ec;
   --garden-sky-ink: #1e4d33;
@@ -341,10 +342,15 @@
   --garden-stone: #c9cbbf;
   --garden-panel-ink: #ffffff;
   --garden-panel-accent: #dcf7c4;
+}
+
+/* Solo la capa del cielo pinta el fondo; .garden-tokens comparte los colores sin el cielo. */
+.garden-scene {
   background: linear-gradient(to bottom, var(--garden-sky-top), var(--garden-sky-bottom) 55%);
 }
 
-.dark .garden-scene {
+.dark .garden-scene,
+.dark .garden-tokens {
   --garden-sky-top: #1c2140;
   --garden-sky-bottom: #2f3a5c;
   --garden-sky-ink: #e6ecff;

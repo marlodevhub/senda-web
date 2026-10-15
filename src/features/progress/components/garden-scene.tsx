@@ -50,9 +50,9 @@ export function GardenScene({ garden }: { garden: Garden }) {
       <ellipse cx="200" cy="170" rx="150" ry="40" fill="url(#garden-glow)" />
       <GrassTufts stage={garden.general.stage} />
 
-      {has("S1") && <Bench x={48} y={206} />}
-      {has("S2") && <Lantern x={356} y={202} />}
-      {has("S4") && <Fountain x={306} y={232} />}
+      {has("S1") && <Bench x={74} y={208} />}
+      {has("S2") && <Lantern x={332} y={200} />}
+      {has("S4") && <Fountain x={252} y={234} />}
 
       <RootsTree x={118} y={170} stage={garden.raices.stage} />
       <FlowerBush x={204} y={160} stage={garden.flores.stage} />
@@ -81,14 +81,15 @@ function FarTree({ x, y, r }: { x: number; y: number; r: number }) {
 
 function RainCloud() {
   return (
+    // Elementos de los bordes cerca del centro: en tablet vertical la escena se amplía y recorta los lados.
     <g className="garden-cloud">
       <g fill="var(--garden-cloud)">
-        <circle cx="300" cy="40" r="13" />
-        <circle cx="316" cy="34" r="16" />
-        <circle cx="334" cy="42" r="12" />
-        <rect x="290" y="40" width="54" height="13" rx="6.5" />
+        <circle cx="280" cy="40" r="13" />
+        <circle cx="296" cy="34" r="16" />
+        <circle cx="314" cy="42" r="12" />
+        <rect x="270" y="40" width="54" height="13" rx="6.5" />
       </g>
-      {[298, 312, 326, 338].map((x, i) => (
+      {[278, 292, 306, 318].map((x, i) => (
         <line
           key={x}
           x1={x}

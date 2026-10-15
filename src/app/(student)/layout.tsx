@@ -13,7 +13,8 @@ export default async function StudentLayout({ children }: { children: React.Reac
 
   return (
     <MessagesCenterProvider>
-      <div className="min-h-screen bg-background md:flex">
+      {/* overflow-x-clip: lo que sale a pantalla completa (jardín) no crea scroll horizontal. */}
+      <div className="min-h-screen overflow-x-clip bg-background md:flex">
         <a
           href="#contenido"
           className="sr-only z-20 rounded-md bg-card px-4 py-2 font-semibold text-foreground focus:not-sr-only focus:fixed focus:top-4 focus:left-4"
