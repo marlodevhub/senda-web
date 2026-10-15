@@ -98,6 +98,10 @@
   --sprout: #7A9471;
   --sprout-ink: #33452E;
   --sprout-tint: #E4EBDD;
+  /* Píldora activa de Progreso: los verdes del pasto del jardín. */
+  --leaf-from: #dcf5e1;
+  --leaf-to: #b5e5c0;
+  --leaf-ink: #1e4d33;
 
   --primary: var(--bloom);
   /* WCAG 2.1 AA (RS-TR): el blanco sobre bloom da 2,9:1; este vino oscuro da 5,7:1 (igual que en modo oscuro). */
@@ -171,6 +175,9 @@
   --sprout: #9DBB8E;
   --sprout-ink: #E4EEDD;
   --sprout-tint: #223023;
+  --leaf-from: #2c5a3e;
+  --leaf-to: #3d7a52;
+  --leaf-ink: #e8f6ec;
 
   --primary: var(--bloom);
   --primary-foreground: #2B1A20;
