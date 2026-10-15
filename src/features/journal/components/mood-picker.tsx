@@ -70,8 +70,8 @@ export function MoodPicker({
               <span
                 key={bubble.taps}
                 aria-hidden
-                // Nace detrás de la carita (z-0, ella va en z-10), sale disparada hacia arriba y queda por encima sin taparla.
-                className="mood-bubble pointer-events-none absolute bottom-[calc(100%+0.25rem)] left-1/2 z-0 rounded-full px-3 py-1 text-base font-semibold whitespace-nowrap shadow-card"
+                // Siempre por encima de la carita (z-20; ella va en z-10, aun con el zoom): sale de su borde y sube.
+                className="mood-bubble pointer-events-none absolute bottom-[calc(100%+0.75rem)] left-1/2 z-20 rounded-full px-3 py-1 text-base font-semibold whitespace-nowrap shadow-card"
                 style={{ background: moodGradient(mood), color: MOOD_INK }}
               >
                 {t(`mood.${mood}`)}

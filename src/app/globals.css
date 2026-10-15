@@ -431,12 +431,12 @@
 }
 
 /*
- * La carita la dispara: nace detrás de ella (más abajo y chica), sale hacia
+ * La carita la dispara: nace en su borde de arriba (más abajo y chica), sale hacia
  * arriba con un arranque muy rápido que frena en seco, rebota un poco y
  * después flota mientras se desvanece. Cada tramo lleva su propia curva.
  */
 @keyframes mood-bubble {
-  0% { opacity: 0; transform: translateY(44px) scale(0.3); animation-timing-function: cubic-bezier(.05, .9, .25, 1); }
+  0% { opacity: 0; transform: translateY(20px) scale(0.4); animation-timing-function: cubic-bezier(.05, .9, .25, 1); }
   20% { opacity: 1; transform: translateY(-16px) scale(1.1); animation-timing-function: ease-in-out; }
   30% { transform: translateY(-8px) scale(0.97); animation-timing-function: ease-out; }
   38% { transform: translateY(-10px) scale(1); animation-timing-function: ease-in; }
