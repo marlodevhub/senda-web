@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { Toaster } from "@/components/ui/sonner";
-import { baloo, eduHand, figtree } from "./fonts";
+import { baloo, figtree, playpen } from "./fonts";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Providers } from "./providers";
 import "./globals.css";
@@ -26,7 +26,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="es"
       suppressHydrationWarning
-      className={`${baloo.variable} ${figtree.variable} ${eduHand.variable} antialiased`}
+      className={`${baloo.variable} ${figtree.variable} ${playpen.variable} antialiased`}
     >
       <body className="min-h-screen">
         <NextIntlClientProvider>
