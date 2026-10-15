@@ -357,7 +357,11 @@
     "sessionHint": "Cierra la sesión en este dispositivo. Si quieres dejar el estudio, puedes retirarte cuando quieras.",
     "helpWelcomeHint": "Qué es Senda y qué no es.",
     "helpTourHint": "Recorre la app paso a paso con las emociones.",
-    "helpConsentHint": "Lo que aceptaste y cómo cuidamos tus datos."
+    "helpConsentHint": "Lo que aceptaste y cómo cuidamos tus datos.",
+    "notificationsSentTo": "Los avisos llegan a",
+    "changeEmail": "Cambiar correo",
+    "changeEmailHint": "Escribe tu correo nuevo. El anterior se borra.",
+    "saveEmail": "Guardar correo"
   },
   "admin": {
     "loginTitle": "Panel de administración",

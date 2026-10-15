@@ -64,7 +64,7 @@ export function ProfilePageClient() {
         ) : isError || !profile ? (
           <p className="text-base text-muted-foreground">{t("common.unexpectedError")}</p>
         ) : (
-          <NotificationsForm enabled={profile.notificationsEnabled} />
+          <NotificationsForm enabled={profile.notificationsEnabled} maskedEmail={profile.maskedEmail} />
         )}
       </Tile>
       <Tile title={t("profile.startingPointTitle")} className="lg:col-span-3">

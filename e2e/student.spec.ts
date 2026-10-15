@@ -312,6 +312,27 @@ test("un mensaje nuevo se avisa con un toast una sola vez; su acción lleva a la
   await expect(page.getByRole("button", { name: "Mensajes para ti", exact: true })).toBeVisible();
 });
 
+test("las notificaciones por correo muestran a qué correo llegan, enmascarado, y se puede cambiar", async ({ page }) => {
+  await activateAndConsent(page);
+  await page.goto("/perfil");
+
+  const card = page.getByRole("region", { name: "Notificaciones por correo" });
+  await card.getByLabel("Tu correo").fill("estudiante@correo.pe");
+  await card.getByRole("button", { name: "Activar notificaciones" }).click();
+  // El servidor lo devuelve enmascarado: el correo completo nunca llega al navegador.
+  await expect(card.getByText("es***@correo.pe")).toBeVisible();
+  await expect(page.getByText("estudiante@correo.pe")).toHaveCount(0);
+  await expectAccessible(page);
+
+  await card.getByRole("button", { name: "Cambiar correo" }).click();
+  await card.getByLabel("Tu correo").fill("otro@senda.pe");
+  await card.getByRole("button", { name: "Guardar correo" }).click();
+  await expect(card.getByText("ot***@senda.pe")).toBeVisible();
+
+  await card.getByRole("button", { name: "Desactivar y borrar mi correo" }).click();
+  await expect(card.getByRole("button", { name: "Activar notificaciones" })).toBeVisible();
+});
+
 test("la barra de vidrio se ajusta desde Perfil y se recuerda", async ({ page }) => {
   await activateAndConsent(page);
   await page.goto("/perfil");
