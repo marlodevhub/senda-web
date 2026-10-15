@@ -17,11 +17,7 @@ const ICONS: Record<JournalContext, { icon: LucideIcon; tone: string }> = {
   OTHER: { icon: Sparkles, tone: "text-flow-ink bg-flow-tint" },
 };
 
-/**
- * RN-DI-05: un solo contexto, obligatorio. Solo íconos para que sea compacto;
- * cada uno lleva su nombre como etiqueta accesible y tooltip, y el elegido se
- * nombra debajo.
- */
+/** RN-DI-05: obligatorio, un solo valor. */
 export function ContextPicker({
   value,
   onChange,
@@ -32,39 +28,31 @@ export function ContextPicker({
   const t = useTranslations();
 
   return (
-    <div className="flex flex-col items-center gap-2 rounded-lg bg-card/80 px-3 py-3 shadow-card backdrop-blur">
-      <div role="radiogroup" aria-label={t("journal.contextLabel")} className="flex w-full justify-between gap-1">
-        {OPTIONS.map((option) => {
-          const active = value === option;
-          const { icon: Icon, tone } = ICONS[option];
-          const label = t(JOURNAL_CONTEXT_LABEL_KEY[option]);
-          return (
-            <button
-              key={option}
-              type="button"
-              role="radio"
-              aria-checked={active}
-              aria-label={label}
-              title={label}
-              onClick={() => onChange(option)}
-              className={cn(
-                "flex size-10 items-center justify-center rounded-full transition-[scale,box-shadow] duration-200 ease-[cubic-bezier(.34,1.56,.64,1)] hover:scale-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring sm:size-12",
-                tone,
-                active && "scale-110 ring-2 ring-flow ring-offset-2 ring-offset-card",
-                value !== undefined && !active && "saturate-50",
-              )}
-            >
+    // 7 opciones: 4 + 3 centradas en móvil, todas en una fila desde sm.
+    <div className="flex flex-wrap justify-center gap-2" role="radiogroup" aria-label={t("journal.contextLabel")}>
+      {OPTIONS.map((option) => {
+        const active = value === option;
+        const { icon: Icon, tone } = ICONS[option];
+        return (
+          <button
+            key={option}
+            type="button"
+            role="radio"
+            aria-checked={active}
+            onClick={() => onChange(option)}
+            className={cn(
+              // shadow-(--shadow-card) y no .shadow-card: la clase propia pisaría el anillo del elegido.
+              "flex w-[calc((100%-1.5rem)/4)] flex-col items-center gap-1.5 rounded-[1.25rem] px-1 py-3 sm:w-[calc((100%-3rem)/7)] text-base text-foreground shadow-(--shadow-card) backdrop-blur transition-all duration-200 hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-ring",
+              active ? "bg-flow-tint ring-2 ring-flow" : "bg-card/80",
+            )}
+          >
+            <span className={cn("flex size-9 items-center justify-center rounded-full", tone)}>
               <Icon className="size-5" aria-hidden />
-            </button>
-          );
-        })}
-      </div>
-      {/* El nombre del elegido; el lector de pantalla ya lo anuncia en el botón. */}
-      {value && (
-        <p aria-hidden className="text-base font-semibold text-foreground">
-          {t(JOURNAL_CONTEXT_LABEL_KEY[value])}
-        </p>
-      )}
+            </span>
+            <span className="text-center leading-tight">{t(JOURNAL_CONTEXT_LABEL_KEY[option])}</span>
+          </button>
+        );
+      })}
     </div>
   );
 }

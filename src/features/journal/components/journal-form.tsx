@@ -156,19 +156,6 @@ export function JournalForm() {
         {errors.moodBefore && <FieldError message="journal.missingMood" />}
       </section>
 
-      {/* RN-DI-05: obligatorio; va antes de la hoja para elegirlo antes de enviar. */}
-      <section aria-labelledby="journal-context" className="flex flex-col gap-2">
-        <h2 id="journal-context" className="text-center text-base font-semibold text-foreground">
-          {t("journal.contextLabel")}
-        </h2>
-        <Controller
-          control={control}
-          name="context"
-          render={({ field }) => <ContextPicker value={field.value} onChange={field.onChange} />}
-        />
-        <FieldError message={errors.context?.message} />
-      </section>
-
       {/* La hoja del diario: sin cajas con borde, letra de cuaderno y aire para escribir. */}
       <div className="relative flex min-h-80 flex-col gap-2 rounded-[2rem] bg-card p-5 shadow-card md:p-8">
         {mode === "GUIDED" ? (
@@ -213,6 +200,19 @@ export function JournalForm() {
           </Button>
         </div>
       </div>
+
+      {/* RN-DI-05: obligatorio; si falta, el error aparece aquí al enviar. */}
+      <section aria-labelledby="journal-context" className="flex flex-col gap-2">
+        <h2 id="journal-context" className="text-center text-base font-semibold text-foreground">
+          {t("journal.contextLabel")}
+        </h2>
+        <Controller
+          control={control}
+          name="context"
+          render={({ field }) => <ContextPicker value={field.value} onChange={field.onChange} />}
+        />
+        <FieldError message={errors.context?.message} />
+      </section>
     </form>
   );
 }
