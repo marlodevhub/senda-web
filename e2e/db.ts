@@ -12,6 +12,9 @@ function sql(statement: string): string {
   ).trim();
 }
 
+/** El día de intervención se cuenta en hora de Lima (RN-TR-07); la base corre en UTC. */
+const LIMA_TODAY = "(now() AT TIME ZONE 'America/Lima')::date";
+
 const ALPHABET = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ";
 
 /** Mismo formato y dígito verificador que `ActivationCodeFormat` del backend (RN-AC-01). */
@@ -39,8 +42,8 @@ function newParticipantCode(): string {
 export function seedPendingParticipant(): string {
   const code = newParticipantCode();
   const cohortId = sql(
-    "INSERT INTO cohort (name, start_date, end_date, status) " +
-      "VALUES ('Cohorte E2E', CURRENT_DATE - 2, CURRENT_DATE + 25, 'IN_PROGRESS') RETURNING id;",
+    `INSERT INTO cohort (name, start_date, end_date, status) ` +
+      `VALUES ('Cohorte E2E', ${LIMA_TODAY} - 2, ${LIMA_TODAY} + 25, 'IN_PROGRESS') RETURNING id;`,
   );
   sql(`INSERT INTO participant (code, cohort_id) VALUES ('${code}', ${cohortId});`);
   return code;
@@ -50,7 +53,7 @@ export function seedPendingParticipant(): string {
 export function seedSentMessage(participantCode: string): void {
   sql(
     "INSERT INTO message (participant_id, decision_date, moment, rule, variant_index, catalog_version, result, " +
-      "action_type, created_at) SELECT id, CURRENT_DATE, 'EVENING_REVIEW', 'R7', 0, 'v1', 'SENT', 'WRITE', now() " +
+      `action_type, created_at) SELECT id, ${LIMA_TODAY}, 'EVENING_REVIEW', 'R7', 0, 'v1', 'SENT', 'WRITE', now() ` +
       `FROM participant WHERE code = '${participantCode}';`,
   );
 }
