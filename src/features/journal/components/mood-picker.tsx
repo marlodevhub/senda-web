@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { MoodOrb, type Mood } from "@/components/icons/mood-orb";
@@ -27,12 +28,14 @@ export function MoodPicker({
 }) {
   const t = useTranslations();
   const orbSize = size === "compact" ? "size-10" : "size-12";
+  // La burbuja con el nombre sale solo al tocar (no al abrir con un ánimo ya guardado); `taps` la repite cada vez.
+  const [bubble, setBubble] = useState<{ mood: Mood; taps: number } | null>(null);
 
   return (
     <div
       role="radiogroup"
       aria-label={label}
-      className={cn("flex items-start justify-between gap-1 rounded-lg bg-card px-3 pt-3 pb-2 shadow-card", className)}
+      className={cn("flex items-center justify-between gap-1 rounded-lg bg-card px-3 py-3 shadow-card", className)}
     >
       {MOODS.map((mood) => {
         const active = value === mood;
@@ -43,8 +46,11 @@ export function MoodPicker({
             role="radio"
             aria-checked={active}
             aria-label={t(`mood.${mood}`)}
-            onClick={() => onChange(mood)}
-            className="group flex flex-1 flex-col items-center gap-1 rounded-lg py-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+            onClick={() => {
+              setBubble((previous) => ({ mood, taps: (previous?.taps ?? 0) + 1 }));
+              onChange(mood);
+            }}
+            className="group relative flex flex-1 justify-center rounded-lg py-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
           >
             {/* El salto al elegir va en este contenedor; el movimiento propio, en la carita. */}
             <span
@@ -58,17 +64,17 @@ export function MoodPicker({
             >
               <MoodOrb mood={mood} animated decorative className={orbSize} />
             </span>
-            {/* El nombre del ánimo elegido; el lector de pantalla ya lo anuncia en el botón. */}
-            <span
-              aria-hidden
-              className={cn(
-                "text-base font-semibold whitespace-nowrap text-foreground",
-                // Sin ánimo elegido no se reserva el renglón; con uno, todos lo reservan para no saltar.
-                value === undefined ? "hidden" : active ? "visible" : "invisible",
-              )}
-            >
-              {t(`mood.${mood}`)}
-            </span>
+            {/* Burbuja con el nombre que sube y se desvanece: no ocupa lugar, la tarjeta no cambia de tamaño.
+                El lector de pantalla ya anuncia el ánimo en el botón. */}
+            {bubble?.mood === mood && (
+              <span
+                key={bubble.taps}
+                aria-hidden
+                className="mood-bubble pointer-events-none absolute bottom-full left-1/2 z-10 rounded-full bg-foreground px-3 py-1 text-base font-semibold whitespace-nowrap text-background shadow-card"
+              >
+                {t(`mood.${mood}`)}
+              </span>
+            )}
           </button>
         );
       })}

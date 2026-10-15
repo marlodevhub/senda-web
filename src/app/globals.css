@@ -414,6 +414,32 @@
   .mood-pop {
     animation: mood-pop 0.5s cubic-bezier(.34, 1.56, .64, 1);
   }
+  .mood-bubble {
+    animation: mood-bubble 1.6s ease-out forwards;
+  }
+}
+
+/* Con menos movimiento la burbuja no sube: solo aparece y se desvanece. */
+@media (prefers-reduced-motion: reduce) {
+  .mood-bubble {
+    animation: mood-bubble-fade 1.6s ease-out forwards;
+  }
+}
+
+.mood-bubble {
+  translate: -50% 0;
+}
+
+@keyframes mood-bubble {
+  0% { opacity: 0; transform: translateY(6px) scale(0.85); }
+  15% { opacity: 1; transform: translateY(0) scale(1); }
+  70% { opacity: 1; transform: translateY(-14px); }
+  100% { opacity: 0; transform: translateY(-26px); }
+}
+
+@keyframes mood-bubble-fade {
+  0%, 70% { opacity: 1; }
+  100% { opacity: 0; }
 }
 
 .mood-blink {
