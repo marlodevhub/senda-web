@@ -85,6 +85,10 @@ test("ciclo diario completo: activar → diario → espejo → reescritura → f
   await page.getByRole("radio", { name: "Mal", exact: true }).click();
   await page.getByRole("radio", { name: "Libre" }).click();
   await page.getByLabel("Escribe lo que quieras contar").fill(ENTRY);
+  // RN-DI-05: sin contexto no se envía.
+  await page.getByRole("button", { name: "Enviar" }).click();
+  await expect(page.getByText("Elige con qué tiene que ver lo que escribiste.")).toBeVisible();
+  await page.getByRole("radio", { name: "Estudios" }).click();
   await expectAccessible(page);
   await page.getByRole("button", { name: "Enviar" }).click();
 
@@ -312,7 +316,9 @@ test("un mensaje nuevo se avisa con un toast una sola vez; su acción lleva a la
   await expect(page.getByRole("button", { name: "Mensajes para ti", exact: true })).toBeVisible();
 });
 
-test("las notificaciones por correo muestran a qué correo llegan, enmascarado, y se puede cambiar", async ({ page }) => {
+test("las notificaciones por correo muestran a qué correo llegan, enmascarado, y se puede cambiar", async ({
+  page,
+}) => {
   await activateAndConsent(page);
   await page.goto("/perfil");
 

@@ -16,6 +16,7 @@ const CODE_TO_MESSAGE_KEY: Record<string, string> = {
   UNAUTHENTICATED: "access.sessionExpired",
   MISSING_MOOD: "journal.missingMood",
   ENTRY_TOO_SHORT: "journal.entryTooShort",
+  MISSING_CONTEXT: "journal.missingContext",
   MISSING_SECOND_QUESTION: "journal.missingSecondQuestion",
   TEXT_TOO_LONG: "journal.textTooLong",
   DAILY_LIMIT_REACHED: "journal.dailyLimitReached",

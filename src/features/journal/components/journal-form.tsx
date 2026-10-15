@@ -68,6 +68,10 @@ export function JournalForm() {
       router.push(`/espejo/${created.journalEntryId}`);
     } catch (error) {
       if (error instanceof BffError) {
+        if (error.code === "MISSING_CONTEXT") {
+          setError("context", { message: errorMessageKey(error.code) });
+          return;
+        }
         if (error.code === "MISSING_SECOND_QUESTION") {
           setError("q2", { message: errorMessageKey(error.code) });
           return;
@@ -152,6 +156,19 @@ export function JournalForm() {
         {errors.moodBefore && <FieldError message="journal.missingMood" />}
       </section>
 
+      {/* RN-DI-05: obligatorio; va antes de la hoja para elegirlo antes de enviar. */}
+      <section aria-labelledby="journal-context" className="flex flex-col gap-2">
+        <h2 id="journal-context" className="text-center text-base font-semibold text-foreground">
+          {t("journal.contextLabel")}
+        </h2>
+        <Controller
+          control={control}
+          name="context"
+          render={({ field }) => <ContextPicker value={field.value} onChange={field.onChange} />}
+        />
+        <FieldError message={errors.context?.message} />
+      </section>
+
       {/* La hoja del diario: sin cajas con borde, letra de cuaderno y aire para escribir. */}
       <div className="relative flex min-h-80 flex-col gap-2 rounded-[2rem] bg-card p-5 shadow-card md:p-8">
         {mode === "GUIDED" ? (
@@ -181,14 +198,13 @@ export function JournalForm() {
           <div className="flex flex-col gap-1">
             {/* Siempre en el mismo lugar: la hoja no cambia de tamaño al empezar a escribir. */}
             <div aria-hidden className="pointer-events-none flex -rotate-2 items-center gap-2">
-              <p className="font-hand text-2xl text-muted-foreground">{t("journal.handNote")}</p>
+              <p className="font-hand text-2xl whitespace-nowrap text-muted-foreground">{t("journal.handNote")}</p>
               <EmotionCharacter emotion="calm" className="w-9" />
             </div>
             <p className="text-base text-muted-foreground">
               <span className="font-semibold text-foreground tabular-nums">
                 {t("journal.wordCount", { count: words })}
               </span>
-              {words < MIN_WORDS && <span> · {t("journal.wordHint")}</span>}
             </p>
           </div>
           <Button type="submit" variant="hero" size="xl" disabled={isSubmitting} className="shrink-0 rounded-full px-6">
@@ -197,24 +213,11 @@ export function JournalForm() {
           </Button>
         </div>
       </div>
-
-      <section aria-labelledby="journal-context" className="flex flex-col gap-2">
-        <h2 id="journal-context" className="text-center text-base font-semibold text-foreground">
-          {t("journal.contextLabel")}
-        </h2>
-        <Controller
-          control={control}
-          name="context"
-          render={({ field }) => <ContextPicker value={field.value} onChange={field.onChange} />}
-        />
-      </section>
     </form>
   );
 }
 
-/** RS-DI-02 se valida en el servidor; este conteo solo acompaña mientras se escribe. */
-const MIN_WORDS = 15;
-
+/** RS-DI-02 (mínimo 15 palabras) se valida en el servidor; este conteo solo acompaña mientras se escribe. */
 function countWords(text: string): number {
   return text.trim().split(/\s+/).filter(Boolean).length;
 }

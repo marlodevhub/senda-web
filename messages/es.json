@@ -81,7 +81,7 @@
     "q2Label": "¿Qué te dijiste a ti mismo?",
     "q3Label": "¿Cómo te sentiste?",
     "freeTextLabel": "Escribe lo que quieras contar",
-    "contextLabel": "¿Con qué tiene que ver? (opcional)",
+    "contextLabel": "¿Con qué tiene que ver?",
     "contextStudies": "Estudios",
     "contextFamily": "Familia",
     "contextFriends": "Amigos",
@@ -106,7 +106,7 @@
     "freeTextPlaceholder": "Escribe con calma, aquí nadie te apura…",
     "handNote": "Escribe sin apuro",
     "wordCount": "{count, plural, one {# palabra} other {# palabras}}",
-    "wordHint": "con 15 ya está bien"
+    "missingContext": "Elige con qué tiene que ver lo que escribiste."
   },
   "home": {
     "writeCta": "Escribir",

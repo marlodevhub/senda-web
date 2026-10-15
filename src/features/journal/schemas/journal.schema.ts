@@ -1,7 +1,8 @@
 import { z } from "zod";
 import { JOURNAL_CONTEXTS, type JournalContext } from "@/types/journal-context";
 
-const journalContextSchema = z.enum(JOURNAL_CONTEXTS);
+// RN-DI-05: obligatorio (también lo exige el servidor, MISSING_CONTEXT).
+const journalContextSchema = z.enum(JOURNAL_CONTEXTS, { error: "journal.missingContext" });
 
 export type { JournalContext };
 
@@ -19,7 +20,7 @@ export const journalFormSchema = z.object({
   q2: z.string().optional(),
   q3: z.string().optional(),
   freeText: z.string().optional(),
-  context: journalContextSchema.optional(),
+  context: journalContextSchema,
 });
 
 export type JournalFormValues = z.infer<typeof journalFormSchema>;
