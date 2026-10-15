@@ -6,7 +6,7 @@ import { useForm, useWatch, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { RotateCcw, Send } from "lucide-react";
+import { Check, RotateCcw } from "lucide-react";
 import { FieldError } from "@/components/forms/field-error";
 import { Button } from "@/components/ui/button";
 import { EmotionCharacter, EmotionDefs } from "@/components/illustrations/emotion-characters";
@@ -184,7 +184,7 @@ export function JournalForm() {
             disabled={isSubmitting}
             className="ms-auto shrink-0 rounded-full px-6"
           >
-            <Send className="size-4" aria-hidden />
+            <Check className="size-4" aria-hidden />
             {isSubmitting ? t("journal.submitting") : t("journal.submit")}
           </Button>
         </div>

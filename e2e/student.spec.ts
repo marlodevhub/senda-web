@@ -86,11 +86,11 @@ test("ciclo diario completo: activar → diario → espejo → reescritura → f
   await page.getByRole("radio", { name: "Libre" }).click();
   await page.getByLabel("Escribe lo que quieras contar").fill(ENTRY);
   // RN-DI-05: sin contexto no se envía.
-  await page.getByRole("button", { name: "Enviar" }).click();
+  await page.getByRole("button", { name: "Guardar" }).click();
   await expect(page.getByText("Elige con qué tiene que ver lo que escribiste.")).toBeVisible();
   await page.getByRole("radio", { name: "Estudios" }).click();
   await expectAccessible(page);
-  await page.getByRole("button", { name: "Enviar" }).click();
+  await page.getByRole("button", { name: "Guardar" }).click();
 
   // CU-02/CU-03: el espejo muestra la frase real (aunque el LLM contó mal las posiciones).
   await expect(page).toHaveURL(/\/espejo\/\d+/);
