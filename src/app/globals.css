@@ -62,6 +62,8 @@
   --color-sprout-ink: var(--sprout-ink);
   --color-sprout-foreground: var(--sprout-foreground);
   --color-celeste: var(--celeste);
+  --color-checkin: var(--checkin);
+  --color-checkin-foreground: var(--checkin-foreground);
   --color-celeste-strong: var(--celeste-strong);
 
   /* escala de radios: cada tamaño tiene un trabajo fijo, no es rounded-lg genérico */
@@ -106,6 +108,9 @@
   --sprout-foreground: #16240F;
   /* Celeste suave de las frases por reescribir (Inicio en escritorio); "strong" al pasar el mouse. */
   --celeste: #E4F1FB;
+  /* Día en que solo marcó su ánimo (check-in, sin registro): amarillo, con texto oscuro encima. */
+  --checkin: #F6D978;
+  --checkin-foreground: #3A2C05;
   --celeste-strong: #D2E7F8;
   /* Píldora activa de Progreso: los verdes del pasto del jardín. */
   --leaf-from: #dcf5e1;
@@ -186,6 +191,7 @@
   --sprout-ink: #E4EEDD;
   --sprout-tint: #223023;
   --celeste: #1B2A3A;
+  --checkin: #E8C95E;
   --celeste-strong: #22364B;
   --leaf-from: #2c5a3e;
   --leaf-to: #3d7a52;

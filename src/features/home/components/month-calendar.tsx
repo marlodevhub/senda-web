@@ -18,7 +18,7 @@ function sameDay(a: Date, b: Date): boolean {
 
 /**
  * CU-05 en escritorio: el calendario de shadcn (react-day-picker), de lunes a domingo, con los 28 días de la
- * senda marcados: escribiste, hoy, sin registro y los que todavía no llegan. Se navega libremente por los meses;
+ * senda marcados: escribiste (verde), solo marcaste tu ánimo (amarillo), hoy, sin registro y los que todavía no llegan. Se navega libremente por los meses;
  * los días fuera de la senda van sin marca. Solo muestra: no se elige ningún día. Sin rachas ni porcentajes
  * (regla de coherencia 6).
  */
@@ -28,17 +28,22 @@ export function MonthCalendar({ days, today }: { days: HomeWeekDay[]; today: num
   const todayDate = todayDay ? toLocalDate(todayDay.date) : undefined;
   const at = (predicate: (day: HomeWeekDay) => boolean) => days.filter(predicate).map((day) => toLocalDate(day.date));
 
+  // Solo marcó su ánimo (check-in) ese día, sin registro.
+  const moodOnly = (day: HomeWeekDay) => !day.hasEntry && day.mood !== null;
   const modifiers = {
     entry: at((day) => day.hasEntry),
-    empty: at((day) => !day.hasEntry && day.interventionDay < today),
+    mood: at((day) => moodOnly(day) && day.interventionDay !== today),
+    moodToday: at((day) => moodOnly(day) && day.interventionDay === today),
+    empty: at((day) => !day.hasEntry && !moodOnly(day) && day.interventionDay < today),
     upcoming: at((day) => !day.hasEntry && day.interventionDay > today),
-    journeyToday: at((day) => !day.hasEntry && day.interventionDay === today),
+    journeyToday: at((day) => !day.hasEntry && !moodOnly(day) && day.interventionDay === today),
   };
   const fullDate = (date: Date) =>
     new Intl.DateTimeFormat("es-PE", { weekday: "long", day: "numeric", month: "long" }).format(date);
   const statusOf = (date: Date): string => {
     const has = (dates: Date[]) => dates.some((d) => sameDay(d, date));
     if (has(modifiers.entry)) return t("home.dayStatusEntry", { date: fullDate(date) });
+    if (has(modifiers.mood) || has(modifiers.moodToday)) return t("home.dayStatusMood", { date: fullDate(date) });
     if (has(modifiers.journeyToday)) return t("home.dayStatusToday", { date: fullDate(date) });
     if (has(modifiers.empty)) return t("home.dayStatusEmpty", { date: fullDate(date) });
     if (has(modifiers.upcoming)) return t("home.dayStatusFuture", { date: fullDate(date) });
@@ -56,6 +61,9 @@ export function MonthCalendar({ days, today }: { days: HomeWeekDay[]; today: num
         modifiers={modifiers}
         modifiersClassNames={{
           entry: "[&>*]:bg-sprout [&>*]:font-semibold [&>*]:text-sprout-foreground",
+          mood: "[&>*]:bg-checkin [&>*]:font-semibold [&>*]:text-checkin-foreground",
+          moodToday:
+            "[&>*]:bg-checkin [&>*]:font-semibold [&>*]:text-checkin-foreground [&>*]:ring-2 [&>*]:ring-bloom [&>*]:ring-offset-2 [&>*]:ring-offset-card",
           journeyToday: "[&>*]:font-semibold [&>*]:text-bloom-ink [&>*]:ring-2 [&>*]:ring-bloom [&>*]:ring-inset",
           empty: "[&>*]:bg-muted [&>*]:font-semibold [&>*]:text-muted-foreground",
           upcoming: "[&>*]:font-semibold [&>*]:text-foreground [&>*]:ring-1 [&>*]:ring-border [&>*]:ring-inset",
@@ -94,6 +102,7 @@ export function MonthCalendar({ days, today }: { days: HomeWeekDay[]; today: num
 
       <ul className="flex flex-wrap gap-x-4 gap-y-1 text-base text-muted-foreground">
         <Legend swatch="bg-sprout" label={t("home.legendEntry")} />
+        <Legend swatch="bg-checkin" label={t("home.legendMood")} />
         <Legend swatch="ring-2 ring-bloom" label={t("home.legendToday")} />
         <Legend swatch="bg-muted ring-1 ring-border" label={t("home.legendEmpty")} />
       </ul>

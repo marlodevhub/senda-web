@@ -65,13 +65,16 @@ export function WeekOverview({
           const isToday = day.interventionDay === today;
           const isFuture = day.interventionDay > today;
           const fullDate = formatDate(day.date, { weekday: "long", day: "numeric", month: "long" });
+          const moodOnly = !day.hasEntry && day.mood !== null;
           const status = day.hasEntry
             ? t("home.dayStatusEntry", { date: fullDate })
-            : isToday
-              ? t("home.dayStatusToday", { date: fullDate })
-              : isFuture
-                ? t("home.dayStatusFuture", { date: fullDate })
-                : t("home.dayStatusEmpty", { date: fullDate });
+            : moodOnly
+              ? t("home.dayStatusMood", { date: fullDate })
+              : isToday
+                ? t("home.dayStatusToday", { date: fullDate })
+                : isFuture
+                  ? t("home.dayStatusFuture", { date: fullDate })
+                  : t("home.dayStatusEmpty", { date: fullDate });
           return (
             <li key={day.interventionDay} aria-label={status} className="flex flex-col items-center gap-1.5">
               <span aria-hidden className="text-base text-muted-foreground capitalize">
@@ -82,8 +85,10 @@ export function WeekOverview({
                 className={cn(
                   "flex size-10 items-center justify-center rounded-full text-base font-semibold tabular-nums transition-colors",
                   day.hasEntry && "bg-sprout text-sprout-foreground",
-                  !day.hasEntry && isToday && "text-bloom-ink ring-2 ring-bloom",
-                  !day.hasEntry && !isToday && !isFuture && "bg-muted text-muted-foreground",
+                  moodOnly && "bg-checkin text-checkin-foreground",
+                  moodOnly && isToday && "ring-2 ring-bloom ring-offset-2 ring-offset-card",
+                  !day.hasEntry && !moodOnly && isToday && "text-bloom-ink ring-2 ring-bloom",
+                  !day.hasEntry && !moodOnly && !isToday && !isFuture && "bg-muted text-muted-foreground",
                   !day.hasEntry && isFuture && "text-muted-foreground ring-1 ring-border",
                 )}
               >
