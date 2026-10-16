@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { ArrowRight, Feather } from "lucide-react";
@@ -55,6 +56,8 @@ const DIMENSION_DOT: Record<Dimension, string> = {
  */
 export function PendingPhraseList({ phrases }: { phrases: HomePendingPhrase[] }) {
   const t = useTranslations();
+  const listRef = useRef<HTMLUListElement>(null);
+  const maxHeight = useHeightToViewportBottom(listRef);
 
   return (
     <section aria-labelledby="pending-list" className="flex flex-col gap-4 rounded-lg bg-card p-5 shadow-card">
@@ -76,7 +79,7 @@ export function PendingPhraseList({ phrases }: { phrases: HomePendingPhrase[] })
         </span>
       </header>
 
-      <ul className="flex max-h-[28rem] flex-col gap-2 overflow-y-auto pr-1">
+      <ul ref={listRef} style={{ maxHeight }} className="flex flex-col gap-2 overflow-y-auto pr-1">
         {phrases.map((phrase) => (
           <li key={phrase.findingId}>
             <Link
@@ -108,4 +111,37 @@ export function PendingPhraseList({ phrases }: { phrases: HomePendingPhrase[] })
       </ul>
     </section>
   );
+}
+
+/** Lo que queda debajo de la lista: el padding de la tarjeta (1,25rem) y el de main en escritorio (2,5rem). */
+const BOTTOM_SPACE_PX = 60;
+/** Al menos una frase completa, aunque la ventana sea muy baja. */
+const MIN_LIST_PX = 176;
+
+/**
+ * El alto de la lista para que la tarjeta llegue justo al borde de abajo de la ventana (sin pasarse), según el
+ * alto de la pantalla y lo que haya arriba (p. ej. la invitación del check-in). Se recalcula al cambiar el tamaño de
+ * la ventana o del contenido.
+ */
+function useHeightToViewportBottom(ref: React.RefObject<HTMLElement | null>): number | undefined {
+  const [maxHeight, setMaxHeight] = useState<number>();
+
+  useEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+    const update = () => {
+      const top = element.getBoundingClientRect().top + window.scrollY;
+      setMaxHeight(Math.max(MIN_LIST_PX, Math.floor(window.innerHeight - top - BOTTOM_SPACE_PX)));
+    };
+    update();
+    const observer = new ResizeObserver(update);
+    observer.observe(document.body);
+    window.addEventListener("resize", update);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", update);
+    };
+  }, [ref]);
+
+  return maxHeight;
 }
