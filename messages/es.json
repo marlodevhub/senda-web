@@ -119,6 +119,7 @@
     "pendingLabel": "Frase pendiente",
     "pendingRewrite": "Reescribir ✦",
     "pendingListTitle": "Frases por reescribir",
+    "pendingListHint": "Elige una para reescribirla con más amabilidad.",
     "pendingRewriteThis": "Reescribir: “{fragment}”",
     "noPending": "No tienes frases pendientes. ¿Qué te dijiste hoy?",
     "goalLabel": "Meta de la semana",

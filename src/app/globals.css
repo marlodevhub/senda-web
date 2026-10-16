@@ -61,6 +61,8 @@
   --color-sprout-tint: var(--sprout-tint);
   --color-sprout-ink: var(--sprout-ink);
   --color-sprout-foreground: var(--sprout-foreground);
+  --color-celeste: var(--celeste);
+  --color-celeste-strong: var(--celeste-strong);
 
   /* escala de radios: cada tamaño tiene un trabajo fijo, no es rounded-lg genérico */
   --radius-sm: 0.75rem;   /* 12px — chips, etiquetas */
@@ -102,6 +104,9 @@
   --sprout-tint: #E4EBDD;
   /* Texto sobre el verde lleno (día con registro, respuesta elegida): oscuro, 11:1. */
   --sprout-foreground: #16240F;
+  /* Celeste suave de las frases por reescribir (Inicio en escritorio); "strong" al pasar el mouse. */
+  --celeste: #E4F1FB;
+  --celeste-strong: #D2E7F8;
   /* Píldora activa de Progreso: los verdes del pasto del jardín. */
   --leaf-from: #dcf5e1;
   --leaf-to: #b5e5c0;
@@ -180,6 +185,8 @@
   --flow-tint: #272645;
   --sprout-ink: #E4EEDD;
   --sprout-tint: #223023;
+  --celeste: #1B2A3A;
+  --celeste-strong: #22364B;
   --leaf-from: #2c5a3e;
   --leaf-to: #3d7a52;
   --leaf-ink: #e8f6ec;
