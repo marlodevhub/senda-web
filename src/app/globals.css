@@ -3,6 +3,8 @@
 @import "shadcn/tailwind.css";
 
 @custom-variant dark (&:is(.dark *));
+/* Inicio sin scroll de página: escritorio con alto suficiente (en pantallas más bajas vuelve el scroll normal). */
+@custom-variant fit (@media (min-width: 64rem) and (min-height: 43.75rem));
 
 /*
   Senda — tokens de marca.

@@ -41,7 +41,10 @@ export function WeekOverview({
   }
 
   return (
-    <section aria-labelledby="home-week" className="flex flex-col gap-4 rounded-lg bg-card p-5 shadow-card">
+    <section
+      aria-labelledby="home-week"
+      className="flex flex-col gap-4 rounded-lg bg-card p-5 shadow-card fit:gap-3 fit:p-4"
+    >
       <div className="flex items-baseline justify-between gap-2 lg:sr-only">
         <h2 id="home-week" className="font-heading text-lg font-bold text-foreground">
           {t("home.weekTitle", { week })}
@@ -99,7 +102,8 @@ export function WeekOverview({
         })}
       </ol>
 
-      <dl className="grid grid-cols-3 divide-x divide-border border-t border-border pt-4 text-center">
+      {/* Sin scroll (`fit`): el día y la semana ya están en el saludo y los días en la meta. */}
+      <dl className="grid grid-cols-3 divide-x divide-border border-t border-border pt-4 text-center fit:hidden">
         {goal && <Stat label={t("home.statDays")} value={goal.daysWithEntry} total={goal.goal} />}
         <Stat
           label={t("home.statJourney")}
