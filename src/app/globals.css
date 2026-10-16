@@ -97,11 +97,11 @@
   --flow: #6E71AA;
   --flow-ink: #34355C;
   --flow-tint: #E4E4F3;
-  --sprout: #7A9471;
+  --sprout: #A6DB92;
   --sprout-ink: #33452E;
   --sprout-tint: #E4EBDD;
-  /* Texto sobre el verde lleno (día con registro, respuesta elegida). */
-  --sprout-foreground: #FFFFFF;
+  /* Texto sobre el verde lleno (día con registro, respuesta elegida): oscuro, 11:1. */
+  --sprout-foreground: #16240F;
   /* Píldora activa de Progreso: los verdes del pasto del jardín. */
   --leaf-from: #dcf5e1;
   --leaf-to: #b5e5c0;
@@ -149,7 +149,7 @@
   --shadow-card: 0 1px 2px rgba(43, 36, 48, .05), 0 16px 32px -14px rgba(43, 36, 48, .16);
   --shadow-bloom: 0 10px 24px -8px rgba(232, 115, 138, .55);
   --shadow-flow: 0 10px 24px -8px rgba(110, 113, 170, .45);
-  --shadow-sprout: 0 10px 24px -8px rgba(122, 148, 113, .4);
+  --shadow-sprout: 0 10px 24px -8px rgba(166, 219, 146, .45);
 
   color-scheme: light;
 }
@@ -178,9 +178,6 @@
   --flow: #A3A6E0;
   --flow-ink: #E7E7F7;
   --flow-tint: #272645;
-  /* Verde más claro y vivo; encima va texto oscuro (11:1). */
-  --sprout: #A6DB92;
-  --sprout-foreground: #16240F;
   --sprout-ink: #E4EEDD;
   --sprout-tint: #223023;
   --leaf-from: #2c5a3e;
