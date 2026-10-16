@@ -308,6 +308,8 @@
   },
   "history": {
     "title": "Historial",
+    "tabAll": "Mis registros",
+    "tabPending": "Por reescribir",
     "empty": "Aún no tienes registros. ¿Escribimos el primero?",
     "writeCta": "Escribir",
     "noResults": "No hay registros con esos filtros.",
