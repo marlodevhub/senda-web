@@ -197,12 +197,12 @@
   --celeste: #1B2A3A;
   --checkin: #E8C95E;
   --celeste-strong: #22364B;
-  --leaf-from: #2c5a3e;
-  --leaf-to: #3d7a52;
-  --leaf-ink: #e8f6ec;
-  /* Más claro que el resto del modo oscuro para que no se vea tosco; encima va texto oscuro (6,6:1 o más). */
-  --ember-from: #F6B27A;
-  --ember-to: #EE9152;
+  /* Pestañas en modo oscuro: pastel claro con texto oscuro (verde de Progreso, naranja de Historial). */
+  --leaf-from: #C3EBCB;
+  --leaf-to: #9FD9AF;
+  --leaf-ink: #143322;
+  --ember-from: #FAD3B0;
+  --ember-to: #F5B98C;
   --ember-ink: #3A1A06;
   --prompt-red: #F0A0AF;
 
