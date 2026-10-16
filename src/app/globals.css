@@ -222,6 +222,34 @@
   color-scheme: dark;
 }
 
+/*
+ * Tema "ocean" (CU-17/CU-20): con Hombre, el acento rosado pasa a azules. Solo cambia el acento (botones, nombre
+ * del saludo, preguntas del Diario, selección del menú); el resto de la paleta y las caritas siguen igual. El
+ * texto blanco de los botones sobre --grad-hero cumple 4,5:1.
+ */
+[data-palette="ocean"] {
+  --bloom: #4F86C6;
+  --bloom-ink: #1D3A63;
+  --bloom-tint: #E0EBF8;
+  --prompt-red: #2D67AE;
+  --primary-foreground: #0F2340;
+  --grad-hero: linear-gradient(135deg, #2D67AE 0%, #22727E 100%);
+  --grad-dawn: linear-gradient(135deg, #4F86C6 0%, #3A9AA6 100%);
+  --grad-dawn-soft: linear-gradient(135deg, #E0EBF8 0%, #DDF0F1 100%);
+  --shadow-bloom: 0 10px 24px -8px rgba(79, 134, 198, .5);
+}
+
+.dark[data-palette="ocean"] {
+  --bloom: #8FB8EC;
+  --bloom-ink: #DCE9FA;
+  --bloom-tint: #1E2B42;
+  --prompt-red: #9CC2F5;
+  --primary-foreground: #0F1B2E;
+  --grad-dawn: linear-gradient(135deg, #8FB8EC 0%, #7CC3CB 100%);
+  --grad-dawn-soft: linear-gradient(135deg, #1E2B42 0%, #1B3236 100%);
+  --shadow-bloom: 0 10px 26px -8px rgba(143, 184, 236, .35);
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

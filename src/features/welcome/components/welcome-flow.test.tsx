@@ -42,6 +42,35 @@ describe("WelcomeFlow", () => {
     expect(push).toHaveBeenCalledWith("/inicio");
   });
 
+  it("la primera vez pide nombre y sexo antes de seguir, aplica el tema y los envía al empezar (CU-17)", async () => {
+    const fetchMock = vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response(null, { status: 204 }));
+    const user = userEvent.setup();
+    renderWithProviders(<WelcomeFlow identityRequired />);
+
+    expect(screen.getByRole("heading", { name: "Cuéntanos de ti" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Saltar" })).not.toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Siguiente" }));
+    expect(screen.getByText("Escribe cómo quieres que te llamemos.")).toBeInTheDocument();
+    expect(screen.getByText("Elige una opción.")).toBeInTheDocument();
+
+    await user.type(screen.getByLabelText("¿Cómo quieres que te llamemos?"), "Mario");
+    await user.click(screen.getByRole("radio", { name: "Hombre" }));
+    await user.click(screen.getByRole("button", { name: "Siguiente" }));
+
+    expect(screen.getByRole("heading", { name: "Qué es Senda" })).toBeInTheDocument();
+    expect(document.documentElement.dataset.palette).toBe("ocean");
+
+    await user.click(screen.getByRole("button", { name: "Saltar" }));
+    await user.click(screen.getByRole("button", { name: "Empezar" }));
+    expect(fetchMock).toHaveBeenCalledWith(
+      "/api/v1/welcome/completion",
+      expect.objectContaining({
+        body: JSON.stringify({ startingPoint: null, preferredName: "Mario", gender: "MALE" }),
+      }),
+    );
+    delete document.documentElement.dataset.palette;
+  });
+
   it("deja saltar las pantallas directo a la pregunta opcional", async () => {
     const user = userEvent.setup();
     renderWithProviders(<WelcomeFlow />);

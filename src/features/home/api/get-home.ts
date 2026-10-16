@@ -36,6 +36,8 @@ export type Home = {
   /** Semana actual (1..4) y sus 7 días, para el calendario. */
   week: number;
   weekDays: HomeWeekDay[];
+  /** Cómo quiere que lo llamen ("Hola, Mario."), o null si todavía no lo dio. */
+  preferredName: string | null;
 };
 
 export async function getHome(): Promise<Home> {

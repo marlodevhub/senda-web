@@ -113,6 +113,7 @@
   "home": {
     "writeCta": "Escribir",
     "greeting": "Hola. Hoy es tu día {day} de 28.",
+    "greetingNamed": "Hola, <highlight>{name}</highlight>. Hoy es tu día {day} de 28.",
     "checkinQuestion": "¿Cómo estás hoy?",
     "pendingLabel": "Frase pendiente",
     "pendingRewrite": "Reescribir ✦",
@@ -351,6 +352,9 @@
     "incorrectPassword": "Tu contraseña actual no es correcta.",
     "withdrawalNotAllowed": "No puedes retirarte en este momento.",
     "saved": "Listo, guardamos tus cambios.",
+    "identityTitle": "Cómo te llamamos",
+    "identityHint": "Si eliges Hombre, Senda usa tonos azules; con Mujer u Otro, los de siempre.",
+    "identitySave": "Guardar",
     "saving": "Guardando…",
     "currentPasswordError": "Tu contraseña actual no coincide.",
     "notificationsTitle": "Notificaciones por correo",
@@ -544,6 +548,12 @@
   },
   "welcome": {
     "progressLabel": "Paso {step} de {total}",
+    "identityTitle": "Cuéntanos de ti",
+    "identityIntro": "Así podemos saludarte por tu nombre. Puedes cambiarlo cuando quieras desde tu perfil.",
+    "nameLabel": "¿Cómo quieres que te llamemos?",
+    "nameRequired": "Escribe cómo quieres que te llamemos.",
+    "genderLabel": "¿Con cuál te identificas?",
+    "genderRequired": "Elige una opción.",
     "whatItIsTitle": "Qué es Senda",
     "whatItIsBody": "Senda te acompaña 28 días a escuchar cómo te hablas. Escribes un momento de tu día, ves en el espejo las frases donde fuiste duro contigo, puedes reescribirlas con más amabilidad y ves cómo avanzas.",
     "whatItIsNotTitle": "Qué no es",
@@ -557,6 +567,11 @@
     "starting": "Entrando…",
     "skip": "Saltar",
     "done": "Listo"
+  },
+  "gender": {
+    "male": "Hombre",
+    "female": "Mujer",
+    "other": "Otro"
   },
   "nav": {
     "label": "Navegación principal",

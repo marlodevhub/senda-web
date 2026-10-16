@@ -23,5 +23,7 @@ export default async function BienvenidaPage() {
     redirect("/inicio");
   }
 
-  return <WelcomeFlow initialStartingPoint={welcome?.startingPoint} />;
+  return (
+    <WelcomeFlow initialStartingPoint={welcome?.startingPoint} identityRequired={welcome?.identityRequired ?? true} />
+  );
 }

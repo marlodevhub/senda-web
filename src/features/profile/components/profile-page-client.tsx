@@ -10,6 +10,7 @@ import { useTour } from "@/components/tour/app-tour";
 import { LogoutButton } from "@/features/access/components/logout-button";
 import { useProfile } from "@/features/profile/api/use-profile";
 import { ChangePasswordForm } from "@/features/profile/components/change-password-form";
+import { IdentityForm } from "@/features/profile/components/identity-form";
 import { NotificationsForm } from "@/features/profile/components/notifications-form";
 import { RecoveryCodeForm } from "@/features/profile/components/recovery-code-form";
 import { ThemeSelector } from "@/features/profile/components/theme-selector";
@@ -18,7 +19,8 @@ import { StartingPointForm } from "@/features/welcome/components/starting-point-
 import { cn } from "@/lib/utils";
 
 /**
- * CU-20 Gestionar perfil (RN-AC-13): notificaciones por correo, contraseña,
+ * CU-20 Gestionar perfil (RN-AC-13): cómo te llamamos (nombre y sexo, que elige
+ * el tema de color), notificaciones por correo, contraseña,
  * código de recuperación, punto de partida (CU-17), ayuda e información
  * (volver a ver la bienvenida o el tutorial y leer el consentimiento), cerrar sesión y
  * retirarse (CU-21). Sin botón de "Necesito ayuda": Senda no es un servicio
@@ -57,6 +59,16 @@ export function ProfilePageClient() {
           <span className="text-base">{t("profile.helpTourHint")}</span>
         </span>
       </button>
+
+      <Tile title={t("profile.identityTitle")} className="md:col-span-2 lg:col-span-6">
+        {isPending ? (
+          <Loader2 className="size-5 animate-spin text-muted-foreground" aria-label={t("common.loading")} />
+        ) : isError || !profile ? (
+          <p className="text-base text-muted-foreground">{t("common.unexpectedError")}</p>
+        ) : (
+          <IdentityForm preferredName={profile.preferredName} gender={profile.gender} />
+        )}
+      </Tile>
 
       <Tile title={t("profile.notificationsTitle")} className="lg:col-span-3">
         {isPending ? (

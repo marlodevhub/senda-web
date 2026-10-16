@@ -8,6 +8,9 @@ const ENTRY =
   "Me fui a casa pensando que no sirvo para esta carrera.";
 
 /** WCAG 2.1 AA (RS-TR): sin violaciones de axe en la pantalla actual. */
+const NAME = "Lucía";
+const GREETING = `Hola, ${NAME}. Hoy es tu día 3 de 28.`;
+
 async function expectAccessible(page: Page) {
   // axe mide colores reales: espera a que terminen las animaciones finitas (toasts, drawers, temas).
   await page.evaluate(() =>
@@ -58,6 +61,11 @@ async function activateAndConsent(page: Page): Promise<string> {
 
   // CU-17: bienvenida de 3 pantallas y punto de partida opcional.
   await expect(page).toHaveURL(/\/bienvenida/);
+  // CU-17: la primera vez, cómo quiere que lo llamen y su sexo (obligatorios).
+  await expect(page.getByRole("heading", { name: "Cuéntanos de ti" })).toBeVisible();
+  await page.getByLabel("¿Cómo quieres que te llamemos?").fill(NAME);
+  await page.getByRole("radio", { name: "Mujer" }).click();
+  await page.getByRole("button", { name: "Siguiente" }).click();
   await expect(page.getByRole("heading", { name: "Qué es Senda" })).toBeVisible();
   await expectAccessible(page);
   await page.getByRole("button", { name: "Siguiente" }).click();
@@ -74,7 +82,7 @@ test("ciclo diario completo: activar → diario → espejo → reescritura → f
   await activateAndConsent(page);
 
   // CU-05/CU-06: Inicio con el check-in del día.
-  await expect(page.getByText("Hola. Hoy es tu día 3 de 28.")).toBeVisible();
+  await expect(page.getByRole("heading", { name: GREETING })).toBeVisible();
   await page.getByRole("radio", { name: "Bien", exact: true }).click();
   await expect(page.getByText("Qué bueno. Si quieres, cuéntale a tu diario qué te hizo bien hoy.")).toBeVisible();
   await expectAccessible(page);
@@ -176,7 +184,7 @@ test(
 
     // Ya visto: no vuelve a abrirse solo.
     await page.reload();
-    await expect(page.getByText("Hola. Hoy es tu día 3 de 28.")).toBeVisible();
+    await expect(page.getByRole("heading", { name: GREETING })).toBeVisible();
     await page.waitForTimeout(1200);
     await expect(page.getByRole("dialog")).toBeHidden();
 
@@ -207,7 +215,7 @@ test("al vencer la cookie de acceso (30 min), la sesión se renueva sola", async
   await context.clearCookies({ name: "senda_access_token" });
   await page.goto("/inicio");
 
-  await expect(page.getByText("Hola. Hoy es tu día 3 de 28.")).toBeVisible();
+  await expect(page.getByRole("heading", { name: GREETING })).toBeVisible();
   expect((await context.cookies()).some((c) => c.name === "senda_access_token")).toBe(true);
 });
 
@@ -397,4 +405,30 @@ test("sin sesión, las pantallas del estudiante llevan al inicio de sesión", as
     await expect(page).toHaveURL(/\/login/);
   }
   await expectAccessible(page);
+});
+
+test("el nombre sale en el saludo y con Hombre la app usa el tema azul; se cambia desde Perfil (CU-17, CU-20)", async ({
+  page,
+}) => {
+  await activateAndConsent(page);
+  const html = page.locator("html");
+  await expect(html).not.toHaveAttribute("data-palette");
+
+  await page.goto("/perfil");
+  await page.getByLabel("¿Cómo quieres que te llamemos?").fill("Mario");
+  await page.getByRole("radio", { name: "Hombre" }).click();
+  await page.getByRole("button", { name: "Guardar", exact: true }).click();
+  await expect(page.getByText("Listo, guardamos tus cambios.")).toBeVisible();
+  await expect(html).toHaveAttribute("data-palette", "ocean");
+
+  // Al recargar se pinta desde el servidor, sin pasar por el rosado.
+  await page.goto("/inicio");
+  await expect(page.getByRole("heading", { name: "Hola, Mario. Hoy es tu día 3 de 28." })).toBeVisible();
+  await expect(html).toHaveAttribute("data-palette", "ocean");
+  await expectAccessible(page);
+
+  await page.goto("/perfil");
+  await page.getByRole("radio", { name: "Otro" }).click();
+  await page.getByRole("button", { name: "Guardar", exact: true }).click();
+  await expect(html).not.toHaveAttribute("data-palette");
 });

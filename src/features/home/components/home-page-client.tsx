@@ -43,7 +43,14 @@ export function HomePageClient() {
     <div className="flex flex-col gap-5">
       <header className="flex flex-col gap-1">
         <h1 className="font-heading text-xl leading-snug font-bold text-foreground lg:text-3xl">
-          {t("home.greeting", { day: home.day })}
+          {home.preferredName
+            ? t.rich("home.greetingNamed", {
+                day: home.day,
+                name: home.preferredName,
+                // El nombre en negrita y en el acento del tema (rojo, o azul con el tema "ocean").
+                highlight: (chunks) => <span className="font-extrabold text-(--prompt-red)">{chunks}</span>,
+              })
+            : t("home.greeting", { day: home.day })}
         </h1>
         <p className="text-base text-muted-foreground first-letter:uppercase">{todayLabel()}</p>
       </header>

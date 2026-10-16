@@ -4,6 +4,7 @@ import { StudentSidebar } from "@/components/layout/student-sidebar";
 import { MessagesBell, MessagesCenterProvider } from "@/components/layout/messages-center";
 import { Sprout } from "lucide-react";
 import { TourProvider } from "@/components/tour/app-tour";
+import { PaletteSync } from "./_components/palette-sync";
 
 /**
  * Móvil (≥ 360 px, RS-TR): barra inferior. Tablet (`md`): riel lateral de
@@ -15,6 +16,7 @@ export default async function StudentLayout({ children }: { children: React.Reac
   return (
     <MessagesCenterProvider>
       <TourProvider>
+        <PaletteSync />
         {/* overflow-x-clip: lo que sale a pantalla completa (jardín) no crea scroll horizontal. */}
         <div className="min-h-screen overflow-x-clip bg-background md:flex">
           <a
@@ -31,7 +33,7 @@ export default async function StudentLayout({ children }: { children: React.Reac
           <div className="min-w-0 flex-1 pb-28 md:pb-0">
             {/* Móvil: la marca a la izquierda y la campana a la derecha. */}
             {/* relative z-10: queda sobre los fondos a pantalla completa (cielo del Diario, jardín). */}
-          <header className="relative z-10 flex items-center justify-between px-4 pt-4 md:hidden">
+            <header className="relative z-10 flex items-center justify-between px-4 pt-4 md:hidden">
               <span className="flex items-center gap-2">
                 <span className="flex size-8 items-center justify-center rounded-full bg-[image:var(--grad-dawn)] text-primary-foreground">
                   <Sprout className="size-4" aria-hidden />

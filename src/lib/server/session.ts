@@ -1,5 +1,6 @@
 import "server-only";
 import { cookies } from "next/headers";
+import { PALETTE_COOKIE } from "@/lib/palette";
 
 import {
   STUDENT_ACCESS_COOKIE as ACCESS_COOKIE,
@@ -30,4 +31,6 @@ export async function clearStudentSession() {
   const store = await cookies();
   store.delete(ACCESS_COOKIE);
   store.delete(REFRESH_COOKIE);
+  // El tema de color es del estudiante que salió: el inicio de sesión vuelve al de siempre.
+  store.delete(PALETTE_COOKIE);
 }

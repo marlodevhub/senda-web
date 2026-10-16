@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { logout } from "@/features/access/api/logout";
+import { applyPalette } from "@/lib/palette";
 
 export function LogoutButton() {
   const t = useTranslations();
@@ -11,6 +12,7 @@ export function LogoutButton() {
 
   async function handleClick() {
     await logout();
+    applyPalette(null);
     router.push("/login");
   }
 

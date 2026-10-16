@@ -1,9 +1,11 @@
 import type { Metadata, Viewport } from "next";
+import { cookies } from "next/headers";
 import { NextIntlClientProvider } from "next-intl";
 import { Toaster } from "@/components/ui/sonner";
 import { baloo, figtree, playpen } from "./fonts";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Providers } from "./providers";
+import { PALETTE_COOKIE, parsePalette } from "@/lib/palette";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -21,10 +23,14 @@ export const viewport: Viewport = {
   ],
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  // El tema de color del estudiante (lib/palette) se pinta desde el servidor: sin parpadeo al cargar.
+  const palette = parsePalette((await cookies()).get(PALETTE_COOKIE)?.value);
+
   return (
     <html
       lang="es"
+      data-palette={palette}
       suppressHydrationWarning
       className={`${baloo.variable} ${figtree.variable} ${playpen.variable} antialiased`}
     >
