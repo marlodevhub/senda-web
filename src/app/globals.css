@@ -464,7 +464,6 @@
     animation: liquid-drop 0.95s ease-in both;
   }
   .liquid-rise-text {
-    display: block;
     animation: liquid-text 0.95s ease-out both;
   }
 }
