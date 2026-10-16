@@ -18,7 +18,7 @@ describe("CheckIn", () => {
     vi.restoreAllMocks();
   });
 
-  it("guarda la cara tocada con PUT /checkins/today y agradece (CU-06)", async () => {
+  it("guarda la cara tocada con PUT /checkins/today e invita a escribir (CU-06)", async () => {
     const fetchMock = mockCheckInResponse(4);
     const user = userEvent.setup();
     renderWithProviders(<CheckIn initialMood={null} />);
@@ -29,9 +29,8 @@ describe("CheckIn", () => {
       "/api/v1/checkins/today",
       expect.objectContaining({ method: "PUT", body: JSON.stringify({ mood: 4 }) }),
     );
-    expect(await screen.findByText("Gracias por contarnos.")).toBeInTheDocument();
+    expect(await screen.findByText("Si quieres, cuéntale a tu diario cómo fue tu día.")).toBeInTheDocument();
     expect(screen.queryByText(/Parece un día difícil/)).not.toBeInTheDocument();
-    expect(screen.getByText("Si quieres, cuéntale a tu diario cómo fue tu día.")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Escribir" })).toHaveAttribute("href", "/diario");
   });
 

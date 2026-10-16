@@ -24,7 +24,6 @@ export function CheckIn({ initialMood }: { initialMood: Mood | null }) {
   const t = useTranslations();
   const recordCheckIn = useRecordCheckIn();
   const [mood, setMood] = useState<Mood | null>(initialMood);
-  const [justSaved, setJustSaved] = useState(false);
   // Solo al tocar una cara: si el check-in ya estaba hecho al abrir Inicio, la invitación aparece quieta.
   const [animate, setAnimate] = useState(false);
 
@@ -34,7 +33,6 @@ export function CheckIn({ initialMood }: { initialMood: Mood | null }) {
     setAnimate(true);
     try {
       await recordCheckIn.mutateAsync(next);
-      setJustSaved(true);
     } catch (error) {
       setMood(previous);
       toast.error(t(error instanceof BffError ? errorMessageKey(error.code) : "common.unexpectedError"));
@@ -48,7 +46,6 @@ export function CheckIn({ initialMood }: { initialMood: Mood | null }) {
       </h2>
       <MoodPicker label={t("home.checkinQuestion")} value={mood ?? undefined} onChange={handleChange} />
       <div aria-live="polite" className="flex flex-col gap-2">
-        {justSaved && <p className="text-base text-muted-foreground">{t("home.checkinThanks")}</p>}
         {/* La invitación cae de las caras como una gota que se estira y se asienta (liquid-rise en globals.css). */}
         {mood !== null && (
           <div
