@@ -311,7 +311,11 @@
     "deleteConfirmBody": "¿Eliminar este registro? Se borrarán tu texto y tus reescrituras, y no se podrán recuperar. Tu jardín y tu meta no cambian.",
     "deleteConfirmButton": "Sí, eliminar",
     "deleting": "Eliminando…",
-    "deleted": "Registro eliminado."
+    "deleted": "Registro eliminado.",
+    "filtersTitle": "Filtros",
+    "filtersButton": "{count, plural, =0 {Filtros} other {Filtros (#)}}",
+    "filtersDone": "Listo",
+    "removeFilter": "Quitar filtro: {name}"
   },
   "profile": {
     "title": "Perfil",

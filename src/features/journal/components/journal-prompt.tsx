@@ -16,10 +16,7 @@ export function JournalPrompt({
   return (
     // Preguntas en el rojo de la paleta (--prompt-red); el campo no tiene borde ni fondo, el foco lo marca el cursor.
     <div className="group flex flex-col gap-1 py-2">
-      <label
-        htmlFor={id}
-        className="font-hand text-2xl leading-tight font-medium text-(--prompt-red)"
-      >
+      <label htmlFor={id} className="font-hand text-2xl leading-tight font-medium text-(--prompt-red)">
         {label}
       </label>
       {children}
