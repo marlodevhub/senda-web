@@ -173,7 +173,7 @@ export function JournalForm({ checkinMood }: { checkinMood?: Mood | null }) {
           <div className="flex flex-col gap-1">
             {/* Siempre en el mismo lugar: la hoja no cambia de tamaño al empezar a escribir. */}
             <div aria-hidden className="pointer-events-none flex -rotate-2 items-center gap-2">
-              <p className="font-hand text-xl whitespace-nowrap text-muted-foreground">{t("journal.handNote")}</p>
+              <p className="font-hand text-base whitespace-nowrap text-muted-foreground">{t("journal.handNote")}</p>
               <EmotionCharacter emotion="calm" className="w-9" />
             </div>
             <div className="flex h-9 items-center gap-2">
