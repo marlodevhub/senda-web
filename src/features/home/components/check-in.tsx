@@ -41,10 +41,13 @@ export function CheckIn({ initialMood }: { initialMood: Mood | null }) {
       <MoodPicker label={t("home.checkinQuestion")} value={mood ?? undefined} onChange={handleChange} />
       <div aria-live="polite" className="flex flex-col gap-2">
         {justSaved && <p className="text-base text-muted-foreground">{t("home.checkinThanks")}</p>}
-        {/* La invitación apunta al botón Escribir de Inicio, justo debajo: no se repite aquí. */}
+        {/*
+          La invitación apunta al botón Escribir de Inicio, justo debajo: no se repite aquí. Sale de él como una
+          gota que sube, se estira y se asienta (liquid-rise en globals.css).
+        */}
         {mood !== null && mood <= 2 && (
-          <p className="rounded-lg bg-card px-4 py-3 text-base leading-relaxed text-foreground shadow-card">
-            {t("home.checkinInvitation")}
+          <p className="liquid-rise relative isolate rounded-lg bg-card px-4 py-3 text-base leading-relaxed text-foreground shadow-card">
+            <span className="liquid-rise-text">{t("home.checkinInvitation")}</span>
           </p>
         )}
       </div>
