@@ -29,6 +29,8 @@ export type Home = {
   /** CU-06: la cara marcada hoy (1..5), o null si todavía no marcó. */
   checkinMood: 1 | 2 | 3 | 4 | 5 | null;
   pendingPhrase: HomePendingPhrase | null;
+  /** Escritorio: todas las frases por reescribir, de la más reciente (vacía en SOLO_LECTURA). */
+  pendingPhrases: HomePendingPhrase[];
   goal: HomeGoal | null;
   newMessages: boolean;
   newSummary: boolean;

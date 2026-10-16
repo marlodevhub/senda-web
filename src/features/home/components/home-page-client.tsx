@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useHome } from "@/features/home/api/use-home";
-import { PendingPhraseCard, NoPendingPhrase } from "@/features/home/components/pending-phrase-card";
+import { PendingPhraseCard, PendingPhraseList, NoPendingPhrase } from "@/features/home/components/pending-phrase-card";
 import { GoalRing } from "@/features/home/components/goal-ring";
 import { MoodWeek } from "@/features/home/components/mood-week";
 import { WeekOverview } from "@/features/home/components/week-overview";
@@ -103,14 +103,26 @@ export function HomePageClient() {
 
             {/* El tutorial ilumina aquí el camino a la Reescritura. */}
             <div data-tour="frase-pendiente">
-              {pending ? (
-                <PendingPhraseCard
-                  fragment={pending.fragment}
-                  onRewrite={() => router.push(`/reescritura/${pending.journalEntryId}?findingId=${pending.findingId}`)}
-                />
-              ) : (
-                <NoPendingPhrase />
-              )}
+              {/* Móvil y tablet: la frase más reciente; escritorio: todas, cada una lleva a Reescribir. */}
+              <div className="lg:hidden">
+                {pending ? (
+                  <PendingPhraseCard
+                    fragment={pending.fragment}
+                    onRewrite={() =>
+                      router.push(`/reescritura/${pending.journalEntryId}?findingId=${pending.findingId}`)
+                    }
+                  />
+                ) : (
+                  <NoPendingPhrase />
+                )}
+              </div>
+              <div className="hidden lg:block">
+                {(home.pendingPhrases ?? []).length > 0 ? (
+                  <PendingPhraseList phrases={home.pendingPhrases} />
+                ) : (
+                  <NoPendingPhrase />
+                )}
+              </div>
             </div>
             <HomeNotices newSummary={home.newSummary} />
           </div>

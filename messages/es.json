@@ -118,6 +118,8 @@
     "checkinQuestion": "¿Cómo estás hoy?",
     "pendingLabel": "Frase pendiente",
     "pendingRewrite": "Reescribir ✦",
+    "pendingListTitle": "Frases por reescribir",
+    "pendingRewriteThis": "Reescribir: “{fragment}”",
     "noPending": "No tienes frases pendientes. ¿Qué te dijiste hoy?",
     "goalLabel": "Meta de la semana",
     "goalMet": "Cumpliste tu meta de esta semana.",
