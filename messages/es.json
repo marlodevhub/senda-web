@@ -125,8 +125,13 @@
     "posttestCta": "Responder el cuestionario final",
     "goToProgress": "Ver mi progreso",
     "goToHistory": "Ver mi historial",
-    "checkinInvitation": "Parece un día difícil. Si quieres, escribir un momento puede ayudarte a ordenarlo.",
-    "checkinInvitationWrite": "Si quieres, cuéntale a tu diario cómo fue tu día.",
+    "checkinInvitation": {
+      "veryLow": "Parece un día muy pesado. Si quieres, escribir un momento puede ayudarte a soltar un poco.",
+      "low": "Parece un día difícil. Si quieres, escribir un momento puede ayudarte a ordenarlo.",
+      "neutral": "Un día a medias también cuenta. Si quieres, escribe qué pasó hoy.",
+      "good": "Qué bueno. Si quieres, cuéntale a tu diario qué te hizo bien hoy.",
+      "veryGood": "¡Qué buen día! Si quieres, escríbelo para recordarlo."
+    },
     "weekTitle": "Tu semana {week}",
     "weekRange": "{from} – {to}",
     "dayStatusEntry": "{date}: escribiste",

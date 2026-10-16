@@ -76,7 +76,7 @@ test("ciclo diario completo: activar → diario → espejo → reescritura → f
   // CU-05/CU-06: Inicio con el check-in del día.
   await expect(page.getByText("Hola. Hoy es tu día 3 de 28.")).toBeVisible();
   await page.getByRole("radio", { name: "Bien", exact: true }).click();
-  await expect(page.getByText("Si quieres, cuéntale a tu diario cómo fue tu día.")).toBeVisible();
+  await expect(page.getByText("Qué bueno. Si quieres, cuéntale a tu diario qué te hizo bien hoy.")).toBeVisible();
   await expectAccessible(page);
 
   // CU-01: registro en modo libre.

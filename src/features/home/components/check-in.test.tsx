@@ -8,8 +8,9 @@ vi.mock("next/navigation", () => ({ useRouter: () => ({ push: vi.fn() }) }));
 function mockCheckInResponse(mood: number) {
   return vi
     .spyOn(globalThis, "fetch")
-    .mockResolvedValue(
-      new Response(JSON.stringify({ mood, interventionDay: 3, invitesToWrite: mood <= 2 }), { status: 200 }),
+    .mockImplementation(
+      async () =>
+        new Response(JSON.stringify({ mood, interventionDay: 3, invitesToWrite: mood <= 2 }), { status: 200 }),
     );
 }
 
@@ -29,7 +30,9 @@ describe("CheckIn", () => {
       "/api/v1/checkins/today",
       expect.objectContaining({ method: "PUT", body: JSON.stringify({ mood: 4 }) }),
     );
-    expect(await screen.findByText("Si quieres, cuéntale a tu diario cómo fue tu día.")).toBeInTheDocument();
+    expect(
+      await screen.findByText("Qué bueno. Si quieres, cuéntale a tu diario qué te hizo bien hoy."),
+    ).toBeInTheDocument();
     expect(screen.queryByText(/Parece un día difícil/)).not.toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Escribir" })).toHaveAttribute("href", "/diario");
   });
@@ -49,6 +52,19 @@ describe("CheckIn", () => {
 
     expect(await screen.findByText(/Parece un día difícil/)).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Escribir" })).toHaveAttribute("href", "/diario");
+  });
+
+  it("la invitación cambia según la cara tocada", async () => {
+    mockCheckInResponse(5);
+    const user = userEvent.setup();
+    renderWithProviders(<CheckIn initialMood={null} />);
+
+    await user.click(screen.getByRole("radio", { name: "Regular" }));
+    expect(await screen.findByText(/Un día a medias también cuenta/)).toBeInTheDocument();
+
+    await user.click(screen.getByRole("radio", { name: "Muy bien" }));
+    expect(await screen.findByText(/¡Qué buen día!/)).toBeInTheDocument();
+    expect(screen.queryByText(/Un día a medias/)).not.toBeInTheDocument();
   });
 
   it("marca la cara del check-in que ya hizo hoy", () => {

@@ -16,21 +16,29 @@ import { cn } from "@/lib/utils";
 /**
  * CU-06 Registrar check-in de ánimo: una cara, sin texto (RN-IN-04). Se
  * puede cambiar el mismo día (RN-IN-03). No cuenta para la meta. Al marcar
- * una cara aparece la invitación a escribir con el botón Escribir de Inicio
- * (con 1 o 2, la de día difícil, RN-IN-05; sin obligar). Sin cara marcada no
+ * una cara aparece la invitación a escribir de esa cara con el botón Escribir
+ * de Inicio (sin obligar). Sin cara marcada no
  * hay botón. El Diario abre con esta cara ya marcada (RN-IN-09).
  */
+/** Cada cara tiene su invitación a escribir (con 1 o 2, la de día difícil, RN-IN-05). */
+const INVITATION_KEY = { 1: "veryLow", 2: "low", 3: "neutral", 4: "good", 5: "veryGood" } as const satisfies Record<
+  Mood,
+  string
+>;
+
 export function CheckIn({ initialMood }: { initialMood: Mood | null }) {
   const t = useTranslations();
   const recordCheckIn = useRecordCheckIn();
   const [mood, setMood] = useState<Mood | null>(initialMood);
-  // Solo al tocar una cara: si el check-in ya estaba hecho al abrir Inicio, la invitación aparece quieta.
-  const [animate, setAnimate] = useState(false);
+  // Cuántas veces se tocó una cara: cada toque vuelve a montar la invitación para repetir la animación. En 0 (el
+  // check-in ya estaba hecho al abrir Inicio) aparece quieta.
+  const [presses, setPresses] = useState(0);
+  const animate = presses > 0;
 
   async function handleChange(next: Mood) {
     const previous = mood;
     setMood(next);
-    setAnimate(true);
+    setPresses((count) => count + 1);
     try {
       await recordCheckIn.mutateAsync(next);
     } catch (error) {
@@ -49,6 +57,7 @@ export function CheckIn({ initialMood }: { initialMood: Mood | null }) {
         {/* La invitación cae de las caras como una gota que se estira y se asienta (liquid-rise en globals.css). */}
         {mood !== null && (
           <div
+            key={presses}
             className={cn(
               "relative isolate flex flex-col gap-3 rounded-lg bg-card p-4 shadow-card",
               animate && "liquid-rise",
@@ -56,7 +65,7 @@ export function CheckIn({ initialMood }: { initialMood: Mood | null }) {
           >
             <div className={cn("flex flex-col gap-3", animate && "liquid-rise-text")}>
               <p className="text-base leading-relaxed text-foreground">
-                {t(mood <= 2 ? "home.checkinInvitation" : "home.checkinInvitationWrite")}
+                {t(`home.checkinInvitation.${INVITATION_KEY[mood]}`)}
               </p>
               <Button asChild variant="hero" size="xl" className="rounded-full">
                 <Link href="/diario">
