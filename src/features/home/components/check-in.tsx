@@ -67,7 +67,7 @@ export function CheckIn({ initialMood }: { initialMood: Mood | null }) {
               <p className="text-base leading-relaxed text-foreground">
                 {t(`home.checkinInvitation.${INVITATION_KEY[mood]}`)}
               </p>
-              <Button asChild variant="hero" size="xl" className="rounded-full">
+              <Button asChild variant="hero" size="xl" className="w-full rounded-full">
                 <Link href="/diario">
                   <PenLine className="size-4" aria-hidden />
                   {t("home.writeCta")}

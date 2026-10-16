@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { Feather } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 /**
@@ -16,7 +17,9 @@ export function PendingPhraseCard({ fragment, onRewrite }: { fragment: string; o
       <p className="font-display text-base leading-snug text-foreground before:content-['“'] after:content-['”']">
         {fragment}
       </p>
-      <Button variant="hero" size="xl" className="w-fit" onClick={onRewrite}>
+      {/* Mismo ancho y forma que el botón Escribir del check-in. */}
+      <Button variant="hero" size="xl" className="w-full rounded-full" onClick={onRewrite}>
+        <Feather className="size-4" aria-hidden />
         {t("home.pendingRewrite")}
       </Button>
     </div>
