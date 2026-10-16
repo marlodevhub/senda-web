@@ -60,6 +60,7 @@
   --color-sprout: var(--sprout);
   --color-sprout-tint: var(--sprout-tint);
   --color-sprout-ink: var(--sprout-ink);
+  --color-sprout-foreground: var(--sprout-foreground);
 
   /* escala de radios: cada tamaño tiene un trabajo fijo, no es rounded-lg genérico */
   --radius-sm: 0.75rem;   /* 12px — chips, etiquetas */
@@ -99,6 +100,8 @@
   --sprout: #7A9471;
   --sprout-ink: #33452E;
   --sprout-tint: #E4EBDD;
+  /* Texto sobre el verde lleno (día con registro, respuesta elegida). */
+  --sprout-foreground: #FFFFFF;
   /* Píldora activa de Progreso: los verdes del pasto del jardín. */
   --leaf-from: #dcf5e1;
   --leaf-to: #b5e5c0;
@@ -175,7 +178,9 @@
   --flow: #A3A6E0;
   --flow-ink: #E7E7F7;
   --flow-tint: #272645;
-  --sprout: #9DBB8E;
+  /* Verde más claro y vivo; encima va texto oscuro (11:1). */
+  --sprout: #A6DB92;
+  --sprout-foreground: #16240F;
   --sprout-ink: #E4EEDD;
   --sprout-tint: #223023;
   --leaf-from: #2c5a3e;
@@ -218,7 +223,7 @@
   --shadow-card: 0 1px 2px rgba(0, 0, 0, .3), 0 20px 40px -16px rgba(0, 0, 0, .55);
   --shadow-bloom: 0 10px 26px -8px rgba(240, 160, 175, .35);
   --shadow-flow: 0 10px 26px -8px rgba(163, 166, 224, .3);
-  --shadow-sprout: 0 10px 26px -8px rgba(157, 187, 142, .3);
+  --shadow-sprout: 0 10px 26px -8px rgba(166, 219, 146, .3);
 
   color-scheme: dark;
 }

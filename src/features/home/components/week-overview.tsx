@@ -72,7 +72,7 @@ export function WeekOverview({
                 aria-hidden
                 className={cn(
                   "flex size-10 items-center justify-center rounded-full text-base font-semibold tabular-nums transition-colors",
-                  day.hasEntry && "bg-sprout text-white",
+                  day.hasEntry && "bg-sprout text-sprout-foreground",
                   !day.hasEntry && isToday && "text-bloom-ink ring-2 ring-bloom",
                   !day.hasEntry && !isToday && !isFuture && "bg-muted text-muted-foreground",
                   !day.hasEntry && isFuture && "text-muted-foreground ring-1 ring-border",

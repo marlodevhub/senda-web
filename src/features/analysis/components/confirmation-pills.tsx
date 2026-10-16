@@ -41,7 +41,7 @@ export function ConfirmationPills({
             className={cn(
               "flex-1 rounded-full border px-2 py-2 text-xs font-bold transition-colors duration-200",
               active
-                ? "border-sprout bg-sprout text-white shadow-sprout"
+                ? "border-sprout bg-sprout text-sprout-foreground shadow-sprout"
                 : "border-border bg-muted text-muted-foreground hover:border-sprout/50",
             )}
           >
