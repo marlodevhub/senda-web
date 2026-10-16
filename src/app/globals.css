@@ -200,9 +200,10 @@
   --leaf-from: #2c5a3e;
   --leaf-to: #3d7a52;
   --leaf-ink: #e8f6ec;
-  --ember-from: #7A3B14;
-  --ember-to: #9C4C1B;
-  --ember-ink: #FFEBDB;
+  /* Más claro que el resto del modo oscuro para que no se vea tosco; encima va texto oscuro (6,6:1 o más). */
+  --ember-from: #F6B27A;
+  --ember-to: #EE9152;
+  --ember-ink: #3A1A06;
   --prompt-red: #F0A0AF;
 
   --primary: var(--bloom);
