@@ -7,6 +7,7 @@ import { PenLine, Sprout } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { STUDENT_NAV_ITEMS } from "@/components/layout/student-nav-items";
+import { SidebarTools } from "@/components/layout/sidebar-tools";
 import { useHome } from "@/features/home/api/use-home";
 
 const INTERVENTION_DAYS = 28;
@@ -52,14 +53,19 @@ export function StudentSidebar() {
             className="flex w-full flex-col items-center gap-2 rounded-md bg-muted p-2 lg:items-stretch lg:p-3.5"
           >
             <div className="flex w-full items-baseline justify-center lg:justify-between">
-              <h2 id="sidebar-journey" className="sr-only text-xs font-semibold tracking-wide text-muted-foreground lg:not-sr-only">
+              <h2
+                id="sidebar-journey"
+                className="sr-only text-xs font-semibold tracking-wide text-muted-foreground lg:not-sr-only"
+              >
                 {t("sidebar.journey")}
               </h2>
               {/* Tablet: "3/28"; escritorio: "Día 3 de 28". */}
               <span aria-hidden className="text-sm font-bold tabular-nums text-foreground lg:hidden">
                 {day}/{INTERVENTION_DAYS}
               </span>
-              <span className="sr-only text-sm font-bold tabular-nums text-foreground lg:not-sr-only">{journeyLabel}</span>
+              <span className="sr-only text-sm font-bold tabular-nums text-foreground lg:not-sr-only">
+                {journeyLabel}
+              </span>
             </div>
             <div
               role="progressbar"
@@ -108,7 +114,9 @@ export function StudentSidebar() {
                 className={cn(
                   "flex size-12 items-center justify-center rounded-md text-[0.9375rem] font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-ring",
                   "lg:min-h-11 lg:w-full lg:justify-start lg:gap-3 lg:px-3",
-                  active ? "bg-bloom-tint text-bloom-ink" : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                  active
+                    ? "bg-bloom-tint text-bloom-ink"
+                    : "text-muted-foreground hover:bg-muted hover:text-foreground",
                 )}
               >
                 <Icon className="size-5" aria-hidden />
@@ -118,34 +126,46 @@ export function StudentSidebar() {
           })}
         </nav>
 
-        {home?.goal && (
-          <section
-            aria-labelledby="sidebar-goal"
-            title={t("sidebar.goalShort", { days: home.goal.daysWithEntry, goal: home.goal.goal })}
-            className="mt-auto flex w-full flex-col items-center gap-2 border-t border-border pt-4 lg:items-stretch"
-          >
-            <h2 id="sidebar-goal" className="sr-only text-xs font-semibold tracking-wide text-muted-foreground lg:not-sr-only">
-              {t("home.goalLabel")}
-            </h2>
-            <div className="flex flex-col items-center gap-1.5 lg:flex-row lg:gap-2">
-              {Array.from({ length: home.goal.goal }, (_, index) => (
-                <span
-                  key={index}
-                  aria-hidden
-                  className={cn(
-                    "size-3 rounded-full",
-                    index < home.goal!.daysWithEntry ? "bg-sprout" : "border border-border bg-background",
+        {/* Al pie: la meta de la semana y, a su derecha, los atajos (tutorial, modo día/noche). */}
+        <div className="mt-auto flex w-full flex-col items-center gap-3 border-t border-border pt-4 lg:flex-row lg:items-end lg:justify-between">
+          {home?.goal && (
+            <section
+              aria-labelledby="sidebar-goal"
+              title={t("sidebar.goalShort", { days: home.goal.daysWithEntry, goal: home.goal.goal })}
+              className="flex flex-col items-center gap-2 lg:items-stretch"
+            >
+              <h2
+                id="sidebar-goal"
+                className="sr-only text-xs font-semibold tracking-wide text-muted-foreground lg:not-sr-only"
+              >
+                {t("home.goalLabel")}
+              </h2>
+              <div className="flex flex-col items-center gap-1.5 lg:flex-row lg:gap-2">
+                {Array.from({ length: home.goal.goal }, (_, index) => (
+                  <span
+                    key={index}
+                    aria-hidden
+                    className={cn(
+                      "size-3 rounded-full",
+                      index < home.goal!.daysWithEntry ? "bg-sprout" : "border border-border bg-background",
+                    )}
+                  />
+                ))}
+                <span className="sr-only text-sm text-foreground lg:not-sr-only lg:ml-1">
+                  {home.goal.daysWithEntry >= home.goal.goal ? (
+                    t("home.goalMet")
+                  ) : (
+                    // "0 de 3 días" en una sola línea, junto a los atajos.
+                    <span className="whitespace-nowrap">
+                      {t("sidebar.goalShort", { days: home.goal.daysWithEntry, goal: home.goal.goal })}
+                    </span>
                   )}
-                />
-              ))}
-              <span className="sr-only text-sm text-foreground lg:not-sr-only lg:ml-1">
-                {home.goal.daysWithEntry >= home.goal.goal
-                  ? t("home.goalMet")
-                  : t("sidebar.goalShort", { days: home.goal.daysWithEntry, goal: home.goal.goal })}
-              </span>
-            </div>
-          </section>
-        )}
+                </span>
+              </div>
+            </section>
+          )}
+          <SidebarTools className="flex-col lg:ms-auto lg:flex-row" />
+        </div>
       </div>
     </aside>
   );

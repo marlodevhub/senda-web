@@ -592,7 +592,9 @@
     "tagline": "Escucha cómo te hablas",
     "journey": "Tu senda",
     "dayOf": "Día {day} de {total}",
-    "goalShort": "{days} de {goal} días"
+    "goalShort": "{days} de {goal} días",
+    "darkMode": "Activar modo noche",
+    "lightMode": "Activar modo día"
   },
   "validation": {
     "codeRequired": "Escribe tu código.",
