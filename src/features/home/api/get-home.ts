@@ -13,6 +13,14 @@ export type HomePendingPhrase = {
 
 export type HomeGoal = { daysWithEntry: number; goal: number };
 
+/** CU-05: un día de la semana actual (fecha AAAA-MM-DD en Lima); `mood` es el check-in o el ánimo del registro. */
+export type HomeWeekDay = {
+  interventionDay: number;
+  date: string;
+  hasEntry: boolean;
+  mood: 1 | 2 | 3 | 4 | 5 | null;
+};
+
 /** RS-IN-01: la respuesta única de CU-05. */
 export type Home = {
   day: number;
@@ -25,6 +33,9 @@ export type Home = {
   newMessages: boolean;
   newSummary: boolean;
   posttestUrl: string | null;
+  /** Semana actual (1..4) y sus 7 días, para el calendario. */
+  week: number;
+  weekDays: HomeWeekDay[];
 };
 
 export async function getHome(): Promise<Home> {

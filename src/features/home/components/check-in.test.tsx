@@ -6,9 +6,11 @@ import { CheckIn } from "@/features/home/components/check-in";
 vi.mock("next/navigation", () => ({ useRouter: () => ({ push: vi.fn() }) }));
 
 function mockCheckInResponse(mood: number) {
-  return vi.spyOn(globalThis, "fetch").mockResolvedValue(
-    new Response(JSON.stringify({ mood, interventionDay: 3, invitesToWrite: mood <= 2 }), { status: 200 }),
-  );
+  return vi
+    .spyOn(globalThis, "fetch")
+    .mockResolvedValue(
+      new Response(JSON.stringify({ mood, interventionDay: 3, invitesToWrite: mood <= 2 }), { status: 200 }),
+    );
 }
 
 describe("CheckIn", () => {

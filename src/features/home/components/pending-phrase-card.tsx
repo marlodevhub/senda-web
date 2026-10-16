@@ -7,20 +7,12 @@ import { Button } from "@/components/ui/button";
  * Tarjeta "frase pendiente" de Inicio (RN-IN-02): el hallazgo visible más
  * reciente sin reescribir. Toca el botón → abre CU-04 con ese hallazgo.
  */
-export function PendingPhraseCard({
-  fragment,
-  onRewrite,
-}: {
-  fragment: string;
-  onRewrite?: () => void;
-}) {
+export function PendingPhraseCard({ fragment, onRewrite }: { fragment: string; onRewrite?: () => void }) {
   const t = useTranslations();
 
   return (
     <div className="flex flex-col gap-2.5 rounded-lg bg-grad-dawn-soft p-4 shadow-card">
-      <span className="text-xs font-bold tracking-wide text-root-ink uppercase">
-        {t("home.pendingLabel")}
-      </span>
+      <span className="text-xs font-bold tracking-wide text-root-ink uppercase">{t("home.pendingLabel")}</span>
       <p className="font-display text-base leading-snug text-foreground before:content-['“'] after:content-['”']">
         {fragment}
       </p>
