@@ -49,7 +49,7 @@ export function CheckIn({ initialMood }: { initialMood: Mood | null }) {
 
   return (
     <section aria-labelledby="checkin-question" className="flex flex-col gap-2">
-      <h2 id="checkin-question" className="text-sm font-semibold text-foreground">
+      <h2 id="checkin-question" className="font-heading text-lg font-bold text-foreground">
         {t("home.checkinQuestion")}
       </h2>
       <MoodPicker label={t("home.checkinQuestion")} value={mood ?? undefined} onChange={handleChange} />
