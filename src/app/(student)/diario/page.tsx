@@ -1,5 +1,5 @@
 import { getTranslations } from "next-intl/server";
-import { JournalForm } from "@/features/journal/components/journal-form";
+import { JournalWithCheckIn } from "./_components/journal-with-check-in";
 
 export default async function DiarioPage() {
   const t = await getTranslations();
@@ -17,7 +17,7 @@ export default async function DiarioPage() {
           <h1 className="font-heading text-4xl font-extrabold text-foreground">{t("journal.subtitle")}</h1>
           <p className="text-base text-muted-foreground">{t("journal.tagline")}</p>
         </header>
-        <JournalForm />
+        <JournalWithCheckIn />
       </div>
     </>
   );

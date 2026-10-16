@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useForm, useWatch, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -43,8 +43,11 @@ function fieldForError(code: string, mode: JournalFormValues["mode"]): keyof Jou
   }
 }
 
-/** CU-01 Escribir registro: ánimo, modo, la hoja del diario y el contexto. */
-export function JournalForm() {
+/**
+ * CU-01 Escribir registro: ánimo, modo, la hoja del diario y el contexto.
+ * `checkinMood`: la cara del check-in de hoy (CU-06), que llega ya marcada; se puede cambiar.
+ */
+export function JournalForm({ checkinMood }: { checkinMood?: Mood | null }) {
   const t = useTranslations();
   const router = useRouter();
   // RS-TR-08: la misma clave en reintentos evita duplicar el registro si el envío se repite.
@@ -57,6 +60,7 @@ export function JournalForm() {
     formState: { errors, isSubmitting },
     setError,
     getValues,
+    setValue,
     reset,
   } = useForm<JournalFormValues>({
     resolver: zodResolver(journalFormSchema),
@@ -73,6 +77,13 @@ export function JournalForm() {
         icon: <RotateCcw className="size-4" aria-hidden />,
       }),
   });
+
+  // El check-in llega después de montar (y del borrador): solo se marca si todavía no hay una cara elegida.
+  useEffect(() => {
+    if (checkinMood && getValues("moodBefore") === undefined) {
+      setValue("moodBefore", checkinMood);
+    }
+  }, [checkinMood, getValues, setValue]);
 
   const mode = useWatch({ control, name: "mode" });
   const texts = useWatch({ control, name: ["q1", "q2", "q3", "freeText"] });

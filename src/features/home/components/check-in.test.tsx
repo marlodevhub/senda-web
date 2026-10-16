@@ -41,7 +41,8 @@ describe("CheckIn", () => {
     await user.click(screen.getByRole("radio", { name: "Mal" }));
 
     expect(await screen.findByText(/Parece un día difícil/)).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Escribir" })).toHaveAttribute("href", "/diario");
+    // El botón Escribir es el de Inicio, no uno repetido en la invitación.
+    expect(screen.queryByRole("link", { name: "Escribir" })).not.toBeInTheDocument();
   });
 
   it("marca la cara del check-in que ya hizo hoy", () => {
