@@ -9,7 +9,7 @@ const ENTRY =
 
 /** WCAG 2.1 AA (RS-TR): sin violaciones de axe en la pantalla actual. */
 const NAME = "Lucía";
-const GREETING = `Hola, ${NAME}. Hoy es tu día 3 de 28.`;
+const GREETING = `Hola, ${NAME}.`;
 
 async function expectAccessible(page: Page) {
   // axe mide colores reales: espera a que terminen las animaciones finitas (toasts, drawers, temas).
@@ -83,6 +83,7 @@ test("ciclo diario completo: activar → diario → espejo → reescritura → f
 
   // CU-05/CU-06: Inicio con el check-in del día.
   await expect(page.getByRole("heading", { name: GREETING })).toBeVisible();
+  await expect(page.getByText("Hoy es tu día 3 de 28.")).toBeVisible();
   await page.getByRole("radio", { name: "Bien", exact: true }).click();
   await expect(page.getByText("Qué bueno. Si quieres, cuéntale a tu diario qué te hizo bien hoy.")).toBeVisible();
   await expectAccessible(page);
@@ -423,7 +424,7 @@ test("el nombre sale en el saludo y con Hombre la app usa el tema azul; se cambi
 
   // Al recargar se pinta desde el servidor, sin pasar por el rosado.
   await page.goto("/inicio");
-  await expect(page.getByRole("heading", { name: "Hola, Mario. Hoy es tu día 3 de 28." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Hola, Mario." })).toBeVisible();
   await expect(html).toHaveAttribute("data-palette", "ocean");
   await expectAccessible(page);
 

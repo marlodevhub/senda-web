@@ -112,8 +112,9 @@
   },
   "home": {
     "writeCta": "Escribir",
-    "greeting": "Hola. Hoy es tu día {day} de 28.",
-    "greetingNamed": "Hola, <highlight>{name}</highlight>. Hoy es tu día {day} de 28.",
+    "greeting": "Hola.",
+    "greetingNamed": "Hola, <highlight>{name}</highlight>.",
+    "dayOfJourney": "Hoy es tu día {day} de 28.",
     "checkinQuestion": "¿Cómo estás hoy?",
     "pendingLabel": "Frase pendiente",
     "pendingRewrite": "Reescribir ✦",

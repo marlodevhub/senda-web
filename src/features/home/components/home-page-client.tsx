@@ -41,18 +41,28 @@ export function HomePageClient() {
 
   return (
     <div className="flex flex-col gap-5">
-      <header className="flex flex-col gap-1">
-        <h1 className="font-heading text-xl leading-snug font-bold text-foreground lg:text-3xl">
+      {/* El saludo grande; debajo, en una línea, el día de la senda y la fecha separados por una raya. */}
+      <header className="flex flex-col gap-1.5">
+        <h1 className="font-heading text-3xl leading-tight font-bold text-foreground lg:text-4xl">
           {home.preferredName
             ? t.rich("home.greetingNamed", {
-                day: home.day,
                 name: home.preferredName,
                 // El nombre en negrita y en el acento del tema (rojo, o azul con el tema "ocean").
                 highlight: (chunks) => <span className="font-extrabold text-(--prompt-red)">{chunks}</span>,
               })
-            : t("home.greeting", { day: home.day })}
+            : t("home.greeting")}
         </h1>
-        <p className="text-base text-muted-foreground first-letter:uppercase">{todayLabel()}</p>
+        {/* En 360 px la fecha larga no entra en la misma línea: ahí va corta ("Vie., 16 oct."). */}
+        <p className="flex items-center gap-3 text-base whitespace-nowrap">
+          <span className="font-semibold text-foreground">{t("home.dayOfJourney", { day: home.day })}</span>
+          <span aria-hidden className="h-4 w-px shrink-0 bg-border" />
+          <span className="inline-block text-muted-foreground first-letter:uppercase sm:hidden">
+            {todayLabel("short")}
+          </span>
+          <span className="hidden text-muted-foreground first-letter:uppercase sm:inline-block">
+            {todayLabel("long")}
+          </span>
+        </p>
       </header>
 
       {home.status === "READ_ONLY" ? (
@@ -110,12 +120,12 @@ export function HomePageClient() {
   );
 }
 
-/** La fecha de hoy en Lima, como "jueves, 15 de octubre". */
-function todayLabel(): string {
+/** La fecha de hoy en Lima: "jueves, 15 de octubre" (long) o "jue., 15 oct." (short). */
+function todayLabel(style: "long" | "short"): string {
   return new Intl.DateTimeFormat("es-PE", {
-    weekday: "long",
+    weekday: style,
     day: "numeric",
-    month: "long",
+    month: style,
     timeZone: "America/Lima",
   }).format(new Date());
 }
