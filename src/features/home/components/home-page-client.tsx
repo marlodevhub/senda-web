@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { Loader2, PenLine } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useHome } from "@/features/home/api/use-home";
 import { PendingPhraseCard, NoPendingPhrase } from "@/features/home/components/pending-phrase-card";
@@ -18,8 +18,8 @@ import { CheckIn } from "@/features/home/components/check-in";
  * nuevos (CU-14) y resumen nuevo (CU-10). En SOLO_LECTURA (RN-IN-06) muestra
  * `inicio.terminaste`, el enlace a la posprueba y los accesos a Progreso e
  * Historial, sin acciones de escritura. La semana va como calendario con la
- * meta y el ánimo de cada día. El check-in (CU-06) va entre el
- * saludo y el botón Escribir (RN-IN-01) y no se muestra en SOLO_LECTURA.
+ * meta y el ánimo de cada día. El check-in (CU-06) va tras el saludo y,
+ * al marcar una cara, trae el botón Escribir (RN-IN-01); no se muestra en SOLO_LECTURA.
  */
 export function HomePageClient() {
   const t = useTranslations();
@@ -70,17 +70,11 @@ export function HomePageClient() {
           <HomeNotices newSummary={home.newSummary} />
         </div>
       ) : (
-        // Escritorio: a la izquierda lo de hoy (check-in, escribir, frase pendiente); a la derecha la semana.
+        // Escritorio: a la izquierda lo de hoy (check-in con escribir, frase pendiente); a la derecha la semana.
         <div className="flex flex-col gap-5 lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:items-start lg:gap-6">
           <div className="flex flex-col gap-5 lg:order-1">
+            {/* El botón Escribir aparece dentro del check-in al marcar una cara. */}
             <CheckIn initialMood={home.checkinMood} />
-
-            <Button asChild variant="hero" size="xl" className="rounded-full">
-              <Link href="/diario">
-                <PenLine className="size-4" aria-hidden />
-                {t("home.writeCta")}
-              </Link>
-            </Button>
 
             {/* El tutorial ilumina aquí el camino a la Reescritura. */}
             <div data-tour="frase-pendiente">

@@ -31,6 +31,14 @@ describe("CheckIn", () => {
     );
     expect(await screen.findByText("Gracias por contarnos.")).toBeInTheDocument();
     expect(screen.queryByText(/Parece un día difícil/)).not.toBeInTheDocument();
+    expect(screen.getByText("Si quieres, cuéntale a tu diario cómo fue tu día.")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Escribir" })).toHaveAttribute("href", "/diario");
+  });
+
+  it("sin una cara marcada no muestra la invitación ni el botón Escribir", () => {
+    renderWithProviders(<CheckIn initialMood={null} />);
+
+    expect(screen.queryByRole("link", { name: "Escribir" })).not.toBeInTheDocument();
   });
 
   it("con ánimo 1 o 2 invita a escribir, sin obligar (RN-IN-05)", async () => {
@@ -41,8 +49,7 @@ describe("CheckIn", () => {
     await user.click(screen.getByRole("radio", { name: "Mal" }));
 
     expect(await screen.findByText(/Parece un día difícil/)).toBeInTheDocument();
-    // El botón Escribir es el de Inicio, no uno repetido en la invitación.
-    expect(screen.queryByRole("link", { name: "Escribir" })).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Escribir" })).toHaveAttribute("href", "/diario");
   });
 
   it("marca la cara del check-in que ya hizo hoy", () => {

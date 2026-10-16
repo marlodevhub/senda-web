@@ -127,6 +127,7 @@
     "goToHistory": "Ver mi historial",
     "checkinThanks": "Gracias por contarnos.",
     "checkinInvitation": "Parece un día difícil. Si quieres, escribir un momento puede ayudarte a ordenarlo.",
+    "checkinInvitationWrite": "Si quieres, cuéntale a tu diario cómo fue tu día.",
     "weekTitle": "Tu semana {week}",
     "weekRange": "{from} – {to}",
     "dayStatusEntry": "{date}: escribiste",

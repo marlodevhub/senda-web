@@ -440,13 +440,13 @@
 }
 
 /*
- * Invitación del check-in (CU-06): sale del botón Escribir, que está justo debajo, como una gota del mismo
- * color que sube estirada, se ensancha con un vaivén de líquido y se asienta como tarjeta; el color del
- * botón se desvanece y aparece el texto. Una gotita queda abajo y vuelve a caer en el botón.
+ * Invitación del check-in (CU-06): cae de las caras como una gota del color del botón Escribir que se
+ * estira hacia abajo, se ensancha con un vaivén de líquido y se asienta como tarjeta; el color se desvanece
+ * y aparecen el texto y el botón. Una gotita la sigue desde arriba y se funde en ella.
  */
 @media (prefers-reduced-motion: no-preference) {
   .liquid-rise {
-    transform-origin: 50% 100%;
+    transform-origin: 50% 0;
     animation: liquid-rise 0.95s both;
   }
   .liquid-rise::before {
@@ -463,11 +463,11 @@
     content: "";
     position: absolute;
     left: 50%;
-    bottom: -12px;
+    top: -12px;
     width: 18px;
     height: 18px;
     margin-left: -9px;
-    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
     background-image: var(--grad-hero);
     pointer-events: none;
     animation: liquid-drop 0.95s ease-in both;
@@ -485,7 +485,7 @@
 }
 
 @keyframes liquid-rise {
-  0% { transform: translateY(26px) scale(0.08, 0.12); border-radius: 50%; animation-timing-function: cubic-bezier(.2, .8, .3, 1); }
+  0% { transform: translateY(-26px) scale(0.08, 0.12); border-radius: 50%; animation-timing-function: cubic-bezier(.2, .8, .3, 1); }
   28% { transform: translateY(0) scale(0.3, 1.08); border-radius: 45% 45% 40% 40%; animation-timing-function: cubic-bezier(.3, .7, .3, 1); }
   48% { transform: scale(1.06, 0.9); border-radius: 30px 22px 28px 20px; animation-timing-function: ease-in-out; }
   64% { transform: scale(0.97, 1.05); border-radius: 18px 26px 20px 24px; animation-timing-function: ease-in-out; }
@@ -499,11 +499,11 @@
 }
 
 @keyframes liquid-drop {
-  0% { opacity: 0; transform: translateY(-6px) scale(0.6); }
-  22% { opacity: 1; transform: translateY(0) scale(1, 1.25); }
-  55% { opacity: 1; transform: translateY(2px) scale(0.85); }
-  85% { opacity: 1; transform: translateY(16px) scale(0.35); }
-  100% { opacity: 0; transform: translateY(20px) scale(0); }
+  0% { opacity: 0; transform: translateY(-8px) scale(0.6); }
+  22% { opacity: 1; transform: translateY(-4px) scale(1, 1.25); }
+  55% { opacity: 1; transform: translateY(0) scale(0.85); }
+  85% { opacity: 1; transform: translateY(10px) scale(0.35); }
+  100% { opacity: 0; transform: translateY(14px) scale(0); }
 }
 
 @keyframes liquid-text {
