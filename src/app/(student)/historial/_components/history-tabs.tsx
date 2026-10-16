@@ -15,6 +15,7 @@ export function HistoryTabs() {
   return (
     <PillTabs
       label={t("history.title")}
+      tone="ember"
       tabs={[
         { href: "/historial", label: t("history.tabAll"), icon: BookOpen, active: pathname === "/historial" },
         { href: PENDING_HREF, label: t("history.tabPending"), icon: Feather, active: pathname === PENDING_HREF },

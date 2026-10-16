@@ -116,6 +116,10 @@
   --leaf-from: #dcf5e1;
   --leaf-to: #b5e5c0;
   --leaf-ink: #1e4d33;
+  /* Degradado naranja de las pestañas de Historial. */
+  --ember-from: #FFE1C4;
+  --ember-to: #FFBE86;
+  --ember-ink: #5A2C0E;
   /* Preguntas del Diario: el rojo del botón principal (4,8:1 sobre la hoja blanca). */
   --prompt-red: #C4466A;
 
@@ -196,6 +200,9 @@
   --leaf-from: #2c5a3e;
   --leaf-to: #3d7a52;
   --leaf-ink: #e8f6ec;
+  --ember-from: #7A3B14;
+  --ember-to: #9C4C1B;
+  --ember-ink: #FFEBDB;
   --prompt-red: #F0A0AF;
 
   --primary: var(--bloom);

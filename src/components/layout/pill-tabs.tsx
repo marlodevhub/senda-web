@@ -6,11 +6,25 @@ import { cn } from "@/lib/utils";
 
 export type PillTab = { href: string; label: string; icon: LucideIcon; active: boolean };
 
+const TONES = {
+  leaf: "bg-[linear-gradient(135deg,var(--leaf-from),var(--leaf-to))] text-(--leaf-ink)",
+  ember: "bg-[linear-gradient(135deg,var(--ember-from),var(--ember-to))] text-(--ember-ink)",
+} as const;
+
 /**
- * Pestañas en píldora (Progreso, Historial), como la de Guiado/Libre del Diario, en los verdes del jardín
- * (--leaf-*, con su versión para el modo oscuro). Cada pestaña es una ruta.
+ * Pestañas en píldora (Progreso, Historial), como la de Guiado/Libre del Diario. La activa va en un degradado:
+ * verde del jardín (`leaf`, Progreso) o naranja (`ember`, Historial), cada uno con su versión para el modo oscuro.
+ * Cada pestaña es una ruta.
  */
-export function PillTabs({ label, tabs }: { label: string; tabs: PillTab[] }) {
+export function PillTabs({
+  label,
+  tabs,
+  tone = "leaf",
+}: {
+  label: string;
+  tabs: PillTab[];
+  tone?: keyof typeof TONES;
+}) {
   return (
     <div
       role="tablist"
@@ -25,9 +39,7 @@ export function PillTabs({ label, tabs }: { label: string; tabs: PillTab[] }) {
           aria-selected={active}
           className={cn(
             "flex flex-1 items-center justify-center gap-2 rounded-full py-2.5 text-base font-semibold transition-all focus-visible:outline-2 focus-visible:outline-ring",
-            active
-              ? "bg-[linear-gradient(135deg,var(--leaf-from),var(--leaf-to))] text-(--leaf-ink) shadow-card"
-              : "text-muted-foreground hover:text-foreground",
+            active ? cn(TONES[tone], "shadow-card") : "text-muted-foreground hover:text-foreground",
           )}
         >
           <Icon className="size-4" aria-hidden />
