@@ -223,11 +223,13 @@
 }
 
 /*
- * Tema "ocean" (CU-17/CU-20): con Hombre, el acento rosado pasa a azules. Solo cambia el acento (botones, nombre
- * del saludo, preguntas del Diario, selección del menú); el resto de la paleta y las caritas siguen igual. El
+ * Tema "ocean" (CU-17/CU-20): con Hombre, el acento rosado pasa a azules y el fondo claro se vuelve azulado. Cambia
+ * el acento (botones, nombre del saludo, preguntas del Diario, selección del menú) y el fondo; las caritas siguen igual. El
  * texto blanco de los botones sobre --grad-hero cumple 4,5:1.
  */
 [data-palette="ocean"] {
+  /* Fondo con un toque azulado en lugar del verdoso (solo en modo claro). */
+  --paper: #EAEDF4;
   --bloom: #4F86C6;
   --bloom-ink: #1D3A63;
   --bloom-tint: #E0EBF8;
@@ -240,6 +242,8 @@
 }
 
 .dark[data-palette="ocean"] {
+  /* El fondo de "ocean" claro pisaría el oscuro (misma especificidad que .dark): se repite el de .dark. */
+  --paper: #211C2B;
   --bloom: #8FB8EC;
   --bloom-ink: #DCE9FA;
   --bloom-tint: #1E2B42;
