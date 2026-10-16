@@ -48,11 +48,9 @@ export function HomePageClient() {
   );
 
   return (
-    // Escritorio con alto suficiente (`fit`): todo cabe en la ventana, sin scroll de página; solo la lista de frases
-    // por reescribir tiene scroll propio. main tiene 2,5rem de padding arriba y abajo.
-    <div className="flex flex-col gap-5 fit:h-[calc(100dvh-5rem)] fit:overflow-hidden">
+    <div className="flex flex-col gap-5">
       {/* El saludo grande; debajo, en una línea, el día de la senda y la fecha separados por una raya. */}
-      <header className="flex shrink-0 flex-col gap-1.5">
+      <header className="flex flex-col gap-1.5">
         <h1 className="font-heading text-3xl leading-tight font-bold text-foreground lg:text-4xl">
           {home.preferredName
             ? t.rich("home.greetingNamed", {
@@ -98,13 +96,13 @@ export function HomePageClient() {
         </div>
       ) : (
         // Escritorio: a la izquierda lo de hoy (check-in con escribir, frase pendiente); a la derecha la semana.
-        <div className="flex flex-col gap-5 lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:items-start lg:gap-6 fit:min-h-0 fit:flex-1 fit:items-stretch">
-          <div className="flex flex-col gap-5 lg:order-1 fit:min-h-0">
+        <div className="flex flex-col gap-5 lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:items-start lg:gap-6">
+          <div className="flex flex-col gap-5 lg:order-1">
             {/* El botón Escribir aparece dentro del check-in al marcar una cara. */}
             <CheckIn initialMood={home.checkinMood} />
 
             {/* El tutorial ilumina aquí el camino a la Reescritura. */}
-            <div data-tour="frase-pendiente" className="fit:flex fit:min-h-0 fit:flex-1 fit:flex-col">
+            <div data-tour="frase-pendiente">
               {/* Móvil y tablet: la frase más reciente; escritorio: todas, cada una lleva a Reescribir. */}
               <div className="lg:hidden">
                 {pending ? (
@@ -118,9 +116,9 @@ export function HomePageClient() {
                   <NoPendingPhrase />
                 )}
               </div>
-              <div className="hidden lg:block fit:flex fit:min-h-0 fit:flex-1 fit:flex-col">
+              <div className="hidden lg:block">
                 {(home.pendingPhrases ?? []).length > 0 ? (
-                  <PendingPhraseList phrases={home.pendingPhrases} className="fit:min-h-0 fit:flex-1" />
+                  <PendingPhraseList phrases={home.pendingPhrases} />
                 ) : (
                   <NoPendingPhrase />
                 )}
@@ -129,9 +127,9 @@ export function HomePageClient() {
             <HomeNotices newSummary={home.newSummary} />
           </div>
 
-          <div className="flex flex-col gap-5 lg:order-2 fit:min-h-0 fit:gap-4">
+          <div className="flex flex-col gap-5 lg:order-2">
             {weekCalendar}
-            <div className="grid gap-5 sm:grid-cols-2 fit:gap-4">
+            <div className="grid gap-5 sm:grid-cols-2">
               {home.goal && <GoalRing daysWithEntry={home.goal.daysWithEntry} goal={home.goal.goal} />}
               <MoodWeek days={home.weekDays} />
             </div>

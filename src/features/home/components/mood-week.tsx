@@ -22,19 +22,15 @@ export function MoodWeek({ days }: { days: HomeWeekDay[] }) {
   const path = marked.map((p, i) => `${i === 0 ? "M" : "L"}${x(p.index)} ${y(p.mood)}`).join(" ");
 
   return (
-    <section
-      aria-labelledby="home-mood-week"
-      className="flex flex-col gap-3 rounded-lg bg-card p-5 shadow-card fit:justify-center fit:p-4"
-    >
-      <h2 id="home-mood-week" className="font-heading text-lg font-bold text-foreground fit:text-base">
+    <section aria-labelledby="home-mood-week" className="flex flex-col gap-3 rounded-lg bg-card p-5 shadow-card">
+      <h2 id="home-mood-week" className="font-heading text-lg font-bold text-foreground">
         {t("home.moodWeekTitle")}
       </h2>
       {marked.length === 0 ? (
         <p className="flex flex-1 items-center text-base text-muted-foreground">{t("home.moodWeekEmpty")}</p>
       ) : (
         <>
-          {/* Sin scroll (`fit`): solo las caras de la semana, sin la línea. */}
-          <svg viewBox={`0 0 ${WIDTH} ${HEIGHT}`} className="h-auto w-full fit:hidden" aria-hidden>
+          <svg viewBox={`0 0 ${WIDTH} ${HEIGHT}`} className="h-auto w-full" aria-hidden>
             <path d={`M${x(0)} ${HEIGHT - PAD} H${x(COLUMNS - 1)}`} stroke="var(--border)" strokeDasharray="3 5" />
             {marked.length > 1 && (
               <path
@@ -69,7 +65,7 @@ export function MoodWeek({ days }: { days: HomeWeekDay[] }) {
               </li>
             ))}
           </ul>
-          <p className="text-base text-muted-foreground fit:hidden">{t("home.moodWeekHint")}</p>
+          <p className="text-base text-muted-foreground">{t("home.moodWeekHint")}</p>
         </>
       )}
     </section>

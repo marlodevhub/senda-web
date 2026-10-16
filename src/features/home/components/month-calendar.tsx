@@ -51,7 +51,7 @@ export function MonthCalendar({ days, today }: { days: HomeWeekDay[]; today: num
   };
 
   return (
-    <div className="flex flex-col gap-3 fit:gap-2">
+    <div className="flex flex-col gap-3">
       <Calendar
         locale={es}
         weekStartsOn={1}
@@ -73,14 +73,14 @@ export function MonthCalendar({ days, today }: { days: HomeWeekDay[]; today: num
           labelPrevious: () => t("home.monthPrev"),
           labelNext: () => t("home.monthNext"),
         }}
-        className="w-full bg-transparent p-0 [--cell-size:--spacing(11)] fit:[--cell-size:--spacing(8)]"
+        className="w-full bg-transparent p-0 [--cell-size:--spacing(11)]"
         classNames={{
           root: "w-full",
           month_caption: "flex h-(--cell-size) w-full items-center justify-start",
           caption_label: "font-heading text-lg font-bold text-foreground capitalize",
           nav: "absolute inset-x-0 top-0 flex w-full items-center justify-end gap-1",
           weekday: "flex-1 text-base font-normal text-muted-foreground capitalize select-none",
-          week: "mt-1.5 flex w-full fit:mt-0.5",
+          week: "mt-1.5 flex w-full",
           day: "flex flex-1 items-center justify-center p-0 text-center select-none",
           today: "",
           outside: "",
@@ -91,7 +91,7 @@ export function MonthCalendar({ days, today }: { days: HomeWeekDay[]; today: num
           Day: ({ day: _day, modifiers: _modifiers, className, children, ...props }) => (
             <td {...props} className={cn("flex flex-1 items-center justify-center p-0", className)}>
               {children !== undefined && children !== false && (
-                <span className="flex size-10 items-center justify-center rounded-full text-base text-muted-foreground tabular-nums fit:size-8">
+                <span className="flex size-10 items-center justify-center rounded-full text-base text-muted-foreground tabular-nums">
                   {children}
                 </span>
               )}
@@ -100,7 +100,7 @@ export function MonthCalendar({ days, today }: { days: HomeWeekDay[]; today: num
         }}
       />
 
-      <ul className="flex flex-wrap gap-x-4 gap-y-1 text-base text-muted-foreground fit:gap-x-3">
+      <ul className="flex flex-wrap gap-x-4 gap-y-1 text-base text-muted-foreground">
         <Legend swatch="bg-sprout" label={t("home.legendEntry")} />
         <Legend swatch="bg-checkin" label={t("home.legendMood")} />
         <Legend swatch="ring-2 ring-bloom" label={t("home.legendToday")} />

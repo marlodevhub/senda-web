@@ -53,14 +53,11 @@ const DIMENSION_DOT: Record<Dimension, string> = {
  * CU-04 con ese hallazgo; debajo, su tipo en lenguaje amable (el mismo del Espejo) como texto, con un punto del
  * color de su dimensión. Nunca como etiqueta clínica.
  */
-export function PendingPhraseList({ phrases, className }: { phrases: HomePendingPhrase[]; className?: string }) {
+export function PendingPhraseList({ phrases }: { phrases: HomePendingPhrase[] }) {
   const t = useTranslations();
 
   return (
-    <section
-      aria-labelledby="pending-list"
-      className={cn("flex flex-col gap-4 rounded-lg bg-card p-5 shadow-card", className)}
-    >
+    <section aria-labelledby="pending-list" className="flex flex-col gap-4 rounded-lg bg-card p-5 shadow-card">
       <header className="flex items-start gap-3">
         <span
           aria-hidden
@@ -79,7 +76,7 @@ export function PendingPhraseList({ phrases, className }: { phrases: HomePending
         </span>
       </header>
 
-      <ul className="flex max-h-[28rem] flex-col gap-2 overflow-y-auto pr-1 fit:max-h-none fit:min-h-0 fit:flex-1">
+      <ul className="flex max-h-[28rem] flex-col gap-2 overflow-y-auto pr-1">
         {phrases.map((phrase) => (
           <li key={phrase.findingId}>
             <Link
