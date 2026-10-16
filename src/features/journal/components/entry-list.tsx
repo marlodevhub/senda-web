@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { ChevronRight, SlidersHorizontal, X } from "lucide-react";
+import { ChevronRight, Feather, SlidersHorizontal, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Drawer, DrawerClose, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
 import { MoodOrb, type Mood } from "@/components/icons/mood-orb";
@@ -41,15 +41,19 @@ function groupByWeek(items: JournalEntrySummary[]): { week: number; items: Journ
 }
 
 /**
- * CU-11: historial filtrable, 20 por página con "Ver más" (RN-HI-01/02).
+ * CU-11: historial filtrable, 20 por página con "Ver más" (RN-HI-01/02). Con `pendingOnly`, solo los registros
+ * con frases por reescribir (pestaña "Por reescribir"); cada registro dice cuántas le faltan.
  * Tablet y escritorio: la lista y, al costado, el panel de filtros fijo.
  * Móvil: los filtros en un drawer y los activos como chips que se quitan.
  */
-export function EntryList() {
+export function EntryList({ pendingOnly = false }: { pendingOnly?: boolean }) {
   const t = useTranslations();
   const [filters, setFilters] = useState<HistoryFilterValues>({});
 
-  const { data, isPending, hasNextPage, fetchNextPage, isFetchingNextPage } = useHistory(filters);
+  const { data, isPending, hasNextPage, fetchNextPage, isFetchingNextPage } = useHistory({
+    ...filters,
+    pending: pendingOnly,
+  });
   const items = data?.pages.flatMap((p) => p.items) ?? [];
   const activeCount = [filters.week, filters.dimension, filters.context].filter((v) => v !== undefined).length;
   const hasFilters = activeCount > 0;
@@ -143,16 +147,18 @@ export function EntryList() {
         {!isPending && items.length === 0 && (
           <div className="flex flex-col items-center gap-3 rounded-lg bg-card px-6 py-12 text-center shadow-card">
             <p className="text-base text-muted-foreground">
-              {hasFilters ? t("history.noResults") : t("history.empty")}
+              {hasFilters ? t("history.noResults") : t(pendingOnly ? "history.noPending" : "history.empty")}
             </p>
             {hasFilters ? (
               <Button variant="outline" onClick={() => setFilters({})}>
                 {t("history.clearFilters")}
               </Button>
             ) : (
-              <Button variant="hero" className="rounded-full" asChild>
-                <Link href="/diario">{t("history.writeCta")}</Link>
-              </Button>
+              !pendingOnly && (
+                <Button variant="hero" className="rounded-full" asChild>
+                  <Link href="/diario">{t("history.writeCta")}</Link>
+                </Button>
+              )
             )}
           </div>
         )}
@@ -209,6 +215,12 @@ function EntryRow({ item }: { item: JournalEntrySummary }) {
           <Tag className="bg-muted text-muted-foreground">
             {t("history.findingsCount", { count: item.findingsCount })}
           </Tag>
+          {item.pendingCount > 0 && (
+            <Tag className="bg-celeste text-foreground">
+              <Feather className="size-3.5" aria-hidden />
+              {t("history.pendingCount", { count: item.pendingCount })}
+            </Tag>
+          )}
           {item.rewritesCount > 0 && (
             <Tag className="bg-sprout-tint text-sprout-ink">
               {t("history.rewritesCount", { count: item.rewritesCount })}

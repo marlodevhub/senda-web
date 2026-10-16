@@ -310,6 +310,8 @@
     "title": "Historial",
     "tabAll": "Mis registros",
     "tabPending": "Por reescribir",
+    "noPending": "No tienes registros con frases por reescribir.",
+    "pendingCount": "{count, plural, one {# por reescribir} other {# por reescribir}}",
     "empty": "Aún no tienes registros. ¿Escribimos el primero?",
     "writeCta": "Escribir",
     "noResults": "No hay registros con esos filtros.",
