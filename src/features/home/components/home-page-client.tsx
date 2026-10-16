@@ -37,7 +37,15 @@ export function HomePageClient() {
 
   const pending = home.pendingPhrase;
 
-  const weekCalendar = <WeekOverview week={home.week} days={home.weekDays} today={home.day} goal={home.goal} />;
+  const weekCalendar = (
+    <WeekOverview
+      week={home.week}
+      days={home.weekDays}
+      journeyDays={home.journeyDays ?? []}
+      today={home.day}
+      goal={home.goal}
+    />
+  );
 
   return (
     <div className="flex flex-col gap-5">

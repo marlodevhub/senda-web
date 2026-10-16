@@ -144,6 +144,11 @@
     "statJourney": "Día de tu senda",
     "statWeek": "Semana",
     "statOf": "de {total}",
+    "monthPrev": "Mes anterior",
+    "monthNext": "Mes siguiente",
+    "legendEntry": "Escribiste",
+    "legendToday": "Hoy",
+    "legendEmpty": "Sin registro",
     "moodWeekTitle": "Tu ánimo esta semana",
     "moodWeekEmpty": "Marca cómo llegas cada día para ver tu semana aquí.",
     "moodWeekHint": "Cada cara es un día; solo te compara contigo."

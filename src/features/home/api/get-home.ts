@@ -36,6 +36,8 @@ export type Home = {
   /** Semana actual (1..4) y sus 7 días, para el calendario. */
   week: number;
   weekDays: HomeWeekDay[];
+  /** Los 28 días de la senda, para el calendario por mes (escritorio). */
+  journeyDays: HomeWeekDay[];
   /** Cómo quiere que lo llamen ("Hola, Mario."), o null si todavía no lo dio. */
   preferredName: string | null;
 };

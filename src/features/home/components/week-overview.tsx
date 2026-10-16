@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import { Check } from "lucide-react";
 import type { HomeWeekDay } from "@/features/home/api/get-home";
+import { MonthCalendar } from "@/features/home/components/month-calendar";
 import { cn } from "@/lib/utils";
 
 const INTERVENTION_DAYS = 28;
@@ -18,17 +19,19 @@ function formatDate(date: string, options: Intl.DateTimeFormatOptions): string {
 
 /**
  * CU-05: la semana actual como calendario (días con registro, hoy y los que faltan) y tres datos que solo
- * describen: días con registro sobre la meta, día de la senda y semana. Sin rachas ni porcentajes (regla de
- * coherencia 6, RN-TR-04).
+ * describen: días con registro sobre la meta, día de la senda y semana. En escritorio, en lugar de la semana va
+ * el mes completo, navegable (MonthCalendar). Sin rachas ni porcentajes (regla de coherencia 6, RN-TR-04).
  */
 export function WeekOverview({
   week,
   days,
+  journeyDays,
   today,
   goal,
 }: {
   week: number;
   days: HomeWeekDay[];
+  journeyDays: HomeWeekDay[];
   today: number;
   goal: { daysWithEntry: number; goal: number } | null;
 }) {
@@ -39,7 +42,7 @@ export function WeekOverview({
 
   return (
     <section aria-labelledby="home-week" className="flex flex-col gap-4 rounded-lg bg-card p-5 shadow-card">
-      <div className="flex items-baseline justify-between gap-2">
+      <div className="flex items-baseline justify-between gap-2 lg:sr-only">
         <h2 id="home-week" className="font-heading text-lg font-bold text-foreground">
           {t("home.weekTitle", { week })}
         </h2>
@@ -51,7 +54,13 @@ export function WeekOverview({
         </p>
       </div>
 
-      <ol className="grid grid-cols-7 gap-1">
+      {journeyDays.length > 0 && (
+        <div className="hidden lg:block">
+          <MonthCalendar days={journeyDays} today={today} />
+        </div>
+      )}
+
+      <ol className="grid grid-cols-7 gap-1 lg:hidden">
         {days.map((day) => {
           const isToday = day.interventionDay === today;
           const isFuture = day.interventionDay > today;
