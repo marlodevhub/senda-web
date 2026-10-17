@@ -15,6 +15,9 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useCompleteWelcome } from "@/features/welcome/api/use-welcome";
 import { applyPalette } from "@/lib/palette";
+import { useMediaQuery } from "@/hooks/use-media-query";
+import { SendaLogo } from "@/components/brand/senda-logo";
+import { JournalScene, type ScenePalette } from "@/features/welcome/components/journal-scene";
 import type { Gender } from "@/types/gender";
 
 const SCREENS = ["whatItIs", "whatItIsNot", "howToUse"] as const;
@@ -38,6 +41,55 @@ const SLIDE_STYLE: Record<Step, { from: string; to: string; ink: string; emotion
   identity: { from: "#EC8DB0", to: "#A63A64", ink: "#8E3156", emotion: "calm" },
 };
 
+/** En escritorio, el paisaje de cada pantalla, en sus mismos tonos (la ropa en un color que contrasta). */
+const SCENE_PALETTE: Record<Step, ScenePalette> = {
+  whatItIs: {
+    sky: "#E3F5E7",
+    far: "#B7E4C1",
+    near: "#7CC98C",
+    ground: "#5AAE70",
+    leaf: "#2F8550",
+    accent: "#F59A5E",
+    accent2: "#6FB6EC",
+  },
+  whatItIsNot: {
+    sky: "#FFEBDD",
+    far: "#FBC7A2",
+    near: "#F59A5E",
+    ground: "#E07A3E",
+    leaf: "#C2531F",
+    accent: "#6FB6EC",
+    accent2: "#7CC98C",
+  },
+  howToUse: {
+    sky: "#E1F0FC",
+    far: "#B4D8F5",
+    near: "#6FB6EC",
+    ground: "#3F8FD0",
+    leaf: "#1F6FB8",
+    accent: "#F59A5E",
+    accent2: "#F2C95C",
+  },
+  question: {
+    sky: "#EEE7FA",
+    far: "#D2C3F0",
+    near: "#A78BE0",
+    ground: "#8466C9",
+    leaf: "#6440AE",
+    accent: "#F2C95C",
+    accent2: "#7CC98C",
+  },
+  identity: {
+    sky: "#FCE6EE",
+    far: "#F5C0D3",
+    near: "#EC8DB0",
+    ground: "#D46A93",
+    leaf: "#A63A64",
+    accent: "#6FB6EC",
+    accent2: "#F2C95C",
+  },
+};
+
 /** Burbujas de fondo (posición y tamaño en %), cada una flotando a su ritmo. */
 const BUBBLES = [
   { top: 12, left: 8, size: 14, delay: "0s" },
@@ -52,6 +104,8 @@ const BUBBLES = [
  * (con Línea 113 y SAMU 106) y cómo se usa —, la pregunta opcional "Mi punto de partida" y, la primera vez, "Cuéntanos
  * de ti" al final (cómo quiere que lo llamen y su sexo, obligatorios; el sexo elige el tema de color). Se pasa con
  * "Continuar" o deslizando. "Empezar" la marca como vista y lleva a Inicio, donde arranca el tutorial.
+ * - Escritorio: el texto y los botones a la izquierda y, a la derecha, un paisaje con alguien que escribe su diario en
+ *   la laptop y otra persona con su celular (JournalScene), que cambia por completo de color con cada pantalla.
  * - `review` (desde Perfil, RN-AC-13): solo las 3 pantallas; "Listo" vuelve a Perfil sin guardar nada.
  */
 export function WelcomeFlow({
@@ -80,6 +134,8 @@ export function WelcomeFlow({
   const [gender, setGender] = useState<Gender>();
   const [showIdentityErrors, setShowIdentityErrors] = useState(false);
   const headingRefs = useRef<(HTMLHeadingElement | null)[]>([]);
+  // Escritorio: el texto a la izquierda y el paisaje a la derecha (en vez del carrusel del móvil).
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
   const pointerStartX = useRef<number | null>(null);
   const moved = useRef(false);
 
@@ -141,6 +197,75 @@ export function WelcomeFlow({
     if (dx >= SWIPE_THRESHOLD && index > 0) goTo(index - 1);
   }
 
+  /** Lo de cada pantalla debajo del título: su texto o sus campos (los mismos en móvil y en escritorio). */
+  function slideBody(slide: Step) {
+    return slide === "question" ? (
+      <div className="flex flex-col gap-3">
+        <Label htmlFor="startingPoint" className="text-base leading-snug font-semibold text-white">
+          {t("welcome.startingPoint")}
+        </Label>
+        <Textarea
+          id="startingPoint"
+          value={startingPoint}
+          maxLength={MAX_STARTING_POINT}
+          onChange={(e) => setStartingPoint(e.target.value)}
+          aria-describedby="startingPointHint"
+          rows={4}
+          className="bg-card focus-visible:ring-white"
+        />
+        <p id="startingPointHint" className="text-base text-white">
+          {t("welcome.startingPointHint")}
+        </p>
+      </div>
+    ) : slide === "identity" ? (
+      <div className="flex flex-col gap-4">
+        <p className="text-base leading-relaxed text-white">{t("welcome.identityIntro")}</p>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="preferredName" className="text-base font-semibold text-white">
+            {t("welcome.nameLabel")}
+          </Label>
+          <Input
+            id="preferredName"
+            value={name}
+            maxLength={MAX_NAME}
+            autoComplete="given-name"
+            className="bg-card focus-visible:ring-white"
+            aria-invalid={(showIdentityErrors && nameMissing) || undefined}
+            onChange={(e) => setName(e.target.value)}
+          />
+          {showIdentityErrors && nameMissing && (
+            <FieldError message="welcome.nameRequired" className="font-semibold text-white" />
+          )}
+        </div>
+        <div className="flex flex-col gap-2">
+          <p id="genderLabel" className="text-base font-semibold text-white">
+            {t("welcome.genderLabel")}
+          </p>
+          <GenderPicker
+            labelledBy="genderLabel"
+            value={gender}
+            onChange={setGender}
+            invalid={showIdentityErrors && !gender}
+            onColor
+          />
+          {showIdentityErrors && !gender && (
+            <FieldError message="welcome.genderRequired" className="font-semibold text-white" />
+          )}
+        </div>
+      </div>
+    ) : (
+      <p className="text-base leading-relaxed text-white sm:text-lg">{t(`welcome.${slide}Body`)}</p>
+    );
+  }
+
+  function slideTitle(slide: Step) {
+    return slide === "question"
+      ? t("welcome.startingPointTitle")
+      : slide === "identity"
+        ? t("welcome.identityTitle")
+        : t(`welcome.${slide}Title`);
+  }
+
   const primaryLabel = !onLastScreen
     ? t("welcome.continue")
     : review
@@ -148,6 +273,106 @@ export function WelcomeFlow({
       : complete.isPending
         ? t("welcome.starting")
         : t("welcome.start");
+
+  if (isDesktop) {
+    return (
+      <div
+        className="fixed inset-0 z-50 flex overflow-clip text-white transition-colors duration-700 motion-reduce:transition-none"
+        style={{ backgroundColor: style.to }}
+      >
+        <div className="relative z-10 flex w-[44%] max-w-2xl shrink-0 flex-col overflow-y-auto px-14 py-10 xl:px-20">
+          <div className="flex items-center justify-between gap-4">
+            <span className="flex items-center gap-2 font-heading text-xl font-extrabold">
+              <SendaLogo className="size-7" />
+              Senda
+            </span>
+            <ol
+              className="flex gap-2"
+              aria-label={t("welcome.progressLabel", { step: index + 1, total: steps.length })}
+            >
+              {steps.map((slide, i) => (
+                <li
+                  key={slide}
+                  aria-current={i === index ? "step" : undefined}
+                  className={cn(
+                    "h-2 rounded-full bg-white transition-all duration-300",
+                    i === index ? "w-6" : "w-2 opacity-50",
+                  )}
+                />
+              ))}
+            </ol>
+          </div>
+
+          {/* Cada pantalla entra con un leve deslizamiento (key: se vuelve a montar al cambiar). */}
+          <section key={step} aria-live="polite" className="welcome-desk-in my-auto flex flex-col gap-5 py-10">
+            <h2
+              ref={(el) => {
+                headingRefs.current[index] = el;
+              }}
+              tabIndex={-1}
+              className="font-heading text-5xl leading-[1.05] font-extrabold outline-none xl:text-6xl"
+            >
+              {slideTitle(step)}
+            </h2>
+            <span aria-hidden className="h-1 w-16 rounded-full bg-white/70" />
+            <div className="max-w-lg [&_p]:text-lg">{slideBody(step)}</div>
+          </section>
+
+          <div className="flex flex-wrap items-center gap-3">
+            {index > 0 && (
+              <button
+                type="button"
+                aria-label={t("common.back")}
+                onClick={() => goTo(index - 1)}
+                className="flex size-14 items-center justify-center rounded-full bg-white/20 transition-colors hover:bg-white/30 focus-visible:outline-2 focus-visible:outline-white"
+              >
+                <ArrowLeft className="size-5" aria-hidden />
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={primaryAction}
+              disabled={complete.isPending}
+              className="h-14 min-w-48 rounded-full bg-white px-8 text-lg font-bold shadow-lg transition-[transform,color] duration-300 hover:scale-[1.02] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white active:scale-[0.98] disabled:opacity-80 motion-reduce:transition-none"
+              style={{ color: style.ink }}
+            >
+              {primaryLabel}
+            </button>
+            {!review && questionIndex > index && (
+              <button
+                type="button"
+                onClick={() => goTo(questionIndex)}
+                className="min-h-11 rounded-full px-4 text-base font-semibold text-white hover:bg-white/20 focus-visible:outline-2 focus-visible:outline-white"
+              >
+                {t("welcome.skip")}
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* El paisaje: cambia por completo de color con cada pantalla. Un borde ondulado lo une al panel del texto. */}
+        {/* La escena entra entera (abajo); arriba el cielo sigue con el mismo color. */}
+        <div
+          className="relative flex-1 transition-colors duration-700 motion-reduce:transition-none"
+          style={{ backgroundColor: SCENE_PALETTE[step].sky }}
+        >
+          <JournalScene palette={SCENE_PALETTE[step]} className="absolute inset-0 h-full w-full" />
+          <svg
+            aria-hidden
+            viewBox="0 0 100 700"
+            preserveAspectRatio="none"
+            className="absolute inset-y-0 -left-px h-full w-20"
+          >
+            <path
+              d="M0 0 H54 C96 120 18 240 66 360 C108 470 26 590 74 700 H0 Z"
+              fill={style.to}
+              className="transition-[fill] duration-700 motion-reduce:transition-none"
+            />
+          </svg>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -213,72 +438,10 @@ export function WelcomeFlow({
                   tabIndex={-1}
                   className="text-center font-heading text-3xl leading-tight font-extrabold drop-shadow-sm outline-none sm:text-4xl"
                 >
-                  {slide === "question"
-                    ? t("welcome.startingPointTitle")
-                    : slide === "identity"
-                      ? t("welcome.identityTitle")
-                      : t(`welcome.${slide}Title`)}
+                  {slideTitle(slide)}
                 </h2>
 
-                <div className="mt-5 rounded-3xl bg-black/15 p-5 backdrop-blur-sm">
-                  {slide === "question" ? (
-                    <div className="flex flex-col gap-3">
-                      <Label htmlFor="startingPoint" className="text-base leading-snug font-semibold text-white">
-                        {t("welcome.startingPoint")}
-                      </Label>
-                      <Textarea
-                        id="startingPoint"
-                        value={startingPoint}
-                        maxLength={MAX_STARTING_POINT}
-                        onChange={(e) => setStartingPoint(e.target.value)}
-                        aria-describedby="startingPointHint"
-                        rows={4}
-                        className="bg-card focus-visible:ring-white"
-                      />
-                      <p id="startingPointHint" className="text-base text-white">
-                        {t("welcome.startingPointHint")}
-                      </p>
-                    </div>
-                  ) : slide === "identity" ? (
-                    <div className="flex flex-col gap-4">
-                      <p className="text-base leading-relaxed text-white">{t("welcome.identityIntro")}</p>
-                      <div className="flex flex-col gap-2">
-                        <Label htmlFor="preferredName" className="text-base font-semibold text-white">
-                          {t("welcome.nameLabel")}
-                        </Label>
-                        <Input
-                          id="preferredName"
-                          value={name}
-                          maxLength={MAX_NAME}
-                          autoComplete="given-name"
-                          className="bg-card focus-visible:ring-white"
-                          aria-invalid={(showIdentityErrors && nameMissing) || undefined}
-                          onChange={(e) => setName(e.target.value)}
-                        />
-                        {showIdentityErrors && nameMissing && (
-                          <FieldError message="welcome.nameRequired" className="font-semibold text-white" />
-                        )}
-                      </div>
-                      <div className="flex flex-col gap-2">
-                        <p id="genderLabel" className="text-base font-semibold text-white">
-                          {t("welcome.genderLabel")}
-                        </p>
-                        <GenderPicker
-                          labelledBy="genderLabel"
-                          value={gender}
-                          onChange={setGender}
-                          invalid={showIdentityErrors && !gender}
-                          onColor
-                        />
-                        {showIdentityErrors && !gender && (
-                          <FieldError message="welcome.genderRequired" className="font-semibold text-white" />
-                        )}
-                      </div>
-                    </div>
-                  ) : (
-                    <p className="text-base leading-relaxed text-white sm:text-lg">{t(`welcome.${slide}Body`)}</p>
-                  )}
-                </div>
+                <div className="mt-5 rounded-3xl bg-black/15 p-5 backdrop-blur-sm">{slideBody(slide)}</div>
               </div>
             </section>
           );

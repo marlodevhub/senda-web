@@ -790,3 +790,37 @@
     radial-gradient(ellipse at 20% 0%, var(--flow-tint), transparent 55%),
     radial-gradient(ellipse at 90% 10%, var(--bloom-tint), transparent 50%);
 }
+
+/* Bienvenida en escritorio (JournalScene): al pasar de pantalla, el paisaje cambia de color con una transición. */
+.welcome-scene * {
+  transition: fill 0.8s ease, stroke 0.8s ease;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .welcome-scene-float {
+    animation: auth-float 3.4s ease-in-out infinite alternate;
+  }
+  .welcome-scene-float-slow {
+    animation-duration: 5s;
+  }
+  .welcome-scene-twinkle {
+    animation: welcome-twinkle 2.6s ease-in-out infinite alternate;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .welcome-scene * {
+    transition: none;
+  }
+}
+@keyframes welcome-twinkle {
+  from { opacity: 0.35; }
+  to { opacity: 1; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .welcome-desk-in {
+    animation: welcome-desk-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+}
+@keyframes welcome-desk-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}

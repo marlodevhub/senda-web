@@ -96,6 +96,32 @@ describe("WelcomeFlow", () => {
     expect(screen.queryByRole("button", { name: "Saltar" })).not.toBeInTheDocument();
   });
 
+  it("en escritorio pone el texto y Continuar a la izquierda y el paisaje cambia de color con cada pantalla", async () => {
+    vi.spyOn(window, "matchMedia").mockImplementation(
+      (query: string) =>
+        ({
+          matches: query.includes("min-width: 1024px"),
+          media: query,
+          addEventListener: vi.fn(),
+          removeEventListener: vi.fn(),
+          addListener: vi.fn(),
+          removeListener: vi.fn(),
+          onchange: null,
+          dispatchEvent: vi.fn(),
+        }) as unknown as MediaQueryList,
+    );
+    const user = userEvent.setup();
+    const { container } = renderWithProviders(<WelcomeFlow />);
+
+    expect(screen.getByRole("heading", { name: "Qué es Senda" })).toBeInTheDocument();
+    const scene = container.querySelector("svg.welcome-scene") as SVGElement;
+    expect(scene.style.getPropertyValue("--sky")).toBe("#E3F5E7");
+
+    await user.click(screen.getByRole("button", { name: "Continuar" }));
+    expect(screen.getByRole("heading", { name: "Qué no es" })).toBeInTheDocument();
+    expect(scene.style.getPropertyValue("--sky")).toBe("#FFEBDD");
+  });
+
   it("en modo repaso muestra solo las 3 pantallas y vuelve al perfil sin guardar (RN-AC-13)", async () => {
     const fetchMock = vi.spyOn(globalThis, "fetch");
     const user = userEvent.setup();
