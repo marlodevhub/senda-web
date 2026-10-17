@@ -52,18 +52,18 @@ export function CheckIn({ initialMood }: { initialMood: Mood | null }) {
       <h2 id="checkin-question" className="font-heading text-lg font-bold text-foreground">
         {t("home.checkinQuestion")}
       </h2>
-      <MoodPicker label={t("home.checkinQuestion")} value={mood ?? undefined} onChange={handleChange} />
-      <div aria-live="polite" className="flex flex-col gap-2">
-        {/* La invitación cae de las caras como una gota que se estira y se asienta (liquid-rise en globals.css). */}
-        {mood !== null && (
-          <div
-            key={presses}
-            className={cn(
-              "relative isolate flex flex-col gap-3 rounded-lg bg-card p-4 shadow-card",
-              animate && "liquid-rise",
-            )}
-          >
-            <div className={cn("flex flex-col gap-3", animate && "liquid-rise-text")}>
+      {/* Un solo contenedor: las caras y, al marcar una, debajo la invitación con el botón Escribir. */}
+      <div className="flex flex-col rounded-lg bg-card p-3 shadow-card">
+        <MoodPicker bare label={t("home.checkinQuestion")} value={mood ?? undefined} onChange={handleChange} />
+        <div aria-live="polite">
+          {mood !== null && (
+            <div
+              key={presses}
+              className={cn(
+                "mt-3 flex flex-col gap-3 border-t border-border/70 px-1 pt-3 pb-1",
+                animate && "liquid-rise-text",
+              )}
+            >
               <p className="text-base leading-relaxed text-foreground">
                 {t(`home.checkinInvitation.${INVITATION_KEY[mood]}`)}
               </p>
@@ -76,8 +76,8 @@ export function CheckIn({ initialMood }: { initialMood: Mood | null }) {
                 </Link>
               </Button>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </section>
   );

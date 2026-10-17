@@ -18,12 +18,15 @@ export function MoodPicker({
   value,
   onChange,
   size = "default",
+  bare = false,
   className,
 }: {
   label: string;
   value?: Mood;
   onChange: (mood: Mood) => void;
   size?: "default" | "compact";
+  /** Sin su propia tarjeta: va dentro de otra (el check-in de Inicio, junto con la invitación a escribir). */
+  bare?: boolean;
   className?: string;
 }) {
   const t = useTranslations();
@@ -35,7 +38,11 @@ export function MoodPicker({
     <div
       role="radiogroup"
       aria-label={label}
-      className={cn("flex items-center justify-between gap-1 rounded-lg bg-card px-3 py-3 shadow-card", className)}
+      className={cn(
+        "flex items-center justify-between gap-1",
+        !bare && "rounded-lg bg-card px-3 py-3 shadow-card",
+        className,
+      )}
     >
       {MOODS.map((mood) => {
         const active = value === mood;

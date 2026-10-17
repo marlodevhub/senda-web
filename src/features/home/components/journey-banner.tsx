@@ -6,8 +6,8 @@ import { clampJourneyDay, INTERVENTION_DAYS, INTERVENTION_WEEKS } from "@/lib/jo
 /**
  * CU-05: en qué va de su senda, como una tarjeta destacada al pie del calendario: el día en negrita ("Día 14 de 28") y,
  * en etiquetas, los días con registro sobre la meta y la semana. Solo describe, sin puntaje ni porcentaje (RN-TR-04,
- * reglas de coherencia 2 y 6). La flecha lleva al jardín, donde se ve lo que creció. Verde profundo por el jardín;
- * el texto blanco cumple AA sobre todo el degradado.
+ * reglas de coherencia 2 y 6). La flecha lleva al jardín, donde se ve lo que creció. Los colores siguen el tema
+ * (rosado o azul, claro u oscuro: `--banner-*` en globals.css); el texto blanco cumple AA sobre todo el degradado.
  */
 export function JourneyBanner({
   today,
@@ -26,7 +26,7 @@ export function JourneyBanner({
         day: clampJourneyDay(today),
         total: INTERVENTION_DAYS,
       })}
-      className="group relative isolate flex flex-col gap-3 overflow-hidden rounded-[1.75rem] bg-[linear-gradient(140deg,#2E6B4F_0%,#1D4A37_100%)] p-5 text-white shadow-card transition-transform focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:scale-[0.98]"
+      className="group relative isolate flex flex-col gap-3 overflow-hidden rounded-[1.75rem] bg-[linear-gradient(140deg,var(--banner-from)_0%,var(--banner-to)_100%)] p-5 text-white shadow-card transition-transform focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:scale-[0.98]"
     >
       <JourneyLeaves />
 
@@ -42,11 +42,11 @@ export function JourneyBanner({
 
       <span className="flex flex-wrap gap-2">
         {goal && (
-          <span className="rounded-lg bg-white px-2.5 py-1 text-sm font-semibold text-[#1D4A37] shadow-sm">
+          <span className="rounded-lg bg-(--banner-chip) px-2.5 py-1 text-sm font-semibold text-(--banner-chip-ink) shadow-sm">
             {t("home.journeyBannerDays", { days: goal.daysWithEntry, goal: goal.goal })}
           </span>
         )}
-        <span className="rounded-lg bg-[#CDEFD8] px-2.5 py-1 text-sm font-semibold text-[#1D4A37] shadow-sm">
+        <span className="rounded-lg bg-(--banner-chip-soft) px-2.5 py-1 text-sm font-semibold text-(--banner-chip-soft-ink) shadow-sm">
           {t("home.journeyBannerWeek", { week, total: INTERVENTION_WEEKS })}
         </span>
       </span>
@@ -64,8 +64,8 @@ function JourneyLeaves() {
     >
       <defs>
         <linearGradient id="journey-leaf" x1="0" y1="1" x2="0" y2="0">
-          <stop offset="0" stopColor="#3F9A63" />
-          <stop offset="1" stopColor="#8FD7A0" />
+          <stop offset="0" style={{ stopColor: "var(--banner-leaf-a)" }} />
+          <stop offset="1" style={{ stopColor: "var(--banner-leaf-b)" }} />
         </linearGradient>
         <radialGradient id="journey-glow">
           <stop offset="0" stopColor="#fff" stopOpacity="0.9" />
