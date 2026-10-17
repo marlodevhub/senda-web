@@ -190,21 +190,37 @@ function GardenInfo({ garden, tone }: { garden: Garden; tone: Tone }) {
   );
 }
 
-/** Móvil: de borde a borde, el verde llega hasta detrás del dock. */
+/** Móvil: de borde a borde (en cualquier ancho), el verde llega hasta detrás del dock. */
 function GardenStacked({ garden }: { garden: Garden }) {
   return (
     <>
-      {/* El cielo cubre toda la pantalla, también detrás de la marca, el título y las pestañas (z-10). */}
-      <div aria-hidden className="garden-scene fixed inset-0 z-0">
+      {/*
+        El cielo cubre toda la pantalla, también detrás de la marca, el título y las pestañas (z-10). Abajo es pasto:
+        si el contenido no llena la pantalla, debajo del panel se ve verde y no cielo.
+      */}
+      <div
+        aria-hidden
+        className="garden-scene fixed inset-0 z-0"
+        style={{
+          background:
+            "linear-gradient(to bottom, var(--garden-sky-top), var(--garden-sky-bottom) 45%, var(--garden-sky-bottom) 58%, var(--garden-hill-deep) 58%)",
+        }}
+      >
         <Petals />
       </div>
-      <section aria-labelledby="garden-title" className="garden-tokens relative z-0 -mx-4 -mb-[8.5rem] overflow-hidden">
-        <GardenHeading garden={garden} className="relative px-5 pt-6 text-(--garden-sky-ink)" />
+      {/* Sale de main (que en móvil es angosto) a todo el ancho de la pantalla: sin franjas de cielo a los lados. */}
+      <section
+        aria-labelledby="garden-title"
+        className="garden-tokens relative left-1/2 z-0 -mb-[8.5rem] w-screen -translate-x-1/2 overflow-hidden"
+      >
+        <GardenHeading garden={garden} className="relative mx-auto max-w-xl px-5 pt-6 text-(--garden-sky-ink)" />
         <div className="relative -mt-2">
           <GardenScene garden={garden} />
         </div>
         <div className="relative -mt-px bg-[linear-gradient(to_bottom,var(--garden-hill-mid),var(--garden-hill-deep)_45%,var(--garden-hill-deep))] px-5 pt-2 pb-[calc(2.5rem+8.5rem)]">
-          <GardenInfo garden={garden} tone="hill" />
+          <div className="mx-auto max-w-xl">
+            <GardenInfo garden={garden} tone="hill" />
+          </div>
           <p
             aria-hidden
             className="mt-10 flex items-center justify-center gap-1.5 font-heading text-lg font-bold text-(--garden-panel-ink) opacity-60"

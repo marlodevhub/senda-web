@@ -97,46 +97,53 @@ export function HomePageClient() {
           <HomeNotices newSummary={home.newSummary} />
         </div>
       ) : (
-        // Escritorio: el contenido es lo de hoy (check-in con escribir, frase pendiente, meta y ánimo); el calendario va
-        // en un panel vertical fijo al borde derecho, flotante como la barra lateral (el layout le deja su espacio).
-        // Escritorio: lo de hoy a la izquierda y, en una columna vertical más, la meta y el ánimo de la semana.
-        <div className="flex flex-col gap-5 lg:grid lg:grid-cols-[minmax(0,1fr)_16rem] lg:items-start lg:gap-5 xl:grid-cols-[minmax(0,1fr)_18rem]">
-          <div className="flex flex-col gap-5 lg:order-1">
-            {/* El botón Escribir aparece dentro del check-in al marcar una cara. */}
-            <CheckIn initialMood={home.checkinMood} />
+        // Escritorio: lo de hoy (check-in con escribir, frase pendiente) y la meta y el ánimo; el calendario va en un
+        // panel vertical fijo al borde derecho, flotante como la barra lateral (el layout le deja su espacio).
+        // @container: las columnas dependen del ancho real del contenido (el panel del calendario le quita espacio),
+        // no de la pantalla. Si no entran, todo va apilado: el check-in, la frase y, debajo, la meta y el ánimo.
+        <div className="flex flex-col gap-5">
+          <div className="@container">
+            <div className="flex flex-col gap-5 @[42rem]:grid @[42rem]:grid-cols-[minmax(0,1fr)_16rem] @[42rem]:items-start @[56rem]:grid-cols-[minmax(0,1fr)_18rem]">
+              <div className="flex flex-col gap-5">
+                {/* El botón Escribir aparece dentro del check-in al marcar una cara. */}
+                <CheckIn initialMood={home.checkinMood} />
 
-            {/* Si hoy escribió, el acceso a su Espejo de hoy. */}
-            {home.todayEntry && <TodayMirrorCard entry={home.todayEntry} />}
+                {/* Si hoy escribió, el acceso a su Espejo de hoy. */}
+                {home.todayEntry && <TodayMirrorCard entry={home.todayEntry} />}
 
-            {/* El tutorial ilumina aquí el camino a la Reescritura. */}
-            <div data-tour="frase-pendiente">
-              {/* Móvil y tablet: la frase más reciente; escritorio: todas, cada una lleva a Reescribir. */}
-              <div className="lg:hidden">
-                {pending ? (
-                  <PendingPhraseCard
-                    fragment={pending.fragment}
-                    onRewrite={() => router.push(routes.rewrite(pending.journalEntryId, pending.findingId))}
-                  />
-                ) : (
-                  <NoPendingPhrase />
-                )}
+                {/* El tutorial ilumina aquí el camino a la Reescritura. */}
+                <div data-tour="frase-pendiente">
+                  {/* Móvil y tablet: la frase más reciente; escritorio: todas, cada una lleva a Reescribir. */}
+                  <div className="lg:hidden">
+                    {pending ? (
+                      <PendingPhraseCard
+                        fragment={pending.fragment}
+                        onRewrite={() => router.push(routes.rewrite(pending.journalEntryId, pending.findingId))}
+                      />
+                    ) : (
+                      <NoPendingPhrase />
+                    )}
+                  </div>
+                  <div className="hidden lg:block">
+                    {(home.pendingPhrases ?? []).length > 0 ? (
+                      <PendingPhraseList phrases={home.pendingPhrases} />
+                    ) : (
+                      <NoPendingPhrase />
+                    )}
+                  </div>
+                </div>
+                <HomeNotices newSummary={home.newSummary} />
               </div>
-              <div className="hidden lg:block">
-                {(home.pendingPhrases ?? []).length > 0 ? (
-                  <PendingPhraseList phrases={home.pendingPhrases} />
-                ) : (
-                  <NoPendingPhrase />
-                )}
+
+              {/* Apiladas, la meta y el ánimo van lado a lado si caben. */}
+              <div className="hidden gap-5 lg:grid @[30rem]:grid-cols-2 @[42rem]:grid-cols-1">
+                {home.goal && <GoalRing daysWithEntry={home.goal.daysWithEntry} goal={home.goal.goal} />}
+                <MoodWeek days={home.weekDays} />
               </div>
             </div>
-            <HomeNotices newSummary={home.newSummary} />
           </div>
 
-          <div className="hidden flex-col gap-5 lg:order-2 lg:flex">
-            {home.goal && <GoalRing daysWithEntry={home.goal.daysWithEntry} goal={home.goal.goal} />}
-            <MoodWeek days={home.weekDays} />
-          </div>
-
+          {/* Fuera del @container: un contenedor de consultas sería el bloque contenedor del panel fijo. */}
           <aside
             data-right-rail
             className="flex flex-col gap-5 lg:fixed lg:inset-y-0 lg:right-0 lg:z-10 lg:w-[22rem] lg:p-4 xl:w-[24rem]"
