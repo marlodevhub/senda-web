@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { Amphora, Feather, Trash2 } from "lucide-react";
+import { Amphora, Feather, ScanFace, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { MoodOrb, type Mood } from "@/components/icons/mood-orb";
 import { CareMessage } from "@/components/feedback/care-message";
@@ -138,6 +139,15 @@ export function EntryDetail({ journalEntryId }: { journalEntryId: number }) {
             )}
           </div>
         </div>
+        {/* CU-03: volver a ver el Espejo completo (con "¿Esto refleja lo que escribiste?"). */}
+        {!isRisk && (
+          <Button asChild variant="outline" className="rounded-full">
+            <Link href={routes.mirror(entry.id)}>
+              <ScanFace className="size-4" aria-hidden />
+              {t("history.seeMirror")}
+            </Link>
+          </Button>
+        )}
       </header>
 
       <div className="flex flex-col gap-5 lg:grid lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] lg:items-start lg:gap-6">

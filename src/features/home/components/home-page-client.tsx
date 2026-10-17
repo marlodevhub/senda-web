@@ -11,6 +11,7 @@ import { GoalRing } from "@/features/home/components/goal-ring";
 import { MoodWeek } from "@/features/home/components/mood-week";
 import { WeekOverview } from "@/features/home/components/week-overview";
 import { CheckIn } from "@/features/home/components/check-in";
+import { TodayMirrorCard } from "@/features/home/components/today-mirror-card";
 import { routes } from "@/lib/routes";
 
 /**
@@ -101,6 +102,9 @@ export function HomePageClient() {
           <div className="flex flex-col gap-5 lg:order-1">
             {/* El botón Escribir aparece dentro del check-in al marcar una cara. */}
             <CheckIn initialMood={home.checkinMood} />
+
+            {/* Si hoy escribió, el acceso a su Espejo de hoy. */}
+            {home.todayEntry && <TodayMirrorCard entry={home.todayEntry} />}
 
             {/* El tutorial ilumina aquí el camino a la Reescritura. */}
             <div data-tour="frase-pendiente">

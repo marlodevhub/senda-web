@@ -13,6 +13,13 @@ export type HomePendingPhrase = {
 
 export type HomeGoal = { daysWithEntry: number; goal: number };
 
+/** CU-05: el registro de hoy, para "Tu espejo de hoy". */
+export type HomeTodayEntry = {
+  journalEntryId: number;
+  analysisStatus: "PENDING" | "COMPLETED" | "FAILED" | "RISK";
+  findingsCount: number;
+};
+
 /** CU-05: un día de la semana actual (fecha AAAA-MM-DD en Lima); `mood` es el check-in o el ánimo del registro. */
 export type HomeWeekDay = {
   interventionDay: number;
@@ -29,6 +36,8 @@ export type Home = {
   /** CU-06: la cara marcada hoy (1..5), o null si todavía no marcó. */
   checkinMood: 1 | 2 | 3 | 4 | 5 | null;
   pendingPhrase: HomePendingPhrase | null;
+  /** null si hoy todavía no escribió (o en SOLO_LECTURA). */
+  todayEntry: HomeTodayEntry | null;
   /** Escritorio: todas las frases por reescribir, de la más reciente (vacía en SOLO_LECTURA). */
   pendingPhrases: HomePendingPhrase[];
   goal: HomeGoal | null;
