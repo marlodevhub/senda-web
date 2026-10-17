@@ -884,3 +884,108 @@
 @keyframes tour-launch-reveal {
   to { clip-path: circle(75% at 50% 50%); }
 }
+
+/*
+ * Fondo de la bienvenida (WelcomeBackdrop): todos los tonos salen de --wb-from y --wb-to, así el paisaje entero
+ * cambia de color con una transición al pasar de pantalla. Arriba el cielo es oscuro (el texto blanco cumple AA) y
+ * aclara hacia el horizonte; las montañas vuelven a oscurecer hacia el frente, donde va el texto en móvil.
+ */
+@property --wb-from {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #7cc98c;
+}
+@property --wb-to {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #2f8550;
+}
+.welcome-backdrop {
+  transition: --wb-from 0.9s ease, --wb-to 0.9s ease;
+}
+.welcome-backdrop-sky {
+  background: linear-gradient(
+    to bottom,
+    color-mix(in oklab, var(--wb-to) 78%, #0b0a1a) 0%,
+    var(--wb-to) 45%,
+    color-mix(in oklab, var(--wb-from) 70%, var(--wb-to)) 100%
+  );
+}
+.welcome-mountain-far {
+  fill: color-mix(in oklab, var(--wb-from) 55%, var(--wb-to));
+  opacity: 0.75;
+}
+.welcome-mountain-mid {
+  fill: color-mix(in oklab, var(--wb-to) 85%, #0b0a1a);
+}
+.welcome-mountain-near {
+  fill: color-mix(in oklab, var(--wb-to) 62%, #0b0a1a);
+}
+.welcome-tree {
+  fill: color-mix(in oklab, var(--wb-to) 45%, #0b0a1a);
+}
+/* La luna: en móvil arriba al centro (detrás de la ilustración); en escritorio, a la derecha. */
+.welcome-moon {
+  left: 50%;
+  top: 22%;
+  width: min(46vw, 15rem);
+  aspect-ratio: 1;
+  translate: -50% -50%;
+}
+@media (min-width: 1024px) {
+  .welcome-moon {
+    left: 70%;
+    top: 46%;
+    width: min(26vw, 22rem);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .welcome-star {
+    animation: welcome-twinkle 3s ease-in-out infinite alternate;
+  }
+  .welcome-cloud {
+    animation: welcome-drift 22s ease-in-out infinite alternate;
+  }
+  .welcome-cloud-slow {
+    animation-duration: 30s;
+    animation-direction: alternate-reverse;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .welcome-backdrop {
+    transition: none;
+  }
+}
+@keyframes welcome-twinkle {
+  from { opacity: 0.25; }
+  to { opacity: 0.95; }
+}
+@keyframes welcome-drift {
+  from { transform: translateX(-3vw); }
+  to { transform: translateX(3vw); }
+}
+/* En móvil la luna va con la ilustración (en su mismo lugar); la del paisaje solo en escritorio. */
+@media (max-width: 1023.98px) {
+  .welcome-backdrop .welcome-moon {
+    display: none;
+  }
+}
+.welcome-moon-inline {
+  translate: -50% -50%;
+  border-radius: 9999px;
+  background: radial-gradient(circle, #fff 0 52%, rgb(255 255 255 / 0.35) 53% 64%, rgb(255 255 255 / 0.15) 65% 80%, transparent 81%);
+  box-shadow: 0 0 90px 30px rgb(255 255 255 / 0.25);
+}
+/* La luna y sus halos en un solo degradado radial (sin capas desenfocadas que dejen bordes cuadrados). */
+.welcome-moon-glow {
+  border-radius: 9999px;
+  background: radial-gradient(
+    circle,
+    #fff 0 34%,
+    rgb(255 255 255 / 0.32) 34.5% 44%,
+    rgb(255 255 255 / 0.16) 44.5% 56%,
+    rgb(255 255 255 / 0.07) 56.5% 72%,
+    transparent 100%
+  );
+  scale: 1.9;
+}

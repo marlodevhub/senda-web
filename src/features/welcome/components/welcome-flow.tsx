@@ -17,6 +17,7 @@ import { applyPalette } from "@/lib/palette";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { SendaLogo } from "@/components/brand/senda-logo";
 import { IllustrationArt } from "@/features/welcome/components/illustration-art";
+import { WelcomeBackdrop } from "@/features/welcome/components/welcome-backdrop";
 import { TourLaunch } from "@/features/welcome/components/tour-launch";
 import {
   BOOK_LOVER,
@@ -39,18 +40,16 @@ type Step = (typeof SCREENS)[number] | "question" | "identity";
 /**
  * Cada pantalla con su color vivo y su ilustración. El degradado va de claro (arriba, la ilustración y el título) a
  * oscuro (abajo, donde va el texto): el blanco sobre el tono oscuro cumple contraste AA, y el botón blanco lleva el
- * texto en ese mismo tono oscuro. La ilustración se pinta con `accent` (y `accent2`, un tono que combina) sobre
- * `tint`, un claro de la misma familia.
+ * texto en ese mismo tono oscuro. La ilustración se pinta con `accent` (y `accent2`, un tono que combina).
  */
 const SLIDE_STYLE: Record<
   Step,
-  { from: string; to: string; ink: string; tint: string; accent: string; accent2: string; art: Illustration }
+  { from: string; to: string; ink: string; accent: string; accent2: string; art: Illustration }
 > = {
   whatItIs: {
     from: "#7CC98C",
     to: "#2F8550",
     ink: "#24693F",
-    tint: "#E3F5E7",
     accent: "#3E9B5B",
     accent2: "#F59A5E",
     art: DEEP_WORK,
@@ -59,7 +58,6 @@ const SLIDE_STYLE: Record<
     from: "#F59A5E",
     to: "#C2531F",
     ink: "#A2441A",
-    tint: "#FFEBDD",
     accent: "#E07A3E",
     accent2: "#6FB6EC",
     art: WAITING_FOR_YOU,
@@ -68,7 +66,6 @@ const SLIDE_STYLE: Record<
     from: "#6FB6EC",
     to: "#1F6FB8",
     ink: "#1A5D9A",
-    tint: "#E1F0FC",
     accent: "#2B86D1",
     accent2: "#F2C95C",
     art: MOONLIGHT,
@@ -77,7 +74,6 @@ const SLIDE_STYLE: Record<
     from: "#A78BE0",
     to: "#6440AE",
     ink: "#56379A",
-    tint: "#EEE7FA",
     accent: "#7A55C7",
     accent2: "#F2C95C",
     art: BOOK_LOVER,
@@ -86,7 +82,6 @@ const SLIDE_STYLE: Record<
     from: "#EC8DB0",
     to: "#A63A64",
     ink: "#8E3156",
-    tint: "#FCE6EE",
     accent: "#C04A78",
     accent2: "#6FB6EC",
     art: PROFILE_CARD,
@@ -104,15 +99,6 @@ function prefersReducedMotion(): boolean {
   }
 }
 
-/** Burbujas de fondo (posición y tamaño en %), cada una flotando a su ritmo. */
-const BUBBLES = [
-  { top: 12, left: 8, size: 14, delay: "0s" },
-  { top: 18, left: 78, size: 9, delay: "1.2s" },
-  { top: 34, left: 6, size: 6, delay: "0.6s" },
-  { top: 42, left: 86, size: 12, delay: "2s" },
-  { top: 58, left: 4, size: 5, delay: "1.6s" },
-];
-
 /**
  * CU-17 Completar bienvenida, como un carrusel a pantalla completa: 3 pantallas fijas (RN-AC-09) — qué es, qué no es
  * (con Línea 113 y SAMU 106) y cómo se usa —, la pregunta opcional "Mi punto de partida" y, la primera vez, "Cuéntanos
@@ -120,7 +106,8 @@ const BUBBLES = [
  * "Continuar" o deslizando. "Empezar" la marca como vista y lleva a Inicio, donde arranca el tutorial.
  * - Cada pantalla tiene su ilustración (unDraw y una del mismo estilo), pintada con su color. Entre pantallas, la
  *   ilustración entra deslizándose (según se avance o se vuelva) y el texto aparece escalonado.
- * - Escritorio: el texto y los botones a la izquierda; la ilustración grande a la derecha, sobre manchas suaves.
+ * - De fondo, a pantalla completa, un paisaje de noche (WelcomeBackdrop) en el color de cada pantalla.
+ * - Escritorio: el texto y los botones a la izquierda; la ilustración grande a la derecha, delante de la luna.
  * - Al tocar "Empezar", una animación presenta el recorrido por la interfaz (TourLaunch) y luego entra a Inicio,
  *   donde arranca el tutorial.
  * - `review` (desde Perfil, RN-AC-13): solo las 3 pantallas; "Listo" vuelve a Perfil sin guardar nada.
@@ -304,10 +291,8 @@ export function WelcomeFlow({
 
   if (isDesktop) {
     return (
-      <div
-        className="fixed inset-0 z-50 flex overflow-clip text-white transition-colors duration-700 motion-reduce:transition-none"
-        style={{ backgroundColor: style.to }}
-      >
+      <div className="fixed inset-0 z-50 flex overflow-clip text-white">
+        <WelcomeBackdrop from={style.from} to={style.to} />
         <div className="relative z-10 flex w-[44%] max-w-2xl shrink-0 flex-col overflow-y-auto px-14 py-10 xl:px-20">
           <div className="flex items-center justify-between gap-4">
             <span className="flex items-center gap-2 font-heading text-xl font-extrabold">
@@ -378,58 +363,25 @@ export function WelcomeFlow({
           </div>
         </div>
 
-        {/* El paisaje: cambia por completo de color con cada pantalla. Un borde ondulado lo une al panel del texto. */}
-        {/* La ilustración grande, sobre un claro del mismo color y dos manchas que se mueven lento. */}
-        <div
-          className="relative -ml-px flex flex-1 items-center justify-center overflow-hidden transition-colors duration-700 motion-reduce:transition-none"
-          style={{ backgroundColor: style.tint }}
-        >
-          <span
-            aria-hidden
-            className="welcome-blob absolute -top-24 -right-24 size-[34rem] opacity-25 transition-colors duration-700"
-            style={{ backgroundColor: style.accent }}
-          />
-          <span
-            aria-hidden
-            className="welcome-blob welcome-blob-slow absolute -bottom-32 left-10 size-[26rem] opacity-15 transition-colors duration-700"
-            style={{ backgroundColor: style.accent2 }}
-          />
-          <div
-            key={step}
-            className={cn(
-              "relative w-[min(78%,42rem)]",
-              direction === "next" ? "welcome-art-in-next" : "welcome-art-in-prev",
-            )}
-          >
+        {/* La ilustración, delante de la luna del paisaje (a la derecha). */}
+        <div className="pointer-events-none absolute top-[46%] left-[70%] w-[min(40vw,38rem)] -translate-x-1/2 -translate-y-1/2">
+          <div key={step} className={direction === "next" ? "welcome-art-in-next" : "welcome-art-in-prev"}>
             <IllustrationArt
               art={style.art}
               accent={style.accent}
               accent2={style.accent2}
-              className="h-auto max-h-[70vh] w-full drop-shadow-[0_24px_40px_rgb(0_0_0/0.08)]"
+              className="h-auto max-h-[62vh] w-full drop-shadow-[0_30px_40px_rgb(0_0_0/0.25)]"
             />
           </div>
-          <svg
-            aria-hidden
-            viewBox="0 0 100 700"
-            preserveAspectRatio="none"
-            className="absolute inset-y-0 -left-0.5 h-full w-20"
-          >
-            <path
-              d="M0 0 H54 C96 120 18 240 66 360 C108 470 26 590 74 700 H0 Z"
-              fill={style.to}
-              className="transition-[fill] duration-700 motion-reduce:transition-none"
-            />
-          </svg>
         </div>
       </div>
     );
   }
 
   return (
-    <div
-      className="fixed inset-0 z-50 overflow-clip text-white transition-colors duration-500"
-      style={{ backgroundColor: style.to }}
-    >
+    <div className="fixed inset-0 z-50 overflow-clip text-white">
+      {/* Un solo paisaje detrás del carrusel: cambia de color al pasar de pantalla. */}
+      <WelcomeBackdrop from={style.from} to={style.to} />
       <div
         className="flex h-full touch-pan-y transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
         style={{ transform: `translateX(-${index * 100}%)` }}
@@ -453,39 +405,26 @@ export function WelcomeFlow({
               aria-hidden={!active || undefined}
               inert={!active}
               className="relative h-full w-full shrink-0 overflow-hidden"
-              style={{ backgroundImage: `linear-gradient(180deg, ${slideStyle.from} 0%, ${slideStyle.to} 62%)` }}
             >
-              {BUBBLES.map((bubble) => (
-                <span
-                  key={`${bubble.top}-${bubble.left}`}
-                  aria-hidden
-                  className="absolute animate-[auth-float_3.2s_ease-in-out_infinite_alternate] rounded-full bg-white/20 motion-reduce:animate-none"
-                  style={{
-                    top: `${bubble.top}%`,
-                    left: `${bubble.left}%`,
-                    width: `${bubble.size}vmin`,
-                    height: `${bubble.size}vmin`,
-                    animationDelay: bubble.delay,
-                  }}
-                />
-              ))}
-
               <div className="relative mx-auto flex h-full w-full max-w-md flex-col overflow-y-auto px-6 pt-20 pb-32">
-                {/* La ilustración de la pantalla, sobre un claro de su color (se lee bien sobre el degradado). */}
+                {/* La ilustración, sin caja: delante de una luna que la ilumina. */}
                 <div className={cn("flex items-center justify-center", isForm ? "py-2" : "flex-1 py-4")}>
                   <div
                     className={cn(
-                      "w-full rounded-[2rem] p-4 shadow-xl",
-                      isForm ? "max-w-[11rem]" : "max-w-[19rem]",
+                      "relative w-full",
+                      isForm ? "max-w-[10rem]" : "max-w-[17rem]",
                       active && "welcome-art-pop",
                     )}
-                    style={{ backgroundColor: slideStyle.tint }}
                   >
+                    <span aria-hidden className="welcome-moon-inline absolute top-1/2 left-1/2 aspect-square w-[92%]" />
                     <IllustrationArt
                       art={slideStyle.art}
                       accent={slideStyle.accent}
                       accent2={slideStyle.accent2}
-                      className={cn("h-auto w-full", isForm ? "max-h-24" : "max-h-[26vh]")}
+                      className={cn(
+                        "relative h-auto w-full drop-shadow-[0_18px_24px_rgb(0_0_0/0.25)]",
+                        isForm ? "max-h-24" : "max-h-[26vh]",
+                      )}
                     />
                   </div>
                 </div>
