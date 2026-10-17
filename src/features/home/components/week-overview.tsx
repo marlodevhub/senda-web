@@ -76,13 +76,13 @@ export function WeekOverview({
               <span
                 aria-hidden
                 className={cn(
-                  "flex size-10 items-center justify-center rounded-full text-base font-semibold tabular-nums transition-colors",
+                  "flex size-9 items-center justify-center rounded-full text-base tabular-nums transition-colors",
                   day.hasEntry && "bg-sprout text-sprout-foreground",
                   moodOnly && "bg-checkin text-checkin-foreground",
                   moodOnly && isToday && "ring-2 ring-bloom ring-offset-2 ring-offset-card",
-                  !day.hasEntry && !moodOnly && isToday && "text-bloom-ink ring-2 ring-bloom",
-                  !day.hasEntry && !moodOnly && !isToday && !isFuture && "bg-muted text-muted-foreground",
-                  !day.hasEntry && isFuture && "text-muted-foreground ring-1 ring-border",
+                  !day.hasEntry && !moodOnly && isToday && "font-semibold text-bloom-ink ring-2 ring-bloom",
+                  !day.hasEntry && !moodOnly && !isToday && !isFuture && "bg-foreground/5 text-muted-foreground",
+                  !day.hasEntry && isFuture && "text-foreground",
                 )}
               >
                 {day.hasEntry ? <Check className="size-5" strokeWidth={3} /> : formatIsoDay(day.date, { day: "numeric" })}

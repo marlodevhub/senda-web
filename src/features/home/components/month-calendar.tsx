@@ -68,27 +68,29 @@ export function MonthCalendar({ days, today }: { days: HomeWeekDay[]; today: num
         showOutsideDays={false}
         modifiers={modifiers}
         modifiersClassNames={{
-          entry: "[&>*]:bg-sprout [&>*]:font-semibold [&>*]:text-sprout-foreground",
-          mood: "[&>*]:bg-checkin [&>*]:font-semibold [&>*]:text-checkin-foreground",
+          // Liviano a propósito: color solo donde hubo algo (escribiste o marcaste tu ánimo) y el anillo de hoy; los
+          // días sin registro, un gris suave, y los que vienen, solo el número.
+          entry: "[&>*]:bg-sprout [&>*]:text-sprout-foreground",
+          mood: "[&>*]:bg-checkin [&>*]:text-checkin-foreground",
           moodToday:
-            "[&>*]:bg-checkin [&>*]:font-semibold [&>*]:text-checkin-foreground [&>*]:ring-2 [&>*]:ring-bloom [&>*]:ring-offset-2 [&>*]:ring-offset-card",
+            "[&>*]:bg-checkin [&>*]:text-checkin-foreground [&>*]:ring-2 [&>*]:ring-bloom [&>*]:ring-offset-2 [&>*]:ring-offset-card",
           journeyToday: "[&>*]:font-semibold [&>*]:text-bloom-ink [&>*]:ring-2 [&>*]:ring-bloom [&>*]:ring-inset",
-          empty: "[&>*]:bg-muted [&>*]:font-semibold [&>*]:text-muted-foreground",
-          upcoming: "[&>*]:font-semibold [&>*]:text-foreground [&>*]:ring-1 [&>*]:ring-border [&>*]:ring-inset",
+          empty: "[&>*]:bg-foreground/5 [&>*]:text-muted-foreground",
+          upcoming: "[&>*]:text-foreground",
         }}
         labels={{
           labelGridcell: (date) => statusOf(date),
           labelPrevious: () => t("home.monthPrev"),
           labelNext: () => t("home.monthNext"),
         }}
-        className="w-full bg-transparent p-0 [--cell-size:--spacing(11)] lg:[--cell-size:--spacing(9)]"
+        className="w-full bg-transparent p-0 [--cell-size:--spacing(10)] lg:[--cell-size:--spacing(9)]"
         classNames={{
           root: "w-full",
           month_caption: "flex h-(--cell-size) w-full items-center justify-start",
           caption_label: "font-heading text-lg font-bold text-foreground capitalize lg:text-base",
           nav: "absolute inset-x-0 top-0 flex w-full items-center justify-end gap-1",
-          weekday: "flex-1 text-base font-normal text-muted-foreground capitalize select-none",
-          week: "mt-1.5 flex w-full lg:mt-1",
+          weekday: "flex-1 text-base font-normal text-muted-foreground/80 capitalize select-none",
+          week: "mt-2 flex w-full",
           day: "flex flex-1 items-center justify-center p-0 text-center select-none",
           today: "",
           outside: "",
@@ -131,7 +133,7 @@ export function MonthCalendar({ days, today }: { days: HomeWeekDay[]; today: num
           Day: ({ day: _day, modifiers: _modifiers, className, children, ...props }) => (
             <td {...props} className={cn("flex flex-1 items-center justify-center p-0", className)}>
               {children !== undefined && children !== false && (
-                <span className="flex size-10 items-center justify-center rounded-full text-base text-muted-foreground tabular-nums lg:size-9">
+                <span className="flex size-9 items-center justify-center rounded-full text-base font-normal text-muted-foreground tabular-nums lg:size-8">
                   {children}
                 </span>
               )}
@@ -144,7 +146,7 @@ export function MonthCalendar({ days, today }: { days: HomeWeekDay[]; today: num
         <Legend swatch="bg-sprout" label={t("home.legendEntry")} />
         <Legend swatch="bg-checkin" label={t("home.legendMood")} />
         <Legend swatch="ring-2 ring-bloom" label={t("home.legendToday")} />
-        <Legend swatch="bg-muted ring-1 ring-border" label={t("home.legendEmpty")} />
+        <Legend swatch="bg-foreground/10" label={t("home.legendEmpty")} />
       </ul>
     </div>
   );
