@@ -11,26 +11,7 @@ import { BffError } from "@/lib/api/client";
 import { errorMessageKey } from "@/lib/api/error-messages";
 import { acceptConsent, type ConsentContent } from "@/features/access/api/consent";
 import { logout } from "@/lib/auth/logout";
-
-/** Lo que va antes de ":" al inicio de un párrafo, si es corto, es su título ("Quién puede leer tus textos:"). */
-const LEAD_MAX_LENGTH = 60;
-
-/**
- * El texto del consentimiento viene del YAML congelado (PT-02) partido en líneas de ~80 caracteres: los párrafos son
- * los bloques separados por una línea en blanco y dentro de cada uno los saltos son solo del archivo.
- */
-function toParagraphs(text: string): { lead: string; body: string }[] {
-  return text
-    .split(/\n\s*\n/)
-    .map((paragraph) => paragraph.replace(/\s*\n\s*/g, " ").trim())
-    .filter(Boolean)
-    .map((paragraph) => {
-      const colon = paragraph.indexOf(": ");
-      return colon > 0 && colon < LEAD_MAX_LENGTH
-        ? { lead: paragraph.slice(0, colon + 1), body: paragraph.slice(colon + 2) }
-        : { lead: "", body: paragraph };
-    });
-}
+import { ConsentText } from "@/features/access/components/consent-text";
 
 /** CU-16: "Acepto" se habilita solo al llegar al final del texto (RN-AC-07), y solo con la casilla marcada. */
 export function ConsentView({ consent }: { consent: ConsentContent }) {
@@ -89,14 +70,9 @@ export function ConsentView({ consent }: { consent: ConsentContent }) {
       <div
         ref={scrollRef}
         onScroll={handleScroll}
-        className="flex max-h-[55vh] min-h-64 flex-col gap-4 overflow-y-auto rounded-lg bg-muted p-5 text-base leading-relaxed text-foreground md:p-8 md:text-lg"
+        className="max-h-[55vh] min-h-64 overflow-y-auto rounded-lg border border-border bg-card p-5 md:p-7"
       >
-        {toParagraphs(consent.text).map(({ lead, body }) => (
-          <p key={lead + body}>
-            {lead && <strong className="font-semibold">{lead} </strong>}
-            {body}
-          </p>
-        ))}
+        <ConsentText text={consent.text} />
       </div>
       {!reachedEnd && <p className="text-base text-muted-foreground">{t("consent.scrollHint")}</p>}
 

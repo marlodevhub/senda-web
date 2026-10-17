@@ -163,7 +163,7 @@ function TourOverlay({ step, onStep, onClose }: { step: number; onStep: (step: n
         {rect ? (
           <div
             aria-hidden
-            className="pointer-events-none fixed z-50 rounded-[1.25rem] shadow-[0_0_0_9999px_rgb(20_15_30/0.6)] ring-4 ring-white/80 transition-all duration-300 motion-reduce:transition-none"
+            className="pointer-events-none fixed z-50 rounded-[1.25rem] shadow-[0_0_0_9999px_rgb(20_15_30/0.6)] ring-4 ring-white/80"
             style={{
               left: rect.left - SPOT_PADDING,
               top: rect.top - SPOT_PADDING,

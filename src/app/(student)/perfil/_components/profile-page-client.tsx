@@ -103,7 +103,8 @@ export function ProfilePageClient() {
       {/* Quien activó con Google aún no tiene contraseña: aquí la crea (y recibe su código de recuperación). */}
       <Tile
         title={t(profile && !profile.hasPassword ? "profile.passwordSetupTitle" : "profile.passwordTitle")}
-        className="md:row-span-2 lg:col-span-3"
+        // Cambiar contraseña es largo y ocupa dos filas; crearla (o el aviso de crear antes el usuario) cabe en una.
+        className={cn("lg:col-span-3", profile?.hasPassword !== false && "md:row-span-2")}
       >
         {isPending ? (
           <Loader2 className="size-5 animate-spin text-muted-foreground" aria-label={t("common.loading")} />
