@@ -18,6 +18,7 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 import { SendaLogo } from "@/components/brand/senda-logo";
 import { IllustrationArt } from "@/features/welcome/components/illustration-art";
 import { WelcomeBackdrop } from "@/features/welcome/components/welcome-backdrop";
+import { LANDSCAPES, type Landscape } from "@/features/welcome/components/welcome-landscapes";
 import { TourLaunch } from "@/features/welcome/components/tour-launch";
 import {
   BOOK_LOVER,
@@ -44,7 +45,7 @@ type Step = (typeof SCREENS)[number] | "question" | "identity";
  */
 const SLIDE_STYLE: Record<
   Step,
-  { from: string; to: string; ink: string; accent: string; accent2: string; art: Illustration }
+  { from: string; to: string; ink: string; accent: string; accent2: string; art: Illustration; land: Landscape }
 > = {
   whatItIs: {
     from: "#7CC98C",
@@ -53,6 +54,7 @@ const SLIDE_STYLE: Record<
     accent: "#3E9B5B",
     accent2: "#F59A5E",
     art: DEEP_WORK,
+    land: LANDSCAPES.MEADOW,
   },
   whatItIsNot: {
     from: "#F59A5E",
@@ -61,6 +63,7 @@ const SLIDE_STYLE: Record<
     accent: "#E07A3E",
     accent2: "#6FB6EC",
     art: WAITING_FOR_YOU,
+    land: LANDSCAPES.DESERT,
   },
   howToUse: {
     from: "#6FB6EC",
@@ -69,6 +72,7 @@ const SLIDE_STYLE: Record<
     accent: "#2B86D1",
     accent2: "#F2C95C",
     art: MOONLIGHT,
+    land: LANDSCAPES.SEA,
   },
   question: {
     from: "#A78BE0",
@@ -77,6 +81,7 @@ const SLIDE_STYLE: Record<
     accent: "#7A55C7",
     accent2: "#F2C95C",
     art: BOOK_LOVER,
+    land: LANDSCAPES.MOUNTAINS,
   },
   identity: {
     from: "#EC8DB0",
@@ -85,6 +90,7 @@ const SLIDE_STYLE: Record<
     accent: "#C04A78",
     accent2: "#6FB6EC",
     art: PROFILE_CARD,
+    land: LANDSCAPES.CITY,
   },
 };
 
@@ -292,7 +298,12 @@ export function WelcomeFlow({
   if (isDesktop) {
     return (
       <div className="fixed inset-0 z-50 flex overflow-clip text-white">
-        <WelcomeBackdrop from={style.from} to={style.to} />
+        <WelcomeBackdrop
+          from={style.from}
+          to={style.to}
+          landscapes={steps.map((slide) => SLIDE_STYLE[slide].land)}
+          index={index}
+        />
         <div className="relative z-10 flex w-[44%] max-w-2xl shrink-0 flex-col overflow-y-auto px-14 py-10 xl:px-20">
           <div className="flex items-center justify-between gap-4">
             <span className="flex items-center gap-2 font-heading text-xl font-extrabold">
@@ -381,7 +392,12 @@ export function WelcomeFlow({
   return (
     <div className="fixed inset-0 z-50 overflow-clip text-white">
       {/* Un solo paisaje detrás del carrusel: cambia de color al pasar de pantalla. */}
-      <WelcomeBackdrop from={style.from} to={style.to} />
+      <WelcomeBackdrop
+        from={style.from}
+        to={style.to}
+        landscapes={steps.map((slide) => SLIDE_STYLE[slide].land)}
+        index={index}
+      />
       <div
         className="flex h-full touch-pan-y transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
         style={{ transform: `translateX(-${index * 100}%)` }}

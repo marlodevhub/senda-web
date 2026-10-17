@@ -989,3 +989,31 @@
   );
   scale: 1.9;
 }
+/* Parallax del paisaje de la bienvenida: cada capa se desliza a su velocidad y el paisaje que se va se desvanece. */
+.welcome-layer {
+  transition: transform 0.95s cubic-bezier(0.65, 0, 0.35, 1), opacity 0.7s ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  .welcome-layer {
+    transition: opacity 0.3s ease;
+  }
+}
+.welcome-tree-stroke {
+  stroke: color-mix(in oklab, var(--wb-to) 45%, #0b0a1a);
+}
+.welcome-snow {
+  fill: #fff;
+  opacity: 0.85;
+}
+.welcome-light {
+  fill: #ffe7a3;
+}
+.welcome-water-far {
+  fill: color-mix(in oklab, var(--wb-from) 40%, var(--wb-to));
+}
+.welcome-water {
+  fill: color-mix(in oklab, var(--wb-to) 80%, #0b0a1a);
+}
+.welcome-water-near {
+  fill: color-mix(in oklab, var(--wb-to) 58%, #0b0a1a);
+}

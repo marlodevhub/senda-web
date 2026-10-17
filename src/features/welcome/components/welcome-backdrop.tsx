@@ -1,13 +1,32 @@
 import type { CSSProperties } from "react";
+import type { Landscape } from "@/features/welcome/components/welcome-landscapes";
+
+/** Las tres capas del paisaje y cuánto se mueven al pasar de pantalla (1 = todo el ancho). */
+const LAYERS = [
+  { key: "far", speed: 0.25, base: { y: 300, className: "welcome-mountain-far" } },
+  { key: "mid", speed: 0.55, base: { y: 370, className: "welcome-mountain-mid" } },
+  { key: "near", speed: 1, base: { y: 470, className: "welcome-mountain-near" } },
+] as const;
 
 /**
  * El fondo de la bienvenida (CU-17), a pantalla completa en móvil y escritorio: cielo en degradado, una luna grande
- * con su resplandor, estrellas que titilan, nubes que flotan, tres capas de montañas y pinos al frente. Todo sale de
+ * con su resplandor, estrellas que titilan, nubes que flotan y, abajo, el paisaje de cada pantalla (`landscapes`, el
+ * de `index` a la vista) en tres capas con parallax al pasar de pantalla. Todo sale de
  * `from` y `to` (los colores de la pantalla): los demás tonos se mezclan en CSS, así cambia por completo de color con
  * una transición al pasar de pantalla (`.welcome-backdrop` en globals.css). `moon` mueve la luna: detrás de la
  * ilustración (en escritorio, a la derecha; en móvil, arriba). Decorativo.
  */
-export function WelcomeBackdrop({ from, to }: { from: string; to: string }) {
+export function WelcomeBackdrop({
+  from,
+  to,
+  landscapes,
+  index,
+}: {
+  from: string;
+  to: string;
+  landscapes: Landscape[];
+  index: number;
+}) {
   const vars = { "--wb-from": from, "--wb-to": to } as CSSProperties;
   return (
     <div aria-hidden className="welcome-backdrop pointer-events-none absolute inset-0 overflow-hidden" style={vars}>
@@ -43,29 +62,31 @@ export function WelcomeBackdrop({ from, to }: { from: string; to: string }) {
         />
       </svg>
 
-      {/* Montañas y pinos */}
+      {/*
+        Los paisajes de todas las pantallas, uno encima de otro: al pasar de pantalla, cada capa se desliza a su
+        velocidad (lejos poco, cerca mucho: parallax) y el paisaje que se va se desvanece mientras entra el nuevo.
+      */}
       <svg
-        className="absolute inset-x-0 bottom-0 h-[52%] w-full"
+        className="absolute inset-x-0 bottom-0 h-[52%] w-full overflow-visible"
         viewBox="0 0 1440 520"
         preserveAspectRatio="xMidYMax slice"
       >
-        <path
-          className="welcome-mountain-far"
-          d="M0 250 L120 190 L230 240 L380 120 L520 230 L640 170 L790 260 L930 140 L1080 230 L1220 160 L1340 220 L1440 180 V520 H0 Z"
-        />
-        <path
-          className="welcome-mountain-mid"
-          d="M0 330 C140 290 240 250 360 280 C470 308 560 230 700 250 C850 272 930 330 1080 300 C1210 274 1320 250 1440 280 V520 H0 Z"
-        />
-        <path
-          className="welcome-mountain-near"
-          d="M0 410 C180 370 320 400 470 380 C640 356 760 420 940 400 C1110 381 1260 350 1440 380 V520 H0 Z"
-        />
-        <g className="welcome-tree">
-          {TREES.map(([x, h]) => (
-            <path key={x} d={`M${x} ${520 - h} l${h * 0.28} ${h} h-${h * 0.56} z`} />
-          ))}
-        </g>
+        {LAYERS.map(({ key, speed, base }) =>
+          landscapes.map((landscape, i) => (
+            <g
+              key={`${key}-${i}`}
+              className="welcome-layer"
+              style={{
+                transform: `translateX(${(i - index) * 1440 * speed}px)`,
+                opacity: i === index ? 1 : 0,
+              }}
+            >
+              {/* Base ancha bajo cada capa: al deslizarse, no deja ver el cielo por los bordes. */}
+              <rect x={-1440} y={base.y} width={4320} height={520 - base.y} className={base.className} />
+              {landscape[key]}
+            </g>
+          )),
+        )}
       </svg>
     </div>
   );
@@ -85,14 +106,4 @@ const STARS: [number, number, number, number][] = [
   [12, 40, 0.2, 2.8],
   [57, 42, 0.18, 1.1],
   [90, 44, 0.2, 0.4],
-];
-
-/** Pinos al frente: x y alto, en el sistema de 1440 × 520. */
-const TREES: [number, number][] = [
-  [30, 150],
-  [80, 110],
-  [130, 70],
-  [1300, 90],
-  [1350, 140],
-  [1405, 100],
 ];
