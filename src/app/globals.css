@@ -125,6 +125,7 @@
   --ember-ink: #5A2C0E;
   /* Preguntas del Diario: el rojo del botón principal (4,8:1 sobre la hoja blanca). */
   --prompt-red: #C4466A;
+  --prompt-red-foreground: #FFFFFF;
 
   --primary: var(--bloom);
   /* WCAG 2.1 AA (RS-TR): el blanco sobre bloom da 2,9:1; este vino oscuro da 5,7:1 (igual que en modo oscuro). */
@@ -211,6 +212,7 @@
   --ember-to: #F5B98C;
   --ember-ink: #3A1A06;
   --prompt-red: #F0A0AF;
+  --prompt-red-foreground: #2B1A20;
 
   --primary: var(--bloom);
   --primary-foreground: #2B1A20;
@@ -269,6 +271,7 @@
   --bloom-ink: #1D3A63;
   --bloom-tint: #E0EBF8;
   --prompt-red: #2D67AE;
+  --prompt-red-foreground: #FFFFFF;
   --primary-foreground: #0F2340;
   --grad-hero: linear-gradient(135deg, #2D67AE 0%, #22727E 100%);
   --grad-dawn: linear-gradient(135deg, #6496D2 0%, #3A9AA6 100%);
@@ -288,6 +291,7 @@
   --bloom-ink: #DCE9FA;
   --bloom-tint: #1E2B42;
   --prompt-red: #9CC2F5;
+  --prompt-red-foreground: #0F1B2E;
   --primary-foreground: #0F1B2E;
   --grad-dawn: linear-gradient(135deg, #8FB8EC 0%, #7CC3CB 100%);
   --grad-dawn-soft: linear-gradient(135deg, #1E2B42 0%, #1B3236 100%);

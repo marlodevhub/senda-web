@@ -268,6 +268,7 @@ export function WelcomeFlow({
                           value={gender}
                           onChange={setGender}
                           invalid={showIdentityErrors && !gender}
+                          onColor
                         />
                         {showIdentityErrors && !gender && (
                           <FieldError message="welcome.genderRequired" className="font-semibold text-white" />
