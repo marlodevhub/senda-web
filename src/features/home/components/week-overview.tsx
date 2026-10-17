@@ -32,6 +32,8 @@ export function WeekOverview({
 }) {
   const t = useTranslations();
   const [selectedDay, setSelectedDay] = useState(clampJourneyDay(today));
+  // Móvil y tablet: la semana (por defecto) o el mes completo. En escritorio siempre va el mes.
+  const [view, setView] = useState<"week" | "month">("week");
   if (days.length === 0) {
     return null;
   }
@@ -44,25 +46,30 @@ export function WeekOverview({
       aria-labelledby="home-week"
       className="flex flex-col gap-4 rounded-lg bg-card p-5 shadow-(--shadow-card) lg:min-h-full lg:gap-3 lg:bg-transparent lg:shadow-none"
     >
-      <div className="flex items-baseline justify-between gap-2 lg:sr-only">
-        <h2 id="home-week" className="font-heading text-lg font-bold text-foreground">
-          {t("home.weekTitle", { week })}
-        </h2>
-        <p className="text-base text-muted-foreground">
-          {t("home.weekRange", {
-            from: formatIsoDay(days[0].date, { day: "numeric", month: "short" }),
-            to: formatIsoDay(days[days.length - 1].date, { day: "numeric", month: "short" }),
-          })}
-        </p>
+      <div className="flex items-center justify-between gap-2 lg:sr-only">
+        <div className="flex min-w-0 flex-col">
+          <h2 id="home-week" className="font-heading text-lg font-bold text-foreground">
+            {t("home.weekTitle", { week })}
+          </h2>
+          {view === "week" && (
+            <p className="text-sm text-muted-foreground">
+              {t("home.weekRange", {
+                from: formatIsoDay(days[0].date, { day: "numeric", month: "short" }),
+                to: formatIsoDay(days[days.length - 1].date, { day: "numeric", month: "short" }),
+              })}
+            </p>
+          )}
+        </div>
+        {journeyDays.length > 0 && <ViewToggle value={view} onChange={setView} />}
       </div>
 
       {journeyDays.length > 0 && (
-        <div className="hidden lg:block">
+        <div className={cn(view === "month" ? "block" : "hidden lg:block")}>
           <MonthCalendar days={journeyDays} today={today} selectedDay={selectedDay} onSelectDay={setSelectedDay} />
         </div>
       )}
 
-      <ol className="grid grid-cols-7 gap-1 lg:hidden">
+      <ol className={cn("grid-cols-7 gap-1 lg:hidden", view === "week" ? "grid" : "hidden")}>
         {days.map((day) => {
           const isToday = day.interventionDay === today;
           const isFuture = day.interventionDay > today;
@@ -118,5 +125,28 @@ export function WeekOverview({
         <JourneyBanner today={today} week={week} goal={goal} />
       </div>
     </section>
+  );
+}
+
+/** Semana | Mes, como un control segmentado: el elegido, sólido con el color del logo. */
+function ViewToggle({ value, onChange }: { value: "week" | "month"; onChange: (view: "week" | "month") => void }) {
+  const t = useTranslations();
+  return (
+    <div role="group" aria-label={t("home.calendarView")} className="flex shrink-0 rounded-full bg-foreground/7 p-1">
+      {(["week", "month"] as const).map((option) => (
+        <button
+          key={option}
+          type="button"
+          aria-pressed={value === option}
+          onClick={() => onChange(option)}
+          className={cn(
+            "min-h-9 touch-manipulation rounded-full px-3.5 text-sm font-semibold transition-colors select-none [-webkit-tap-highlight-color:transparent] focus-visible:outline-2 focus-visible:outline-ring",
+            value === option ? "bg-(--prompt-red) text-(--prompt-red-foreground) shadow-sm" : "text-foreground",
+          )}
+        >
+          {t(option === "week" ? "home.calendarWeek" : "home.calendarMonth")}
+        </button>
+      ))}
+    </div>
   );
 }

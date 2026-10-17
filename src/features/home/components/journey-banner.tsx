@@ -1,11 +1,10 @@
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { ArrowUpRight } from "lucide-react";
-import { SendaLogo } from "@/components/brand/senda-logo";
 import { clampJourneyDay, INTERVENTION_DAYS, INTERVENTION_WEEKS } from "@/lib/journey";
 
 /**
- * CU-05: en qué va de su senda, como una tarjeta destacada al pie del calendario: el día grande ("Día 14 de 28") y,
+ * CU-05: en qué va de su senda, como una tarjeta destacada al pie del calendario: el día en negrita ("Día 14 de 28") y,
  * en etiquetas, los días con registro sobre la meta y la semana. Solo describe, sin puntaje ni porcentaje (RN-TR-04,
  * reglas de coherencia 2 y 6). La flecha lleva al jardín, donde se ve lo que creció. Verde profundo por el jardín;
  * el texto blanco cumple AA sobre todo el degradado.
@@ -27,26 +26,18 @@ export function JourneyBanner({
         day: clampJourneyDay(today),
         total: INTERVENTION_DAYS,
       })}
-      className="group relative isolate flex min-h-44 flex-col justify-between gap-4 overflow-hidden rounded-[1.75rem] bg-[linear-gradient(140deg,#2E6B4F_0%,#1D4A37_100%)] p-5 text-white shadow-card transition-transform focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:scale-[0.98]"
+      className="group relative isolate flex flex-col gap-3 overflow-hidden rounded-[1.75rem] bg-[linear-gradient(140deg,#2E6B4F_0%,#1D4A37_100%)] p-5 text-white shadow-card transition-transform focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:scale-[0.98]"
     >
       <JourneyLeaves />
 
-      <span className="flex items-center justify-between">
-        <span className="flex items-center gap-2 text-sm font-semibold text-white/90">
-          <SendaLogo className="size-4 text-[#9FE0B4]" />
-          {t("home.journeyBannerKicker")}
-        </span>
-        <ArrowUpRight
-          className="size-6 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-          aria-hidden
-        />
-      </span>
+      <ArrowUpRight
+        className="absolute top-4 right-4 size-6 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+        aria-hidden
+      />
 
-      <span className="font-heading text-3xl leading-tight font-bold">
-        {t("home.journeyBannerDay", { day: clampJourneyDay(today) })}
-        <span className="block text-lg font-semibold text-white/85">
-          {t("home.journeyBannerOf", { total: INTERVENTION_DAYS })}
-        </span>
+      {/* Solo el día, en negrita y en una línea: "Día 14 de 28". */}
+      <span className="pr-8 font-heading text-2xl leading-tight font-bold">
+        {t("home.journeyBannerDay", { day: clampJourneyDay(today), total: INTERVENTION_DAYS })}
       </span>
 
       <span className="flex flex-wrap gap-2">

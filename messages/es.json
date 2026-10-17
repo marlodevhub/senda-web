@@ -185,12 +185,13 @@
     "dayTodayEmpty": "Hoy todavía no escribes ni marcas tu ánimo.",
     "dayUpcoming": "Este día todavía no llega.",
     "daySelect": "Ver {date}",
-    "journeyBannerKicker": "Tu senda",
-    "journeyBannerDay": "Día {day}",
-    "journeyBannerOf": "de {total}",
+    "journeyBannerDay": "Día {day} de {total}",
     "journeyBannerDays": "{days} de {goal} días con registro",
     "journeyBannerWeek": "Semana {week} de {total}",
-    "journeyBannerLabel": "Tu senda: día {day} de {total}. Ver mi jardín"
+    "journeyBannerLabel": "Tu senda: día {day} de {total}. Ver mi jardín",
+    "calendarView": "Ver el calendario por",
+    "calendarWeek": "Semana",
+    "calendarMonth": "Mes"
   },
   "analysis": {
     "title": "Espejo",

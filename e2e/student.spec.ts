@@ -269,7 +269,7 @@ test("en escritorio la navegación es una barra lateral accesible", async ({ pag
   // "Tu senda" también titula la tarjeta al pie del calendario: aquí, el de la barra lateral.
   const sidebarPanel = page.locator("aside:not([data-right-rail])");
   await expect(sidebarPanel.getByText("Tu senda", { exact: true })).toBeVisible();
-  await expect(page.getByText("Día 3 de 28", { exact: true })).toBeVisible();
+  await expect(sidebarPanel.getByText("Día 3 de 28", { exact: true })).toBeVisible();
   await sidebar.getByRole("link", { name: "Historial" }).click();
   await expect(page).toHaveURL(/\/historial/);
   await expect(sidebar.getByRole("link", { name: "Historial" })).toHaveAttribute("aria-current", "page");
