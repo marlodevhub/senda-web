@@ -2,6 +2,13 @@
 
 import { useTranslations } from "next-intl";
 import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import {
+  AXIS_PROPS,
+  BAR_RADIUS,
+  GRID_PROPS,
+  LEGEND_PROPS,
+  TOOLTIP_PROPS,
+} from "@/features/progress/components/charts/chart-theme";
 import type { VoiceByWeekPoint } from "@/features/progress/api/get-stats";
 import { DIMENSION_COLOR, DIMENSION_SHORT_KEY } from "@/features/progress/dimension-style";
 import type { Dimension } from "@/types/dimension";
@@ -28,23 +35,21 @@ export function VoiceByWeekChart({ data }: { data: VoiceByWeekPoint[] }) {
   return (
     <ResponsiveContainer width="100%" height="100%">
       <BarChart data={rows} margin={{ top: 8, right: 8, left: -24, bottom: 0 }}>
-        <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-        <XAxis
-          dataKey="week"
-          tick={{ fontSize: 11, fill: "var(--muted-foreground)" }}
-          tickLine={false}
-          tickFormatter={(week) => t("progress.stats.weekLabel", { week })}
+        <CartesianGrid {...GRID_PROPS} />
+        <XAxis dataKey="week" {...AXIS_PROPS} tickFormatter={(week) => t("progress.stats.weekLabel", { week })} />
+        <YAxis allowDecimals={false} {...AXIS_PROPS} />
+        <Tooltip
+          {...TOOLTIP_PROPS}
+          labelFormatter={(week) => t("progress.stats.weekLabel", { week: week as number })}
         />
-        <YAxis allowDecimals={false} tick={{ fontSize: 11, fill: "var(--muted-foreground)" }} />
-        <Tooltip contentStyle={{ borderRadius: 12, borderColor: "var(--border)", fontSize: 12 }} />
-        <Legend wrapperStyle={{ fontSize: 11 }} />
+        <Legend {...LEGEND_PROPS} />
         {DIMENSIONS.map((dimension) => (
           <Bar
             key={dimension}
             dataKey={dimension}
             name={t(DIMENSION_SHORT_KEY[dimension])}
             fill={DIMENSION_COLOR[dimension]}
-            radius={[4, 4, 0, 0]}
+            radius={BAR_RADIUS}
           />
         ))}
       </BarChart>

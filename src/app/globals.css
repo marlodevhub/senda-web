@@ -145,6 +145,8 @@
   --chart-3: var(--flow);
   --chart-4: var(--sprout);
   --chart-5: var(--ink-soft);
+  /* Serie principal de "Mis datos": el acento del tema en pastel (rosa; azul con Hombre). Nunca rojo. */
+  --chart-accent: #EFA7B8;
 
   --radius: 1.25rem;
 
@@ -227,6 +229,7 @@
   --chart-3: var(--flow);
   --chart-4: var(--sprout);
   --chart-5: var(--ink-soft);
+  --chart-accent: #E9A2B4;
 
   --sidebar: var(--paper-sunken);
   --sidebar-foreground: var(--ink);
@@ -255,6 +258,7 @@
  * texto blanco de los botones sobre --grad-hero cumple 4,5:1.
  */
 [data-palette="ocean"] {
+  --chart-accent: #8DB2E2;
   --celeste: #E4F1FB;
   --celeste-strong: #D2E7F8;
   /* Fondo con un toque azulado en lugar del verdoso (solo en modo claro). */
@@ -272,6 +276,7 @@
 }
 
 .dark[data-palette="ocean"] {
+  --chart-accent: #93B9EA;
   --celeste: #262F48;
   --celeste-strong: #2F3A57;
   /* El fondo de "ocean" claro pisaría el oscuro (misma especificidad que .dark): se repite el de .dark. */
