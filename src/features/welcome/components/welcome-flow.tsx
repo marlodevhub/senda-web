@@ -233,7 +233,7 @@ export function WelcomeFlow({
                         onChange={(e) => setStartingPoint(e.target.value)}
                         aria-describedby="startingPointHint"
                         rows={4}
-                        className="rounded-2xl bg-card text-foreground"
+                        className="bg-card focus-visible:ring-white"
                       />
                       <p id="startingPointHint" className="text-base text-white">
                         {t("welcome.startingPointHint")}
@@ -251,7 +251,7 @@ export function WelcomeFlow({
                           value={name}
                           maxLength={MAX_NAME}
                           autoComplete="given-name"
-                          className="h-12 bg-card text-foreground"
+                          className="bg-card focus-visible:ring-white"
                           aria-invalid={(showIdentityErrors && nameMissing) || undefined}
                           onChange={(e) => setName(e.target.value)}
                         />

@@ -114,7 +114,7 @@ function UsernameSection({ username }: { username: string | null }) {
           id="profile-username"
           className={cn(
             "pr-12",
-            availability === "available" && "border-sprout focus-visible:border-sprout focus-visible:ring-sprout/40",
+            availability === "available" && "ring-2 ring-sprout focus-visible:ring-sprout",
           )}
           autoComplete="username"
           autoCapitalize="none"
