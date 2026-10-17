@@ -36,12 +36,27 @@ const ENTRY: JournalEntryDetail = {
   rewrites: [
     {
       id: 3,
+      findingId: 5,
       dimension: "D1",
       pattern: "self_disqualification",
       result: "RISK",
       moodAfter: null,
       attemptNumber: 1,
       inJar: false,
+      originalPhrase: "Soy un inútil",
+      text: "Me cuesta, pero sigo",
+    },
+    {
+      id: 4,
+      findingId: 5,
+      dimension: "D1",
+      pattern: "self_disqualification",
+      result: "SOFTENED",
+      moodAfter: 4,
+      attemptNumber: 2,
+      inJar: true,
+      originalPhrase: "Soy un inútil",
+      text: "Me equivoqué y puedo aprender de esto",
     },
   ],
 };
@@ -58,5 +73,16 @@ describe("EntryDetail", () => {
     expect(await screen.findByText("Intento 1")).toBeInTheDocument();
     expect(screen.getByText("Guardada")).toBeInTheDocument();
     expect(screen.queryByText(/riesgo/i)).not.toBeInTheDocument();
+  });
+
+  it("muestra cada versión con su texto bajo la frase original (RN-HI-03)", async () => {
+    vi.spyOn(globalThis, "fetch").mockImplementation(async () => new Response(JSON.stringify(ENTRY), { status: 200 }));
+    renderWithProviders(<EntryDetail journalEntryId={22} />);
+
+    expect(await screen.findByText("Me cuesta, pero sigo")).toBeInTheDocument();
+    expect(screen.getByText("Me equivoqué y puedo aprender de esto")).toBeInTheDocument();
+    expect(screen.getByText("Intento 2")).toBeInTheDocument();
+    expect(screen.getByText("Se suavizó")).toBeInTheDocument();
+    expect(screen.getByText("Guardada en el frasco")).toBeInTheDocument();
   });
 });

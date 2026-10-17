@@ -198,10 +198,10 @@ export function EntryDetail({ journalEntryId }: { journalEntryId: number }) {
               <h2 id="entry-rewrites" className="font-heading text-lg font-bold text-foreground">
                 {t("history.rewritesTitle")}
               </h2>
-              <ul className="flex flex-col gap-2">
-                {entry.rewrites.map((rewrite) => (
-                  <li key={rewrite.id}>
-                    <RewriteRow rewrite={rewrite} />
+              <ul className="flex flex-col gap-3">
+                {groupByFinding(entry.rewrites).map((versions) => (
+                  <li key={versions[0].findingId}>
+                    <RewriteGroup versions={versions} />
                   </li>
                 ))}
               </ul>
@@ -263,30 +263,60 @@ function FindingRow({
   );
 }
 
-function RewriteRow({ rewrite }: { rewrite: EntryRewrite }) {
+/** Las versiones de cada frase, en orden de intento; las frases en el orden en que se reescribieron por primera vez. */
+function groupByFinding(rewrites: EntryRewrite[]): EntryRewrite[][] {
+  const groups = new Map<number, EntryRewrite[]>();
+  for (const rewrite of [...rewrites].sort((a, b) => a.id - b.id)) {
+    groups.set(rewrite.findingId, [...(groups.get(rewrite.findingId) ?? []), rewrite]);
+  }
+  return [...groups.values()].map((versions) => versions.sort((a, b) => a.attemptNumber - b.attemptNumber));
+}
+
+/** Una frase reescrita: la original tachada y debajo cada versión, con su texto, resultado, ánimo y frasco. */
+function RewriteGroup({ versions }: { versions: EntryRewrite[] }) {
   const t = useTranslations();
-  const result = RESULT_STYLE[rewrite.result ?? "PENDING"] ?? RESULT_STYLE.PENDING;
   return (
-    <div className="flex flex-wrap items-center gap-3 rounded-md bg-muted/60 px-4 py-3">
-      <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-card text-foreground">
-        <Feather className="size-4" aria-hidden />
-      </span>
-      <span className="font-semibold text-foreground">{t("history.attemptLabel", { n: rewrite.attemptNumber })}</span>
-      <span className={cn("rounded-full px-2.5 py-0.5 text-base font-semibold", result.tone)}>{t(result.key)}</span>
-      <span className="ms-auto flex items-center gap-3 text-base text-muted-foreground">
-        {rewrite.moodAfter != null && (
-          <span className="flex items-center gap-1.5">
-            {t("history.moodAfterLabel")}
-            <MoodOrb mood={rewrite.moodAfter as Mood} className="size-7" />
-          </span>
-        )}
-        {rewrite.inJar && (
-          <span className="flex items-center gap-1.5" title={t("history.inJar")}>
-            <Amphora className="size-4" aria-hidden />
-            <span className="sr-only sm:not-sr-only">{t("history.inJar")}</span>
-          </span>
-        )}
-      </span>
+    <div className="flex flex-col gap-2 rounded-md bg-muted/50 p-4">
+      <p className="font-hand text-base text-muted-foreground line-through decoration-muted-foreground/50 before:content-['“'] after:content-['”'] md:text-lg">
+        {versions[0].originalPhrase}
+      </p>
+      <ol className="flex flex-col gap-2">
+        {versions.map((rewrite) => {
+          const result = RESULT_STYLE[rewrite.result ?? "PENDING"] ?? RESULT_STYLE.PENDING;
+          return (
+            <li key={rewrite.id} className="flex flex-col gap-2 rounded-md bg-card px-4 py-3 shadow-card">
+              <div className="flex flex-wrap items-center gap-2">
+                <Feather className="size-4 text-muted-foreground" aria-hidden />
+                <span className="font-semibold text-foreground">
+                  {t("history.attemptLabel", { n: rewrite.attemptNumber })}
+                </span>
+                <span className={cn("rounded-full px-2.5 py-0.5 text-base font-semibold", result.tone)}>
+                  {t(result.key)}
+                </span>
+              </div>
+              <p className="font-hand text-base leading-relaxed text-foreground before:content-['“'] after:content-['”'] md:text-lg">
+                {rewrite.text}
+              </p>
+              {(rewrite.moodAfter != null || rewrite.inJar) && (
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-base text-muted-foreground">
+                  {rewrite.moodAfter != null && (
+                    <span className="flex items-center gap-1.5">
+                      {t("history.moodAfterLabel")}
+                      <MoodOrb mood={rewrite.moodAfter as Mood} className="size-7" />
+                    </span>
+                  )}
+                  {rewrite.inJar && (
+                    <span className="flex items-center gap-1.5">
+                      <Amphora className="size-4" aria-hidden />
+                      {t("history.inJar")}
+                    </span>
+                  )}
+                </div>
+              )}
+            </li>
+          );
+        })}
+      </ol>
     </div>
   );
 }

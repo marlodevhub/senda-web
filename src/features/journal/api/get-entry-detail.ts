@@ -24,12 +24,17 @@ export type EntryMirror = {
 
 export type EntryRewrite = {
   id: number;
+  /** La frase (hallazgo) que se reescribió: agrupa las versiones. */
+  findingId: number;
   dimension: Dimension | null;
   pattern: string | null;
   result: "SOFTENED" | "ALMOST" | "STILL_HARD" | "PENDING" | "RISK" | null;
   moodAfter: number | null;
   attemptNumber: number;
   inJar: boolean;
+  /** La frase original y el texto de esta versión (solo en el detalle, para su dueño). */
+  originalPhrase: string;
+  text: string;
 };
 
 export type JournalEntryDetail = {
