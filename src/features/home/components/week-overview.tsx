@@ -41,7 +41,7 @@ export function WeekOverview({
   }
 
   return (
-    <section aria-labelledby="home-week" className="flex flex-col gap-4 rounded-lg bg-card p-5 shadow-card">
+    <section aria-labelledby="home-week" className="flex flex-col gap-4 rounded-lg bg-card p-5 shadow-card lg:gap-3">
       <div className="flex items-baseline justify-between gap-2 lg:sr-only">
         <h2 id="home-week" className="font-heading text-lg font-bold text-foreground">
           {t("home.weekTitle", { week })}
@@ -99,7 +99,7 @@ export function WeekOverview({
         })}
       </ol>
 
-      <dl className="grid grid-cols-3 divide-x divide-border border-t border-border pt-4 text-center">
+      <dl className="grid grid-cols-3 divide-x divide-border border-t border-border pt-4 text-center lg:pt-3">
         {goal && <Stat label={t("home.statDays")} value={goal.daysWithEntry} total={goal.goal} />}
         <Stat
           label={t("home.statJourney")}
@@ -117,7 +117,7 @@ function Stat({ label, value, total }: { label: string; value: number; total: nu
   return (
     <div className="flex flex-col gap-0.5 px-1">
       <dt className="order-2 text-base text-muted-foreground">{label}</dt>
-      <dd className="order-1 font-heading text-2xl font-bold text-foreground tabular-nums">
+      <dd className="order-1 font-heading text-2xl font-bold text-foreground tabular-nums lg:text-xl">
         {value} <span className="text-base font-normal text-muted-foreground">{t("home.statOf", { total })}</span>
       </dd>
     </div>

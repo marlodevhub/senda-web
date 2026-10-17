@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { ArrowRight, Feather } from "lucide-react";
@@ -58,9 +58,10 @@ export function PendingPhraseList({ phrases }: { phrases: HomePendingPhrase[] })
   const t = useTranslations();
   const listRef = useRef<HTMLUListElement>(null);
   const maxHeight = useHeightToViewportBottom(listRef);
+  const { canScrollUp, canScrollDown, onScroll } = useScrollEdges(listRef, phrases.length, maxHeight);
 
   return (
-    <section aria-labelledby="pending-list" className="flex flex-col gap-4 rounded-lg bg-card p-5 shadow-card">
+    <section aria-labelledby="pending-list" className="flex flex-col gap-4 overflow-hidden rounded-lg bg-card p-5 shadow-card">
       <header className="flex items-start gap-3">
         <span
           aria-hidden
@@ -79,41 +80,57 @@ export function PendingPhraseList({ phrases }: { phrases: HomePendingPhrase[] })
         </span>
       </header>
 
-      <ul ref={listRef} style={{ maxHeight }} className="flex flex-col gap-2 overflow-y-auto pr-1">
-        {phrases.map((phrase) => (
-          <li key={phrase.findingId}>
-            <Link
-              href={`/reescritura/${phrase.journalEntryId}?findingId=${phrase.findingId}`}
-              aria-label={t("home.pendingRewriteThis", { fragment: phrase.fragment })}
-              className="group flex items-center gap-3 rounded-md bg-celeste px-4 py-3 transition-colors hover:bg-celeste-strong focus-visible:outline-2 focus-visible:outline-ring"
-            >
-              <span className="flex min-w-0 flex-1 flex-col gap-1">
-                <span className="font-display text-base leading-snug font-semibold text-foreground before:content-['“'] after:content-['”']">
-                  {phrase.fragment}
-                </span>
-                <span className="flex items-start gap-2 text-base leading-snug text-muted-foreground">
-                  <span
-                    aria-hidden
-                    className={cn("mt-[0.45rem] size-2 shrink-0 rounded-full", DIMENSION_DOT[phrase.dimension])}
-                  />
-                  {t(patternLabelKey(phrase.pattern))}
-                </span>
-              </span>
-              <span
-                aria-hidden
-                className="flex size-9 shrink-0 items-center justify-center rounded-full bg-[image:var(--grad-hero)] text-white shadow-bloom transition-transform group-hover:translate-x-0.5"
+      {/*
+        La lista llega hasta los bordes de la tarjeta (-mx-5): la barra de scroll queda pegada al borde derecho. Arriba
+        y abajo, un desvanecido con desenfoque indica que hay más frases (solo cuando las hay).
+      */}
+      <div className="relative -mx-5 -mb-2">
+        <ul
+          ref={listRef}
+          style={{ maxHeight }}
+          onScroll={onScroll}
+          className="flex flex-col gap-2 overflow-y-auto px-5 py-2 [scrollbar-color:var(--border)_transparent] [scrollbar-width:thin]"
+        >
+          {phrases.map((phrase) => (
+            <li key={phrase.findingId} className="relative hover:z-10 focus-within:z-10">
+              <Link
+                href={`/reescritura/${phrase.journalEntryId}?findingId=${phrase.findingId}`}
+                aria-label={t("home.pendingRewriteThis", { fragment: phrase.fragment })}
+                className="group flex items-center gap-3 rounded-md bg-celeste px-4 py-3 transition-[transform,background-color,box-shadow] duration-200 hover:scale-[1.03] hover:bg-celeste-strong hover:shadow-card focus-visible:scale-[1.03] focus-visible:outline-2 focus-visible:outline-ring motion-reduce:transition-none motion-reduce:hover:scale-100"
               >
-                <ArrowRight className="size-4" />
-              </span>
-            </Link>
-          </li>
-        ))}
-      </ul>
+                <span className="flex min-w-0 flex-1 flex-col gap-1">
+                  <span className="font-display text-base leading-snug font-semibold text-foreground before:content-['“'] after:content-['”']">
+                    {phrase.fragment}
+                  </span>
+                  <span className="flex items-start gap-2 text-base leading-snug text-muted-foreground">
+                    <span
+                      aria-hidden
+                      className={cn("mt-[0.45rem] size-2 shrink-0 rounded-full", DIMENSION_DOT[phrase.dimension])}
+                    />
+                    {t(patternLabelKey(phrase.pattern))}
+                  </span>
+                </span>
+                <span
+                  aria-hidden
+                  className="flex size-9 shrink-0 items-center justify-center rounded-full bg-[image:var(--grad-hero)] text-white shadow-bloom transition-transform group-hover:translate-x-0.5"
+                >
+                  <ArrowRight className="size-4" />
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+        <ScrollFade side="top" visible={canScrollUp} />
+        <ScrollFade side="bottom" visible={canScrollDown} />
+      </div>
     </section>
   );
 }
 
-/** Lo que queda debajo de la lista: el padding de la tarjeta (1,25rem) y el de main en escritorio (2,5rem). */
+/**
+ * Lo que queda debajo de la lista: el padding de abajo de la lista (0,5rem), el de la tarjeta menos lo que la lista
+ * se mete en él (1,25rem − 0,5rem) y el de main en escritorio (2,5rem).
+ */
 const BOTTOM_SPACE_PX = 60;
 /** Al menos una frase completa, aunque la ventana sea muy baja. */
 const MIN_LIST_PX = 176;
@@ -144,4 +161,42 @@ function useHeightToViewportBottom(ref: React.RefObject<HTMLElement | null>): nu
   }, [ref]);
 
   return maxHeight;
+}
+
+/** Desvanecido con desenfoque en el borde de arriba o de abajo de la lista; deja libre la barra de scroll. */
+function ScrollFade({ side, visible }: { side: "top" | "bottom"; visible: boolean }) {
+  return (
+    <div
+      aria-hidden
+      className={cn(
+        "pointer-events-none absolute inset-x-0 right-3 h-10 backdrop-blur-[2px] transition-opacity duration-200",
+        side === "top"
+          ? "top-0 bg-linear-to-b from-card to-transparent [mask-image:linear-gradient(to_bottom,black,transparent)]"
+          : "bottom-0 bg-linear-to-t from-card to-transparent [mask-image:linear-gradient(to_top,black,transparent)]",
+        visible ? "opacity-100" : "opacity-0",
+      )}
+    />
+  );
+}
+
+/** Si la lista tiene más contenido arriba o abajo del que se ve (para mostrar los desvanecidos). */
+function useScrollEdges(ref: React.RefObject<HTMLElement | null>, itemCount: number, maxHeight: number | undefined) {
+  const [edges, setEdges] = useState({ canScrollUp: false, canScrollDown: false });
+
+  const measure = useCallback(() => {
+    const element = ref.current;
+    if (!element) return;
+    const canScrollUp = element.scrollTop > 1;
+    const canScrollDown = element.scrollTop + element.clientHeight < element.scrollHeight - 1;
+    setEdges((previous) =>
+      previous.canScrollUp === canScrollUp && previous.canScrollDown === canScrollDown
+        ? previous
+        : { canScrollUp, canScrollDown },
+    );
+  }, [ref]);
+
+  // Al cambiar las frases o el alto disponible, el borde de abajo puede aparecer o desaparecer.
+  useEffect(measure, [measure, itemCount, maxHeight]);
+
+  return { ...edges, onScroll: measure };
 }
