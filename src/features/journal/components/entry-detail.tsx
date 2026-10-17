@@ -1,14 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { Amphora, ArrowRight, Feather, Trash2 } from "lucide-react";
+import { Amphora, Feather, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { MoodOrb, type Mood } from "@/components/icons/mood-orb";
 import { CareMessage } from "@/components/feedback/care-message";
+import { FindingRow } from "@/components/feedback/finding-row";
 import {
   Dialog,
   DialogContent,
@@ -27,6 +27,7 @@ import type {
 } from "@/features/journal/api/get-entry-detail";
 import { CONTEXT_ICONS } from "@/features/journal/context-icons";
 import { patternLabelKey } from "@/lib/pattern-labels";
+import { routes } from "@/lib/routes";
 import { BffError } from "@/lib/api/client";
 import { errorMessageKey } from "@/lib/api/error-messages";
 import { cn } from "@/lib/utils";
@@ -47,12 +48,6 @@ const DIMENSION_MARK: Record<Dimension, string> = {
   D1: "bg-root-tint text-root-ink",
   D2: "bg-bloom-tint text-bloom-ink",
   D3: "bg-flow-tint text-flow-ink",
-};
-
-const DIMENSION_DOT: Record<Dimension, string> = {
-  D1: "bg-root",
-  D2: "bg-bloom",
-  D3: "bg-flow",
 };
 
 const FIELD_TEXT: Record<EntryAnalysisField, keyof Pick<JournalEntryDetail, "q1" | "q2" | "q3" | "freeText">> = {
@@ -181,7 +176,8 @@ export function EntryDetail({ journalEntryId }: { journalEntryId: number }) {
                         fragment={fragmentOf(finding, entry)}
                         label={t(patternLabelKey(finding.pattern))}
                         dimension={finding.dimension}
-                        href={canRewrite ? `/reescritura/${entry.id}?findingId=${finding.findingId}` : undefined}
+                        href={canRewrite ? routes.rewrite(entry.id, finding.findingId) : undefined}
+                        linkLabel={t("home.pendingRewriteThis", { fragment: fragmentOf(finding, entry) })}
                       />
                     </li>
                   ))}
@@ -212,54 +208,6 @@ export function EntryDetail({ journalEntryId }: { journalEntryId: number }) {
         </div>
       </div>
     </div>
-  );
-}
-
-/** Una frase del Espejo: el fragmento, su tipo en lenguaje amable y, si se puede, el acceso a reescribirla. */
-function FindingRow({
-  fragment,
-  label,
-  dimension,
-  href,
-}: {
-  fragment: string;
-  label: string;
-  dimension: Dimension;
-  href?: string;
-}) {
-  const t = useTranslations();
-  const body = (
-    <>
-      <span className="flex min-w-0 flex-1 flex-col gap-1">
-        <span className="font-display text-base leading-snug font-semibold text-foreground before:content-['“'] after:content-['”']">
-          {fragment}
-        </span>
-        <span className="flex items-start gap-2 text-base leading-snug text-muted-foreground">
-          <span aria-hidden className={cn("mt-[0.45rem] size-2 shrink-0 rounded-full", DIMENSION_DOT[dimension])} />
-          {label}
-        </span>
-      </span>
-      {href && (
-        <span
-          aria-hidden
-          className="flex size-9 shrink-0 items-center justify-center rounded-full bg-[image:var(--grad-hero)] text-white shadow-bloom transition-transform group-hover:translate-x-0.5"
-        >
-          <ArrowRight className="size-4" />
-        </span>
-      )}
-    </>
-  );
-
-  return href ? (
-    <Link
-      href={href}
-      aria-label={t("home.pendingRewriteThis", { fragment })}
-      className="group flex items-center gap-3 rounded-md bg-celeste px-4 py-3 transition-[transform,background-color] duration-200 hover:scale-[1.02] hover:bg-celeste-strong focus-visible:outline-2 focus-visible:outline-ring motion-reduce:hover:scale-100"
-    >
-      {body}
-    </Link>
-  ) : (
-    <div className="flex items-center gap-3 rounded-md bg-celeste px-4 py-3">{body}</div>
   );
 }
 

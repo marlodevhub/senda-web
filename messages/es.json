@@ -129,6 +129,7 @@
     "finished": "Terminaste tus 28 días. Gracias por acompañarte así. Solo falta un último cuestionario.",
     "posttestCta": "Responder el cuestionario final",
     "goToProgress": "Ver mi progreso",
+    "seeEntry": "Ver el registro",
     "goToHistory": "Ver mi historial",
     "checkinInvitation": {
       "veryLow": "Parece un día muy pesado. Si quieres, escribir un momento puede ayudarte a soltar un poco.",
@@ -175,6 +176,7 @@
     "rewriteThisPhrase": "Reescribir esta frase",
     "goHome": "Ir al inicio",
     "goToProgress": "Ver mi progreso",
+    "seeEntry": "Ver el registro",
     "patterns": {
       "selfDisqualification": "Aquí te hablaste con dureza por un error.",
       "errorOvergeneralization": "Aquí un error se volvió un \"siempre\" o un \"nunca\".",

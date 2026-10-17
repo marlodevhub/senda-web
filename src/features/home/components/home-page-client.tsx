@@ -11,6 +11,7 @@ import { GoalRing } from "@/features/home/components/goal-ring";
 import { MoodWeek } from "@/features/home/components/mood-week";
 import { WeekOverview } from "@/features/home/components/week-overview";
 import { CheckIn } from "@/features/home/components/check-in";
+import { routes } from "@/lib/routes";
 
 /**
  * CU-05 Inicio (RN-IN-01): saludo con "Día N de 28", botón Escribir, frase
@@ -108,9 +109,7 @@ export function HomePageClient() {
                 {pending ? (
                   <PendingPhraseCard
                     fragment={pending.fragment}
-                    onRewrite={() =>
-                      router.push(`/reescritura/${pending.journalEntryId}?findingId=${pending.findingId}`)
-                    }
+                    onRewrite={() => router.push(routes.rewrite(pending.journalEntryId, pending.findingId))}
                   />
                 ) : (
                   <NoPendingPhrase />

@@ -60,8 +60,8 @@ senda-web/
     │   ├── (student)/                con barra inferior
     │   │   ├── layout.tsx
     │   │   ├── inicio/ · diario/ · resumen/ · mensajes/ · perfil/
-    │   │   ├── espejo/[entryId]/ · reescritura/[entryId]/
-    │   │   ├── historial/ · historial/[entryId]/
+    │   │   ├── historial/ · historial/por-reescribir/ · historial/reescritos/
+    │   │   ├── historial/[entryId]/ · historial/[entryId]/espejo/ · historial/[entryId]/reescribir/   rutas con parámetros en lib/routes.ts
     │   │   └── progreso/
     │   │       ├── layout.tsx
     │   │       ├── _components/progress-tabs.tsx    carpeta privada: solo esta ruta

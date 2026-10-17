@@ -24,6 +24,7 @@ import { countWords } from "@/features/journal/word-count";
 import { BffError } from "@/lib/api/client";
 import { errorMessageKey } from "@/lib/api/error-messages";
 import { saveFieldTexts } from "@/lib/field-texts-cache";
+import { routes } from "@/lib/routes";
 
 /** Un solo aviso aunque el efecto se repita (modo estricto de React en desarrollo). */
 const DRAFT_RECOVERED_TOAST_ID = "journal-draft-recovered";
@@ -99,7 +100,7 @@ export function JournalForm({ checkinMood }: { checkinMood?: Mood | null }) {
           : { FREE_TEXT: values.freeText ?? "" },
       );
       clearDraft();
-      router.push(`/espejo/${created.journalEntryId}`);
+      router.push(routes.mirror(created.journalEntryId));
     } catch (error) {
       if (error instanceof BffError) {
         const field = fieldForError(error.code, values.mode);

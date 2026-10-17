@@ -1,14 +1,14 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { ArrowRight, Feather } from "lucide-react";
+import { Feather } from "lucide-react";
+import { FindingRow } from "@/components/feedback/finding-row";
 import { Button } from "@/components/ui/button";
 import type { HomePendingPhrase } from "@/features/home/api/get-home";
 import { patternLabelKey } from "@/lib/pattern-labels";
+import { routes } from "@/lib/routes";
 import { cn } from "@/lib/utils";
-import type { Dimension } from "@/types/dimension";
 
 /**
  * Tarjeta "frase pendiente" de Inicio (RN-IN-02): el hallazgo visible más
@@ -42,13 +42,6 @@ export function NoPendingPhrase() {
   );
 }
 
-/** El punto de color de cada dimensión, junto al tipo de frase. */
-const DIMENSION_DOT: Record<Dimension, string> = {
-  D1: "bg-root",
-  D2: "bg-bloom",
-  D3: "bg-flow",
-};
-
 /**
  * Escritorio (CU-05): todas las frases por reescribir, de la más reciente. Cada una, en el tono suave del tema (rosado; celeste con Hombre), lleva directo a
  * CU-04 con ese hallazgo; debajo, su tipo en lenguaje amable (el mismo del Espejo) como texto, con un punto del
@@ -61,7 +54,10 @@ export function PendingPhraseList({ phrases }: { phrases: HomePendingPhrase[] })
   const { canScrollUp, canScrollDown, onScroll } = useScrollEdges(listRef, phrases.length, maxHeight);
 
   return (
-    <section aria-labelledby="pending-list" className="flex flex-col gap-4 overflow-hidden rounded-lg bg-card p-5 shadow-card">
+    <section
+      aria-labelledby="pending-list"
+      className="flex flex-col gap-4 overflow-hidden rounded-lg bg-card p-5 shadow-card"
+    >
       <header className="flex items-start gap-3">
         <span
           aria-hidden
@@ -93,30 +89,13 @@ export function PendingPhraseList({ phrases }: { phrases: HomePendingPhrase[] })
         >
           {phrases.map((phrase) => (
             <li key={phrase.findingId} className="relative hover:z-10 focus-within:z-10">
-              <Link
-                href={`/reescritura/${phrase.journalEntryId}?findingId=${phrase.findingId}`}
-                aria-label={t("home.pendingRewriteThis", { fragment: phrase.fragment })}
-                className="group flex items-center gap-3 rounded-md bg-celeste px-4 py-3 transition-[transform,background-color,box-shadow] duration-200 hover:scale-[1.03] hover:bg-celeste-strong hover:shadow-card focus-visible:scale-[1.03] focus-visible:outline-2 focus-visible:outline-ring motion-reduce:transition-none motion-reduce:hover:scale-100"
-              >
-                <span className="flex min-w-0 flex-1 flex-col gap-1">
-                  <span className="font-display text-base leading-snug font-semibold text-foreground before:content-['“'] after:content-['”']">
-                    {phrase.fragment}
-                  </span>
-                  <span className="flex items-start gap-2 text-base leading-snug text-muted-foreground">
-                    <span
-                      aria-hidden
-                      className={cn("mt-[0.45rem] size-2 shrink-0 rounded-full", DIMENSION_DOT[phrase.dimension])}
-                    />
-                    {t(patternLabelKey(phrase.pattern))}
-                  </span>
-                </span>
-                <span
-                  aria-hidden
-                  className="flex size-9 shrink-0 items-center justify-center rounded-full bg-[image:var(--grad-hero)] text-white shadow-bloom transition-transform group-hover:translate-x-0.5"
-                >
-                  <ArrowRight className="size-4" />
-                </span>
-              </Link>
+              <FindingRow
+                fragment={phrase.fragment}
+                label={t(patternLabelKey(phrase.pattern))}
+                dimension={phrase.dimension}
+                href={routes.rewrite(phrase.journalEntryId, phrase.findingId)}
+                linkLabel={t("home.pendingRewriteThis", { fragment: phrase.fragment })}
+              />
             </li>
           ))}
         </ul>

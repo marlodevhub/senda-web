@@ -102,7 +102,7 @@ test("ciclo diario completo: activar → diario → espejo → reescritura → f
   await page.getByRole("button", { name: "Guardar" }).click();
 
   // CU-02/CU-03: el espejo muestra la frase real (aunque el LLM contó mal las posiciones).
-  await expect(page).toHaveURL(/\/espejo\/\d+/);
+  await expect(page).toHaveURL(/\/historial\/\d+\/espejo$/);
   await expect(page.getByText("Esto es lo que noté en tu voz interna", { exact: false })).toBeVisible();
   await expect(page.getByText("Soy un inútil", { exact: true })).toBeVisible();
   await expect(page.getByText("Aquí te hablaste con dureza por un error.")).toBeVisible();
@@ -111,7 +111,7 @@ test("ciclo diario completo: activar → diario → espejo → reescritura → f
 
   // CU-04: reescribir la frase.
   await page.getByRole("link", { name: "Reescribir esta frase" }).click();
-  await expect(page).toHaveURL(/\/reescritura\/\d+/);
+  await expect(page).toHaveURL(/\/historial\/\d+\/reescribir\?frase=\d+$/);
   await page
     .getByLabel("Tu reescritura")
     .fill("Hoy me costó, pero equivocarme no me hace inútil; puedo repasar con calma.");

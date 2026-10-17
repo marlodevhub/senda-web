@@ -8,13 +8,14 @@ import { cn } from "@/lib/utils";
 import type { Message } from "@/features/guidance/api/get-messages";
 import { useOpenMessage } from "@/features/guidance/api/use-messages";
 import { formatShortDate } from "@/lib/format/dates";
+import { routes } from "@/lib/routes";
 
 function actionHref(message: Message): string | null {
   if (message.actionType === "WRITE") {
     return "/diario";
   }
   if (message.actionType === "REWRITE" && message.actionJournalEntryId && message.actionFindingId) {
-    return `/reescritura/${message.actionJournalEntryId}?findingId=${message.actionFindingId}`;
+    return routes.rewrite(message.actionJournalEntryId, message.actionFindingId);
   }
   if (message.actionType === "JAR_PHRASE") {
     return "/progreso/frasco";

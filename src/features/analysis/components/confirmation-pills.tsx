@@ -39,7 +39,7 @@ export function ConfirmationPills({
             aria-checked={active}
             onClick={() => onChange(opt.value)}
             className={cn(
-              "flex-1 rounded-full border px-2 py-2 text-xs font-bold transition-colors duration-200",
+              "flex-1 rounded-full border px-2 py-2.5 text-base font-semibold transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-ring",
               active
                 ? "border-sprout bg-sprout text-sprout-foreground shadow-sprout"
                 : "border-border bg-muted text-muted-foreground hover:border-sprout/50",

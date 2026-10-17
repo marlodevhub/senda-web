@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 import { Amphora, ArrowLeft, Check, Feather, Home, Lightbulb, Loader2 } from "lucide-react";
+import { DIMENSION_DOT } from "@/components/feedback/finding-row";
 import { JournalPrompt, JournalTextarea } from "@/components/forms/journal-sheet";
 import { Button } from "@/components/ui/button";
 import { MoodPicker } from "@/features/journal/components/mood-picker";
@@ -20,10 +21,8 @@ import type { SubmitRewriteResult } from "@/features/rewrite/api/submit-rewrite"
 import { BffError } from "@/lib/api/client";
 import { errorMessageKey } from "@/lib/api/error-messages";
 import { patternLabelKey } from "@/lib/pattern-labels";
+import { routes } from "@/lib/routes";
 import { cn } from "@/lib/utils";
-import type { Dimension } from "@/types/dimension";
-
-const DIMENSION_DOT: Record<Dimension, string> = { D1: "bg-root", D2: "bg-bloom", D3: "bg-flow" };
 
 /**
  * CU-04 completo salvo 2 recortes deliberados, iguales a los que ya
@@ -156,7 +155,7 @@ export function RewriteForm({ journalEntryId, findingId }: { journalEntryId: num
             type="button"
             variant="ghost"
             className="rounded-full"
-            onClick={() => router.push(`/espejo/${journalEntryId}`)}
+            onClick={() => router.push(routes.mirror(journalEntryId))}
           >
             <ArrowLeft className="size-4" aria-hidden />
             {t("common.back")}

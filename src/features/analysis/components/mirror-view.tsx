@@ -3,15 +3,16 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { Loader2 } from "lucide-react";
+import { BookOpen, Home, Loader2, ScanFace } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useMirror, useConfirmMirror } from "@/features/analysis/api/use-mirror";
 import type { MirrorFinding, AnalysisField } from "@/features/analysis/api/get-mirror";
-import { FindingCard } from "@/components/feedback/finding-card";
+import { FindingRow } from "@/components/feedback/finding-row";
 import { ConfirmationPills, type ConfirmationAnswer } from "@/features/analysis/components/confirmation-pills";
 import { CareMessage } from "@/components/feedback/care-message";
 import { MirrorMoment } from "@/features/analysis/components/mirror-moment";
 import { patternLabelKey } from "@/lib/pattern-labels";
+import { routes } from "@/lib/routes";
 
 /** Las 3 preguntas del Diario guardan el texto por campo (RS-ES-06). */
 export type JournalFieldTexts = Partial<Record<AnalysisField, string>>;
@@ -44,16 +45,17 @@ export function MirrorView({ journalEntryId, fieldTexts }: { journalEntryId: num
     return (
       <div className="flex flex-col items-center gap-3 py-10 text-center">
         <Loader2 className="size-6 animate-spin text-muted-foreground" aria-hidden />
-        <p className="text-sm text-muted-foreground">{t("common.loading")}</p>
+        <p className="text-base text-muted-foreground">{t("common.loading")}</p>
       </div>
     );
   }
 
   if (mirror.status === "RISK") {
     return (
-      <div className="flex flex-col gap-4">
+      <div className="mx-auto flex w-full max-w-2xl flex-col gap-4">
+        <MirrorHeader />
         <CareMessage />
-        <Button variant="soft" onClick={() => router.push("/inicio")}>
+        <Button variant="soft" size="xl" className="rounded-full" onClick={() => router.push("/inicio")}>
           {t("analysis.goHome")}
         </Button>
       </div>
@@ -64,7 +66,7 @@ export function MirrorView({ journalEntryId, fieldTexts }: { journalEntryId: num
     const pending = mirror.status === "PENDING";
     return (
       <MirrorMoment emotion={pending ? "calm" : "hope"} message={t(pending ? "analysis.pending" : "analysis.failed")}>
-        <Button variant="soft" size="xl" onClick={() => router.push("/inicio")}>
+        <Button variant="soft" size="xl" className="rounded-full" onClick={() => router.push("/inicio")}>
           {t("analysis.goHome")}
         </Button>
       </MirrorMoment>
@@ -80,7 +82,7 @@ export function MirrorView({ journalEntryId, fieldTexts }: { journalEntryId: num
         <Button variant="hero" size="xl" className="rounded-full" asChild>
           <Link href="/progreso">{t("analysis.goToProgress")}</Link>
         </Button>
-        <Button variant="ghost" size="xl" onClick={() => router.push("/inicio")}>
+        <Button variant="ghost" size="xl" className="rounded-full" onClick={() => router.push("/inicio")}>
           {t("analysis.goHome")}
         </Button>
       </MirrorMoment>
@@ -93,39 +95,81 @@ export function MirrorView({ journalEntryId, fieldTexts }: { journalEntryId: num
       : null;
 
   return (
-    <div className="flex flex-col gap-5">
-      <p className="font-display text-lg leading-snug text-foreground">{t("analysis.recognition")}</p>
+    <div className="mx-auto flex w-full max-w-2xl flex-col gap-5">
+      <MirrorHeader />
 
-      <div className="flex flex-col gap-3">
-        {findings.map((finding) => (
-          <div key={finding.findingId} className="flex flex-col gap-2">
-            <FindingCard
-              fragment={fragmentOf(finding, fieldTexts)}
-              label={t(patternLabelKey(finding.pattern))}
-              dimension={finding.dimension}
-            />
-            <Button variant="outline" size="sm" className="self-start" asChild>
-              <Link href={`/reescritura/${journalEntryId}?findingId=${finding.findingId}`}>
-                {t("analysis.rewriteThisPhrase")}
-              </Link>
-            </Button>
-          </div>
-        ))}
-      </div>
+      {/* La hoja del Espejo: lo que notó, cada frase con su acceso a reescribirla (CU-04) y el mensaje de la dimensión. */}
+      <section
+        aria-labelledby="mirror-recognition"
+        className="flex flex-col gap-4 rounded-[2rem] bg-card p-5 shadow-card md:p-8"
+      >
+        <p id="mirror-recognition" className="font-display text-lg leading-snug text-foreground">
+          {t("analysis.recognition")}
+        </p>
+        <ul className="flex flex-col gap-2">
+          {findings.map((finding) => {
+            const fragment = fragmentOf(finding, fieldTexts);
+            return (
+              <li key={finding.findingId} className="relative hover:z-10 focus-within:z-10">
+                <FindingRow
+                  fragment={fragment}
+                  label={t(patternLabelKey(finding.pattern))}
+                  dimension={finding.dimension}
+                  href={routes.rewrite(journalEntryId, finding.findingId)}
+                  linkLabel={`${t("analysis.rewriteThisPhrase")}: “${fragment}”`}
+                />
+              </li>
+            );
+          })}
+        </ul>
+        {dimensionMessage && (
+          <p className="rounded-md bg-muted/60 px-4 py-3 font-hand text-base leading-relaxed text-foreground md:text-lg">
+            {dimensionMessage}
+          </p>
+        )}
+      </section>
 
-      {dimensionMessage && <p className="text-sm text-muted-foreground">{dimensionMessage}</p>}
-
-      <div className="flex flex-col gap-2">
-        <p className="text-sm font-semibold text-foreground">{t("analysis.confirmationQuestion")}</p>
+      {/* RN-ES-14: opcional y se puede cambiar; no cambia el análisis. */}
+      <section aria-labelledby="mirror-confirmation" className="flex flex-col gap-3 rounded-lg bg-card p-5 shadow-card">
+        <h2 id="mirror-confirmation" className="font-heading text-lg font-bold text-foreground">
+          {t("analysis.confirmationQuestion")}
+        </h2>
         <ConfirmationPills
           value={mirror.confirmation}
           onChange={(answer: ConfirmationAnswer) => confirmMutation.mutate(answer)}
         />
-      </div>
+      </section>
 
-      <Button variant="outline" onClick={() => router.push("/inicio")}>
-        {t("analysis.goHome")}
-      </Button>
+      <div className="flex flex-col gap-2 sm:flex-row sm:justify-between">
+        <Button variant="ghost" className="rounded-full" asChild>
+          <Link href={routes.entry(journalEntryId)}>
+            <BookOpen className="size-4" aria-hidden />
+            {t("analysis.seeEntry")}
+          </Link>
+        </Button>
+        <Button variant="outline" className="rounded-full" onClick={() => router.push("/inicio")}>
+          <Home className="size-4" aria-hidden />
+          {t("analysis.goHome")}
+        </Button>
+      </div>
     </div>
+  );
+}
+
+/** Título del Espejo con su ícono. */
+function MirrorHeader() {
+  const t = useTranslations();
+  return (
+    <header className="flex items-center gap-3">
+      <span
+        aria-hidden
+        className="flex size-11 shrink-0 items-center justify-center rounded-full bg-celeste text-bloom-ink"
+      >
+        <ScanFace className="size-5" />
+      </span>
+      <h1 className="font-heading text-xl leading-tight font-bold text-foreground md:text-2xl">
+        {t("analysis.title")}
+      </h1>
+    </header>
   );
 }
