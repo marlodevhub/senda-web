@@ -106,12 +106,15 @@
   --sprout-tint: #E4EBDD;
   /* Texto sobre el verde lleno (día con registro, respuesta elegida): oscuro, 11:1. */
   --sprout-foreground: #16240F;
-  /* Celeste suave de las frases por reescribir (Inicio en escritorio); "strong" al pasar el mouse. */
-  --celeste: #E4F1FB;
+  /*
+   * Fondo suave de las frases por reescribir ("strong" al pasar el mouse) y de "N por reescribir". Sigue al tema:
+   * rosado con Mujer u Otro, azul (celeste) con Hombre ("ocean").
+   */
+  --celeste: #FBEAEE;
+  --celeste-strong: #F6DAE1;
   /* Día en que solo marcó su ánimo (check-in, sin registro): amarillo, con texto oscuro encima. */
   --checkin: #F6D978;
   --checkin-foreground: #3A2C05;
-  --celeste-strong: #D2E7F8;
   /* Píldora activa de Progreso: los verdes del pasto del jardín. */
   --leaf-from: #dcf5e1;
   --leaf-to: #b5e5c0;
@@ -194,9 +197,9 @@
   --flow-tint: #272645;
   --sprout-ink: #E4EEDD;
   --sprout-tint: #223023;
-  --celeste: #1B2A3A;
+  --celeste: #3A2633;
+  --celeste-strong: #47303F;
   --checkin: #E8C95E;
-  --celeste-strong: #22364B;
   /* Pestañas en modo oscuro: pastel claro con texto oscuro (verde de Progreso, naranja de Historial). */
   --leaf-from: #C3EBCB;
   --leaf-to: #9FD9AF;
@@ -252,6 +255,8 @@
  * texto blanco de los botones sobre --grad-hero cumple 4,5:1.
  */
 [data-palette="ocean"] {
+  --celeste: #E4F1FB;
+  --celeste-strong: #D2E7F8;
   /* Fondo con un toque azulado en lugar del verdoso (solo en modo claro). */
   --paper: #EAEDF4;
   --paper-sunken: #DFE4EE;
@@ -267,6 +272,8 @@
 }
 
 .dark[data-palette="ocean"] {
+  --celeste: #262F48;
+  --celeste-strong: #2F3A57;
   /* El fondo de "ocean" claro pisaría el oscuro (misma especificidad que .dark): se repite el de .dark. */
   --paper: #211C2B;
   --paper-sunken: #190F22;

@@ -50,7 +50,7 @@ const DIMENSION_DOT: Record<Dimension, string> = {
 };
 
 /**
- * Escritorio (CU-05): todas las frases por reescribir, de la más reciente. Cada una, en celeste, lleva directo a
+ * Escritorio (CU-05): todas las frases por reescribir, de la más reciente. Cada una, en el tono suave del tema (rosado; celeste con Hombre), lleva directo a
  * CU-04 con ese hallazgo; debajo, su tipo en lenguaje amable (el mismo del Espejo) como texto, con un punto del
  * color de su dimensión. Nunca como etiqueta clínica.
  */
@@ -65,7 +65,7 @@ export function PendingPhraseList({ phrases }: { phrases: HomePendingPhrase[] })
       <header className="flex items-start gap-3">
         <span
           aria-hidden
-          className="flex size-10 shrink-0 items-center justify-center rounded-full bg-celeste text-flow-ink"
+          className="flex size-10 shrink-0 items-center justify-center rounded-full bg-celeste text-bloom-ink"
         >
           <Feather className="size-5" />
         </span>
