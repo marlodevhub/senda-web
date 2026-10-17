@@ -164,9 +164,6 @@
     "dayStatusToday": "{date}: hoy",
     "dayStatusEmpty": "{date}: sin registro",
     "dayStatusFuture": "{date}: todavía no llega",
-    "statDays": "Días con registro",
-    "statJourney": "Día de tu senda",
-    "statWeek": "Semana",
     "statOf": "de {total}",
     "monthPrev": "Mes anterior",
     "monthNext": "Mes siguiente",
@@ -187,7 +184,13 @@
     "dayNothing": "Ese día no hay nada registrado. Está bien: la meta es 3 días por semana.",
     "dayTodayEmpty": "Hoy todavía no escribes ni marcas tu ánimo.",
     "dayUpcoming": "Este día todavía no llega.",
-    "daySelect": "Ver {date}"
+    "daySelect": "Ver {date}",
+    "journeyBannerKicker": "Tu senda",
+    "journeyBannerDay": "Día {day}",
+    "journeyBannerOf": "de {total}",
+    "journeyBannerDays": "{days} de {goal} días con registro",
+    "journeyBannerWeek": "Semana {week} de {total}",
+    "journeyBannerLabel": "Tu senda: día {day} de {total}. Ver mi jardín"
   },
   "analysis": {
     "title": "Espejo",

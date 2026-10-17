@@ -45,7 +45,7 @@ export default async function StudentLayout({ children }: { children: React.Reac
             </header>
             <main
               id="contenido"
-              className="mx-auto w-full max-w-md px-4 pt-4 pb-6 md:max-w-2xl md:px-8 md:py-8 lg:max-w-3xl lg:px-10 lg:py-10 xl:max-w-4xl"
+              className="mx-auto w-full max-w-md px-4 pt-4 pb-6 md:max-w-2xl md:px-8 md:py-8 lg:max-w-3xl lg:px-10 lg:py-10 xl:max-w-4xl lg:group-has-[[data-right-rail]]/shell:max-w-5xl"
             >
               {children}
             </main>

@@ -5,14 +5,15 @@ import { useTranslations } from "next-intl";
 import { Check } from "lucide-react";
 import type { HomeWeekDay } from "@/features/home/api/get-home";
 import { DayDetails } from "@/features/home/components/day-details";
+import { JourneyBanner } from "@/features/home/components/journey-banner";
 import { MonthCalendar } from "@/features/home/components/month-calendar";
 import { cn } from "@/lib/utils";
 import { formatIsoDay } from "@/lib/format/dates";
-import { clampJourneyDay, INTERVENTION_DAYS, INTERVENTION_WEEKS } from "@/lib/journey";
+import { clampJourneyDay } from "@/lib/journey";
 
 /**
- * CU-05: la semana actual como calendario (días con registro, hoy y los que faltan) y tres datos que solo
- * describen: días con registro sobre la meta, día de la senda y semana. En escritorio, en lugar de la semana va
+ * CU-05: la semana actual como calendario (días con registro, hoy y los que faltan) y, al pie, en qué va de su
+ * senda (JourneyBanner: día, días con registro sobre la meta y semana; solo describen). En escritorio, en lugar de la semana va
  * el mes completo, navegable (MonthCalendar). Al tocar un día, lo de ese día sale debajo en tarjetas (DayDetails);
  * al abrir, el de hoy. Sin rachas ni porcentajes (regla de coherencia 6, RN-TR-04).
  */
@@ -39,7 +40,10 @@ export function WeekOverview({
     days.find((day) => day.interventionDay === selectedDay);
 
   return (
-    <section aria-labelledby="home-week" className="flex flex-col gap-4 rounded-lg bg-card p-5 shadow-(--shadow-card) lg:gap-3 lg:bg-transparent lg:shadow-none">
+    <section
+      aria-labelledby="home-week"
+      className="flex flex-col gap-4 rounded-lg bg-card p-5 shadow-(--shadow-card) lg:min-h-full lg:gap-3 lg:bg-transparent lg:shadow-none"
+    >
       <div className="flex items-baseline justify-between gap-2 lg:sr-only">
         <h2 id="home-week" className="font-heading text-lg font-bold text-foreground">
           {t("home.weekTitle", { week })}
@@ -109,23 +113,10 @@ export function WeekOverview({
 
       {selected && <DayDetails day={selected} today={today} />}
 
-      <dl className="grid grid-cols-3 divide-x divide-border border-t border-border pt-4 text-center lg:pt-3">
-        {goal && <Stat label={t("home.statDays")} value={goal.daysWithEntry} total={goal.goal} />}
-        <Stat label={t("home.statJourney")} value={clampJourneyDay(today)} total={INTERVENTION_DAYS} />
-        <Stat label={t("home.statWeek")} value={week} total={INTERVENTION_WEEKS} />
-      </dl>
+      {/* Al pie: en qué va de su senda, en una tarjeta destacada (en escritorio, abajo del panel). */}
+      <div className="lg:mt-auto">
+        <JourneyBanner today={today} week={week} goal={goal} />
+      </div>
     </section>
-  );
-}
-
-function Stat({ label, value, total }: { label: string; value: number; total: number }) {
-  const t = useTranslations();
-  return (
-    <div className="flex flex-col gap-0.5 px-1">
-      <dt className="order-2 text-sm text-muted-foreground">{label}</dt>
-      <dd className="order-1 font-heading text-xl font-bold text-foreground tabular-nums lg:text-lg">
-        {value} <span className="text-sm font-normal text-muted-foreground">{t("home.statOf", { total })}</span>
-      </dd>
-    </div>
   );
 }

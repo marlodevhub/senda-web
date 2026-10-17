@@ -100,7 +100,8 @@ export function HomePageClient() {
       ) : (
         // Escritorio: el contenido es lo de hoy (check-in con escribir, frase pendiente, meta y ánimo); el calendario va
         // en un panel vertical fijo al borde derecho, flotante como la barra lateral (el layout le deja su espacio).
-        <div className="flex flex-col gap-5">
+        // Escritorio: lo de hoy a la izquierda y, en una columna vertical más, la meta y el ánimo de la semana.
+        <div className="flex flex-col gap-5 lg:grid lg:grid-cols-[minmax(0,1fr)_16rem] lg:items-start lg:gap-5 xl:grid-cols-[minmax(0,1fr)_18rem]">
           <div className="flex flex-col gap-5 lg:order-1">
             {/* El botón Escribir aparece dentro del check-in al marcar una cara. */}
             <CheckIn initialMood={home.checkinMood} />
@@ -129,11 +130,12 @@ export function HomePageClient() {
                 )}
               </div>
             </div>
-            <div className="hidden gap-5 lg:grid lg:grid-cols-2">
-              {home.goal && <GoalRing daysWithEntry={home.goal.daysWithEntry} goal={home.goal.goal} />}
-              <MoodWeek days={home.weekDays} />
-            </div>
             <HomeNotices newSummary={home.newSummary} />
+          </div>
+
+          <div className="hidden flex-col gap-5 lg:order-2 lg:flex">
+            {home.goal && <GoalRing daysWithEntry={home.goal.daysWithEntry} goal={home.goal.goal} />}
+            <MoodWeek days={home.weekDays} />
           </div>
 
           <aside

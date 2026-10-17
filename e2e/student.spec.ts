@@ -266,7 +266,9 @@ test("en escritorio la navegación es una barra lateral accesible", async ({ pag
 
   const sidebar = page.getByRole("navigation", { name: "Navegación principal" });
   await expect(sidebar).toHaveCount(1); // la barra inferior queda oculta en escritorio
-  await expect(page.getByText("Tu senda", { exact: true })).toBeVisible();
+  // "Tu senda" también titula la tarjeta al pie del calendario: aquí, el de la barra lateral.
+  const sidebarPanel = page.locator("aside:not([data-right-rail])");
+  await expect(sidebarPanel.getByText("Tu senda", { exact: true })).toBeVisible();
   await expect(page.getByText("Día 3 de 28", { exact: true })).toBeVisible();
   await sidebar.getByRole("link", { name: "Historial" }).click();
   await expect(page).toHaveURL(/\/historial/);
@@ -284,7 +286,10 @@ test("en tablet la barra lateral es un riel de iconos con nombres accesibles", a
   const rail = page.getByRole("navigation", { name: "Navegación principal" });
   await expect(rail).toHaveCount(1); // sin barra inferior en tablet
   // Los textos no se ven, pero cada ícono conserva su nombre (lector de pantalla y tooltip).
-  const journeyTitle = await page.getByText("Tu senda", { exact: true }).boundingBox();
+  const journeyTitle = await page
+    .locator("aside:not([data-right-rail])")
+    .getByText("Tu senda", { exact: true })
+    .boundingBox();
   expect(journeyTitle?.width ?? 0).toBeLessThanOrEqual(1); // solo para lectores de pantalla
   await expect(rail.getByRole("link", { name: "Historial" })).toHaveAttribute("title", "Historial");
   await rail.getByRole("link", { name: "Progreso" }).click();
