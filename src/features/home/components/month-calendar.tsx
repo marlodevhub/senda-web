@@ -1,8 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { es } from "react-day-picker/locale";
 import { Calendar } from "@/components/ui/calendar";
+import { Button } from "@/components/ui/button";
 import type { HomeWeekDay } from "@/features/home/api/get-home";
 import { cn } from "@/lib/utils";
 
@@ -26,6 +29,10 @@ export function MonthCalendar({ days, today }: { days: HomeWeekDay[]; today: num
   const t = useTranslations();
   const todayDay = days.find((day) => day.interventionDay === today);
   const todayDate = todayDay ? toLocalDate(todayDay.date) : undefined;
+  // El mes se controla aquí para que "Hoy" pueda volver al mes actual desde cualquier otro.
+  const homeMonth = todayDate ?? new Date();
+  const [month, setMonth] = useState(homeMonth);
+  const onHomeMonth = month.getFullYear() === homeMonth.getFullYear() && month.getMonth() === homeMonth.getMonth();
   const at = (predicate: (day: HomeWeekDay) => boolean) => days.filter(predicate).map((day) => toLocalDate(day.date));
 
   // Solo marcó su ánimo (check-in) ese día, sin registro.
@@ -56,7 +63,8 @@ export function MonthCalendar({ days, today }: { days: HomeWeekDay[]; today: num
         locale={es}
         weekStartsOn={1}
         today={todayDate}
-        defaultMonth={todayDate ?? toLocalDate(days[0].date)}
+        month={month}
+        onMonthChange={setMonth}
         showOutsideDays={false}
         modifiers={modifiers}
         modifiersClassNames={{
@@ -86,6 +94,38 @@ export function MonthCalendar({ days, today }: { days: HomeWeekDay[]; today: num
           outside: "",
         }}
         components={{
+          // ‹ Hoy ›: "Hoy" vuelve al mes de hoy desde cualquier mes (desactivado si ya se está en él).
+          Nav: ({ onPreviousClick, onNextClick, previousMonth, nextMonth, className }) => (
+            <nav className={cn(className, "items-center")}>
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label={t("home.monthPrev")}
+                disabled={!previousMonth}
+                onClick={onPreviousClick}
+              >
+                <ChevronLeft className="size-5" aria-hidden />
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className="rounded-full px-3 text-base"
+                disabled={onHomeMonth}
+                onClick={() => setMonth(homeMonth)}
+              >
+                {t("home.monthToday")}
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label={t("home.monthNext")}
+                disabled={!nextMonth}
+                onClick={onNextClick}
+              >
+                <ChevronRight className="size-5" aria-hidden />
+              </Button>
+            </nav>
+          ),
           // Solo muestra (sin selección): el día es una celda con un círculo y su número, no un botón.
           // eslint-disable-next-line @typescript-eslint/no-unused-vars -- day y modifiers no van al <td>.
           Day: ({ day: _day, modifiers: _modifiers, className, children, ...props }) => (

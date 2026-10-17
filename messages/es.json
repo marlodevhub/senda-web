@@ -150,6 +150,7 @@
     "statOf": "de {total}",
     "monthPrev": "Mes anterior",
     "monthNext": "Mes siguiente",
+    "monthToday": "Hoy",
     "legendEntry": "Escribiste",
     "legendMood": "Marcaste tu ánimo",
     "legendToday": "Hoy",
