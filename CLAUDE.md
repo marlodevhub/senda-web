@@ -2,7 +2,7 @@
 
 Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS 4, shadcn/ui. Pantallas del estudiante (móvil) y panel del administrador (escritorio), y hace de **BFF**: guarda la sesión en cookies httpOnly y reenvía al backend. Ver [../CLAUDE.md](../CLAUDE.md) para la visión general (casos de uso, reglas RN/RS, roadmap).
 
-El navegador **nunca** llama directo a `senda-api` ni al proveedor de LLM — solo al BFF propio (`/api/*` de este repo).
+El navegador **nunca** llama directo a `senda-api` ni al proveedor de LLM — solo al BFF propio (`/api/*` de este repo). La única excepción es el botón de **"Acceder con Google"** (`src/components/auth/google-sign-in-button.tsx`), que carga Google Identity Services solo si `NEXT_PUBLIC_GOOGLE_CLIENT_ID` está definido (la política de contenido de `next.config.ts` abre `accounts.google.com/gsi` solo entonces); el ID token que entrega Google va al BFF (`/api/auth/google`), nunca a senda-api directo. Ver `../senda-api/docs/google-sign-in.md`.
 
 ## 1. Tecnologías
 
@@ -75,7 +75,7 @@ senda-web/
     │   │       ├── adherencia/                          CU-25
     │   │       └── auditoria/                           CU-27
     │   ├── api/                      BFF
-    │   │   ├── auth/[action]/route.ts         activar, login, recuperar, logout; cookies httpOnly
+    │   │   ├── auth/[action]/route.ts         activar, login, google, recuperar, logout; cookies httpOnly
     │   │   ├── admin-auth/[action]/route.ts   login, verify (TOTP), logout; cookie admin_access
     │   │   └── v1/[...path]/route.ts          reenvía a senda-api con el token que corresponda; renueva (solo estudiante)
     │   └── layout.tsx · globals.css · not-found.tsx · error.tsx
@@ -157,7 +157,7 @@ Cada feature: `api/` (hooks TanStack Query + llamadas al BFF), `components/`, `s
 
 Ver mapa completo de API en la Especificación v2 (toda petición del estudiante lleva JWT de 30 min + refresh; la de administrador usa su propia cookie de 15 min sin renovación). Endpoints clave para construir el BFF:
 
-- Estudiante: `/auth/{activate,login,logout,refresh,recover}`, `/consents/current`, `/consent-acceptances`, `/welcome`, `/profile/*`, `/home`, `/check-ins/today`, `/journal-entries*`, `/progress/*`, `/jar*`, `/weekly-summaries*`, `/messages*`.
+- Estudiante: `/auth/{activate,login,google,logout,refresh,recover}`, `/consents/current`, `/consent-acceptances`, `/welcome`, `/profile/*`, `/home`, `/check-ins/today`, `/journal-entries*`, `/progress/*`, `/jar*`, `/weekly-summaries*`, `/messages*`.
 - Administrador (`/admin/**`): `/admin/auth/{login,verify,logout}`, `/admin/cohorts*`, `/admin/participants*`, `/admin/adherence`, `/admin/exports/adherence`, `/admin/audit-logs`, `/admin/config/current`.
 
 ## 7. DoD específica de este repo
