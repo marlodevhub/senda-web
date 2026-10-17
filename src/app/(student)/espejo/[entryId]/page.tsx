@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { MirrorPageClient } from "@/features/analysis/components/mirror-page-client";
+import { MirrorPageClient } from "./_components/mirror-page-client";
 
 export default async function EspejoPage({ params }: { params: Promise<{ entryId: string }> }) {
   const { entryId } = await params;
