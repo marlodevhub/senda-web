@@ -1,7 +1,7 @@
 import { FieldError } from "@/components/forms/field-error";
 import { cn } from "@/lib/utils";
 
-/** Una pregunta del diario: la pregunta y, debajo, el renglón para escribir, ambos en letra manuscrita. */
+/** Compartido por el Diario (CU-01) y la Reescritura (CU-04). Una pregunta de la hoja: la pregunta y, debajo, el renglón para escribir, ambos en letra manuscrita. */
 export function JournalPrompt({
   id,
   label,

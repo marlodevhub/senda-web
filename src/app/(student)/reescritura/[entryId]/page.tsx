@@ -1,5 +1,4 @@
 import { notFound } from "next/navigation";
-import { getTranslations } from "next-intl/server";
 import { RewriteForm } from "@/features/rewrite/components/rewrite-form";
 
 export default async function ReescrituraPage({
@@ -16,16 +15,12 @@ export default async function ReescrituraPage({
     notFound();
   }
 
-  const t = await getTranslations();
   const parsedFindingId = findingId ? Number(findingId) : undefined;
 
   return (
-    <div className="flex flex-col gap-5">
-      <h1 className="font-heading text-xl font-bold text-foreground">{t("rewrite.title")}</h1>
-      <RewriteForm
-        journalEntryId={journalEntryId}
-        findingId={Number.isInteger(parsedFindingId) ? parsedFindingId : undefined}
-      />
-    </div>
+    <RewriteForm
+      journalEntryId={journalEntryId}
+      findingId={Number.isInteger(parsedFindingId) ? parsedFindingId : undefined}
+    />
   );
 }

@@ -14,7 +14,7 @@ import type { Mood } from "@/components/icons/mood-orb";
 import { ContextPicker } from "@/features/journal/components/context-picker";
 import { DraftStatusIcon } from "@/features/journal/components/draft-status";
 import { JournalModeToggle } from "@/features/journal/components/journal-mode-toggle";
-import { JournalPrompt, JournalTextarea } from "@/features/journal/components/journal-prompt";
+import { JournalPrompt, JournalTextarea } from "@/components/forms/journal-sheet";
 import { MoodPicker } from "@/features/journal/components/mood-picker";
 import { createJournalEntry } from "@/features/journal/api/create-entry";
 import { clearDraft, saveDraft } from "@/features/journal/draft";

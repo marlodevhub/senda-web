@@ -17,10 +17,7 @@ export type SubmitRewriteInput = {
   guideAnswer3?: string;
 };
 
-export async function submitRewrite(
-  journalEntryId: number,
-  input: SubmitRewriteInput,
-): Promise<SubmitRewriteResult> {
+export async function submitRewrite(journalEntryId: number, input: SubmitRewriteInput): Promise<SubmitRewriteResult> {
   return callBff<SubmitRewriteResult>(`/api/v1/journal-entries/${journalEntryId}/rewrites`, {
     method: "POST",
     body: JSON.stringify(input),

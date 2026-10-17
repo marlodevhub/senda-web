@@ -208,6 +208,7 @@
   "rewrite": {
     "title": "Di lo mismo como se lo dirías a un buen amigo",
     "guideQuestionsLabel": "Preguntas para pensarlo",
+    "yourPhrase": "Tu frase",
     "seeExample": "Ver un ejemplo",
     "textLabel": "Tu reescritura",
     "submit": "Listo",

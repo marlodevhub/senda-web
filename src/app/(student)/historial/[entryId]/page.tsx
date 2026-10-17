@@ -14,12 +14,14 @@ export default async function HistorialDetailPage({ params }: { params: Promise<
   const t = await getTranslations();
 
   return (
-    <div className="flex flex-col gap-5">
-      <Link href="/historial" className="flex items-center gap-1.5 text-sm font-semibold text-muted-foreground">
+    <div className="flex flex-col gap-4">
+      <Link
+        href="/historial"
+        className="flex w-fit items-center gap-1.5 rounded-full px-1 text-base font-semibold text-muted-foreground hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring"
+      >
         <ArrowLeft className="size-4" aria-hidden />
         {t("history.back")}
       </Link>
-      <h1 className="font-heading text-xl font-bold text-foreground">{t("history.detailTitle")}</h1>
       <EntryDetail journalEntryId={journalEntryId} />
     </div>
   );
