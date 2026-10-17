@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 import { FieldError } from "@/components/forms/field-error";
@@ -13,9 +13,12 @@ import { Label } from "@/components/ui/label";
 import { AUTH_INPUT } from "@/features/access/components/auth-input";
 import { Card, CardContent } from "@/components/ui/card";
 import { BffError } from "@/lib/api/client";
+import { cn } from "@/lib/utils";
 import { errorMessageKey } from "@/lib/api/error-messages";
 import { activateFormSchema, type ActivateFormValues } from "@/features/access/schemas/access.schema";
 import { activateAccount } from "@/features/access/api/activate";
+import { UsernameAvailabilityIcon, UsernameAvailabilityMessage } from "@/components/forms/username-availability";
+import { useUsernameAvailability } from "@/hooks/use-username-availability";
 
 export function ActivateForm() {
   const t = useTranslations();
@@ -26,8 +29,11 @@ export function ActivateForm() {
     register,
     handleSubmit,
     setError,
+    control,
     formState: { errors, isSubmitting },
   } = useForm<ActivateFormValues>({ resolver: zodResolver(activateFormSchema) });
+  // CU-15: al dejar de escribir, si el usuario está libre (check verde) u ocupado (X roja).
+  const availability = useUsernameAvailability(useWatch({ control, name: "username" }) ?? "");
 
   async function onSubmit(values: ActivateFormValues) {
     try {
@@ -92,24 +98,36 @@ export function ActivateForm() {
       {/* CU-15: desde ahora entra con este usuario; el código solo se usa para activar. */}
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="username">{t("access.usernameLabel")}</Label>
-        <Input
-          className={AUTH_INPUT}
-          id="username"
-          autoComplete="username"
-          autoCapitalize="none"
-          spellCheck={false}
-          maxLength={30}
-          placeholder={t("access.usernamePlaceholder")}
-          aria-invalid={Boolean(errors.username)}
-          aria-describedby="username-hint"
-          {...register("username")}
-        />
+        <div className="relative">
+          <Input
+            className={cn(
+              AUTH_INPUT,
+              "pr-12",
+              availability === "available" && "border-sprout focus-visible:border-sprout focus-visible:ring-sprout/40",
+            )}
+            id="username"
+            autoComplete="username"
+            autoCapitalize="none"
+            spellCheck={false}
+            maxLength={30}
+            placeholder={t("access.usernamePlaceholder")}
+            aria-invalid={Boolean(errors.username) || availability === "taken"}
+            aria-describedby="username-hint username-availability"
+            {...register("username")}
+          />
+          <UsernameAvailabilityIcon state={availability} />
+        </div>
         {errors.username ? (
           <FieldError message={errors.username.message} />
+        ) : availability === "available" || availability === "taken" ? (
+          <UsernameAvailabilityMessage id="username-availability" state={availability} />
         ) : (
-          <p id="username-hint" className="text-base text-muted-foreground">
-            {t("access.usernameHint")}
-          </p>
+          <>
+            <p id="username-hint" className="text-base text-muted-foreground">
+              {t("access.usernameHint")}
+            </p>
+            <UsernameAvailabilityMessage id="username-availability" state={availability} />
+          </>
         )}
       </div>
 

@@ -1,11 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { z } from "zod";
+import { usernameSchema } from "@/lib/validation/username";
+import { UsernameAvailabilityIcon, UsernameAvailabilityMessage } from "@/components/forms/username-availability";
+import { useUsernameAvailability } from "@/hooks/use-username-availability";
 import { AtSign, Check } from "lucide-react";
 import { GoogleSignInButton } from "@/components/auth/google-sign-in-button";
 import { FieldError } from "@/components/forms/field-error";
@@ -15,17 +18,10 @@ import { Label } from "@/components/ui/label";
 import { isGoogleSignInEnabled } from "@/config/public-env";
 import { useChangeUsername, useLinkGoogle, useUnlinkGoogle } from "@/features/profile/api/use-profile";
 import { BffError } from "@/lib/api/client";
+import { cn } from "@/lib/utils";
 import { errorMessageKey } from "@/lib/api/error-messages";
 
-/** Mismo formato que el servidor (`Username`): 3 a 30, minúsculas, números, punto o guion bajo en medio. */
-const usernameFormSchema = z.object({
-  username: z
-    .string()
-    .trim()
-    .toLowerCase()
-    .min(1, "validation.usernameRequired")
-    .regex(/^[a-z0-9][a-z0-9._]{1,28}[a-z0-9]$/, "validation.usernameFormat"),
-});
+const usernameFormSchema = z.object({ username: usernameSchema });
 type UsernameFormValues = z.infer<typeof usernameFormSchema>;
 
 function errorKey(error: unknown): string {
@@ -54,11 +50,14 @@ function UsernameSection({ username }: { username: string | null }) {
     handleSubmit,
     setError,
     reset,
+    control,
     formState: { errors, isSubmitting },
   } = useForm<UsernameFormValues>({
     resolver: zodResolver(usernameFormSchema),
     defaultValues: { username: username ?? "" },
   });
+  // CU-20: al dejar de escribir, si el usuario nuevo está libre u ocupado (el actual no se consulta).
+  const availability = useUsernameAvailability(useWatch({ control, name: "username" }) ?? "", username);
 
   async function save(values: UsernameFormValues) {
     try {
@@ -101,22 +100,34 @@ function UsernameSection({ username }: { username: string | null }) {
       <Label htmlFor="profile-username" className="text-base">
         {t("access.usernameLabel")}
       </Label>
-      <Input
-        id="profile-username"
-        autoComplete="username"
-        autoCapitalize="none"
-        spellCheck={false}
-        maxLength={30}
-        aria-invalid={Boolean(errors.username)}
-        aria-describedby="profile-username-hint"
-        {...register("username")}
-      />
+      <div className="relative">
+        <Input
+          id="profile-username"
+          className={cn(
+            "pr-12",
+            availability === "available" && "border-sprout focus-visible:border-sprout focus-visible:ring-sprout/40",
+          )}
+          autoComplete="username"
+          autoCapitalize="none"
+          spellCheck={false}
+          maxLength={30}
+          aria-invalid={Boolean(errors.username) || availability === "taken"}
+          aria-describedby="profile-username-hint profile-username-availability"
+          {...register("username")}
+        />
+        <UsernameAvailabilityIcon state={availability} />
+      </div>
       {errors.username ? (
         <FieldError message={errors.username.message} />
+      ) : availability === "available" || availability === "taken" ? (
+        <UsernameAvailabilityMessage id="profile-username-availability" state={availability} />
       ) : (
-        <p id="profile-username-hint" className="text-base text-muted-foreground">
-          {t("access.usernameHint")}
-        </p>
+        <>
+          <p id="profile-username-hint" className="text-base text-muted-foreground">
+            {t("access.usernameHint")}
+          </p>
+          <UsernameAvailabilityMessage id="profile-username-availability" state={availability} />
+        </>
       )}
       <div className="flex flex-wrap gap-2">
         <Button type="submit" variant="outline" className="rounded-full" disabled={isSubmitting}>

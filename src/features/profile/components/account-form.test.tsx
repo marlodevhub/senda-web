@@ -40,6 +40,39 @@ describe("AccountForm", () => {
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
+  it("al dejar de escribir avisa si el usuario está libre (check) u ocupado (X roja)", async () => {
+    vi.spyOn(globalThis, "fetch").mockImplementation(async (input) => {
+      const taken = String(input).includes("username=mario");
+      return new Response(JSON.stringify({ status: taken ? "TAKEN" : "AVAILABLE" }), { status: 200 });
+    });
+    const user = userEvent.setup();
+    renderWithProviders(<AccountForm username="lucia.r" googleLinked={false} />);
+
+    await user.click(screen.getByRole("button", { name: "Cambiar usuario" }));
+    const input = screen.getByLabelText("Usuario");
+    await user.clear(input);
+    await user.type(input, "Lucia.Nueva");
+    expect(await screen.findByText("¡Ese usuario está libre!", {}, { timeout: 2000 })).toBeInTheDocument();
+
+    await user.clear(input);
+    await user.type(input, "mario");
+    expect(
+      await screen.findByText("Ese usuario ya está en uso. Prueba con otro.", {}, { timeout: 2000 }),
+    ).toBeInTheDocument();
+    expect(input).toHaveAttribute("aria-invalid", "true");
+  });
+
+  it("no consulta el usuario actual", async () => {
+    const fetchMock = vi.spyOn(globalThis, "fetch");
+    const user = userEvent.setup();
+    renderWithProviders(<AccountForm username="lucia.r" googleLinked={false} />);
+
+    await user.click(screen.getByRole("button", { name: "Cambiar usuario" }));
+    await new Promise((resolve) => setTimeout(resolve, 700));
+
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
   it("sin el client ID de Google configurado no ofrece vincular Google", () => {
     renderWithProviders(<AccountForm username="lucia.r" googleLinked={false} />);
 
