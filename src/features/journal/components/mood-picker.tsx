@@ -58,8 +58,8 @@ export function MoodPicker({
               className={cn(
                 "relative z-10 inline-flex rounded-full transition-[scale,filter] duration-300 ease-[cubic-bezier(.34,1.56,.64,1)] group-hover:scale-110",
                 active && "mood-pop scale-115 ring-4 ring-bloom-tint",
-                // Sin transparencia: sobre el fondo oscuro quedaría turbia.
-                value !== undefined && !active && "scale-90 saturate-50",
+                // Las no elegidas siguen con su color (sin apagarlas): solo un poco más chicas, para que la elegida resalte.
+                value !== undefined && !active && "scale-95",
               )}
             >
               <MoodOrb mood={mood} animated decorative className={orbSize} />
