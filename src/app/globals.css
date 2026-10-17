@@ -176,7 +176,8 @@
 .dark {
   --paper: #211C2B;
   --paper-raised: #2B2436;
-  --paper-sunken: #190F22;
+  /* Relleno suave en modo oscuro: un poco más claro que las tarjetas, no un hueco negro. */
+  --paper-sunken: #352D42;
   --ink: #F3EEE9;
   --ink-soft: #C9BFC6;
   --line: #3B3248;
@@ -281,7 +282,8 @@
   --celeste-strong: #2F3A57;
   /* El fondo de "ocean" claro pisaría el oscuro (misma especificidad que .dark): se repite el de .dark. */
   --paper: #211C2B;
-  --paper-sunken: #190F22;
+  /* Relleno suave en modo oscuro: un poco más claro que las tarjetas, no un hueco negro. */
+  --paper-sunken: #352D42;
   --bloom: #8FB8EC;
   --bloom-ink: #DCE9FA;
   --bloom-tint: #1E2B42;

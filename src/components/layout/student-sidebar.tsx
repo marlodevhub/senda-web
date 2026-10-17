@@ -74,7 +74,7 @@ export function StudentSidebar() {
               aria-valuemax={INTERVENTION_DAYS}
               aria-valuenow={day}
               aria-valuetext={journeyLabel}
-              className="h-1.5 w-full overflow-hidden rounded-full bg-background"
+              className="h-1.5 w-full overflow-hidden rounded-full bg-background dark:bg-border"
             >
               <div
                 className="h-full rounded-full bg-[image:var(--grad-dawn)] transition-[width] duration-700 ease-out"
