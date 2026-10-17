@@ -38,6 +38,8 @@ const RESULT_STYLE: Record<string, { key: string; tone: string }> = {
   ALMOST: { key: "history.resultAlmost", tone: "bg-root-tint text-root-ink" },
   STILL_HARD: { key: "history.resultStillHard", tone: "bg-flow-tint text-flow-ink" },
   PENDING: { key: "history.resultPending", tone: "bg-muted text-muted-foreground" },
+  // RN-ES-11: si la reescritura tuvo una señal de cuidado no se compara ni se nombra; solo se dice que se guardó.
+  RISK: { key: "history.resultSaved", tone: "bg-muted text-muted-foreground" },
 };
 
 /** Resaltado de cada frase dentro del texto, en el tono suave de su dimensión. */
@@ -263,7 +265,7 @@ function FindingRow({
 
 function RewriteRow({ rewrite }: { rewrite: EntryRewrite }) {
   const t = useTranslations();
-  const result = RESULT_STYLE[rewrite.result ?? "PENDING"];
+  const result = RESULT_STYLE[rewrite.result ?? "PENDING"] ?? RESULT_STYLE.PENDING;
   return (
     <div className="flex flex-wrap items-center gap-3 rounded-md bg-muted/60 px-4 py-3">
       <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-card text-foreground">

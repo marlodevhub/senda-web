@@ -26,7 +26,7 @@ export type EntryRewrite = {
   id: number;
   dimension: Dimension | null;
   pattern: string | null;
-  result: "SOFTENED" | "ALMOST" | "STILL_HARD" | "PENDING" | null;
+  result: "SOFTENED" | "ALMOST" | "STILL_HARD" | "PENDING" | "RISK" | null;
   moodAfter: number | null;
   attemptNumber: number;
   inJar: boolean;
