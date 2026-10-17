@@ -41,7 +41,7 @@ export function BottomNav() {
               <span
                 className={cn(
                   "flex flex-col items-center gap-0.5 rounded-full px-1 py-1.5 text-[0.6875rem] font-semibold transition-all duration-300",
-                  active ? "bg-bloom-tint text-bloom-ink" : "text-foreground/75",
+                  active ? "bg-bloom-tint text-bloom-ink" : "text-foreground",
                 )}
               >
                 <Icon className={cn("size-5 transition-transform duration-300", active && "scale-110")} aria-hidden />
