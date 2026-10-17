@@ -5,17 +5,10 @@ import { Check } from "lucide-react";
 import type { HomeWeekDay } from "@/features/home/api/get-home";
 import { MonthCalendar } from "@/features/home/components/month-calendar";
 import { cn } from "@/lib/utils";
+import { formatIsoDay } from "@/lib/format/dates";
+import { clampJourneyDay, INTERVENTION_DAYS, INTERVENTION_WEEKS } from "@/lib/journey";
 
-const INTERVENTION_DAYS = 28;
-const WEEKS = 4;
 
-/** Una fecha AAAA-MM-DD (día de Lima) formateada sin correrla por la zona del navegador. */
-function formatDate(date: string, options: Intl.DateTimeFormatOptions): string {
-  const [year, month, day] = date.split("-").map(Number);
-  return new Intl.DateTimeFormat("es-PE", { ...options, timeZone: "UTC" }).format(
-    new Date(Date.UTC(year, month - 1, day)),
-  );
-}
 
 /**
  * CU-05: la semana actual como calendario (días con registro, hoy y los que faltan) y tres datos que solo
@@ -48,8 +41,8 @@ export function WeekOverview({
         </h2>
         <p className="text-base text-muted-foreground">
           {t("home.weekRange", {
-            from: formatDate(days[0].date, { day: "numeric", month: "short" }),
-            to: formatDate(days[days.length - 1].date, { day: "numeric", month: "short" }),
+            from: formatIsoDay(days[0].date, { day: "numeric", month: "short" }),
+            to: formatIsoDay(days[days.length - 1].date, { day: "numeric", month: "short" }),
           })}
         </p>
       </div>
@@ -64,7 +57,7 @@ export function WeekOverview({
         {days.map((day) => {
           const isToday = day.interventionDay === today;
           const isFuture = day.interventionDay > today;
-          const fullDate = formatDate(day.date, { weekday: "long", day: "numeric", month: "long" });
+          const fullDate = formatIsoDay(day.date, { weekday: "long", day: "numeric", month: "long" });
           const moodOnly = !day.hasEntry && day.mood !== null;
           const status = day.hasEntry
             ? t("home.dayStatusEntry", { date: fullDate })
@@ -78,7 +71,7 @@ export function WeekOverview({
           return (
             <li key={day.interventionDay} aria-label={status} className="flex flex-col items-center gap-1.5">
               <span aria-hidden className="text-base text-muted-foreground capitalize">
-                {formatDate(day.date, { weekday: "narrow" })}
+                {formatIsoDay(day.date, { weekday: "narrow" })}
               </span>
               <span
                 aria-hidden
@@ -92,7 +85,7 @@ export function WeekOverview({
                   !day.hasEntry && isFuture && "text-muted-foreground ring-1 ring-border",
                 )}
               >
-                {day.hasEntry ? <Check className="size-5" strokeWidth={3} /> : formatDate(day.date, { day: "numeric" })}
+                {day.hasEntry ? <Check className="size-5" strokeWidth={3} /> : formatIsoDay(day.date, { day: "numeric" })}
               </span>
             </li>
           );
@@ -103,10 +96,10 @@ export function WeekOverview({
         {goal && <Stat label={t("home.statDays")} value={goal.daysWithEntry} total={goal.goal} />}
         <Stat
           label={t("home.statJourney")}
-          value={Math.min(Math.max(today, 1), INTERVENTION_DAYS)}
+          value={clampJourneyDay(today)}
           total={INTERVENTION_DAYS}
         />
-        <Stat label={t("home.statWeek")} value={week} total={WEEKS} />
+        <Stat label={t("home.statWeek")} value={week} total={INTERVENTION_WEEKS} />
       </dl>
     </section>
   );

@@ -10,7 +10,7 @@ import {
   TOOLTIP_PROPS,
 } from "@/features/progress/components/charts/chart-theme";
 import type { VoiceByWeekPoint } from "@/features/progress/api/get-stats";
-import { DIMENSION_COLOR, DIMENSION_SHORT_KEY } from "@/features/progress/dimension-style";
+import { DIMENSION_COLOR, DIMENSION_SHORT_KEY } from "@/lib/dimension-style";
 import type { Dimension } from "@/types/dimension";
 
 const DIMENSIONS: Dimension[] = ["D1", "D2", "D3"];

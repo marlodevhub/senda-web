@@ -15,7 +15,7 @@ import { ContextPicker } from "@/features/journal/components/context-picker";
 import { DraftStatusIcon } from "@/features/journal/components/draft-status";
 import { JournalModeToggle } from "@/features/journal/components/journal-mode-toggle";
 import { JournalPrompt, JournalTextarea } from "@/components/forms/journal-sheet";
-import { MoodPicker } from "@/features/journal/components/mood-picker";
+import { MoodPicker } from "@/components/forms/mood-picker";
 import { createJournalEntry } from "@/features/journal/api/create-entry";
 import { clearDraft, saveDraft } from "@/features/journal/draft";
 import { journalFormSchema, type JournalFormValues } from "@/features/journal/schemas/journal.schema";

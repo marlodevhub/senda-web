@@ -37,3 +37,21 @@ export function formatCalendarDay(isoDate: string): string {
 export function limaIsoDay(offsetDays = 0): string {
   return isoDay.format(new Date(Date.now() + offsetDays * 24 * 60 * 60 * 1000));
 }
+
+/**
+ * Un día de calendario ("2026-10-16", ya es un día de Lima) con el formato pedido, sin correrlo por la zona del
+ * navegador: "vie, 16 oct." (`short`) o "viernes, 16 de octubre" (`long`).
+ */
+export function formatIsoDay(isoDate: string, options: Intl.DateTimeFormatOptions): string {
+  return new Intl.DateTimeFormat(LOCALE, { ...options, timeZone: "UTC" }).format(new Date(`${isoDate}T00:00:00Z`));
+}
+
+/** Hoy en Lima con el formato pedido (p. ej. "viernes, 16 de octubre"). */
+export function formatTodayLima(options: Intl.DateTimeFormatOptions): string {
+  return new Intl.DateTimeFormat(LOCALE, { ...options, timeZone: LIMA }).format(new Date());
+}
+
+/** Una fecha local del navegador (p. ej. la celda del calendario) como "viernes, 16 de octubre". */
+export function formatLocalDate(date: Date, options: Intl.DateTimeFormatOptions): string {
+  return new Intl.DateTimeFormat(LOCALE, options).format(date);
+}

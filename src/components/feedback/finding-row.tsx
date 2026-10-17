@@ -1,14 +1,9 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { DIMENSION_DOT } from "@/lib/dimension-style";
 import type { Dimension } from "@/types/dimension";
 
-/** El punto de color de cada dimensión, junto al tipo de frase (naranja Errores, acento Valoración, lila Exigencia). */
-export const DIMENSION_DOT: Record<Dimension, string> = {
-  D1: "bg-root",
-  D2: "bg-bloom",
-  D3: "bg-flow",
-};
 
 /**
  * Una frase dura detectada (Espejo CU-03, detalle CU-11, Inicio CU-05): el fragmento que escribió el estudiante y, debajo,

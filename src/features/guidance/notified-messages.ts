@@ -1,11 +1,12 @@
 import type { Message } from "@/features/guidance/api/get-messages";
+import { STUDENT_STORAGE_KEYS } from "@/lib/local-student-data";
 
 /**
  * Qué mensajes ya se avisaron con un toast en este dispositivo, para avisar
  * cada uno una sola vez. Solo guarda ids (nunca texto) y se borra al cerrar
  * sesión (`clearLocalStudentData`).
  */
-const NOTIFIED_KEY = "senda:notified-messages";
+const NOTIFIED_KEY = STUDENT_STORAGE_KEYS.notifiedMessages;
 /** Basta con recordar los más recientes: la bandeja de 28 días nunca llega a tanto. */
 const MAX_REMEMBERED = 100;
 
@@ -30,13 +31,5 @@ export function saveNotifiedIds(ids: Iterable<number>): void {
     window.localStorage.setItem(NOTIFIED_KEY, JSON.stringify(recent));
   } catch {
     // Sin almacenamiento: se podría repetir un aviso, nada más.
-  }
-}
-
-export function clearNotifiedIds(): void {
-  try {
-    window.localStorage.removeItem(NOTIFIED_KEY);
-  } catch {
-    // Sin almacenamiento no hay nada que borrar.
   }
 }

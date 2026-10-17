@@ -6,23 +6,18 @@ import { useTranslations } from "next-intl";
 import { BookOpen, Home, Loader2, ScanFace } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useMirror, useConfirmMirror } from "@/features/analysis/api/use-mirror";
-import type { MirrorFinding, AnalysisField } from "@/features/analysis/api/get-mirror";
 import { FindingRow } from "@/components/feedback/finding-row";
 import { ConfirmationPills, type ConfirmationAnswer } from "@/features/analysis/components/confirmation-pills";
 import { CareMessage } from "@/components/feedback/care-message";
 import { MirrorMoment } from "@/features/analysis/components/mirror-moment";
+import { sliceFinding, type FieldTexts } from "@/lib/findings";
 import { patternLabelKey } from "@/lib/pattern-labels";
 import { routes } from "@/lib/routes";
 
 /** Las 3 preguntas del Diario guardan el texto por campo (RS-ES-06). */
-export type JournalFieldTexts = Partial<Record<AnalysisField, string>>;
+export type JournalFieldTexts = FieldTexts;
 
-function fragmentOf(finding: MirrorFinding, fieldTexts: JournalFieldTexts): string {
-  const text = fieldTexts[finding.field] ?? "";
-  return text.slice(finding.start, finding.end);
-}
 
-const DIMENSION_KEY: Record<string, "d1" | "d2" | "d3"> = { D1: "d1", D2: "d2", D3: "d3" };
 const INTENSITY_KEY: Record<string, "low" | "moderate" | "high"> = {
   LOW: "low",
   MODERATE: "moderate",
@@ -91,7 +86,7 @@ export function MirrorView({ journalEntryId, fieldTexts }: { journalEntryId: num
 
   const dimensionMessage =
     mirror.predominantDimension && mirror.intensity
-      ? t(`analysis.dimensionMessages.${DIMENSION_KEY[mirror.predominantDimension]}.${INTENSITY_KEY[mirror.intensity]}`)
+      ? t(`analysis.dimensionMessages.${mirror.predominantDimension.toLowerCase()}.${INTENSITY_KEY[mirror.intensity]}`)
       : null;
 
   return (
@@ -108,7 +103,7 @@ export function MirrorView({ journalEntryId, fieldTexts }: { journalEntryId: num
         </p>
         <ul className="flex flex-col gap-2">
           {findings.map((finding) => {
-            const fragment = fragmentOf(finding, fieldTexts);
+            const fragment = sliceFinding(finding, fieldTexts);
             return (
               <li key={finding.findingId} className="relative hover:z-10 focus-within:z-10">
                 <FindingRow

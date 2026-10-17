@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { PenLine } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Mood } from "@/components/icons/mood-orb";
-import { MoodPicker } from "@/features/journal/components/mood-picker";
+import { MoodPicker } from "@/components/forms/mood-picker";
 import { useRecordCheckIn } from "@/features/home/api/use-record-check-in";
 import { BffError } from "@/lib/api/client";
 import { errorMessageKey } from "@/lib/api/error-messages";

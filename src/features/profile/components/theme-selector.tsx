@@ -1,10 +1,10 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
 import { useTheme } from "next-themes";
 import { useTranslations } from "next-intl";
 import { Monitor, Moon, Sun } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useMounted } from "@/hooks/use-mounted";
 
 const OPTIONS = [
   { value: "light", labelKey: "profile.themeLight", icon: Sun },
@@ -12,14 +12,6 @@ const OPTIONS = [
   { value: "system", labelKey: "profile.themeSystem", icon: Monitor },
 ] as const;
 
-/** El tema guardado solo existe en el navegador: hasta montar, no se marca ninguna opción (evita un desajuste de hidratación). */
-function useMounted() {
-  return useSyncExternalStore(
-    () => () => {},
-    () => true,
-    () => false,
-  );
-}
 
 /**
  * Apariencia: claro, oscuro o según el sistema (por defecto). Se guarda en

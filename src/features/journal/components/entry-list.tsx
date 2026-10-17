@@ -10,21 +10,15 @@ import { MoodOrb, type Mood } from "@/components/icons/mood-orb";
 import { useHistory } from "@/features/journal/api/use-entries";
 import type { JournalEntrySummary } from "@/features/journal/api/get-entries";
 import {
-  DIMENSION_SHORT_KEY,
   HistoryFilters,
   type HistoryFilterValues,
 } from "@/features/journal/components/history-filters";
 import { CONTEXT_ICONS } from "@/features/journal/context-icons";
 import { cn } from "@/lib/utils";
+import { DIMENSION_SHORT_KEY } from "@/lib/dimension-style";
+import { formatIsoDay } from "@/lib/format/dates";
 import { JOURNAL_CONTEXT_LABEL_KEY } from "@/types/journal-context";
 
-/** La fecha del registro (AAAA-MM-DD, día de Lima) como "jue 15 oct", sin correrla por la zona del navegador. */
-function formatEntryDate(date: string): string {
-  const [year, month, day] = date.split("-").map(Number);
-  return new Intl.DateTimeFormat("es-PE", { weekday: "short", day: "numeric", month: "short", timeZone: "UTC" }).format(
-    new Date(Date.UTC(year, month - 1, day)),
-  );
-}
 
 /** Agrupa los registros por semana, en el orden en que llegan (del más reciente al más antiguo). */
 function groupByWeek(items: JournalEntrySummary[]): { week: number; items: JournalEntrySummary[] }[] {
@@ -213,7 +207,7 @@ function EntryRow({ item }: { item: JournalEntrySummary }) {
           <span className="font-heading text-lg font-bold text-foreground">
             {t("history.dayLabel", { day: item.interventionDay })}
           </span>
-          <span className="text-base text-muted-foreground">{formatEntryDate(item.date)}</span>
+          <span className="text-base text-muted-foreground">{formatIsoDay(item.date, { weekday: "short", day: "numeric", month: "short" })}</span>
         </p>
         <div className="flex flex-wrap gap-1.5">
           {item.context && context && (

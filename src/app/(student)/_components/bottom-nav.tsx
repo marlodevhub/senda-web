@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
-import { STUDENT_NAV_ITEMS } from "@/components/layout/student-nav-items";
+import { STUDENT_NAV_ITEMS } from "./student-nav-items";
 import { glassStyle, useGlassSettings } from "@/features/appearance/glass-settings";
 
 /**

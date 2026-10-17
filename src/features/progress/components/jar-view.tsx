@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/dialog";
 import type { JarCard } from "@/features/progress/api/jar";
 import { useUpdateJarCard } from "@/features/progress/api/use-jar";
-import { DIMENSION_COLOR } from "@/features/progress/dimension-style";
+import { DIMENSION_COLOR } from "@/lib/dimension-style";
 import { formatCalendarDay } from "@/lib/format/dates";
 
 /**

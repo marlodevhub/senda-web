@@ -13,6 +13,7 @@ import { WeekOverview } from "@/features/home/components/week-overview";
 import { CheckIn } from "@/features/home/components/check-in";
 import { TodayMirrorCard } from "@/features/home/components/today-mirror-card";
 import { routes } from "@/lib/routes";
+import { formatTodayLima } from "@/lib/format/dates";
 
 /**
  * CU-05 Inicio (RN-IN-01): saludo con "Día N de 28", botón Escribir, frase
@@ -67,10 +68,10 @@ export function HomePageClient() {
           <span className="font-semibold text-foreground">{t("home.dayOfJourney", { day: home.day })}</span>
           <span aria-hidden className="h-4 w-px shrink-0 bg-border" />
           <span className="inline-block text-muted-foreground first-letter:uppercase sm:hidden">
-            {todayLabel("short")}
+            {formatTodayLima({ weekday: "short", day: "numeric", month: "short" })}
           </span>
           <span className="hidden text-muted-foreground first-letter:uppercase sm:inline-block">
-            {todayLabel("long")}
+            {formatTodayLima({ weekday: "long", day: "numeric", month: "long" })}
           </span>
         </p>
       </header>
@@ -143,15 +144,6 @@ export function HomePageClient() {
   );
 }
 
-/** La fecha de hoy en Lima: "jueves, 15 de octubre" (long) o "jue., 15 oct." (short). */
-function todayLabel(style: "long" | "short"): string {
-  return new Intl.DateTimeFormat("es-PE", {
-    weekday: style,
-    day: "numeric",
-    month: style,
-    timeZone: "America/Lima",
-  }).format(new Date());
-}
 
 /** Aviso de resumen nuevo (CU-10). Los mensajes nuevos (CU-14) los avisa el botón de la campana. */
 function HomeNotices({ newSummary }: { newSummary: boolean }) {

@@ -1,7 +1,7 @@
 import { getTranslations } from "next-intl/server";
-import { BottomNav } from "@/components/layout/bottom-nav";
-import { StudentSidebar } from "@/components/layout/student-sidebar";
-import { MessagesBell, MessagesCenterProvider } from "@/components/layout/messages-center";
+import { BottomNav } from "./_components/bottom-nav";
+import { StudentSidebar } from "./_components/student-sidebar";
+import { MessagesBell, MessagesCenterProvider } from "./_components/messages-center";
 import { Sprout } from "lucide-react";
 import { TourProvider } from "@/components/tour/app-tour";
 import { PaletteSync } from "./_components/palette-sync";

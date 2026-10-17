@@ -8,6 +8,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
 import type { HomeWeekDay } from "@/features/home/api/get-home";
 import { cn } from "@/lib/utils";
+import { formatLocalDate } from "@/lib/format/dates";
 
 /** Una fecha AAAA-MM-DD (día de Lima) como fecha local, que es como la maneja el calendario. */
 function toLocalDate(date: string): Date {
@@ -45,8 +46,7 @@ export function MonthCalendar({ days, today }: { days: HomeWeekDay[]; today: num
     upcoming: at((day) => !day.hasEntry && day.interventionDay > today),
     journeyToday: at((day) => !day.hasEntry && !moodOnly(day) && day.interventionDay === today),
   };
-  const fullDate = (date: Date) =>
-    new Intl.DateTimeFormat("es-PE", { weekday: "long", day: "numeric", month: "long" }).format(date);
+  const fullDate = (date: Date) => formatLocalDate(date, { weekday: "long", day: "numeric", month: "long" });
   const statusOf = (date: Date): string => {
     const has = (dates: Date[]) => dates.some((d) => sameDay(d, date));
     if (has(modifiers.entry)) return t("home.dayStatusEntry", { date: fullDate(date) });

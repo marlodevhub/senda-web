@@ -1,4 +1,5 @@
 import type { JournalFormValues } from "@/features/journal/schemas/journal.schema";
+import { STUDENT_STORAGE_KEYS } from "@/lib/local-student-data";
 
 /**
  * RS-DI-03: borrador del Diario en el almacenamiento local del dispositivo.
@@ -7,7 +8,7 @@ import type { JournalFormValues } from "@/features/journal/schemas/journal.schem
  * servidor; se borra al enviar el registro, al cerrar sesión y si la sesión
  * expira (`clearLocalStudentData`).
  */
-export const DRAFT_KEY = "senda:journal-draft";
+export const DRAFT_KEY = STUDENT_STORAGE_KEYS.journalDraft;
 export const DRAFT_INTERVAL_MS = 10_000;
 /** Pausa al escribir tras la que se guarda: si el navegador se cierra, se pierde a lo sumo medio segundo. */
 export const DRAFT_DEBOUNCE_MS = 500;

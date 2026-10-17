@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { BffError } from "@/lib/api/client";
 import { errorMessageKey } from "@/lib/api/error-messages";
-import { logout } from "@/features/access/api/logout";
+import { logout } from "@/lib/auth/logout";
 import { useChangePassword } from "@/features/profile/api/use-profile";
 import {
   changePasswordFormSchema,

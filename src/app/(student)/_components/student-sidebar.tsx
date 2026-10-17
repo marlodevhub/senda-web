@@ -5,12 +5,12 @@ import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { PenLine, Sprout } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { clampJourneyDay, INTERVENTION_DAYS } from "@/lib/journey";
 import { Button } from "@/components/ui/button";
-import { STUDENT_NAV_ITEMS } from "@/components/layout/student-nav-items";
-import { SidebarTools } from "@/components/layout/sidebar-tools";
+import { STUDENT_NAV_ITEMS } from "./student-nav-items";
+import { SidebarTools } from "./sidebar-tools";
 import { useHome } from "@/features/home/api/use-home";
 
-const INTERVENTION_DAYS = 28;
 
 /**
  * Navegación lateral del estudiante:
@@ -26,7 +26,7 @@ export function StudentSidebar() {
   const { data: home } = useHome();
 
   const readOnly = home?.status === "READ_ONLY";
-  const day = home ? Math.min(Math.max(home.day, 1), INTERVENTION_DAYS) : null;
+  const day = home ? clampJourneyDay(home.day) : null;
   const journeyLabel = day !== null ? t("sidebar.dayOf", { day, total: INTERVENTION_DAYS }) : "";
 
   return (

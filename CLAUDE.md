@@ -58,7 +58,7 @@ senda-web/
     │   │   └── (onboarding)/         tarjeta centrada
     │   │       └── consentimiento/ · bienvenida/
     │   ├── (student)/                con barra inferior
-    │   │   ├── layout.tsx
+    │   │   ├── layout.tsx · _components/ (barra lateral, barra inferior, mensajes, tema)
     │   │   ├── inicio/ · diario/ · resumen/ · mensajes/ · perfil/
     │   │   ├── historial/ · historial/por-reescribir/ · historial/reescritos/
     │   │   ├── historial/[entryId]/ · historial/[entryId]/espejo/ · historial/[entryId]/reescribir/   rutas con parámetros en lib/routes.ts
@@ -81,7 +81,7 @@ senda-web/
     │   └── layout.tsx · globals.css · not-found.tsx · error.tsx
     ├── features/                     mismos nombres que los módulos del backend
     │   ├── access/            api/{activate,login,recover}.ts · components/{activate-form,login-form,recover-form,consent-view,logout-button}.tsx · schemas/access.schema.ts (RN-AC-01, RN-AC-04)
-    │   ├── journal/           journal-form, mood-picker, entry-list, entry-detail · use-create-entry, use-entries, use-check-in
+    │   ├── journal/           journal-form, entry-list, entry-detail · use-create-entry, use-entries, use-check-in
     │   ├── analysis/          mirror-view, finding-card, care-message · use-mirror (consulta cada 2 s si PENDING)
     │   ├── rewrite/           rewrite-form, rewrite-result · use-rewrite-guide, use-submit-rewrite
     │   ├── home/              today-card, pending-phrase · use-home
@@ -94,14 +94,18 @@ senda-web/
     │       └── schemas/admin.schema.ts (RN-AD-01 a RN-AD-04)
     ├── components/
     │   ├── ui/                       shadcn/ui
-    │   ├── layout/                   bottom-nav.tsx, student-sidebar.tsx, messages-center.tsx, admin-sidebar.tsx
+    │   ├── layout/                   admin-sidebar.tsx, pill-tabs.tsx (el armazón del estudiante vive en app/(student)/_components)
+    │   ├── forms/                    mood-picker, gender-picker, journal-sheet (la hoja manuscrita), field-error
     │   ├── illustrations/            emotion-characters.tsx (personajes de emociones)
     │   ├── tour/                     tutorial guiado por las emociones (app-tour.tsx, tour-steps.ts)
-    │   └── feedback/                 care-message.tsx, finding-card.tsx
-    ├── hooks/                        hooks compartidos
+    │   └── feedback/                 care-message.tsx, finding-row.tsx (frase detectada con su acceso a reescribir)
+    ├── hooks/                        hooks compartidos (use-media-query, use-mounted)
     ├── lib/
     │   ├── api/                      client.ts (fetch al BFF), errors.ts, query-keys.ts
     │   ├── server/                   server-only: backend.ts, session.ts, admin-session.ts
+    │   ├── auth/logout.ts            cerrar sesión (borra los datos locales del estudiante)
+    │   ├── format/dates.ts           todo formato de fecha (hora de Lima)
+    │   ├── routes.ts · dimension-style.ts · journey.ts · findings.ts · local-student-data.ts
     │   └── utils.ts
     ├── i18n/request.ts               configuración next-intl
     ├── config/env.ts                 variables de entorno validadas con zod
@@ -116,7 +120,7 @@ Cada feature: `api/` (hooks TanStack Query + llamadas al BFF), `components/`, `s
 
 1. **`app/` solo enruta.** `page.tsx` importa de `features/`, sin lógica propia. Server Components por defecto; `"use client"` solo si hay interacción.
 2. **Dirección única:** `app/` → `features/` → compartidos (`components/`, `hooks/`, `lib/`, `types/`, `config/`). Nunca al revés.
-3. **Una feature no importa de otra.** Si 2 la necesitan, sube a compartidos o se compone en `app/`. Forzado por ESLint `import/no-restricted-paths`, no solo convención.
+3. **Una feature no importa de otra.** Si 2 la necesitan, sube a compartidos o se compone en `app/`. Forzado por ESLint `import/no-restricted-paths` en `eslint.config.mjs` (también: lo compartido no importa de features ni de `app/`, y una feature no importa de `app/`).
 4. **Carpetas privadas (`_components/`)** junto a la ruta que las usa — Next.js no las convierte en URL.
 5. **Código de servidor en `lib/server/`** con `import "server-only"` — si un componente cliente lo importa, el build falla.
 6. **El navegador solo habla con el BFF** (`/api/*`). Los tokens nunca llegan al JS del navegador.

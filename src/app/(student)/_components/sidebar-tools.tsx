@@ -1,20 +1,12 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
 import { useTheme } from "next-themes";
 import { useTranslations } from "next-intl";
 import { CircleHelp, Moon, Sun } from "lucide-react";
 import { useTour } from "@/components/tour/app-tour";
 import { cn } from "@/lib/utils";
+import { useMounted } from "@/hooks/use-mounted";
 
-/** El tema solo se conoce en el navegador: hasta montar, el botón no dice cuál es (evita un desajuste de hidratación). */
-function useMounted() {
-  return useSyncExternalStore(
-    () => () => {},
-    () => true,
-    () => false,
-  );
-}
 
 const TOOL_CLASS =
   "flex size-9 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring";

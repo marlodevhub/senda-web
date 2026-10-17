@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { BffError } from "@/lib/api/client";
 import { errorMessageKey } from "@/lib/api/error-messages";
 import { acceptConsent, type ConsentContent } from "@/features/access/api/consent";
-import { logout } from "@/features/access/api/logout";
+import { logout } from "@/lib/auth/logout";
 
 /** CU-16: "Acepto" se habilita solo al llegar al final del texto (RN-AC-07), y solo con la casilla marcada. */
 export function ConsentView({ consent }: { consent: ConsentContent }) {

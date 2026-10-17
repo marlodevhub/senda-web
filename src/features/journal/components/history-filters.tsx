@@ -3,17 +3,12 @@
 import { useTranslations } from "next-intl";
 import { CONTEXT_ICONS } from "@/features/journal/context-icons";
 import { cn } from "@/lib/utils";
+import { DIMENSIONS, DIMENSION_SHORT_KEY } from "@/lib/dimension-style";
+import { INTERVENTION_WEEKS } from "@/lib/journey";
+import type { Dimension } from "@/types/dimension";
 import { JOURNAL_CONTEXTS, JOURNAL_CONTEXT_LABEL_KEY, type JournalContext } from "@/types/journal-context";
 
-export const WEEKS = [1, 2, 3, 4] as const;
-export const DIMENSIONS = ["D1", "D2", "D3"] as const;
-export type Dimension = (typeof DIMENSIONS)[number];
-
-export const DIMENSION_SHORT_KEY: Record<Dimension, string> = {
-  D1: "progress.dimensionShort.d1",
-  D2: "progress.dimensionShort.d2",
-  D3: "progress.dimensionShort.d3",
-};
+const WEEKS = Array.from({ length: INTERVENTION_WEEKS }, (_, i) => i + 1);
 
 export type HistoryFilterValues = { week?: number; dimension?: Dimension; context?: JournalContext };
 

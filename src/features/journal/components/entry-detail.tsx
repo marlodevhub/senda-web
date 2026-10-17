@@ -27,13 +27,14 @@ import type {
   JournalEntryDetail,
 } from "@/features/journal/api/get-entry-detail";
 import { CONTEXT_ICONS } from "@/features/journal/context-icons";
+import { DIMENSION_TINT } from "@/lib/dimension-style";
+import { sliceFinding, type FieldTexts } from "@/lib/findings";
 import { patternLabelKey } from "@/lib/pattern-labels";
 import { routes } from "@/lib/routes";
 import { BffError } from "@/lib/api/client";
 import { errorMessageKey } from "@/lib/api/error-messages";
 import { cn } from "@/lib/utils";
 import { JOURNAL_CONTEXT_LABEL_KEY } from "@/types/journal-context";
-import type { Dimension } from "@/types/dimension";
 
 const RESULT_STYLE: Record<string, { key: string; tone: string }> = {
   SOFTENED: { key: "history.resultSoftened", tone: "bg-sprout-tint text-sprout-ink" },
@@ -44,12 +45,6 @@ const RESULT_STYLE: Record<string, { key: string; tone: string }> = {
   RISK: { key: "history.resultSaved", tone: "bg-muted text-muted-foreground" },
 };
 
-/** Resaltado de cada frase dentro del texto, en el tono suave de su dimensión. */
-const DIMENSION_MARK: Record<Dimension, string> = {
-  D1: "bg-root-tint text-root-ink",
-  D2: "bg-bloom-tint text-bloom-ink",
-  D3: "bg-flow-tint text-flow-ink",
-};
 
 const FIELD_TEXT: Record<EntryAnalysisField, keyof Pick<JournalEntryDetail, "q1" | "q2" | "q3" | "freeText">> = {
   Q1: "q1",
@@ -66,8 +61,10 @@ function formatLongDate(date: string): string {
   );
 }
 
-function fragmentOf(finding: EntryMirrorFinding, entry: JournalEntryDetail): string {
-  return (entry[FIELD_TEXT[finding.field]] ?? "").slice(finding.start, finding.end);
+
+/** Los textos del registro por campo, para recortar sus frases. */
+function textsOf(entry: JournalEntryDetail): FieldTexts {
+  return { Q1: entry.q1, Q2: entry.q2, Q3: entry.q3, FREE_TEXT: entry.freeText };
 }
 
 /** El texto de una respuesta con sus frases detectadas resaltadas (en el orden en que aparecen). */
@@ -81,7 +78,7 @@ function Highlighted({ text, findings }: { text: string; findings: EntryMirrorFi
     parts.push(
       <mark
         key={finding.findingId}
-        className={cn("rounded-md px-1 py-0.5 box-decoration-clone", DIMENSION_MARK[finding.dimension])}
+        className={cn("rounded-md px-1 py-0.5 box-decoration-clone", DIMENSION_TINT[finding.dimension])}
       >
         {text.slice(finding.start, finding.end)}
       </mark>,
@@ -183,11 +180,11 @@ export function EntryDetail({ journalEntryId }: { journalEntryId: number }) {
                   {findings.map((finding) => (
                     <li key={finding.findingId}>
                       <FindingRow
-                        fragment={fragmentOf(finding, entry)}
+                        fragment={sliceFinding(finding, textsOf(entry))}
                         label={t(patternLabelKey(finding.pattern))}
                         dimension={finding.dimension}
                         href={canRewrite ? routes.rewrite(entry.id, finding.findingId) : undefined}
-                        linkLabel={t("home.pendingRewriteThis", { fragment: fragmentOf(finding, entry) })}
+                        linkLabel={t("home.pendingRewriteThis", { fragment: sliceFinding(finding, textsOf(entry)) })}
                       />
                     </li>
                   ))}
