@@ -18,7 +18,9 @@ export default async function StudentLayout({ children }: { children: React.Reac
       <TourProvider>
         <PaletteSync />
         {/* overflow-x-clip: lo que sale a pantalla completa (jardín) no crea scroll horizontal. */}
-        <div className="min-h-screen overflow-x-clip bg-background md:flex">
+        {/* group/shell: si la pantalla trae un panel derecho fijo (Inicio en escritorio), el contenido y la campana le
+            dejan su espacio. */}
+        <div className="group/shell min-h-screen overflow-x-clip bg-background md:flex">
           <a
             href="#contenido"
             className="sr-only z-20 rounded-md bg-card px-4 py-2 font-semibold text-foreground focus:not-sr-only focus:fixed focus:top-4 focus:left-4"
@@ -27,10 +29,10 @@ export default async function StudentLayout({ children }: { children: React.Reac
           </a>
           <StudentSidebar />
           {/* Tablet y escritorio: la campana flota arriba a la derecha. */}
-          <div className="fixed top-5 right-6 z-20 hidden md:block">
+          <div className="fixed top-5 right-6 z-20 hidden md:block lg:group-has-[[data-right-rail]]/shell:right-[23.5rem] xl:group-has-[[data-right-rail]]/shell:right-[25.5rem]">
             <MessagesBell />
           </div>
-          <div className="min-w-0 flex-1 pb-28 md:pb-0">
+          <div className="min-w-0 flex-1 pb-28 md:pb-0 lg:group-has-[[data-right-rail]]/shell:pr-[22rem] xl:group-has-[[data-right-rail]]/shell:pr-[24rem]">
             {/* Móvil: la marca a la izquierda y la campana a la derecha. */}
             {/* relative z-10: queda sobre los fondos a pantalla completa (cielo del Diario, jardín). */}
             <header className="relative z-10 flex items-center justify-between px-4 pt-4 md:hidden">

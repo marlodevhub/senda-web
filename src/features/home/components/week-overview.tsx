@@ -39,7 +39,7 @@ export function WeekOverview({
     days.find((day) => day.interventionDay === selectedDay);
 
   return (
-    <section aria-labelledby="home-week" className="flex flex-col gap-4 rounded-lg bg-card p-5 shadow-card lg:gap-3">
+    <section aria-labelledby="home-week" className="flex flex-col gap-4 rounded-lg bg-card p-5 shadow-(--shadow-card) lg:gap-3 lg:bg-transparent lg:shadow-none">
       <div className="flex items-baseline justify-between gap-2 lg:sr-only">
         <h2 id="home-week" className="font-heading text-lg font-bold text-foreground">
           {t("home.weekTitle", { week })}
