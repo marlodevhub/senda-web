@@ -53,6 +53,16 @@ export function RewriteForm({ journalEntryId, findingId }: { journalEntryId: num
     );
   }
 
+  // Se llega desde el Espejo, el detalle del registro, Inicio, Historial o un mensaje: "Volver" regresa a donde
+  // estaba. Si la página se abrió directo (sin historial en la pestaña), al detalle del registro.
+  function goBack() {
+    if (window.history.length > 1) {
+      router.back();
+    } else {
+      router.push(routes.entry(journalEntryId));
+    }
+  }
+
   async function onSubmit(values: RewriteFormValues) {
     if (!guide) return;
     try {
@@ -155,7 +165,7 @@ export function RewriteForm({ journalEntryId, findingId }: { journalEntryId: num
             type="button"
             variant="ghost"
             className="rounded-full"
-            onClick={() => router.push(routes.mirror(journalEntryId))}
+            onClick={goBack}
           >
             <ArrowLeft className="size-4" aria-hidden />
             {t("common.back")}
