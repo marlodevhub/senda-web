@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { PenLine } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import type { Mood } from "@/components/icons/mood-orb";
+import { moodSolidStyle, type Mood } from "@/components/icons/mood-orb";
 import { MoodPicker } from "@/components/forms/mood-picker";
 import { useRecordCheckIn } from "@/features/home/api/use-record-check-in";
 import { BffError } from "@/lib/api/client";
@@ -67,7 +67,8 @@ export function CheckIn({ initialMood }: { initialMood: Mood | null }) {
               <p className="text-base leading-relaxed text-foreground">
                 {t(`home.checkinInvitation.${INVITATION_KEY[mood]}`)}
               </p>
-              <Button asChild variant="hero" size="xl" className="w-full rounded-full">
+              {/* Sólido en el color de la cara elegida. */}
+              <Button asChild size="xl" className="w-full rounded-full" style={moodSolidStyle(mood)}>
                 <Link href="/diario">
                   <PenLine className="size-4" aria-hidden />
                   {t("home.writeCta")}

@@ -10,7 +10,7 @@ import { Check, RotateCcw } from "lucide-react";
 import { FieldError } from "@/components/forms/field-error";
 import { Button } from "@/components/ui/button";
 import { EmotionCharacter, EmotionDefs } from "@/components/illustrations/emotion-characters";
-import type { Mood } from "@/components/icons/mood-orb";
+import { moodSolidStyle, type Mood } from "@/components/icons/mood-orb";
 import { ContextPicker } from "@/features/journal/components/context-picker";
 import { DraftStatusIcon } from "@/features/journal/components/draft-status";
 import { JournalModeToggle } from "@/features/journal/components/journal-mode-toggle";
@@ -87,6 +87,7 @@ export function JournalForm({ checkinMood }: { checkinMood?: Mood | null }) {
   }, [checkinMood, getValues, setValue]);
 
   const mode = useWatch({ control, name: "mode" });
+  const moodBefore = useWatch({ control, name: "moodBefore" });
   const texts = useWatch({ control, name: ["q1", "q2", "q3", "freeText"] });
   const words = countWords(mode === "GUIDED" ? texts.slice(0, 3).join(" ") : (texts[3] ?? ""));
 
@@ -189,12 +190,14 @@ export function JournalForm({ checkinMood }: { checkinMood?: Mood | null }) {
               )}
             </div>
           </div>
+          {/* En el color de la cara elegida; sin cara todavía, el del tema. */}
           <Button
             type="submit"
-            variant="hero"
+            variant={moodBefore ? "default" : "hero"}
             size="xl"
             disabled={isSubmitting}
             className="ms-auto shrink-0 rounded-full px-6"
+            style={moodBefore ? moodSolidStyle(moodBefore as Mood) : undefined}
           >
             <Check className="size-4" aria-hidden />
             {isSubmitting ? t("journal.submitting") : t("journal.submit")}

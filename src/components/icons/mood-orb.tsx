@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 
@@ -25,6 +26,20 @@ export function moodGradient(mood: Mood): string {
 
 /** Tinta de las caras: oscura sobre cualquiera de los colores (contraste ≥ 4,5:1). */
 export const MOOD_INK = INK;
+
+/**
+ * Un botón sólido en el color del ánimo elegido (Escribir en Inicio, Guardar en el Diario), con la tinta de las
+ * caras: contraste ≥ 4,5:1 sobre los cinco colores. Va como `style` porque los colores salen de aquí, no del tema.
+ */
+export function moodSolidStyle(mood: Mood): CSSProperties {
+  const { base } = ORB_COLORS[mood];
+  return {
+    backgroundColor: base,
+    backgroundImage: "none",
+    color: INK,
+    boxShadow: `0 12px 24px -12px ${base}`,
+  };
+}
 
 function Mouth({ mood }: { mood: Mood }) {
   const d = {
