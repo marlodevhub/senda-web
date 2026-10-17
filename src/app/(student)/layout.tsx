@@ -4,6 +4,7 @@ import { StudentSidebar } from "./_components/student-sidebar";
 import { MessagesBell, MessagesCenterProvider } from "./_components/messages-center";
 import { TourProvider } from "@/components/tour/app-tour";
 import { PaletteSync } from "./_components/palette-sync";
+import { MobileHeaderBackdrop } from "./_components/mobile-header-backdrop";
 import { ParticipantNoSelect } from "@/components/layout/participant-no-select";
 import { SendaLogo } from "@/components/brand/senda-logo";
 
@@ -36,13 +37,10 @@ export default async function StudentLayout({ children }: { children: React.Reac
           </div>
           <div className="min-w-0 flex-1 pb-28 md:pb-0 lg:group-has-[[data-right-rail]]/shell:pr-[22rem] xl:group-has-[[data-right-rail]]/shell:pr-[24rem]">
             {/* Móvil: la marca a la izquierda y la campana a la derecha. */}
-            {/* Fija arriba al hacer scroll y sobre los fondos a pantalla completa (cielo del Diario, jardín): debajo, el
-                color de fondo con desenfoque que se desvanece hacia abajo, así el contenido pasa por detrás sin corte. */}
+            {/* Fija arriba y sobre los fondos a pantalla completa (cielo del Diario, jardín): transparente arriba del todo;
+                al bajar toma fondo con desenfoque (MobileHeaderBackdrop). */}
             <header className="sticky top-0 z-30 flex items-center justify-between px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-3 md:hidden">
-              <span
-                aria-hidden
-                className="pointer-events-none absolute inset-x-0 top-0 -bottom-6 -z-10 bg-background/70 backdrop-blur-md [mask-image:linear-gradient(to_bottom,black_0%,rgb(0_0_0/0.85)_35%,rgb(0_0_0/0.4)_70%,transparent_100%)]"
-              />
+              <MobileHeaderBackdrop />
               <span className="flex items-center gap-2">
                 {/* El logotipo solo, en el color de acento del tema (rosado; azul con Hombre). */}
                 <SendaLogo className="size-7 text-(--prompt-red)" />

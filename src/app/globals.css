@@ -517,27 +517,13 @@
 
 /*
  * Invitación del check-in (CU-06): cae de las caras como una gota blanca que se estira hacia abajo, se
- * ensancha con un vaivén de líquido y se asienta como tarjeta; después aparecen el texto y el botón. Una
- * gotita la sigue desde arriba y se funde en ella. Se repite cada vez que se toca una cara.
+ * ensancha con un vaivén de líquido y se asienta como tarjeta; después aparecen el texto y el botón. Se repite
+ * cada vez que se toca una cara (sin la gotita que la seguía: ya no hay partículas sueltas).
  */
 @media (prefers-reduced-motion: no-preference) {
   .liquid-rise {
     transform-origin: 50% 0;
     animation: liquid-rise 0.95s both;
-  }
-  .liquid-rise::after {
-    content: "";
-    position: absolute;
-    left: 50%;
-    top: -12px;
-    width: 18px;
-    height: 18px;
-    margin-left: -9px;
-    border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
-    background: var(--card);
-    box-shadow: var(--shadow-card);
-    pointer-events: none;
-    animation: liquid-drop 0.95s ease-in both;
   }
   .liquid-rise-text {
     animation: liquid-text 0.95s ease-out both;
@@ -557,14 +543,6 @@
   64% { transform: scale(0.97, 1.05); border-radius: 18px 26px 20px 24px; animation-timing-function: ease-in-out; }
   80% { transform: scale(1.015, 0.985); }
   100% { transform: none; }
-}
-
-@keyframes liquid-drop {
-  0% { opacity: 0; transform: translateY(-8px) scale(0.6); }
-  22% { opacity: 1; transform: translateY(-4px) scale(1, 1.25); }
-  55% { opacity: 1; transform: translateY(0) scale(0.85); }
-  85% { opacity: 1; transform: translateY(10px) scale(0.35); }
-  100% { opacity: 0; transform: translateY(14px) scale(0); }
 }
 
 @keyframes liquid-text {
