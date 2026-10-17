@@ -89,7 +89,7 @@ export function MonthCalendar({ days, today }: { days: HomeWeekDay[]; today: num
           month_caption: "flex h-(--cell-size) w-full items-center justify-start",
           caption_label: "font-heading text-lg font-bold text-foreground capitalize lg:text-base",
           nav: "absolute inset-x-0 top-0 flex w-full items-center justify-end gap-1",
-          weekday: "flex-1 text-base font-normal text-muted-foreground/80 capitalize select-none",
+          weekday: "flex-1 text-base font-normal text-muted-foreground capitalize select-none",
           week: "mt-2 flex w-full",
           day: "flex flex-1 items-center justify-center p-0 text-center select-none",
           today: "",
