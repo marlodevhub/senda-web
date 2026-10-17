@@ -47,6 +47,9 @@ function findTarget(targets: string[] | undefined): DOMRect | null {
  * lateral (tablet y escritorio), si no debajo o encima de lo iluminado (donde
  * haya más lugar, con scroll si aun así no cabe), o al centro si no ilumina nada.
  */
+/** Ancho máximo de la tarjeta (24rem, igual que su clase `w-[min(24rem,…)]`). */
+const CARD_MAX_WIDTH = 384;
+
 function cardPlacement({ rect, vw, vh }: Layout, cardHeight: number): React.CSSProperties {
   if (!rect) {
     return { left: "50%", top: "50%", transform: "translate(-50%, -50%)", maxHeight: vh - MARGIN * 2 };
@@ -62,10 +65,24 @@ function cardPlacement({ rect, vw, vh }: Layout, cardHeight: number): React.CSSP
       : { left: "50%", transform: "translateX(-50%)" };
   const below = vh - rect.bottom - MARGIN * 2;
   const above = rect.top - MARGIN * 2;
-  if (cardHeight <= below || below >= above) {
+  if (cardHeight <= below) {
     return { ...horizontal, top: rect.bottom + MARGIN, maxHeight: below };
   }
-  return { ...horizontal, bottom: vh - rect.top + MARGIN, maxHeight: above };
+  if (cardHeight <= above) {
+    return { ...horizontal, bottom: vh - rect.top + MARGIN, maxHeight: above };
+  }
+  // No entra completa ni arriba ni abajo (p. ej. una tarjeta en medio de Inicio): al costado del objetivo, con el
+  // alto de la pantalla; si tampoco hay lugar al costado, centrada. Así la tarjeta se ve entera, sin scroll.
+  const cardWidth = Math.min(CARD_MAX_WIDTH, vw - MARGIN * 2);
+  const top = Math.max(MARGIN, Math.min(rect.top + rect.height / 2 - cardHeight / 2, vh - cardHeight - MARGIN));
+  const maxHeight = vh - MARGIN * 2;
+  if (vw - rect.right - MARGIN * 2 >= cardWidth) {
+    return { left: rect.right + MARGIN, top, maxHeight };
+  }
+  if (rect.left - MARGIN * 2 >= cardWidth) {
+    return { right: vw - rect.left + MARGIN, top, maxHeight };
+  }
+  return { left: "50%", top: "50%", transform: "translate(-50%, -50%)", maxHeight };
 }
 
 /**
