@@ -10,7 +10,7 @@ export default async function PorReescribirPage() {
     <div className="flex flex-col gap-4">
       <h1 className="font-heading text-xl font-bold text-foreground">{t("history.title")}</h1>
       <HistoryTabs />
-      <EntryList pendingOnly />
+      <EntryList view="pending" />
     </div>
   );
 }

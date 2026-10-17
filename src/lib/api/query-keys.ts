@@ -10,13 +10,14 @@ export const queryKeys = {
   stats: () => ["stats"] as const,
   jar: () => ["jar"] as const,
   messages: () => ["messages"] as const,
-  history: (filters: { week?: number; dimension?: string; context?: string; pending?: boolean }) =>
+  history: (filters: { week?: number; dimension?: string; context?: string; pending?: boolean; rewritten?: boolean }) =>
     [
       "history",
       filters.week ?? null,
       filters.dimension ?? null,
       filters.context ?? null,
       filters.pending ?? false,
+      filters.rewritten ?? false,
     ] as const,
   entryDetail: (journalEntryId: number) => ["entry-detail", journalEntryId] as const,
   adminCohorts: () => ["admin-cohorts"] as const,

@@ -41,18 +41,28 @@ function groupByWeek(items: JournalEntrySummary[]): { week: number; items: Journ
 }
 
 /**
- * CU-11: historial filtrable, 20 por página con "Ver más" (RN-HI-01/02). Con `pendingOnly`, solo los registros
- * con frases por reescribir (pestaña "Por reescribir"); cada registro dice cuántas le faltan.
+ * CU-11: historial filtrable, 20 por página con "Ver más" (RN-HI-01/02). Con `view`, solo los registros con frases
+ * por reescribir ("Por reescribir") o con reescrituras ("Reescritos"); cada registro dice cuántas le faltan.
  * Tablet y escritorio: la lista y, al costado, el panel de filtros fijo.
  * Móvil: los filtros en un drawer y los activos como chips que se quitan.
  */
-export function EntryList({ pendingOnly = false }: { pendingOnly?: boolean }) {
+/** Qué registros lista: todos, los que tienen frases por reescribir o los que ya tienen reescrituras. */
+export type EntryListView = "all" | "pending" | "rewritten";
+
+const EMPTY_KEY: Record<EntryListView, string> = {
+  all: "history.empty",
+  pending: "history.noPending",
+  rewritten: "history.noRewritten",
+};
+
+export function EntryList({ view = "all" }: { view?: EntryListView }) {
   const t = useTranslations();
   const [filters, setFilters] = useState<HistoryFilterValues>({});
 
   const { data, isPending, hasNextPage, fetchNextPage, isFetchingNextPage } = useHistory({
     ...filters,
-    pending: pendingOnly,
+    pending: view === "pending",
+    rewritten: view === "rewritten",
   });
   const items = data?.pages.flatMap((p) => p.items) ?? [];
   const activeCount = [filters.week, filters.dimension, filters.context].filter((v) => v !== undefined).length;
@@ -147,14 +157,14 @@ export function EntryList({ pendingOnly = false }: { pendingOnly?: boolean }) {
         {!isPending && items.length === 0 && (
           <div className="flex flex-col items-center gap-3 rounded-lg bg-card px-6 py-12 text-center shadow-card">
             <p className="text-base text-muted-foreground">
-              {hasFilters ? t("history.noResults") : t(pendingOnly ? "history.noPending" : "history.empty")}
+              {hasFilters ? t("history.noResults") : t(EMPTY_KEY[view])}
             </p>
             {hasFilters ? (
               <Button variant="outline" onClick={() => setFilters({})}>
                 {t("history.clearFilters")}
               </Button>
             ) : (
-              !pendingOnly && (
+              view === "all" && (
                 <Button variant="hero" className="rounded-full" asChild>
                   <Link href="/diario">{t("history.writeCta")}</Link>
                 </Button>

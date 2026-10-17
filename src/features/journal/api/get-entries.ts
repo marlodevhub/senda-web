@@ -26,6 +26,8 @@ export type HistoryFilters = {
   context?: JournalContext;
   /** Solo los registros con frases por reescribir (pestaña "Por reescribir"). */
   pending?: boolean;
+  /** Solo los registros con reescrituras (pestaña "Reescritos"). */
+  rewritten?: boolean;
   page?: number;
 };
 
@@ -35,6 +37,7 @@ export async function getHistory(filters: HistoryFilters): Promise<HistoryPage> 
   if (filters.dimension) params.set("dimension", filters.dimension);
   if (filters.context) params.set("context", filters.context);
   if (filters.pending) params.set("pending", "true");
+  if (filters.rewritten) params.set("rewritten", "true");
   params.set("page", String(filters.page ?? 1));
 
   return callBff<HistoryPage>(`/api/v1/journal-entries?${params.toString()}`);

@@ -20,10 +20,13 @@ export function PillTabs({
   label,
   tabs,
   tone = "leaf",
+  iconsOnMobile = true,
 }: {
   label: string;
   tabs: PillTab[];
   tone?: keyof typeof TONES;
+  /** Con nombres largos (Historial) los íconos se ocultan en móvil para que cada nombre quepa en una línea. */
+  iconsOnMobile?: boolean;
 }) {
   return (
     <div
@@ -38,11 +41,11 @@ export function PillTabs({
           role="tab"
           aria-selected={active}
           className={cn(
-            "flex flex-1 items-center justify-center gap-2 rounded-full py-2.5 text-base font-semibold transition-all focus-visible:outline-2 focus-visible:outline-ring",
+            "flex flex-1 items-center justify-center gap-2 rounded-full px-2 py-2.5 text-base font-semibold whitespace-nowrap transition-all focus-visible:outline-2 focus-visible:outline-ring",
             active ? cn(TONES[tone], "shadow-card") : "text-muted-foreground hover:text-foreground",
           )}
         >
-          <Icon className="size-4" aria-hidden />
+          <Icon className={cn("size-4 shrink-0", !iconsOnMobile && "max-sm:hidden")} aria-hidden />
           {tabLabel}
         </Link>
       ))}
