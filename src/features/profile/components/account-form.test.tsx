@@ -11,7 +11,7 @@ describe("AccountForm", () => {
   it("muestra el usuario con el que entra y lo cambia (CU-20)", async () => {
     const fetchMock = vi.spyOn(globalThis, "fetch").mockImplementation(async () => new Response(null, { status: 204 }));
     const user = userEvent.setup();
-    renderWithProviders(<AccountForm username="lucia.r" googleLinked={false} />);
+    renderWithProviders(<AccountForm username="lucia.r" googleLinked={false} hasPassword />);
 
     expect(screen.getByText("lucia.r")).toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: "Cambiar usuario" }));
@@ -29,9 +29,9 @@ describe("AccountForm", () => {
   it("no deja guardar un usuario con un formato inválido, como un código de participante", async () => {
     const fetchMock = vi.spyOn(globalThis, "fetch");
     const user = userEvent.setup();
-    renderWithProviders(<AccountForm username={null} googleLinked={false} />);
+    renderWithProviders(<AccountForm username={null} googleLinked={false} hasPassword />);
 
-    expect(screen.getByText(/Todavía entras con tu código de participante/)).toBeInTheDocument();
+    expect(screen.getByText(/Todavía no tienes usuario/)).toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: "Crear usuario" }));
     await user.type(screen.getByLabelText("Usuario"), "C1-7KQ4-9");
     await user.click(screen.getByRole("button", { name: "Guardar usuario" }));
@@ -46,7 +46,7 @@ describe("AccountForm", () => {
       return new Response(JSON.stringify({ status: taken ? "TAKEN" : "AVAILABLE" }), { status: 200 });
     });
     const user = userEvent.setup();
-    renderWithProviders(<AccountForm username="lucia.r" googleLinked={false} />);
+    renderWithProviders(<AccountForm username="lucia.r" googleLinked={false} hasPassword />);
 
     await user.click(screen.getByRole("button", { name: "Cambiar usuario" }));
     const input = screen.getByLabelText("Usuario");
@@ -65,7 +65,7 @@ describe("AccountForm", () => {
   it("no consulta el usuario actual", async () => {
     const fetchMock = vi.spyOn(globalThis, "fetch");
     const user = userEvent.setup();
-    renderWithProviders(<AccountForm username="lucia.r" googleLinked={false} />);
+    renderWithProviders(<AccountForm username="lucia.r" googleLinked={false} hasPassword />);
 
     await user.click(screen.getByRole("button", { name: "Cambiar usuario" }));
     await new Promise((resolve) => setTimeout(resolve, 700));
@@ -74,7 +74,7 @@ describe("AccountForm", () => {
   });
 
   it("sin el client ID de Google configurado no ofrece vincular Google", () => {
-    renderWithProviders(<AccountForm username="lucia.r" googleLinked={false} />);
+    renderWithProviders(<AccountForm username="lucia.r" googleLinked={false} hasPassword />);
 
     expect(screen.queryByText("Ingresar con Google")).not.toBeInTheDocument();
   });

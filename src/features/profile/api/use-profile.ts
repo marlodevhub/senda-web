@@ -6,6 +6,7 @@ import {
   linkGoogle,
   unlinkGoogle,
   generateRecoveryCode,
+  setUpPassword,
   updateIdentity,
   updateNotifications,
 } from "@/features/profile/api/profile-settings";
@@ -17,6 +18,11 @@ export function useProfile() {
 
 export function useChangePassword() {
   return useMutation({ mutationFn: changePassword });
+}
+
+/** El perfil se vuelve a pedir recién cuando guardó su código de recuperación (si no, la tarjeta cambia antes). */
+export function useSetUpPassword() {
+  return useMutation({ mutationFn: setUpPassword });
 }
 
 export function useGenerateRecoveryCode() {

@@ -3,7 +3,8 @@ import { rejectCrossOrigin } from "@/lib/server/same-origin";
 import { backendFetch, forwardedHeaders, readJsonSafely, type BackendErrorBody } from "@/lib/server/backend";
 import { clearStudentSession, getStudentSession, setStudentSession } from "@/lib/server/session";
 
-type ActivationResult = { token: string; refreshToken: string; recoveryCode: string };
+/** `recoveryCode` es null al activar con Google (sin contraseña no hay nada que recuperar con él). */
+type ActivationResult = { token: string; refreshToken: string; recoveryCode: string | null };
 type LoginResult = { token: string; refreshToken: string; destination: string };
 
 /**
@@ -20,7 +21,9 @@ export async function POST(request: Request, { params }: { params: Promise<{ act
 
   switch (action) {
     case "activate":
-      return handleActivate(request);
+      return handleActivate(request, "/api/v1/auth/activate");
+    case "activate-google":
+      return handleActivate(request, "/api/v1/auth/activate/google");
     case "login":
       return handleLogin(request, "/api/v1/auth/login");
     case "google":
@@ -36,9 +39,10 @@ export async function POST(request: Request, { params }: { params: Promise<{ act
   }
 }
 
-async function handleActivate(request: Request) {
+/** CU-15: con usuario y contraseña, o con Google (código + ID token); las dos dejan la sesión iniciada. */
+async function handleActivate(request: Request, backendPath: string) {
   const body = await request.text();
-  const res = await backendFetch("/api/v1/auth/activate", {
+  const res = await backendFetch(backendPath, {
     method: "POST",
     headers: forwardedHeaders(request),
     body,

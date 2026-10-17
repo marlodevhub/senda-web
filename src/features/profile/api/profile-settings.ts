@@ -6,6 +6,14 @@ export async function changePassword(input: { currentPassword: string; newPasswo
   await callBff<void>("/api/v1/profile/password", { method: "POST", body: JSON.stringify(input) });
 }
 
+/** CU-20: la primera contraseña de quien activó con Google (necesita usuario); devuelve su código de recuperación. */
+export async function setUpPassword(input: { newPassword: string }): Promise<{ recoveryCode: string }> {
+  return callBff<{ recoveryCode: string }>("/api/v1/profile/password-setup", {
+    method: "POST",
+    body: JSON.stringify(input),
+  });
+}
+
 /** CU-20 2b (RS-AC-13): el código nuevo se muestra una sola vez y el anterior deja de servir. */
 export async function generateRecoveryCode(input: { password: string }): Promise<{ recoveryCode: string }> {
   return callBff<{ recoveryCode: string }>("/api/v1/profile/recovery-code", {

@@ -8,11 +8,16 @@ export const changePasswordFormSchema = z
     newPassword: newPasswordSchema,
     newPasswordConfirm: z.string(),
   })
-  .refine(
-    ...passwordsMatch<{ newPassword: string; newPasswordConfirm: string }>("newPassword", "newPasswordConfirm"),
-  );
+  .refine(...passwordsMatch<{ newPassword: string; newPasswordConfirm: string }>("newPassword", "newPasswordConfirm"));
 
 export type ChangePasswordFormValues = z.infer<typeof changePasswordFormSchema>;
+
+/** CU-20: la primera contraseña de quien activó con Google (no hay una actual que pedir). */
+export const setUpPasswordFormSchema = z
+  .object({ newPassword: newPasswordSchema, newPasswordConfirm: z.string() })
+  .refine(...passwordsMatch<{ newPassword: string; newPasswordConfirm: string }>("newPassword", "newPasswordConfirm"));
+
+export type SetUpPasswordFormValues = z.infer<typeof setUpPasswordFormSchema>;
 
 /** CU-20 2b (RS-AC-13): pide la contraseña. */
 export const generateRecoveryCodeFormSchema = z.object({

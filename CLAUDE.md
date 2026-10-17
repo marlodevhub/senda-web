@@ -75,7 +75,7 @@ senda-web/
     │   │       ├── adherencia/                          CU-25
     │   │       └── auditoria/                           CU-27
     │   ├── api/                      BFF
-    │   │   ├── auth/[action]/route.ts         activar, login, google, recuperar, logout; cookies httpOnly
+    │   │   ├── auth/[action]/route.ts         activar (contraseña o Google), login, google, recuperar, logout; cookies httpOnly
     │   │   ├── admin-auth/[action]/route.ts   login, verify (TOTP), logout; cookie admin_access
     │   │   └── v1/[...path]/route.ts          reenvía a senda-api con el token que corresponda; renueva (solo estudiante)
     │   └── layout.tsx · globals.css · not-found.tsx · error.tsx
@@ -157,7 +157,7 @@ Cada feature: `api/` (hooks TanStack Query + llamadas al BFF), `components/`, `s
 
 Ver mapa completo de API en la Especificación v2 (toda petición del estudiante lleva JWT de 30 min + refresh; la de administrador usa su propia cookie de 15 min sin renovación). Endpoints clave para construir el BFF:
 
-- Estudiante: `/auth/{activate,login,google,logout,refresh,recover}`, `/consents/current`, `/consent-acceptances`, `/welcome`, `/profile/*`, `/home`, `/check-ins/today`, `/journal-entries*`, `/progress/*`, `/jar*`, `/weekly-summaries*`, `/messages*`.
+- Estudiante: `/auth/{activate,activate/google,login,google,logout,refresh,recover}`, `/consents/current`, `/consent-acceptances`, `/welcome`, `/profile/*`, `/home`, `/check-ins/today`, `/journal-entries*`, `/progress/*`, `/jar*`, `/weekly-summaries*`, `/messages*`.
 - Administrador (`/admin/**`): `/admin/auth/{login,verify,logout}`, `/admin/cohorts*`, `/admin/participants*`, `/admin/adherence`, `/admin/exports/adherence`, `/admin/audit-logs`, `/admin/config/current`.
 
 ## 7. DoD específica de este repo

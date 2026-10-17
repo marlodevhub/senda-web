@@ -32,11 +32,19 @@ function errorKey(error: unknown): string {
  * CU-20 "Tu cuenta": el usuario con el que entra (el código de participante solo sirvió para activar) y, si el ingreso
  * con Google está configurado, vincular o desvincular su cuenta de Google. Nada de esto lo ve el administrador.
  */
-export function AccountForm({ username, googleLinked }: { username: string | null; googleLinked: boolean }) {
+export function AccountForm({
+  username,
+  googleLinked,
+  hasPassword,
+}: {
+  username: string | null;
+  googleLinked: boolean;
+  hasPassword: boolean;
+}) {
   return (
     <div className="flex flex-col gap-5">
       <UsernameSection username={username} />
-      {isGoogleSignInEnabled && <GoogleSection linked={googleLinked} />}
+      {isGoogleSignInEnabled && <GoogleSection linked={googleLinked} canUnlink={hasPassword} />}
     </div>
   );
 }
@@ -142,7 +150,8 @@ function UsernameSection({ username }: { username: string | null }) {
   );
 }
 
-function GoogleSection({ linked }: { linked: boolean }) {
+/** Sin contraseña, Google es su única forma de entrar: no se ofrece desvincularlo hasta crearla. */
+function GoogleSection({ linked, canUnlink }: { linked: boolean; canUnlink: boolean }) {
   const t = useTranslations();
   const link = useLinkGoogle();
   const unlink = useUnlinkGoogle();
@@ -173,7 +182,9 @@ function GoogleSection({ linked }: { linked: boolean }) {
       <p className="text-base text-muted-foreground">
         {t(linked ? "profile.googleLinkedText" : "profile.googleUnlinkedText")}
       </p>
-      {linked ? (
+      {linked && !canUnlink ? (
+        <p className="text-base text-muted-foreground">{t("profile.googleOnlyHint")}</p>
+      ) : linked ? (
         <Button
           type="button"
           variant="ghost"

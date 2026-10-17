@@ -43,9 +43,14 @@ function usernameFor(code: string): string {
 async function activateAndConsent(page: Page): Promise<string> {
   const code = seedPendingParticipant();
 
-  // CU-15: activar la cuenta con el código (solo esta vez) y crear el usuario y la contraseña.
+  // CU-15: activar la cuenta con el código (solo esta vez). Sin Google real en E2E, por el camino del usuario y la
+  // contraseña (si el build tiene Google configurado, la pantalla abre con Google y hay que elegir el otro camino).
   await page.goto("/activar");
   await page.getByLabel("Código de participante").fill(code);
+  const withPassword = page.getByRole("button", { name: "Prefiero crear un usuario y una contraseña" });
+  if (await withPassword.isVisible()) {
+    await withPassword.click();
+  }
   await page.getByLabel("Usuario").fill(usernameFor(code));
   await page.getByLabel("Contraseña", { exact: true }).fill(PASSWORD);
   await page.getByLabel("Repite tu contraseña").fill(PASSWORD);

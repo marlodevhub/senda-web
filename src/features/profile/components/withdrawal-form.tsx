@@ -15,6 +15,9 @@ import { BffError } from "@/lib/api/client";
 import { errorMessageKey } from "@/lib/api/error-messages";
 import { logout } from "@/lib/auth/logout";
 import { useWithdraw } from "@/features/profile/api/use-withdraw";
+import { useProfile } from "@/features/profile/api/use-profile";
+import type { WithdrawInput } from "@/features/profile/api/withdraw";
+import { GoogleSignInButton } from "@/components/auth/google-sign-in-button";
 import {
   withdrawFormSchema,
   type WithdrawFormValues,
@@ -26,11 +29,16 @@ const OPTIONS: { value: WithdrawalOption; titleKey: string; descriptionKey: stri
   { value: "DELETE_ALL", titleKey: "profile.deleteAllTitle", descriptionKey: "profile.deleteAllDescription" },
 ];
 
-/** CU-21 Retirarse del estudio: explica las 2 opciones sin pedir motivo (RN-AC-15). */
+/**
+ * CU-21 Retirarse del estudio: explica las 2 opciones sin pedir motivo (RN-AC-15). Se confirma con la contraseña o,
+ * si la cuenta entra solo con Google, eligiendo de nuevo esa cuenta de Google.
+ */
 export function WithdrawalForm() {
   const t = useTranslations();
   const router = useRouter();
   const withdrawMutation = useWithdraw();
+  const { data: profile } = useProfile();
+  const confirmsWithGoogle = profile?.hasPassword === false;
   const [done, setDone] = useState(false);
 
   const {
@@ -39,6 +47,7 @@ export function WithdrawalForm() {
     control,
     setValue,
     setError,
+    getValues,
     formState: { errors, isSubmitting },
   } = useForm<WithdrawFormValues>({
     resolver: zodResolver(withdrawFormSchema),
@@ -46,9 +55,9 @@ export function WithdrawalForm() {
   });
   const selectedOption = useWatch({ control, name: "option" });
 
-  async function onSubmit(values: WithdrawFormValues) {
+  async function submit(input: WithdrawInput) {
     try {
-      await withdrawMutation.mutateAsync(values);
+      await withdrawMutation.mutateAsync(input);
       setDone(true);
       await logout();
     } catch (error) {
@@ -64,6 +73,8 @@ export function WithdrawalForm() {
     }
   }
 
+  const onSubmit = (values: WithdrawFormValues) => submit({ option: values.option, password: values.password });
+
   if (done) {
     return (
       <div className="flex flex-col gap-4 text-center">
@@ -76,7 +87,11 @@ export function WithdrawalForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5" noValidate>
+    <form
+      onSubmit={confirmsWithGoogle ? (event) => event.preventDefault() : handleSubmit(onSubmit)}
+      className="flex flex-col gap-5"
+      noValidate
+    >
       <p className="text-sm text-muted-foreground">{t("profile.withdrawalExplanation")}</p>
 
       <div role="radiogroup" aria-label={t("profile.withdrawalOptionsLabel")} className="flex flex-col gap-2">
@@ -101,21 +116,39 @@ export function WithdrawalForm() {
         })}
       </div>
 
-      <div className="flex flex-col gap-1.5">
-        <Label htmlFor="password">{t("profile.confirmPasswordLabel")}</Label>
-        <Input
-          id="password"
-          type="password"
-          autoComplete="current-password"
-          aria-invalid={Boolean(errors.password)}
-          {...register("password")}
-        />
-        <FieldError message={errors.password?.message} />
-      </div>
+      {confirmsWithGoogle ? (
+        <div className="flex flex-col gap-2">
+          <p className="text-base font-semibold text-foreground">{t("profile.confirmWithGoogleLabel")}</p>
+          {withdrawMutation.isPending ? (
+            <p role="status" className="text-base text-muted-foreground">
+              {t("profile.withdrawing")}
+            </p>
+          ) : (
+            <GoogleSignInButton
+              text="continue_with"
+              onCredential={(googleIdToken) => submit({ option: getValues("option"), googleIdToken })}
+            />
+          )}
+        </div>
+      ) : (
+        <>
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="password">{t("profile.confirmPasswordLabel")}</Label>
+            <Input
+              id="password"
+              type="password"
+              autoComplete="current-password"
+              aria-invalid={Boolean(errors.password)}
+              {...register("password")}
+            />
+            <FieldError message={errors.password?.message} />
+          </div>
 
-      <Button type="submit" variant="destructive" disabled={isSubmitting}>
-        {isSubmitting ? t("profile.withdrawing") : t("profile.withdrawSubmit")}
-      </Button>
+          <Button type="submit" variant="destructive" disabled={isSubmitting}>
+            {isSubmitting ? t("profile.withdrawing") : t("profile.withdrawSubmit")}
+          </Button>
+        </>
+      )}
     </form>
   );
 }

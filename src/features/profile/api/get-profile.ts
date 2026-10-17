@@ -13,6 +13,8 @@ export type Profile = {
   username: string | null;
   /** Si vinculó una cuenta de Google (nunca cuál). */
   googleLinked: boolean;
+  /** false si activó con Google y aún no creó su contraseña (Google es su única forma de entrar). */
+  hasPassword: boolean;
 };
 
 export async function getProfile(): Promise<Profile> {

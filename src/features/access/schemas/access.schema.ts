@@ -7,7 +7,7 @@ import { usernameSchema } from "@/lib/validation/username";
  * sin O/0/I/1) lo valida el servidor — esto solo evita un viaje de red
  * por un error de tipeo obvio, nunca es la fuente de verdad.
  */
-const activationCodeSchema = z
+export const activationCodeSchema = z
   .string()
   .trim()
   .toUpperCase()

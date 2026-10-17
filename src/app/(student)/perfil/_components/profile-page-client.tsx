@@ -14,6 +14,7 @@ import { AccountForm } from "@/features/profile/components/account-form";
 import { IdentityForm } from "@/features/profile/components/identity-form";
 import { NotificationsForm } from "@/features/profile/components/notifications-form";
 import { RecoveryCodeForm } from "@/features/profile/components/recovery-code-form";
+import { SetUpPasswordForm } from "@/features/profile/components/set-up-password-form";
 import { ThemeSelector } from "@/features/profile/components/theme-selector";
 import { GlassSettingsForm } from "@/features/appearance/glass-settings-form";
 import { StartingPointForm } from "@/features/welcome/components/starting-point-form";
@@ -21,8 +22,8 @@ import { cn } from "@/lib/utils";
 
 /**
  * CU-20 Gestionar perfil (RN-AC-13): cómo te llamamos (nombre y sexo, que elige
- * el tema de color), tu cuenta (usuario e ingreso con Google), notificaciones por correo, contraseña,
- * código de recuperación, punto de partida (CU-17), ayuda e información
+ * el tema de color), tu cuenta (usuario e ingreso con Google), notificaciones por correo, contraseña (o crearla, si
+ * activó con Google), código de recuperación, punto de partida (CU-17), ayuda e información
  * (volver a ver la bienvenida o el tutorial y leer el consentimiento), cerrar sesión y
  * retirarse (CU-21). Sin botón de "Necesito ayuda": Senda no es un servicio
  * de crisis (sección 15 del CLAUDE.md raíz).
@@ -78,7 +79,11 @@ export function ProfilePageClient() {
         ) : isError || !profile ? (
           <p className="text-base text-muted-foreground">{t("common.unexpectedError")}</p>
         ) : (
-          <AccountForm username={profile.username} googleLinked={profile.googleLinked} />
+          <AccountForm
+            username={profile.username}
+            googleLinked={profile.googleLinked}
+            hasPassword={profile.hasPassword}
+          />
         )}
       </Tile>
 
@@ -95,12 +100,25 @@ export function ProfilePageClient() {
         <StartingPointForm />
       </Tile>
 
-      <Tile title={t("profile.passwordTitle")} className="md:row-span-2 lg:col-span-3">
-        <ChangePasswordForm />
+      {/* Quien activó con Google aún no tiene contraseña: aquí la crea (y recibe su código de recuperación). */}
+      <Tile
+        title={t(profile && !profile.hasPassword ? "profile.passwordSetupTitle" : "profile.passwordTitle")}
+        className="md:row-span-2 lg:col-span-3"
+      >
+        {isPending ? (
+          <Loader2 className="size-5 animate-spin text-muted-foreground" aria-label={t("common.loading")} />
+        ) : profile && !profile.hasPassword ? (
+          <SetUpPasswordForm hasUsername={profile.username !== null} />
+        ) : (
+          <ChangePasswordForm />
+        )}
       </Tile>
-      <Tile title={t("profile.recoveryTitle")} className="lg:col-span-3">
-        <RecoveryCodeForm />
-      </Tile>
+      {/* Sin contraseña no hay nada que recuperar con un código: entra con Google. */}
+      {profile?.hasPassword !== false && (
+        <Tile title={t("profile.recoveryTitle")} className="lg:col-span-3">
+          <RecoveryCodeForm />
+        </Tile>
+      )}
       <Tile title={t("profile.themeMode")} className="lg:col-span-3">
         <ThemeSelector />
       </Tile>
