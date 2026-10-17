@@ -11,6 +11,7 @@ import { UsernameAvailabilityIcon, UsernameAvailabilityMessage } from "@/compone
 import { useUsernameAvailability } from "@/hooks/use-username-availability";
 import { AtSign, Check } from "lucide-react";
 import { GoogleSignInButton } from "@/components/auth/google-sign-in-button";
+import { GoogleLogo } from "@/components/brand/google-logo";
 import { FieldError } from "@/components/forms/field-error";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -179,6 +180,18 @@ function GoogleSection({ linked, canUnlink }: { linked: boolean; canUnlink: bool
       <h3 id="profile-google" className="text-base font-semibold text-foreground">
         {t("profile.googleTitle")}
       </h3>
+      {linked && (
+        <p className="flex items-center gap-3 rounded-md bg-muted px-4 py-3 text-base">
+          <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-card shadow-sm">
+            <GoogleLogo className="size-5" />
+          </span>
+          <span className="flex min-w-0 flex-1 flex-col">
+            <span className="font-semibold text-foreground">{t("profile.googleLinkedStatus")}</span>
+            <span className="text-muted-foreground">{t("profile.googleLinkedStatusHint")}</span>
+          </span>
+          <Check className="size-5 shrink-0 text-sprout-ink" aria-hidden />
+        </p>
+      )}
       <p className="text-base text-muted-foreground">
         {t(linked ? "profile.googleLinkedText" : "profile.googleUnlinkedText")}
       </p>
