@@ -44,7 +44,7 @@ function FilterGroup<T extends string | number>({
                 "flex items-center gap-2 rounded-full px-3 py-1.5 text-base transition-colors focus-visible:outline-2 focus-visible:outline-ring",
                 active
                   ? "bg-flow-tint text-flow-ink ring-2 ring-flow"
-                  : "bg-muted text-foreground hover:bg-flow-tint/60",
+                  : "bg-flow-tint/60 text-foreground hover:bg-muted",
               )}
             >
               {renderOption(option)}
