@@ -101,7 +101,8 @@ test("ciclo diario completo: activar → diario → espejo → reescritura → f
 
   // CU-05/CU-06: Inicio con el check-in del día.
   await expect(page.getByRole("heading", { name: GREETING })).toBeVisible();
-  await expect(page.getByRole("main").getByText("Día 3 de 28", { exact: true }).first()).toBeVisible();
+  // El día de la senda va en la tarjeta "Tu senda", al pie del calendario.
+  await expect(page.getByRole("main").getByText("Día 3 de 28", { exact: true })).toBeVisible();
   await page.getByRole("radio", { name: "Bien", exact: true }).click();
   await expect(page.getByText("Qué bueno. Si quieres, cuéntale a tu diario qué te hizo bien hoy.")).toBeVisible();
   await expectAccessible(page);

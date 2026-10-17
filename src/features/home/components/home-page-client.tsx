@@ -52,8 +52,8 @@ export function HomePageClient() {
 
   return (
     <div className="flex flex-col gap-5">
-      {/* El saludo grande con la fecha de hoy a la derecha; debajo, el día de la senda. */}
-      <header className="flex flex-col gap-1.5">
+      {/* El saludo grande con la fecha de hoy a la derecha (el día de la senda va en la tarjeta del calendario). */}
+      <header>
         {/* md:pr-16: desde tablet la campana flota arriba a la derecha; la fecha queda a su izquierda. */}
         <div className="flex items-start justify-between gap-3 md:pr-16">
           <h1 className="font-heading text-3xl leading-tight font-bold text-foreground lg:text-4xl">
@@ -73,7 +73,6 @@ export function HomePageClient() {
             </span>
           </p>
         </div>
-        <p className="text-base font-semibold text-foreground">{t("home.dayOfJourney", { day: home.day })}</p>
       </header>
 
       {home.status === "READ_ONLY" ? (
