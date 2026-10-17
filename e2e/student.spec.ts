@@ -35,12 +35,18 @@ test.beforeEach(async ({ context }, testInfo) => {
   }
 });
 
+/** El usuario de cada participante de prueba: su código sin guiones, en minúsculas (único y con formato válido). */
+function usernameFor(code: string): string {
+  return code.toLowerCase().replaceAll("-", "");
+}
+
 async function activateAndConsent(page: Page): Promise<string> {
   const code = seedPendingParticipant();
 
-  // CU-15: activar la cuenta con el código y crear la contraseña.
+  // CU-15: activar la cuenta con el código (solo esta vez) y crear el usuario y la contraseña.
   await page.goto("/activar");
   await page.getByLabel("Código de participante").fill(code);
+  await page.getByLabel("Usuario").fill(usernameFor(code));
   await page.getByLabel("Contraseña", { exact: true }).fill(PASSWORD);
   await page.getByLabel("Repite tu contraseña").fill(PASSWORD);
   await page.getByRole("button", { name: "Activar cuenta" }).click();
@@ -153,7 +159,8 @@ test("la bienvenida es solo la primera vez y se repasa desde Ayuda e informació
   await page.goto("/perfil");
   await page.getByRole("button", { name: "Cerrar sesión" }).click();
   await expect(page).toHaveURL(/\/login/);
-  await page.getByLabel("Código de participante").fill(code);
+  // CU-18: con el usuario, sin el código.
+  await page.getByLabel("Usuario").fill(usernameFor(code));
   await page.getByLabel("Contraseña").fill(PASSWORD);
   await page.getByRole("button", { name: "Iniciar sesión" }).click();
   await expect(page).toHaveURL(/\/inicio/);

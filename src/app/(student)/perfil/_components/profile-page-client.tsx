@@ -10,6 +10,7 @@ import { useTour } from "@/components/tour/app-tour";
 import { LogoutButton } from "@/features/access/components/logout-button";
 import { useProfile } from "@/features/profile/api/use-profile";
 import { ChangePasswordForm } from "@/features/profile/components/change-password-form";
+import { AccountForm } from "@/features/profile/components/account-form";
 import { IdentityForm } from "@/features/profile/components/identity-form";
 import { NotificationsForm } from "@/features/profile/components/notifications-form";
 import { RecoveryCodeForm } from "@/features/profile/components/recovery-code-form";
@@ -20,7 +21,7 @@ import { cn } from "@/lib/utils";
 
 /**
  * CU-20 Gestionar perfil (RN-AC-13): cómo te llamamos (nombre y sexo, que elige
- * el tema de color), notificaciones por correo, contraseña,
+ * el tema de color), tu cuenta (usuario e ingreso con Google), notificaciones por correo, contraseña,
  * código de recuperación, punto de partida (CU-17), ayuda e información
  * (volver a ver la bienvenida o el tutorial y leer el consentimiento), cerrar sesión y
  * retirarse (CU-21). Sin botón de "Necesito ayuda": Senda no es un servicio
@@ -67,6 +68,17 @@ export function ProfilePageClient() {
           <p className="text-base text-muted-foreground">{t("common.unexpectedError")}</p>
         ) : (
           <IdentityForm preferredName={profile.preferredName} gender={profile.gender} />
+        )}
+      </Tile>
+
+      {/* CU-20: el usuario con el que entra y la cuenta de Google vinculada (nada de esto lo ve el administrador). */}
+      <Tile title={t("profile.accountTitle")} className="md:col-span-2 lg:col-span-6">
+        {isPending ? (
+          <Loader2 className="size-5 animate-spin text-muted-foreground" aria-label={t("common.loading")} />
+        ) : isError || !profile ? (
+          <p className="text-base text-muted-foreground">{t("common.unexpectedError")}</p>
+        ) : (
+          <AccountForm username={profile.username} googleLinked={profile.googleLinked} />
         )}
       </Tile>
 

@@ -31,12 +31,16 @@ export function ActivateForm() {
 
   async function onSubmit(values: ActivateFormValues) {
     try {
-      const result = await activateAccount({ code: values.code, password: values.password });
+      const result = await activateAccount({ code: values.code, username: values.username, password: values.password });
       setRecoveryCode(result.recoveryCode);
     } catch (error) {
       if (error instanceof BffError) {
         if (error.code === "INVALID_CODE" || error.code === "ACTIVATION_NOT_POSSIBLE") {
           setError("code", { message: errorMessageKey(error.code) });
+          return;
+        }
+        if (error.code === "INVALID_USERNAME" || error.code === "USERNAME_TAKEN") {
+          setError("username", { message: errorMessageKey(error.code) });
           return;
         }
         if (error.code === "WEAK_PASSWORD") {
@@ -83,6 +87,30 @@ export function ActivateForm() {
           {...register("code")}
         />
         <FieldError message={errors.code?.message} />
+      </div>
+
+      {/* CU-15: desde ahora entra con este usuario; el código solo se usa para activar. */}
+      <div className="flex flex-col gap-1.5">
+        <Label htmlFor="username">{t("access.usernameLabel")}</Label>
+        <Input
+          className={AUTH_INPUT}
+          id="username"
+          autoComplete="username"
+          autoCapitalize="none"
+          spellCheck={false}
+          maxLength={30}
+          placeholder={t("access.usernamePlaceholder")}
+          aria-invalid={Boolean(errors.username)}
+          aria-describedby="username-hint"
+          {...register("username")}
+        />
+        {errors.username ? (
+          <FieldError message={errors.username.message} />
+        ) : (
+          <p id="username-hint" className="text-base text-muted-foreground">
+            {t("access.usernameHint")}
+          </p>
+        )}
       </div>
 
       <div className="flex flex-col gap-1.5">

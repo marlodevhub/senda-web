@@ -9,6 +9,10 @@ export type Profile = {
   /** Cómo quiere que lo llamen y su sexo (elige el tema de color); null hasta que los da en la bienvenida. */
   preferredName: string | null;
   gender: Gender | null;
+  /** El usuario con el que entra; null si su cuenta es anterior al usuario (entra con el código). */
+  username: string | null;
+  /** Si vinculó una cuenta de Google (nunca cuál). */
+  googleLinked: boolean;
 };
 
 export async function getProfile(): Promise<Profile> {

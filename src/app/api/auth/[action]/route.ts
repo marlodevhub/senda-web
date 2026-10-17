@@ -1,11 +1,6 @@
 import { NextResponse } from "next/server";
 import { rejectCrossOrigin } from "@/lib/server/same-origin";
-import {
-  backendFetch,
-  forwardedHeaders,
-  readJsonSafely,
-  type BackendErrorBody,
-} from "@/lib/server/backend";
+import { backendFetch, forwardedHeaders, readJsonSafely, type BackendErrorBody } from "@/lib/server/backend";
 import { clearStudentSession, getStudentSession, setStudentSession } from "@/lib/server/session";
 
 type ActivationResult = { token: string; refreshToken: string; recoveryCode: string };
@@ -27,16 +22,17 @@ export async function POST(request: Request, { params }: { params: Promise<{ act
     case "activate":
       return handleActivate(request);
     case "login":
-      return handleLogin(request);
+      return handleLogin(request, "/api/v1/auth/login");
+    case "google":
+      return handleLogin(request, "/api/v1/auth/google");
     case "recover":
       return handleRecover(request);
     case "logout":
       return handleLogout();
     default:
-      return NextResponse.json(
-        { code: "NOT_FOUND", message: "Esa acción no existe." } satisfies BackendErrorBody,
-        { status: 404 },
-      );
+      return NextResponse.json({ code: "NOT_FOUND", message: "Esa acción no existe." } satisfies BackendErrorBody, {
+        status: 404,
+      });
   }
 }
 
@@ -72,9 +68,10 @@ async function handleRecover(request: Request) {
   return NextResponse.json({ recoveryCode: data.recoveryCode }, { status: res.status });
 }
 
-async function handleLogin(request: Request) {
+/** Usuario y contraseña (CU-18) o ID token de Google (CU-18/CU-20): las dos terminan en la misma sesión. */
+async function handleLogin(request: Request, backendPath: string) {
   const body = await request.text();
-  const res = await backendFetch("/api/v1/auth/login", {
+  const res = await backendFetch(backendPath, {
     method: "POST",
     headers: forwardedHeaders(request),
     body,

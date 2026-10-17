@@ -18,7 +18,7 @@ test("las páginas llevan las cabeceras de seguridad", async ({ page }) => {
 test("el BFF rechaza peticiones que cambian datos desde otro origen (CSRF)", async ({ request }) => {
   const response = await request.post("/api/auth/login", {
     headers: { Origin: "https://sitio-malicioso.example" },
-    data: { code: "C1-AAAA-A", password: "x" },
+    data: { username: "estudiante", password: "x" },
   });
 
   expect(response.status()).toBe(403);

@@ -26,3 +26,17 @@ export async function updateIdentity(input: { preferredName: string; gender: Gen
 export async function updateNotifications(input: { enabled: boolean; email?: string }): Promise<void> {
   await callBff<void>("/api/v1/profile", { method: "PUT", body: JSON.stringify(input) });
 }
+
+/** CU-20: el usuario con el que inicia sesión. */
+export async function changeUsername(username: string): Promise<void> {
+  await callBff<void>("/api/v1/profile/username", { method: "PUT", body: JSON.stringify({ username }) });
+}
+
+/** CU-20: vincula la cuenta de Google del ID token (senda-api guarda solo un HMAC de su identificador). */
+export async function linkGoogle(idToken: string): Promise<void> {
+  await callBff<void>("/api/v1/profile/google", { method: "PUT", body: JSON.stringify({ idToken }) });
+}
+
+export async function unlinkGoogle(): Promise<void> {
+  await callBff<void>("/api/v1/profile/google", { method: "DELETE" });
+}

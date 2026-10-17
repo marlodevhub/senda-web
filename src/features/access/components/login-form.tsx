@@ -14,7 +14,9 @@ import { AUTH_INPUT } from "@/features/access/components/auth-input";
 import { BffError } from "@/lib/api/client";
 import { errorMessageKey } from "@/lib/api/error-messages";
 import { loginFormSchema, type LoginFormValues } from "@/features/access/schemas/access.schema";
-import { login, type LoginDestination } from "@/features/access/api/login";
+import { login, loginWithGoogle, type LoginDestination } from "@/features/access/api/login";
+import { GoogleSignInButton } from "@/components/auth/google-sign-in-button";
+import { isGoogleSignInEnabled } from "@/config/public-env";
 
 const DESTINATION_ROUTE: Record<LoginDestination, string> = {
   CONSENT: "/consentimiento",
@@ -32,6 +34,17 @@ export function LoginForm() {
     setError,
     formState: { errors, isSubmitting },
   } = useForm<LoginFormValues>({ resolver: zodResolver(loginFormSchema) });
+
+  async function signInWithGoogle(idToken: string) {
+    try {
+      const result = await loginWithGoogle(idToken);
+      router.push(DESTINATION_ROUTE[result.destination]);
+    } catch (error) {
+      toast.error(t(error instanceof BffError ? errorMessageKey(error.code) : "common.unexpectedError"), {
+        duration: 10_000,
+      });
+    }
+  }
 
   async function onSubmit(values: LoginFormValues) {
     try {
@@ -53,16 +66,18 @@ export function LoginForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4" noValidate>
       <div className="flex flex-col gap-1.5">
-        <Label htmlFor="code">{t("access.codeLabel")}</Label>
+        <Label htmlFor="username">{t("access.usernameLabel")}</Label>
         <Input
           className={AUTH_INPUT}
-          id="code"
+          id="username"
           autoComplete="username"
-          placeholder={t("access.codePlaceholder")}
-          aria-invalid={Boolean(errors.code)}
-          {...register("code")}
+          autoCapitalize="none"
+          spellCheck={false}
+          placeholder={t("access.usernamePlaceholder")}
+          aria-invalid={Boolean(errors.username)}
+          {...register("username")}
         />
-        <FieldError message={errors.code?.message} />
+        <FieldError message={errors.username?.message} />
       </div>
 
       <div className="flex flex-col gap-1.5">
@@ -87,6 +102,18 @@ export function LoginForm() {
       <Button type="submit" variant="hero" size="xl" disabled={isSubmitting} className="mt-2 h-12 rounded-full">
         {isSubmitting ? t("access.loggingIn") : t("access.loginSubmit")}
       </Button>
+
+      {/* CU-18: solo entra una cuenta de Google que el estudiante vinculó desde su perfil. */}
+      {isGoogleSignInEnabled && (
+        <>
+          <div aria-hidden className="flex items-center gap-3 text-base text-muted-foreground">
+            <span className="h-px flex-1 bg-border" />
+            {t("access.orDivider")}
+            <span className="h-px flex-1 bg-border" />
+          </div>
+          <GoogleSignInButton onCredential={signInWithGoogle} />
+        </>
+      )}
     </form>
   );
 }

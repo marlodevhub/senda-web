@@ -13,9 +13,21 @@ const activationCodeSchema = z
   .min(1, "validation.codeRequired")
   .regex(/^C\d+-[A-Z0-9]{4}-[A-Z0-9]$/, "validation.codeFormat");
 
+/**
+ * CU-15/CU-20: el usuario con el que se entra (el código solo activa). Mismo formato que el dominio del servidor
+ * (`Username`): de 3 a 30, minúsculas, números, punto o guion bajo en medio. Sin guion, así no se confunde con un código.
+ */
+export const usernameSchema = z
+  .string()
+  .trim()
+  .toLowerCase()
+  .min(1, "validation.usernameRequired")
+  .regex(/^[a-z0-9][a-z0-9._]{1,28}[a-z0-9]$/, "validation.usernameFormat");
+
 export const activateFormSchema = z
   .object({
     code: activationCodeSchema,
+    username: usernameSchema,
     password: newPasswordSchema,
     passwordConfirm: z.string(),
   })
@@ -23,8 +35,9 @@ export const activateFormSchema = z
 
 export type ActivateFormValues = z.infer<typeof activateFormSchema>;
 
+/** CU-18: el usuario (o, para cuentas activadas antes de existir el usuario, el código de participante). */
 export const loginFormSchema = z.object({
-  code: activationCodeSchema,
+  username: z.string().trim().min(1, "validation.usernameRequired"),
   password: z.string().min(1, "validation.passwordRequired"),
 });
 

@@ -2,6 +2,9 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getProfile } from "@/features/profile/api/get-profile";
 import {
   changePassword,
+  changeUsername,
+  linkGoogle,
+  unlinkGoogle,
   generateRecoveryCode,
   updateIdentity,
   updateNotifications,
@@ -39,3 +42,16 @@ export function useUpdateIdentity() {
     },
   });
 }
+
+/** CU-20: usuario y Google; al terminar, el perfil se vuelve a pedir. */
+function useProfileMutation<TInput>(mutationFn: (input: TInput) => Promise<void>) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: queryKeys.profile() }),
+  });
+}
+
+export const useChangeUsername = () => useProfileMutation(changeUsername);
+export const useLinkGoogle = () => useProfileMutation(linkGoogle);
+export const useUnlinkGoogle = () => useProfileMutation(() => unlinkGoogle());
