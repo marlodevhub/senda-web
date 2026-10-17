@@ -69,7 +69,8 @@ export function CheckIn({ initialMood }: { initialMood: Mood | null }) {
               </p>
               {/* Sólido en el color de la cara elegida. */}
               <Button asChild size="xl" className="w-full rounded-full" style={moodSolidStyle(mood)}>
-                <Link href="/diario">
+                {/* Lleva la cara elegida: el Diario abre con esa, aunque haya un borrador con otra. */}
+                <Link href={`/diario?animo=${mood}`}>
                   <PenLine className="size-4" aria-hidden />
                   {t("home.writeCta")}
                 </Link>

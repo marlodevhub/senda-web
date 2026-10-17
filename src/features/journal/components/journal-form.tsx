@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useForm, useWatch, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -46,9 +46,12 @@ function fieldForError(code: string, mode: JournalFormValues["mode"]): keyof Jou
 
 /**
  * CU-01 Escribir registro: ánimo, modo, la hoja del diario y el contexto.
- * `checkinMood`: la cara del check-in de hoy (CU-06), que llega ya marcada; se puede cambiar.
+ * `checkinMood`: la cara del check-in de hoy (CU-06), que llega ya marcada; se puede cambiar. Si el borrador trae otra,
+ * manda el borrador (RS-DI-03).
+ * `chosenMood`: la cara que acaba de elegir en Inicio al tocar Escribir (`/diario?animo=N`): esa manda sobre la del
+ * borrador y la del check-in (el borrador conserva sus textos).
  */
-export function JournalForm({ checkinMood }: { checkinMood?: Mood | null }) {
+export function JournalForm({ checkinMood, chosenMood }: { checkinMood?: Mood | null; chosenMood?: Mood | null }) {
   const t = useTranslations();
   const router = useRouter();
   // RS-TR-08: la misma clave en reintentos evita duplicar el registro si el envío se repite.
@@ -78,6 +81,15 @@ export function JournalForm({ checkinMood }: { checkinMood?: Mood | null }) {
         icon: <RotateCcw className="size-4" aria-hidden />,
       }),
   });
+
+  // La cara recién elegida en Inicio se marca una sola vez, después de recuperar el borrador (va después de su efecto).
+  const chosenApplied = useRef(false);
+  useEffect(() => {
+    if (chosenMood && !chosenApplied.current) {
+      chosenApplied.current = true;
+      setValue("moodBefore", chosenMood);
+    }
+  }, [chosenMood, setValue]);
 
   // El check-in llega después de montar (y del borrador): solo se marca si todavía no hay una cara elegida.
   useEffect(() => {

@@ -27,4 +27,18 @@ describe("JournalForm", () => {
     expect(screen.getByRole("radio", { name: "Bien" })).toHaveAttribute("aria-checked", "true");
     expect(screen.getByRole("radio", { name: "Mal" })).toHaveAttribute("aria-checked", "false");
   });
+
+  it("la cara recién elegida en Inicio manda sobre la del borrador y la del check-in, y el borrador conserva su texto", async () => {
+    localStorage.setItem(
+      DRAFT_KEY,
+      JSON.stringify({ mode: "GUIDED", moodBefore: 4, q1: "Hoy fue un día largo en la universidad" }),
+    );
+    renderWithProviders(<JournalForm checkinMood={2} chosenMood={5} />);
+
+    expect(await screen.findByDisplayValue("Hoy fue un día largo en la universidad")).toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.getByRole("radio", { name: "Muy bien" })).toHaveAttribute("aria-checked", "true"),
+    );
+    expect(screen.getByRole("radio", { name: "Bien" })).toHaveAttribute("aria-checked", "false");
+  });
 });

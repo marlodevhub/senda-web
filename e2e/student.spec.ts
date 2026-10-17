@@ -110,8 +110,12 @@ test("ciclo diario completo: activar → diario → espejo → reescritura → f
   expect(await page.evaluate(() => getComputedStyle(document.body).userSelect)).toBe("none");
 
   // CU-01: registro en modo libre.
+  // Cambia de cara antes de escribir: el Diario abre con la última elegida.
+  await page.getByRole("radio", { name: "Regular", exact: true }).click();
+  await page.getByRole("radio", { name: "Bien", exact: true }).click();
   await page.getByRole("link", { name: "Escribir" }).first().click();
-  await expect(page).toHaveURL(/\/diario/);
+  await expect(page).toHaveURL(/\/diario\?animo=4/);
+  await expect(page.getByRole("radio", { name: "Bien", exact: true })).toHaveAttribute("aria-checked", "true");
   await page.getByRole("radio", { name: "Mal", exact: true }).click();
   await page.getByRole("radio", { name: "Libre" }).click();
   await page.getByLabel("Escribe lo que quieras contar").fill(ENTRY);

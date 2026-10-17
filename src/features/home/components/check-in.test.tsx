@@ -34,7 +34,7 @@ describe("CheckIn", () => {
       await screen.findByText("Qué bueno. Si quieres, cuéntale a tu diario qué te hizo bien hoy."),
     ).toBeInTheDocument();
     expect(screen.queryByText(/Parece un día difícil/)).not.toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Escribir" })).toHaveAttribute("href", "/diario");
+    expect(screen.getByRole("link", { name: "Escribir" })).toHaveAttribute("href", "/diario?animo=4");
   });
 
   it("sin una cara marcada no muestra la invitación ni el botón Escribir", () => {
@@ -51,7 +51,7 @@ describe("CheckIn", () => {
     await user.click(screen.getByRole("radio", { name: "Mal" }));
 
     expect(await screen.findByText(/Parece un día difícil/)).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Escribir" })).toHaveAttribute("href", "/diario");
+    expect(screen.getByRole("link", { name: "Escribir" })).toHaveAttribute("href", "/diario?animo=2");
   });
 
   it("la invitación cambia según la cara tocada", async () => {
