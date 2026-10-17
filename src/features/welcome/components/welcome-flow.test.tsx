@@ -17,11 +17,11 @@ describe("WelcomeFlow", () => {
     renderWithProviders(<WelcomeFlow />);
 
     expect(screen.getByRole("heading", { name: "Qué es Senda" })).toBeInTheDocument();
-    await user.click(screen.getByRole("button", { name: "Siguiente" }));
+    await user.click(screen.getByRole("button", { name: "Continuar" }));
     expect(screen.getByRole("heading", { name: "Qué no es" })).toBeInTheDocument();
     expect(screen.getByText(/Línea 113, opción 5/)).toBeInTheDocument();
     expect(screen.getByText(/SAMU 106/)).toBeInTheDocument();
-    await user.click(screen.getByRole("button", { name: "Siguiente" }));
+    await user.click(screen.getByRole("button", { name: "Continuar" }));
     expect(screen.getByRole("heading", { name: "Cómo se usa" })).toBeInTheDocument();
   });
 
@@ -31,7 +31,7 @@ describe("WelcomeFlow", () => {
     renderWithProviders(<WelcomeFlow />);
 
     for (let i = 0; i < 3; i++) {
-      await user.click(screen.getByRole("button", { name: "Siguiente" }));
+      await user.click(screen.getByRole("button", { name: "Continuar" }));
     }
     await user.click(screen.getByRole("button", { name: "Empezar" }));
 
@@ -42,33 +42,48 @@ describe("WelcomeFlow", () => {
     expect(push).toHaveBeenCalledWith("/inicio");
   });
 
-  it("la primera vez pide nombre y sexo antes de seguir, aplica el tema y los envía al empezar (CU-17)", async () => {
+  it("la primera vez pide al final nombre y sexo, aplica el tema y los envía al empezar (CU-17)", async () => {
     const fetchMock = vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response(null, { status: 204 }));
     const user = userEvent.setup();
     renderWithProviders(<WelcomeFlow identityRequired />);
 
+    expect(screen.getByRole("heading", { name: "Qué es Senda" })).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Saltar" }));
+    await user.click(screen.getByRole("button", { name: "Continuar" }));
     expect(screen.getByRole("heading", { name: "Cuéntanos de ti" })).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Saltar" })).not.toBeInTheDocument();
-    await user.click(screen.getByRole("button", { name: "Siguiente" }));
+
+    await user.click(screen.getByRole("button", { name: "Empezar" }));
     expect(screen.getByText("Escribe cómo quieres que te llamemos.")).toBeInTheDocument();
     expect(screen.getByText("Elige una opción.")).toBeInTheDocument();
+    expect(fetchMock).not.toHaveBeenCalled();
 
     await user.type(screen.getByLabelText("¿Cómo quieres que te llamemos?"), "Mario");
     await user.click(screen.getByRole("radio", { name: "Hombre" }));
-    await user.click(screen.getByRole("button", { name: "Siguiente" }));
-
-    expect(screen.getByRole("heading", { name: "Qué es Senda" })).toBeInTheDocument();
-    expect(document.documentElement.dataset.palette).toBe("ocean");
-
-    await user.click(screen.getByRole("button", { name: "Saltar" }));
     await user.click(screen.getByRole("button", { name: "Empezar" }));
+
+    expect(document.documentElement.dataset.palette).toBe("ocean");
     expect(fetchMock).toHaveBeenCalledWith(
       "/api/v1/welcome/completion",
       expect.objectContaining({
         body: JSON.stringify({ startingPoint: null, preferredName: "Mario", gender: "MALE" }),
       }),
     );
+    expect(push).toHaveBeenCalledWith("/inicio");
     delete document.documentElement.dataset.palette;
+  });
+
+  it("al terminar vuelve a abrir el tutorial en Inicio aunque este navegador ya lo mostró", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response(null, { status: 204 }));
+    window.localStorage.setItem("senda:tour-seen", "1");
+    const user = userEvent.setup();
+    renderWithProviders(<WelcomeFlow />);
+
+    await user.click(screen.getByRole("button", { name: "Saltar" }));
+    await user.click(screen.getByRole("button", { name: "Empezar" }));
+
+    expect(push).toHaveBeenCalledWith("/inicio");
+    expect(window.localStorage.getItem("senda:tour-seen")).toBeNull();
   });
 
   it("deja saltar las pantallas directo a la pregunta opcional", async () => {
@@ -87,8 +102,8 @@ describe("WelcomeFlow", () => {
     renderWithProviders(<WelcomeFlow mode="review" />);
 
     expect(screen.queryByRole("button", { name: "Saltar" })).not.toBeInTheDocument();
-    await user.click(screen.getByRole("button", { name: "Siguiente" }));
-    await user.click(screen.getByRole("button", { name: "Siguiente" }));
+    await user.click(screen.getByRole("button", { name: "Continuar" }));
+    await user.click(screen.getByRole("button", { name: "Continuar" }));
     expect(screen.getByRole("heading", { name: "Cómo se usa" })).toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: "Listo" }));
 

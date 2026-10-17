@@ -21,3 +21,12 @@ export function markTourSeen(): void {
     // Sin almacenamiento: se volverá a ofrecer, nada más.
   }
 }
+
+/** Al terminar la bienvenida (CU-17) el tutorial vuelve a abrirse solo en Inicio, aunque este navegador ya lo mostró. */
+export function resetTourSeen(): void {
+  try {
+    window.localStorage.removeItem(TOUR_SEEN_KEY);
+  } catch {
+    // Sin almacenamiento: isTourSeen lo da por visto; se abre desde Perfil.
+  }
+}

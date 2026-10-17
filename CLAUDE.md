@@ -55,7 +55,7 @@ senda-web/
     │   ├── (auth)/                   sin barra inferior
     │   │   ├── (entrada)/            personajes de emociones + formulario (_components/auth-hero.tsx)
     │   │   │   └── activar/ · login/ · recuperar/
-    │   │   └── (onboarding)/         tarjeta centrada
+    │   │   └── (onboarding)/         consentimiento en tarjeta ancha; bienvenida en carrusel a pantalla completa
     │   │       └── consentimiento/ · bienvenida/
     │   ├── (student)/                con barra inferior
     │   │   ├── layout.tsx · _components/ (barra lateral, barra inferior, mensajes, tema)

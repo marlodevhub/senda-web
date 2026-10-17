@@ -29,8 +29,10 @@ async function expectAccessible(page: Page) {
 }
 
 // El tutorial se abre solo la primera vez en Inicio: los demás flujos lo dan por visto.
+let skipTour = true;
 test.beforeEach(async ({ context }, testInfo) => {
-  if (!testInfo.tags.includes("@tutorial")) {
+  skipTour = !testInfo.tags.includes("@tutorial");
+  if (skipTour) {
     await context.addInitScript(() => window.localStorage.setItem("senda:tour-seen", "1"));
   }
 });
@@ -70,22 +72,27 @@ async function activateAndConsent(page: Page): Promise<string> {
   await page.getByLabel("Leí y acepto").check();
   await page.getByRole("button", { name: "Acepto", exact: true }).click();
 
-  // CU-17: bienvenida de 3 pantallas y punto de partida opcional.
+  // CU-17: bienvenida a pantalla completa (3 pantallas), punto de partida opcional y, al final, cómo quiere que lo
+  // llamen y su sexo (obligatorios).
   await expect(page).toHaveURL(/\/bienvenida/);
-  // CU-17: la primera vez, cómo quiere que lo llamen y su sexo (obligatorios).
+  await expect(page.getByRole("heading", { name: "Qué es Senda" })).toBeVisible();
+  await expectAccessible(page);
+  await page.getByRole("button", { name: "Continuar" }).click();
+  await expect(page.getByText(/Línea 113, opción 5/)).toBeVisible();
+  await page.getByRole("button", { name: "Continuar" }).click();
+  await page.getByRole("button", { name: "Continuar" }).click();
+  await page.getByLabel("¿Qué te gustaría cambiar en cómo te hablas? (opcional)").fill("Dejar de llamarme inútil");
+  await page.getByRole("button", { name: "Continuar" }).click();
   await expect(page.getByRole("heading", { name: "Cuéntanos de ti" })).toBeVisible();
   await page.getByLabel("¿Cómo quieres que te llamemos?").fill(NAME);
   await page.getByRole("radio", { name: "Mujer" }).click();
-  await page.getByRole("button", { name: "Siguiente" }).click();
-  await expect(page.getByRole("heading", { name: "Qué es Senda" })).toBeVisible();
   await expectAccessible(page);
-  await page.getByRole("button", { name: "Siguiente" }).click();
-  await expect(page.getByText(/Línea 113, opción 5/)).toBeVisible();
-  await page.getByRole("button", { name: "Siguiente" }).click();
-  await page.getByRole("button", { name: "Siguiente" }).click();
-  await page.getByLabel("¿Qué te gustaría cambiar en cómo te hablas? (opcional)").fill("Dejar de llamarme inútil");
   await page.getByRole("button", { name: "Empezar" }).click();
   await expect(page).toHaveURL(/\/inicio/);
+  // La bienvenida vuelve a abrir el tutorial; los flujos que no lo prueban recargan para darlo por visto.
+  if (skipTour) {
+    await page.reload();
+  }
   return code;
 }
 
@@ -151,8 +158,8 @@ test("la bienvenida es solo la primera vez y se repasa desde Ayuda e informació
   await page.goto("/perfil");
   await page.getByRole("link", { name: "¿Qué es Senda? Ver la bienvenida" }).click();
   await expect(page.getByRole("heading", { name: "Qué es Senda" })).toBeVisible();
-  await page.getByRole("button", { name: "Siguiente" }).click();
-  await page.getByRole("button", { name: "Siguiente" }).click();
+  await page.getByRole("button", { name: "Continuar" }).click();
+  await page.getByRole("button", { name: "Continuar" }).click();
   await page.getByRole("button", { name: "Listo" }).click();
   await expect(page).toHaveURL(/\/perfil$/);
 
