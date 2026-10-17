@@ -9,6 +9,8 @@ test("sin sesión de administrador, el panel lleva al ingreso", async ({ page })
     await page.goto(route);
     await expect(page).toHaveURL(/\/admin\/login/);
   }
+  // A diferencia de las pantallas del participante, el panel deja seleccionar y copiar (p. ej. códigos generados).
+  expect(await page.evaluate(() => getComputedStyle(document.body).userSelect)).not.toBe("none");
 });
 
 test("credenciales incorrectas muestran el error sin revelar cuál falló", async ({ page }) => {

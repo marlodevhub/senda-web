@@ -105,6 +105,8 @@ test("ciclo diario completo: activar → diario → espejo → reescritura → f
   await page.getByRole("radio", { name: "Bien", exact: true }).click();
   await expect(page.getByText("Qué bueno. Si quieres, cuéntale a tu diario qué te hizo bien hoy.")).toBeVisible();
   await expectAccessible(page);
+  // Como una app: el texto no se selecciona al hacer clic y arrastrar.
+  expect(await page.evaluate(() => getComputedStyle(document.body).userSelect)).toBe("none");
 
   // CU-01: registro en modo libre.
   await page.getByRole("link", { name: "Escribir" }).first().click();
@@ -112,6 +114,10 @@ test("ciclo diario completo: activar → diario → espejo → reescritura → f
   await page.getByRole("radio", { name: "Mal", exact: true }).click();
   await page.getByRole("radio", { name: "Libre" }).click();
   await page.getByLabel("Escribe lo que quieras contar").fill(ENTRY);
+  // Donde se escribe, sí (para editar).
+  expect(await page.getByLabel("Escribe lo que quieras contar").evaluate((el) => getComputedStyle(el).userSelect)).toBe(
+    "text",
+  );
   // RN-DI-05: sin contexto no se envía.
   await page.getByRole("button", { name: "Guardar" }).click();
   await expect(page.getByText("Elige con qué tiene que ver lo que escribiste.")).toBeVisible();

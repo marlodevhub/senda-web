@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { AuthCast, AuthHero } from "@/app/(auth)/(entrada)/_components/auth-hero";
 import { SendaLogo } from "@/components/brand/senda-logo";
+import { ParticipantNoSelect } from "@/components/layout/participant-no-select";
 
 /**
  * Entrada del estudiante (login, activar, recuperar): los personajes de
@@ -11,7 +12,8 @@ export default async function EntradaLayout({ children }: { children: React.Reac
   const t = await getTranslations();
 
   return (
-    <div className="min-h-dvh bg-[linear-gradient(135deg,var(--bloom-tint),var(--background)_45%,var(--flow-tint))]">
+    <div className="participant-no-select min-h-dvh bg-[linear-gradient(135deg,var(--bloom-tint),var(--background)_45%,var(--flow-tint))]">
+      <ParticipantNoSelect />
       <div className="mx-auto flex min-h-dvh max-w-7xl flex-col p-4 sm:p-8 lg:px-10 lg:py-6">
         {/* Todo el contenido visible va dentro de una región (header, aside, main). */}
         <header className="flex items-center gap-2 font-heading text-2xl font-extrabold text-foreground">

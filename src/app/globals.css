@@ -727,3 +727,25 @@
     transform: translateY(var(--petal-rest, 60px)) rotate(30deg);
   }
 }
+
+/*
+ * Pantallas del participante: nada se selecciona al hacer clic y arrastrar, ni se arrastran imágenes o enlaces, ni
+ * sale el menú de mantener presionado en iOS, como en una app nativa. Los campos donde se escribe sí se seleccionan
+ * (para editar). Lo pone `ParticipantNoSelect` en <body> (así alcanza también a diálogos, cajones y avisos) y la
+ * clase en cada layout del participante para el primer pintado. El panel del administrador no la usa.
+ */
+.participant-no-select {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+.participant-no-select img,
+.participant-no-select svg,
+.participant-no-select a {
+  -webkit-user-drag: none;
+}
+.participant-no-select :is(input, textarea, [contenteditable="true"]) {
+  -webkit-user-select: text;
+  user-select: text;
+  -webkit-touch-callout: default;
+}
