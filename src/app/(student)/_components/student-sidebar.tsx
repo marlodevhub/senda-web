@@ -37,9 +37,8 @@ export function StudentSidebar() {
           title="Senda"
           className="flex items-center gap-3 rounded-md focus-visible:outline-2 focus-visible:outline-ring"
         >
-          <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-[image:var(--grad-dawn)] text-white shadow-bloom">
-            <SendaLogo className="size-6" />
-          </span>
+          {/* El logotipo solo, en el color de acento del tema (rosado; azul con Hombre). */}
+          <SendaLogo className="size-9 text-(--prompt-red)" />
           <span className="sr-only lg:not-sr-only lg:flex lg:flex-col">
             <span className="font-heading text-2xl leading-none font-extrabold text-foreground">Senda</span>
             <span className="text-xs text-muted-foreground">{t("sidebar.tagline")}</span>

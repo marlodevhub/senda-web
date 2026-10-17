@@ -35,9 +35,8 @@ export default async function StudentLayout({ children }: { children: React.Reac
             {/* relative z-10: queda sobre los fondos a pantalla completa (cielo del Diario, jardín). */}
             <header className="relative z-10 flex items-center justify-between px-4 pt-4 md:hidden">
               <span className="flex items-center gap-2">
-                <span className="flex size-8 items-center justify-center rounded-full bg-[image:var(--grad-dawn)] text-white">
-                  <SendaLogo className="size-5" />
-                </span>
+                {/* El logotipo solo, en el color de acento del tema (rosado; azul con Hombre). */}
+                <SendaLogo className="size-7 text-(--prompt-red)" />
                 <span className="font-heading text-xl font-extrabold text-foreground">Senda</span>
               </span>
               <MessagesBell />

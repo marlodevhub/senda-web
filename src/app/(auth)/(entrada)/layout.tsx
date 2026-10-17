@@ -15,9 +15,7 @@ export default async function EntradaLayout({ children }: { children: React.Reac
       <div className="mx-auto flex min-h-dvh max-w-7xl flex-col p-4 sm:p-8 lg:px-10 lg:py-6">
         {/* Todo el contenido visible va dentro de una región (header, aside, main). */}
         <header className="flex items-center gap-2 font-heading text-2xl font-extrabold text-foreground">
-          <span className="flex size-10 items-center justify-center rounded-full bg-card text-sprout-ink shadow-card">
-            <SendaLogo className="size-5" />
-          </span>
+          <SendaLogo className="size-9 text-(--prompt-red)" />
           Senda
         </header>
         <div className="grid flex-1 items-center gap-6 py-4 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:gap-16">
