@@ -39,7 +39,7 @@ export function UsernameAvailabilityMessage({ state, id }: { state: UsernameAvai
       aria-live="polite"
       className={cn(
         "text-base",
-        state === "available" && "font-semibold text-sprout-ink",
+        state === "available" && "font-semibold text-[#1F6B3A] dark:text-sprout",
         state === "taken" && "font-semibold text-[#A83A2F] dark:text-destructive",
         (state === "idle" || state === "checking") && "sr-only",
       )}

@@ -52,7 +52,7 @@ describe("AccountForm", () => {
     const input = screen.getByLabelText("Usuario");
     await user.clear(input);
     await user.type(input, "Lucia.Nueva");
-    expect(await screen.findByText("¡Ese usuario está libre!", {}, { timeout: 2000 })).toBeInTheDocument();
+    expect(await screen.findByText("¡Ese nombre de usuario está libre!", {}, { timeout: 2000 })).toBeInTheDocument();
 
     await user.clear(input);
     await user.type(input, "mario");
