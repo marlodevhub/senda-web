@@ -1,10 +1,10 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import userEvent from "@testing-library/user-event";
-import { renderWithProviders, screen } from "@/testing/test-utils";
+import { renderWithProviders, screen, waitFor } from "@/testing/test-utils";
 import { WelcomeFlow } from "@/features/welcome/components/welcome-flow";
 
 const push = vi.fn();
-vi.mock("next/navigation", () => ({ useRouter: () => ({ push }) }));
+vi.mock("next/navigation", () => ({ useRouter: () => ({ push, prefetch: vi.fn() }) }));
 
 describe("WelcomeFlow", () => {
   afterEach(() => {
@@ -39,7 +39,7 @@ describe("WelcomeFlow", () => {
       "/api/v1/welcome/completion",
       expect.objectContaining({ method: "POST", body: JSON.stringify({ startingPoint: null }) }),
     );
-    expect(push).toHaveBeenCalledWith("/inicio");
+    await waitFor(() => expect(push).toHaveBeenCalledWith("/inicio"), { timeout: 4000 });
   });
 
   it("la primera vez pide al final nombre y sexo, aplica el tema y los envía al empezar (CU-17)", async () => {
@@ -69,7 +69,7 @@ describe("WelcomeFlow", () => {
         body: JSON.stringify({ startingPoint: null, preferredName: "Mario", gender: "MALE" }),
       }),
     );
-    expect(push).toHaveBeenCalledWith("/inicio");
+    await waitFor(() => expect(push).toHaveBeenCalledWith("/inicio"), { timeout: 4000 });
     delete document.documentElement.dataset.palette;
   });
 
@@ -82,7 +82,7 @@ describe("WelcomeFlow", () => {
     await user.click(screen.getByRole("button", { name: "Saltar" }));
     await user.click(screen.getByRole("button", { name: "Empezar" }));
 
-    expect(push).toHaveBeenCalledWith("/inicio");
+    await waitFor(() => expect(push).toHaveBeenCalledWith("/inicio"), { timeout: 4000 });
     expect(window.localStorage.getItem("senda:tour-seen")).toBeNull();
   });
 
@@ -96,7 +96,7 @@ describe("WelcomeFlow", () => {
     expect(screen.queryByRole("button", { name: "Saltar" })).not.toBeInTheDocument();
   });
 
-  it("en escritorio pone el texto y Continuar a la izquierda y el paisaje cambia de color con cada pantalla", async () => {
+  it("en escritorio pone el texto y Continuar a la izquierda y la ilustración toma el color de cada pantalla", async () => {
     vi.spyOn(window, "matchMedia").mockImplementation(
       (query: string) =>
         ({
@@ -114,12 +114,26 @@ describe("WelcomeFlow", () => {
     const { container } = renderWithProviders(<WelcomeFlow />);
 
     expect(screen.getByRole("heading", { name: "Qué es Senda" })).toBeInTheDocument();
-    const scene = container.querySelector("svg.welcome-scene") as SVGElement;
-    expect(scene.style.getPropertyValue("--sky")).toBe("#E3F5E7");
+    const accent = () =>
+      (container.querySelector("svg[style*='--illu-accent']") as SVGElement).style.getPropertyValue("--illu-accent");
+    expect(accent()).toBe("#3E9B5B");
 
     await user.click(screen.getByRole("button", { name: "Continuar" }));
     expect(screen.getByRole("heading", { name: "Qué no es" })).toBeInTheDocument();
-    expect(scene.style.getPropertyValue("--sky")).toBe("#FFEBDD");
+    expect(accent()).toBe("#E07A3E");
+  });
+
+  it("al empezar presenta el recorrido por la app antes de entrar a Inicio", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response(null, { status: 204 }));
+    const user = userEvent.setup();
+    renderWithProviders(<WelcomeFlow />);
+
+    await user.click(screen.getByRole("button", { name: "Saltar" }));
+    await user.click(screen.getByRole("button", { name: "Empezar" }));
+
+    expect(await screen.findByRole("heading", { name: "Ahora, un recorrido por tu app" })).toBeInTheDocument();
+    expect(push).not.toHaveBeenCalled();
+    await waitFor(() => expect(push).toHaveBeenCalledWith("/inicio"), { timeout: 4000 });
   });
 
   it("en modo repaso muestra solo las 3 pantallas y vuelve al perfil sin guardar (RN-AC-13)", async () => {

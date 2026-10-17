@@ -791,36 +791,96 @@
     radial-gradient(ellipse at 90% 10%, var(--bloom-tint), transparent 50%);
 }
 
-/* Bienvenida en escritorio (JournalScene): al pasar de pantalla, el paisaje cambia de color con una transición. */
-.welcome-scene * {
-  transition: fill 0.8s ease, stroke 0.8s ease;
-}
+/*
+ * Bienvenida (CU-17). Entre pantallas: la ilustración entra deslizándose y se enfoca (según se avance o se vuelva), y
+ * el texto aparece escalonado; las manchas del fondo cambian de forma muy lento. Curvas de salida suaves (sin rebote).
+ */
 @media (prefers-reduced-motion: no-preference) {
-  .welcome-scene-float {
-    animation: auth-float 3.4s ease-in-out infinite alternate;
+  .welcome-art-in-next {
+    animation: welcome-art-in-next 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
-  .welcome-scene-float-slow {
-    animation-duration: 5s;
+  .welcome-art-in-prev {
+    animation: welcome-art-in-prev 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
-  .welcome-scene-twinkle {
-    animation: welcome-twinkle 2.6s ease-in-out infinite alternate;
+  .welcome-art-pop {
+    animation: welcome-art-pop 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .welcome-desk-in > * {
+    animation: welcome-desk-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .welcome-desk-in > :nth-child(2) { animation-delay: 0.08s; }
+  .welcome-desk-in > :nth-child(3) { animation-delay: 0.16s; }
+  .welcome-blob {
+    animation: welcome-blob 14s ease-in-out infinite alternate;
+  }
+  .welcome-blob-slow {
+    animation-duration: 19s;
+    animation-direction: alternate-reverse;
+  }
+}
+.welcome-blob {
+  border-radius: 42% 58% 63% 37% / 41% 44% 56% 59%;
+}
+@keyframes welcome-art-in-next {
+  from { opacity: 0; transform: translateX(48px) scale(0.96); filter: blur(6px); }
+  to { opacity: 1; transform: none; filter: none; }
+}
+@keyframes welcome-art-in-prev {
+  from { opacity: 0; transform: translateX(-48px) scale(0.96); filter: blur(6px); }
+  to { opacity: 1; transform: none; filter: none; }
+}
+@keyframes welcome-art-pop {
+  from { opacity: 0; transform: translateY(16px) scale(0.94); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes welcome-desk-in {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes welcome-blob {
+  0% { border-radius: 42% 58% 63% 37% / 41% 44% 56% 59%; transform: translate(0, 0) rotate(0deg); }
+  50% { border-radius: 58% 42% 38% 62% / 52% 61% 39% 48%; transform: translate(-20px, 16px) rotate(8deg); }
+  100% { border-radius: 37% 63% 51% 49% / 60% 37% 63% 40%; transform: translate(14px, -12px) rotate(-6deg); }
+}
+
+/*
+ * Presentación del recorrido (TourLaunch), al tocar "Empezar": la maqueta de la app sube y se enfoca, sus bloques
+ * aparecen escalonados, cada sección se enciende una tras otra y, al final, un círculo del color de la app se
+ * expande desde el centro. Unos 2,9 s en total (TOUR_LAUNCH_MS en welcome-flow.tsx).
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .tour-launch-device {
+    animation: tour-launch-device 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .tour-launch-block {
+    animation: welcome-desk-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: calc(0.35s + var(--i) * 0.09s);
+  }
+  .tour-launch-nav {
+    animation: tour-launch-nav 0.5s ease-in-out both;
+    animation-delay: calc(0.7s + var(--i) * 0.26s);
+  }
+  .tour-launch-text {
+    animation: welcome-desk-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.25s both;
+  }
+  .tour-launch-reveal {
+    clip-path: circle(0% at 50% 50%);
+    animation: tour-launch-reveal 0.75s cubic-bezier(0.65, 0, 0.35, 1) 2.15s both;
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .welcome-scene * {
-    transition: none;
+  .tour-launch-reveal {
+    display: none;
   }
 }
-@keyframes welcome-twinkle {
-  from { opacity: 0.35; }
-  to { opacity: 1; }
+@keyframes tour-launch-device {
+  from { opacity: 0; transform: translateY(28px) scale(0.92); filter: blur(4px); }
+  to { opacity: 1; transform: none; filter: none; }
 }
-@media (prefers-reduced-motion: no-preference) {
-  .welcome-desk-in {
-    animation: welcome-desk-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
-  }
+@keyframes tour-launch-nav {
+  0%, 100% { background-color: transparent; color: #2b2430; transform: none; }
+  35%, 65% { background-color: var(--launch-accent); color: #fff; transform: scale(1.06); }
 }
-@keyframes welcome-desk-in {
-  from { opacity: 0; transform: translateY(14px); }
-  to { opacity: 1; transform: none; }
+@keyframes tour-launch-reveal {
+  to { clip-path: circle(75% at 50% 50%); }
 }

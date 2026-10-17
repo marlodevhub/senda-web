@@ -646,7 +646,9 @@
     "start": "Empezar",
     "starting": "Entrando…",
     "skip": "Saltar",
-    "done": "Listo"
+    "done": "Listo",
+    "launchTitle": "Ahora, un recorrido por tu app",
+    "launchBody": "Te mostramos dónde está cada cosa. Toma menos de un minuto."
   },
   "gender": {
     "male": "Hombre",

@@ -8,7 +8,6 @@ import { ArrowLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { FieldError } from "@/components/forms/field-error";
 import { GenderPicker } from "@/components/forms/gender-picker";
-import { EmotionCharacter, EmotionDefs, type Emotion } from "@/components/illustrations/emotion-characters";
 import { resetTourSeen } from "@/components/tour/tour-seen";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -17,7 +16,16 @@ import { useCompleteWelcome } from "@/features/welcome/api/use-welcome";
 import { applyPalette } from "@/lib/palette";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { SendaLogo } from "@/components/brand/senda-logo";
-import { JournalScene, type ScenePalette } from "@/features/welcome/components/journal-scene";
+import { IllustrationArt } from "@/features/welcome/components/illustration-art";
+import { TourLaunch } from "@/features/welcome/components/tour-launch";
+import {
+  BOOK_LOVER,
+  DEEP_WORK,
+  MOONLIGHT,
+  WAITING_FOR_YOU,
+  type Illustration,
+} from "@/features/welcome/illustrations/undraw";
+import { PROFILE_CARD } from "@/features/welcome/illustrations/profile-card";
 import type { Gender } from "@/types/gender";
 
 const SCREENS = ["whatItIs", "whatItIsNot", "howToUse"] as const;
@@ -29,66 +37,72 @@ const SWIPE_THRESHOLD = 50;
 type Step = (typeof SCREENS)[number] | "question" | "identity";
 
 /**
- * Cada pantalla con su color vivo y su personaje. El degradado va de claro (arriba, solo personaje y título grande)
- * a oscuro (abajo, donde va el texto): el blanco sobre el tono oscuro cumple contraste AA, y el botón blanco lleva el
- * texto en ese mismo tono oscuro.
+ * Cada pantalla con su color vivo y su ilustración. El degradado va de claro (arriba, la ilustración y el título) a
+ * oscuro (abajo, donde va el texto): el blanco sobre el tono oscuro cumple contraste AA, y el botón blanco lleva el
+ * texto en ese mismo tono oscuro. La ilustración se pinta con `accent` (y `accent2`, un tono que combina) sobre
+ * `tint`, un claro de la misma familia.
  */
-const SLIDE_STYLE: Record<Step, { from: string; to: string; ink: string; emotion: Emotion }> = {
-  whatItIs: { from: "#7CC98C", to: "#2F8550", ink: "#24693F", emotion: "joy" },
-  whatItIsNot: { from: "#F59A5E", to: "#C2531F", ink: "#A2441A", emotion: "calm" },
-  howToUse: { from: "#6FB6EC", to: "#1F6FB8", ink: "#1A5D9A", emotion: "spark" },
-  question: { from: "#A78BE0", to: "#6440AE", ink: "#56379A", emotion: "hope" },
-  identity: { from: "#EC8DB0", to: "#A63A64", ink: "#8E3156", emotion: "calm" },
-};
-
-/** En escritorio, el paisaje de cada pantalla, en sus mismos tonos (la ropa en un color que contrasta). */
-const SCENE_PALETTE: Record<Step, ScenePalette> = {
+const SLIDE_STYLE: Record<
+  Step,
+  { from: string; to: string; ink: string; tint: string; accent: string; accent2: string; art: Illustration }
+> = {
   whatItIs: {
-    sky: "#E3F5E7",
-    far: "#B7E4C1",
-    near: "#7CC98C",
-    ground: "#5AAE70",
-    leaf: "#2F8550",
-    accent: "#F59A5E",
-    accent2: "#6FB6EC",
+    from: "#7CC98C",
+    to: "#2F8550",
+    ink: "#24693F",
+    tint: "#E3F5E7",
+    accent: "#3E9B5B",
+    accent2: "#F59A5E",
+    art: DEEP_WORK,
   },
   whatItIsNot: {
-    sky: "#FFEBDD",
-    far: "#FBC7A2",
-    near: "#F59A5E",
-    ground: "#E07A3E",
-    leaf: "#C2531F",
-    accent: "#6FB6EC",
-    accent2: "#7CC98C",
+    from: "#F59A5E",
+    to: "#C2531F",
+    ink: "#A2441A",
+    tint: "#FFEBDD",
+    accent: "#E07A3E",
+    accent2: "#6FB6EC",
+    art: WAITING_FOR_YOU,
   },
   howToUse: {
-    sky: "#E1F0FC",
-    far: "#B4D8F5",
-    near: "#6FB6EC",
-    ground: "#3F8FD0",
-    leaf: "#1F6FB8",
-    accent: "#F59A5E",
+    from: "#6FB6EC",
+    to: "#1F6FB8",
+    ink: "#1A5D9A",
+    tint: "#E1F0FC",
+    accent: "#2B86D1",
     accent2: "#F2C95C",
+    art: MOONLIGHT,
   },
   question: {
-    sky: "#EEE7FA",
-    far: "#D2C3F0",
-    near: "#A78BE0",
-    ground: "#8466C9",
-    leaf: "#6440AE",
-    accent: "#F2C95C",
-    accent2: "#7CC98C",
+    from: "#A78BE0",
+    to: "#6440AE",
+    ink: "#56379A",
+    tint: "#EEE7FA",
+    accent: "#7A55C7",
+    accent2: "#F2C95C",
+    art: BOOK_LOVER,
   },
   identity: {
-    sky: "#FCE6EE",
-    far: "#F5C0D3",
-    near: "#EC8DB0",
-    ground: "#D46A93",
-    leaf: "#A63A64",
-    accent: "#6FB6EC",
-    accent2: "#F2C95C",
+    from: "#EC8DB0",
+    to: "#A63A64",
+    ink: "#8E3156",
+    tint: "#FCE6EE",
+    accent: "#C04A78",
+    accent2: "#6FB6EC",
+    art: PROFILE_CARD,
   },
 };
+
+/** Cuánto dura la animación que presenta el recorrido antes de entrar a Inicio (TourLaunch). */
+const TOUR_LAUNCH_MS = 2900;
+
+function prefersReducedMotion(): boolean {
+  try {
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  } catch {
+    return false;
+  }
+}
 
 /** Burbujas de fondo (posición y tamaño en %), cada una flotando a su ritmo. */
 const BUBBLES = [
@@ -104,8 +118,11 @@ const BUBBLES = [
  * (con Línea 113 y SAMU 106) y cómo se usa —, la pregunta opcional "Mi punto de partida" y, la primera vez, "Cuéntanos
  * de ti" al final (cómo quiere que lo llamen y su sexo, obligatorios; el sexo elige el tema de color). Se pasa con
  * "Continuar" o deslizando. "Empezar" la marca como vista y lleva a Inicio, donde arranca el tutorial.
- * - Escritorio: el texto y los botones a la izquierda y, a la derecha, un paisaje con alguien que escribe su diario en
- *   la laptop y otra persona con su celular (JournalScene), que cambia por completo de color con cada pantalla.
+ * - Cada pantalla tiene su ilustración (unDraw y una del mismo estilo), pintada con su color. Entre pantallas, la
+ *   ilustración entra deslizándose (según se avance o se vuelva) y el texto aparece escalonado.
+ * - Escritorio: el texto y los botones a la izquierda; la ilustración grande a la derecha, sobre manchas suaves.
+ * - Al tocar "Empezar", una animación presenta el recorrido por la interfaz (TourLaunch) y luego entra a Inicio,
+ *   donde arranca el tutorial.
  * - `review` (desde Perfil, RN-AC-13): solo las 3 pantallas; "Listo" vuelve a Perfil sin guardar nada.
  */
 export function WelcomeFlow({
@@ -136,6 +153,9 @@ export function WelcomeFlow({
   const headingRefs = useRef<(HTMLHeadingElement | null)[]>([]);
   // Escritorio: el texto a la izquierda y el paisaje a la derecha (en vez del carrusel del móvil).
   const isDesktop = useMediaQuery("(min-width: 1024px)");
+  // Hacia dónde se movió la última vez: la ilustración entra desde la derecha al avanzar y desde la izquierda al volver.
+  const [direction, setDirection] = useState<"next" | "prev">("next");
+  const [launching, setLaunching] = useState(false);
   const pointerStartX = useRef<number | null>(null);
   const moved = useRef(false);
 
@@ -155,6 +175,7 @@ export function WelcomeFlow({
 
   function goTo(target: number) {
     moved.current = true;
+    setDirection(target >= index ? "next" : "prev");
     setIndex(Math.max(0, Math.min(steps.length - 1, target)));
   }
 
@@ -173,7 +194,10 @@ export function WelcomeFlow({
       });
       // Recién llega: el tutorial de Inicio arranca aunque este navegador ya lo haya mostrado a otra cuenta.
       resetTourSeen();
-      router.push("/inicio");
+      // La animación que presenta el recorrido; al terminar, a Inicio (con menos movimiento, casi de inmediato).
+      router.prefetch("/inicio");
+      setLaunching(true);
+      window.setTimeout(() => router.push("/inicio"), prefersReducedMotion() ? 300 : TOUR_LAUNCH_MS);
     } catch {
       toast.error(t("common.unexpectedError"));
     }
@@ -274,6 +298,10 @@ export function WelcomeFlow({
         ? t("welcome.starting")
         : t("welcome.start");
 
+  if (launching) {
+    return <TourLaunch background={style.to} accent={style.accent} />;
+  }
+
   if (isDesktop) {
     return (
       <div
@@ -351,17 +379,40 @@ export function WelcomeFlow({
         </div>
 
         {/* El paisaje: cambia por completo de color con cada pantalla. Un borde ondulado lo une al panel del texto. */}
-        {/* La escena entra entera (abajo); arriba el cielo sigue con el mismo color. */}
+        {/* La ilustración grande, sobre un claro del mismo color y dos manchas que se mueven lento. */}
         <div
-          className="relative flex-1 transition-colors duration-700 motion-reduce:transition-none"
-          style={{ backgroundColor: SCENE_PALETTE[step].sky }}
+          className="relative -ml-px flex flex-1 items-center justify-center overflow-hidden transition-colors duration-700 motion-reduce:transition-none"
+          style={{ backgroundColor: style.tint }}
         >
-          <JournalScene palette={SCENE_PALETTE[step]} className="absolute inset-0 h-full w-full" />
+          <span
+            aria-hidden
+            className="welcome-blob absolute -top-24 -right-24 size-[34rem] opacity-25 transition-colors duration-700"
+            style={{ backgroundColor: style.accent }}
+          />
+          <span
+            aria-hidden
+            className="welcome-blob welcome-blob-slow absolute -bottom-32 left-10 size-[26rem] opacity-15 transition-colors duration-700"
+            style={{ backgroundColor: style.accent2 }}
+          />
+          <div
+            key={step}
+            className={cn(
+              "relative w-[min(78%,42rem)]",
+              direction === "next" ? "welcome-art-in-next" : "welcome-art-in-prev",
+            )}
+          >
+            <IllustrationArt
+              art={style.art}
+              accent={style.accent}
+              accent2={style.accent2}
+              className="h-auto max-h-[70vh] w-full drop-shadow-[0_24px_40px_rgb(0_0_0/0.08)]"
+            />
+          </div>
           <svg
             aria-hidden
             viewBox="0 0 100 700"
             preserveAspectRatio="none"
-            className="absolute inset-y-0 -left-px h-full w-20"
+            className="absolute inset-y-0 -left-0.5 h-full w-20"
           >
             <path
               d="M0 0 H54 C96 120 18 240 66 360 C108 470 26 590 74 700 H0 Z"
@@ -379,7 +430,6 @@ export function WelcomeFlow({
       className="fixed inset-0 z-50 overflow-clip text-white transition-colors duration-500"
       style={{ backgroundColor: style.to }}
     >
-      <EmotionDefs />
       <div
         className="flex h-full touch-pan-y transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
         style={{ transform: `translateX(-${index * 100}%)` }}
@@ -421,12 +471,21 @@ export function WelcomeFlow({
               ))}
 
               <div className="relative mx-auto flex h-full w-full max-w-md flex-col overflow-y-auto px-6 pt-20 pb-32">
+                {/* La ilustración de la pantalla, sobre un claro de su color (se lee bien sobre el degradado). */}
                 <div className={cn("flex items-center justify-center", isForm ? "py-2" : "flex-1 py-4")}>
-                  <div className="relative">
-                    <span aria-hidden className="absolute inset-[8%] rounded-full bg-white/25 blur-2xl" />
-                    <EmotionCharacter
-                      emotion={slideStyle.emotion}
-                      className={cn("relative drop-shadow-xl", isForm ? "w-28" : "w-44 sm:w-52")}
+                  <div
+                    className={cn(
+                      "w-full rounded-[2rem] p-4 shadow-xl",
+                      isForm ? "max-w-[11rem]" : "max-w-[19rem]",
+                      active && "welcome-art-pop",
+                    )}
+                    style={{ backgroundColor: slideStyle.tint }}
+                  >
+                    <IllustrationArt
+                      art={slideStyle.art}
+                      accent={slideStyle.accent}
+                      accent2={slideStyle.accent2}
+                      className={cn("h-auto w-full", isForm ? "max-h-24" : "max-h-[26vh]")}
                     />
                   </div>
                 </div>
