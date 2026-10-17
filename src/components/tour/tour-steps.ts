@@ -18,6 +18,8 @@ export type TourStep = {
   preview?: "mirror" | "rewrite";
   /** Muestra las 5 caras del check-in. */
   moods?: boolean;
+  /** Fondo ilustrado de la cabecera (en lugar del degradado). */
+  scene?: "garden";
 };
 
 /**
@@ -38,7 +40,7 @@ export const TOUR_STEPS: TourStep[] = [
     mobileTarget: ["historial"],
     preview: "rewrite",
   },
-  { id: "progress", cast: ["joy"], target: ["progreso"] },
+  { id: "progress", cast: ["joy"], target: ["progreso"], scene: "garden" },
   { id: "messages", cast: ["sad"], target: ["mensajes"] },
   { id: "history", cast: ["calm"], target: ["historial"] },
   { id: "profile", cast: ["hope"], target: ["perfil"] },

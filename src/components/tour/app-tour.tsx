@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { MoodOrb, type Mood } from "@/components/icons/mood-orb";
 import { EmotionCharacter, EmotionDefs } from "@/components/illustrations/emotion-characters";
 import { isTourSeen, markTourSeen } from "@/components/tour/tour-seen";
+import { TourGarden } from "@/components/tour/tour-garden";
 import { SPEAKER_KEY, TOUR_STEPS } from "@/components/tour/tour-steps";
 import { cn } from "@/lib/utils";
 
@@ -171,19 +172,28 @@ function TourOverlay({ step, onStep, onClose }: { step: number; onStep: (step: n
             key={current.id}
             className="motion-safe:animate-in motion-safe:fade-in-0 motion-safe:zoom-in-95 motion-safe:duration-300"
           >
-            <div
-              aria-hidden
-              className="flex h-32 items-end justify-center gap-1 bg-[radial-gradient(circle_at_50%_110%,var(--bloom-tint),var(--flow-tint)_60%,var(--card))] px-6 pb-3"
-            >
-              {current.cast.map((emotion, index) => (
-                <EmotionCharacter
-                  key={emotion}
-                  emotion={emotion}
-                  delay={`${-index * 0.7}s`}
-                  className={current.cast.length === 1 ? "w-24" : "w-14"}
-                />
-              ))}
-            </div>
+            {current.scene === "garden" ? (
+              // Progreso: la Alegría parada en un jardín panorámico.
+              <div aria-hidden>
+                <TourGarden>
+                  <EmotionCharacter emotion={current.cast[0]} className="w-20" />
+                </TourGarden>
+              </div>
+            ) : (
+              <div
+                aria-hidden
+                className="flex h-32 items-end justify-center gap-1 bg-[radial-gradient(circle_at_50%_110%,var(--bloom-tint),var(--flow-tint)_60%,var(--card))] px-6 pb-3"
+              >
+                {current.cast.map((emotion, index) => (
+                  <EmotionCharacter
+                    key={emotion}
+                    emotion={emotion}
+                    delay={`${-index * 0.7}s`}
+                    className={current.cast.length === 1 ? "w-24" : "w-14"}
+                  />
+                ))}
+              </div>
+            )}
 
             <div className="flex flex-col gap-3 p-6 pt-4">
               <p className="self-start rounded-full bg-muted px-3 py-0.5 text-sm font-semibold text-muted-foreground">
