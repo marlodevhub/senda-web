@@ -289,6 +289,27 @@ test("en escritorio la navegación es una barra lateral accesible", async ({ pag
   await expectAccessible(page);
 });
 
+test("en escritorio, la cara elegida en Inicio llega al Diario por cualquier Escribir, aun con un borrador", async ({
+  page,
+}) => {
+  await activateAndConsent(page);
+  await page.setViewportSize({ width: 1440, height: 900 });
+
+  // Un borrador del Diario con otra cara.
+  await page.goto("/diario");
+  await page.getByRole("radio", { name: "Bien", exact: true }).click();
+  await page.getByLabel("¿Qué pasó?").fill("Empecé a escribir algo y lo dejé");
+  await page.waitForTimeout(800);
+
+  // En Inicio elige otra cara y entra por el Escribir de la barra lateral.
+  await page.goto("/inicio");
+  await page.getByRole("radio", { name: "Muy mal", exact: true }).click();
+  await page.locator("aside:not([data-right-rail])").getByRole("link", { name: "Escribir" }).click();
+  await expect(page).toHaveURL(/\/diario/);
+  await expect(page.getByRole("radio", { name: "Muy mal", exact: true })).toHaveAttribute("aria-checked", "true");
+  await expect(page.getByLabel("¿Qué pasó?")).toHaveValue("Empecé a escribir algo y lo dejé");
+});
+
 test("en tablet la barra lateral es un riel de iconos con nombres accesibles", async ({ page }) => {
   await activateAndConsent(page);
   await page.setViewportSize({ width: 834, height: 1112 });
