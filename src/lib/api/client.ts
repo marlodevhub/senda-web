@@ -21,6 +21,10 @@ function redirectIfSessionLost(path: string, status: number, code: string | unde
   if (typeof window === "undefined") {
     return;
   }
+  // Activar, ingresar o recuperar (estudiante) aún no tienen sesión que perder: su error se muestra en la pantalla.
+  if (path.startsWith("/api/auth/")) {
+    return;
+  }
   const isAdmin = path.startsWith("/api/admin");
   // Recarga completa a propósito: al perder la sesión se descarta todo el estado en memoria
   // (caché de TanStack Query incluida); este módulo tampoco tiene acceso al router.
