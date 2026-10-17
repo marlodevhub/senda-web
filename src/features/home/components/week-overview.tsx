@@ -32,8 +32,8 @@ export function WeekOverview({
 }) {
   const t = useTranslations();
   const [selectedDay, setSelectedDay] = useState(clampJourneyDay(today));
-  // Móvil y tablet: la semana (por defecto) o el mes completo. En escritorio siempre va el mes.
-  const [view, setView] = useState<"week" | "month">("week");
+  // Móvil y tablet: el mes completo (por defecto) o la semana. En escritorio siempre va el mes.
+  const [view, setView] = useState<"week" | "month">("month");
   if (days.length === 0) {
     return null;
   }

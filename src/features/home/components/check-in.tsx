@@ -48,12 +48,12 @@ export function CheckIn({ initialMood }: { initialMood: Mood | null }) {
   }
 
   return (
-    // Un solo contenedor que agrupa el título, las caras y la invitación a escribir.
+    // En escritorio, un solo contenedor agrupa el título, las caras y la invitación; en móvil van sueltos.
     <section
       aria-labelledby="checkin-question"
-      className="flex flex-col gap-2 rounded-[1.75rem] bg-foreground/[0.04] p-3 dark:bg-foreground/[0.06]"
+      className="flex flex-col gap-2 lg:rounded-[1.75rem] lg:bg-foreground/[0.04] lg:p-3 lg:dark:bg-foreground/[0.06]"
     >
-      <h2 id="checkin-question" className="px-1 pt-1 font-heading text-lg font-bold text-foreground">
+      <h2 id="checkin-question" className="font-heading text-lg font-bold text-foreground lg:px-1 lg:pt-1">
         {t("home.checkinQuestion")}
       </h2>
       <MoodPicker label={t("home.checkinQuestion")} value={mood ?? undefined} onChange={handleChange} />
@@ -67,12 +67,13 @@ export function CheckIn({ initialMood }: { initialMood: Mood | null }) {
               animate && "liquid-rise",
             )}
           >
-            <div className={cn("flex flex-col gap-3", animate && "liquid-rise-text")}>
-              <p className="text-base leading-relaxed text-foreground">
+            {/* El texto a la izquierda y Escribir a la derecha. */}
+            <div className={cn("flex items-center gap-3", animate && "liquid-rise-text")}>
+              <p className="min-w-0 flex-1 text-base leading-relaxed text-foreground">
                 {t(`home.checkinInvitation.${INVITATION_KEY[mood]}`)}
               </p>
               {/* Sólido en el color de la cara elegida. */}
-              <Button asChild size="xl" className="w-full rounded-full" style={moodSolidStyle(mood)}>
+              <Button asChild size="lg" className="shrink-0 rounded-full" style={moodSolidStyle(mood)}>
                 {/* Lleva la cara elegida: el Diario abre con esa, aunque haya un borrador con otra. */}
                 <Link href={`/diario?animo=${mood}`}>
                   <PenLine className="size-4" aria-hidden />
