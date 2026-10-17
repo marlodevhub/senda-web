@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
-import { Sprout } from "lucide-react";
 import { AuthCast, AuthHero } from "@/app/(auth)/(entrada)/_components/auth-hero";
+import { SendaLogo } from "@/components/brand/senda-logo";
 
 /**
  * Entrada del estudiante (login, activar, recuperar): los personajes de
@@ -16,7 +16,7 @@ export default async function EntradaLayout({ children }: { children: React.Reac
         {/* Todo el contenido visible va dentro de una región (header, aside, main). */}
         <header className="flex items-center gap-2 font-heading text-2xl font-extrabold text-foreground">
           <span className="flex size-10 items-center justify-center rounded-full bg-card text-sprout-ink shadow-card">
-            <Sprout className="size-5" aria-hidden />
+            <SendaLogo className="size-5" />
           </span>
           Senda
         </header>

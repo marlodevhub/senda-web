@@ -1,11 +1,12 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { Droplets, Flower2, Lamp, Sparkles, Sprout } from "lucide-react";
+import { Droplets, Flower2, Lamp, Sparkles } from "lucide-react";
 import type { Garden } from "@/features/progress/api/get-garden";
 import { GardenScene } from "@/features/progress/components/garden-scene";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { cn } from "@/lib/utils";
+import { SendaLogo } from "@/components/brand/senda-logo";
 
 const ZONES = [
   {
@@ -208,7 +209,7 @@ function GardenStacked({ garden }: { garden: Garden }) {
             aria-hidden
             className="mt-10 flex items-center justify-center gap-1.5 font-heading text-lg font-bold text-(--garden-panel-ink) opacity-60"
           >
-            <Sprout className="size-5" />
+            <SendaLogo className="size-5" />
             Senda
           </p>
         </div>

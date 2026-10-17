@@ -3,14 +3,14 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { PenLine, Sprout } from "lucide-react";
+import { PenLine } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { clampJourneyDay, INTERVENTION_DAYS } from "@/lib/journey";
 import { Button } from "@/components/ui/button";
 import { STUDENT_NAV_ITEMS } from "./student-nav-items";
 import { SidebarTools } from "./sidebar-tools";
 import { useHome } from "@/features/home/api/use-home";
-
+import { SendaLogo } from "@/components/brand/senda-logo";
 
 /**
  * Navegación lateral del estudiante:
@@ -37,8 +37,8 @@ export function StudentSidebar() {
           title="Senda"
           className="flex items-center gap-3 rounded-md focus-visible:outline-2 focus-visible:outline-ring"
         >
-          <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-[image:var(--grad-dawn)] text-primary-foreground shadow-bloom">
-            <Sprout className="size-5" aria-hidden />
+          <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-[image:var(--grad-dawn)] text-white shadow-bloom">
+            <SendaLogo className="size-6" />
           </span>
           <span className="sr-only lg:not-sr-only lg:flex lg:flex-col">
             <span className="font-heading text-2xl leading-none font-extrabold text-foreground">Senda</span>

@@ -2,9 +2,9 @@ import { getTranslations } from "next-intl/server";
 import { BottomNav } from "./_components/bottom-nav";
 import { StudentSidebar } from "./_components/student-sidebar";
 import { MessagesBell, MessagesCenterProvider } from "./_components/messages-center";
-import { Sprout } from "lucide-react";
 import { TourProvider } from "@/components/tour/app-tour";
 import { PaletteSync } from "./_components/palette-sync";
+import { SendaLogo } from "@/components/brand/senda-logo";
 
 /**
  * Móvil (≥ 360 px, RS-TR): barra inferior. Tablet (`md`): riel lateral de
@@ -35,8 +35,8 @@ export default async function StudentLayout({ children }: { children: React.Reac
             {/* relative z-10: queda sobre los fondos a pantalla completa (cielo del Diario, jardín). */}
             <header className="relative z-10 flex items-center justify-between px-4 pt-4 md:hidden">
               <span className="flex items-center gap-2">
-                <span className="flex size-8 items-center justify-center rounded-full bg-[image:var(--grad-dawn)] text-primary-foreground">
-                  <Sprout className="size-4" aria-hidden />
+                <span className="flex size-8 items-center justify-center rounded-full bg-[image:var(--grad-dawn)] text-white">
+                  <SendaLogo className="size-5" />
                 </span>
                 <span className="font-heading text-xl font-extrabold text-foreground">Senda</span>
               </span>
