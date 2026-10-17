@@ -98,8 +98,9 @@ export function HomePageClient() {
           <HomeNotices newSummary={home.newSummary} />
         </div>
       ) : (
-        // Escritorio: a la izquierda lo de hoy (check-in con escribir, frase pendiente); a la derecha la semana.
-        <div className="flex flex-col gap-5 lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:items-start lg:gap-6">
+        // Escritorio: a la izquierda lo de hoy (check-in con escribir, frase pendiente, meta y ánimo); a la derecha un
+        // panel con el calendario y, debajo, lo del día que se toque.
+        <div className="flex flex-col gap-5 lg:grid lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start lg:gap-6 xl:grid-cols-[minmax(0,1fr)_24rem]">
           <div className="flex flex-col gap-5 lg:order-1">
             {/* El botón Escribir aparece dentro del check-in al marcar una cara. */}
             <CheckIn initialMood={home.checkinMood} />
@@ -128,22 +129,25 @@ export function HomePageClient() {
                 )}
               </div>
             </div>
-            <HomeNotices newSummary={home.newSummary} />
-          </div>
-
-          <div className="flex flex-col gap-5 lg:order-2">
-            {weekCalendar}
-            <div className="grid gap-5 sm:grid-cols-2">
+            <div className="hidden gap-5 lg:grid lg:grid-cols-2">
               {home.goal && <GoalRing daysWithEntry={home.goal.daysWithEntry} goal={home.goal.goal} />}
               <MoodWeek days={home.weekDays} />
             </div>
+            <HomeNotices newSummary={home.newSummary} />
           </div>
+
+          <aside className="flex flex-col gap-5 lg:sticky lg:top-6 lg:order-2">
+            {weekCalendar}
+            <div className="grid gap-5 sm:grid-cols-2 lg:hidden">
+              {home.goal && <GoalRing daysWithEntry={home.goal.daysWithEntry} goal={home.goal.goal} />}
+              <MoodWeek days={home.weekDays} />
+            </div>
+          </aside>
         </div>
       )}
     </div>
   );
 }
-
 
 /** Aviso de resumen nuevo (CU-10). Los mensajes nuevos (CU-14) los avisa el botón de la campana. */
 function HomeNotices({ newSummary }: { newSummary: boolean }) {

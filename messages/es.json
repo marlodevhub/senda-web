@@ -177,7 +177,17 @@
     "legendEmpty": "Sin registro",
     "moodWeekTitle": "Tu ánimo esta semana",
     "moodWeekEmpty": "Marca cómo llegas cada día para ver tu semana aquí.",
-    "moodWeekHint": "Cada cara es un día; solo te compara contigo."
+    "moodWeekHint": "Cada cara es un día; solo te compara contigo.",
+    "dayEntryTitle": "Escribiste",
+    "dayEntryFindings": "{count, plural, =0 {Sin frases para reescribir} one {# frase detectada} other {# frases detectadas}}",
+    "dayEntryRewrites": "{count, plural, one {# reescrita} other {# reescritas}}",
+    "dayEntryOpen": "Ver registro",
+    "dayEntryRewrite": "{count, plural, one {Reescribir} other {Reescribir (#)}}",
+    "dayMoodTitle": "Marcaste tu ánimo",
+    "dayNothing": "Ese día no hay nada registrado. Está bien: la meta es 3 días por semana.",
+    "dayTodayEmpty": "Hoy todavía no escribes ni marcas tu ánimo.",
+    "dayUpcoming": "Este día todavía no llega.",
+    "daySelect": "Ver {date}"
   },
   "analysis": {
     "title": "Espejo",

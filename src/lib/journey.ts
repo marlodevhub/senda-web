@@ -9,3 +9,8 @@ export const INTERVENTION_WEEKS = 4;
 export function clampJourneyDay(day: number): number {
   return Math.min(Math.max(day, 1), INTERVENTION_DAYS);
 }
+
+/** La semana (1…4) de un día de la senda que ya mandó el servidor, para pedir sus registros: techo(día / 7). */
+export function weekOfDay(day: number): number {
+  return Math.ceil(clampJourneyDay(day) / 7);
+}

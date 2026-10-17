@@ -21,12 +21,23 @@ function sameDay(a: Date, b: Date): boolean {
 }
 
 /**
- * CU-05 en escritorio: el calendario de shadcn (react-day-picker), de lunes a domingo, con los 28 días de la
- * senda marcados: escribiste (verde), solo marcaste tu ánimo (amarillo), hoy, sin registro y los que todavía no llegan. Se navega libremente por los meses;
- * los días fuera de la senda van sin marca. Solo muestra: no se elige ningún día. Sin rachas ni porcentajes
- * (regla de coherencia 6).
+ * CU-05 en escritorio: el calendario de shadcn (react-day-picker), compacto, de lunes a domingo, con los 28 días de
+ * la senda marcados: escribiste (verde), solo marcaste tu ánimo (amarillo), hoy, sin registro y los que todavía no
+ * llegan. Se navega libremente por los meses. Cada día de la senda se puede tocar para ver lo de ese día debajo
+ * (`DayDetails`); el elegido va sólido con el color del logo. Los días fuera de la senda van sin marca. Sin rachas ni
+ * porcentajes (regla de coherencia 6).
  */
-export function MonthCalendar({ days, today }: { days: HomeWeekDay[]; today: number }) {
+export function MonthCalendar({
+  days,
+  today,
+  selectedDay,
+  onSelectDay,
+}: {
+  days: HomeWeekDay[];
+  today: number;
+  selectedDay: number;
+  onSelectDay: (interventionDay: number) => void;
+}) {
   const t = useTranslations();
   const todayDay = days.find((day) => day.interventionDay === today);
   const todayDate = todayDay ? toLocalDate(todayDay.date) : undefined;
@@ -45,7 +56,9 @@ export function MonthCalendar({ days, today }: { days: HomeWeekDay[]; today: num
     empty: at((day) => !day.hasEntry && !moodOnly(day) && day.interventionDay < today),
     upcoming: at((day) => !day.hasEntry && day.interventionDay > today),
     journeyToday: at((day) => !day.hasEntry && !moodOnly(day) && day.interventionDay === today),
+    selected: at((day) => day.interventionDay === selectedDay),
   };
+  const journeyDayAt = (date: Date) => days.find((day) => sameDay(toLocalDate(day.date), date));
   const fullDate = (date: Date) => formatLocalDate(date, { weekday: "long", day: "numeric", month: "long" });
   const statusOf = (date: Date): string => {
     const has = (dates: Date[]) => dates.some((d) => sameDay(d, date));
@@ -77,20 +90,22 @@ export function MonthCalendar({ days, today }: { days: HomeWeekDay[]; today: num
           journeyToday: "[&>*]:font-semibold [&>*]:text-bloom-ink [&>*]:ring-2 [&>*]:ring-bloom [&>*]:ring-inset",
           empty: "[&>*]:bg-foreground/5 [&>*]:text-muted-foreground",
           upcoming: "[&>*]:text-foreground",
+          // El día elegido, sólido con el color del logo (gana a los demás colores).
+          selected: "[&>*]:!bg-(--prompt-red) [&>*]:!font-semibold [&>*]:!text-(--prompt-red-foreground) [&>*]:!ring-0",
         }}
         labels={{
           labelGridcell: (date) => statusOf(date),
           labelPrevious: () => t("home.monthPrev"),
           labelNext: () => t("home.monthNext"),
         }}
-        className="w-full bg-transparent p-0 [--cell-size:--spacing(10)] lg:[--cell-size:--spacing(9)]"
+        className="w-full bg-transparent p-0 [--cell-size:--spacing(9)]"
         classNames={{
           root: "w-full",
           month_caption: "flex h-(--cell-size) w-full items-center justify-start",
-          caption_label: "font-heading text-lg font-bold text-foreground capitalize lg:text-base",
+          caption_label: "font-heading text-base font-bold text-foreground capitalize",
           nav: "absolute inset-x-0 top-0 flex w-full items-center justify-end gap-1",
-          weekday: "flex-1 text-base font-normal text-muted-foreground capitalize select-none",
-          week: "mt-2 flex w-full",
+          weekday: "flex-1 text-sm font-normal text-muted-foreground capitalize select-none",
+          week: "mt-1.5 flex w-full",
           day: "flex flex-1 items-center justify-center p-0 text-center select-none",
           today: "",
           outside: "",
@@ -128,21 +143,39 @@ export function MonthCalendar({ days, today }: { days: HomeWeekDay[]; today: num
               </Button>
             </nav>
           ),
-          // Solo muestra (sin selección): el día es una celda con un círculo y su número, no un botón.
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars -- day y modifiers no van al <td>.
-          Day: ({ day: _day, modifiers: _modifiers, className, children, ...props }) => (
-            <td {...props} className={cn("flex flex-1 items-center justify-center p-0", className)}>
-              {children !== undefined && children !== false && (
-                <span className="flex size-9 items-center justify-center rounded-full text-base font-normal text-muted-foreground tabular-nums lg:size-8">
-                  {children}
-                </span>
-              )}
-            </td>
-          ),
+          // Los días de la senda son botones que muestran lo de ese día debajo; los demás, solo el número.
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars -- modifiers no va al <td>.
+          Day: ({ day, modifiers: _modifiers, className, children, ...props }) => {
+            const journeyDay = journeyDayAt(day.date);
+            const circle =
+              "flex size-8 items-center justify-center rounded-full text-sm font-normal text-muted-foreground tabular-nums";
+            return (
+              <td {...props} className={cn("flex flex-1 items-center justify-center p-0", className)}>
+                {children !== undefined &&
+                  children !== false &&
+                  (journeyDay ? (
+                    <button
+                      type="button"
+                      aria-label={statusOf(day.date)}
+                      aria-pressed={journeyDay.interventionDay === selectedDay}
+                      onClick={() => onSelectDay(journeyDay.interventionDay)}
+                      className={cn(
+                        circle,
+                        "touch-manipulation transition-transform select-none [-webkit-tap-highlight-color:transparent] hover:brightness-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:scale-90",
+                      )}
+                    >
+                      {day.date.getDate()}
+                    </button>
+                  ) : (
+                    <span className={circle}>{children}</span>
+                  ))}
+              </td>
+            );
+          },
         }}
       />
 
-      <ul className="flex flex-wrap gap-x-3 gap-y-1 text-base text-muted-foreground">
+      <ul className="flex flex-wrap gap-x-3 gap-y-1 text-sm text-muted-foreground">
         <Legend swatch="bg-sprout" label={t("home.legendEntry")} />
         <Legend swatch="bg-checkin" label={t("home.legendMood")} />
         <Legend swatch="ring-2 ring-bloom" label={t("home.legendToday")} />
@@ -155,7 +188,7 @@ export function MonthCalendar({ days, today }: { days: HomeWeekDay[]; today: num
 function Legend({ swatch, label }: { swatch: string; label: string }) {
   return (
     <li className="flex items-center gap-2">
-      <span aria-hidden className={cn("size-3 rounded-full", swatch)} />
+      <span aria-hidden className={cn("size-2.5 rounded-full", swatch)} />
       {label}
     </li>
   );
