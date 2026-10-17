@@ -43,6 +43,8 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // Sin el botón flotante "N" de Next.js en desarrollo (los errores siguen saliendo en su panel al ocurrir).
+  devIndicators: false,
   output: "standalone",
   poweredByHeader: false,
   async headers() {
