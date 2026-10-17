@@ -129,7 +129,7 @@
     "writeCta": "Escribir",
     "greeting": "Hola.",
     "greetingNamed": "Hola, <highlight>{name}</highlight>.",
-    "dayOfJourney": "Hoy es tu día {day} de 28.",
+    "dayOfJourney": "Día {day} de 28",
     "checkinQuestion": "¿Cómo estás hoy?",
     "pendingLabel": "Frase pendiente",
     "pendingRewrite": "Reescribir ✦",
