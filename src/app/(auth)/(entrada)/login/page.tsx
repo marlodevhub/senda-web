@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { AuthHeading } from "@/app/(auth)/(entrada)/_components/auth-heading";
 import { LoginForm } from "@/features/access/components/login-form";
+import { InstallApp } from "@/components/pwa/install-app";
 
 export default async function LoginPage() {
   const t = await getTranslations();
@@ -19,6 +20,8 @@ export default async function LoginPage() {
           {t("access.activateLink")}
         </Link>
       </p>
+      {/* Instalar Senda con su ícono, si el navegador lo permite y aún no está instalada. */}
+      <InstallApp />
     </div>
   );
 }

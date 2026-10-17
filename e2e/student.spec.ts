@@ -310,6 +310,24 @@ test("en escritorio, la cara elegida en Inicio llega al Diario por cualquier Esc
   await expect(page.getByLabel("¿Qué pasó?")).toHaveValue("Empecé a escribir algo y lo dejé");
 });
 
+test("Senda se puede instalar como app, con su nombre, su ícono y abriendo en Inicio (PWA)", async ({ page }) => {
+  const response = await page.request.get("/manifest.webmanifest");
+  expect(response.ok()).toBe(true);
+  const manifest = await response.json();
+  expect(manifest).toMatchObject({ name: "Senda", start_url: "/inicio", display: "standalone" });
+  for (const icon of manifest.icons as { src: string }[]) {
+    expect((await page.request.get(icon.src)).ok()).toBe(true);
+  }
+
+  // Chrome confirma que es instalable (sin errores de instalabilidad).
+  await page.goto("/login");
+  const cdp = await page.context().newCDPSession(page);
+  const { installabilityErrors } = (await cdp.send("Page.getInstallabilityErrors")) as {
+    installabilityErrors: { errorId: string }[];
+  };
+  expect(installabilityErrors.map((error) => error.errorId)).toEqual([]);
+});
+
 test("en tablet la barra lateral es un riel de iconos con nombres accesibles", async ({ page }) => {
   await activateAndConsent(page);
   await page.setViewportSize({ width: 834, height: 1112 });

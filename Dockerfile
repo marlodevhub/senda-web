@@ -19,6 +19,8 @@ ENV NODE_ENV=production NEXT_TELEMETRY_DISABLED=1 PORT=3000 HOSTNAME=0.0.0.0
 RUN addgroup -S senda && adduser -S senda -G senda
 COPY --from=build --chown=senda:senda /app/.next/standalone ./
 COPY --from=build --chown=senda:senda /app/.next/static ./.next/static
+# Íconos de la app instalable (PWA): el modo standalone no copia public/ solo.
+COPY --from=build --chown=senda:senda /app/public ./public
 USER senda
 EXPOSE 3000
 # BACKEND_URL (URL interna de senda-api) llega por entorno al ejecutar.

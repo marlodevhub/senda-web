@@ -4,6 +4,8 @@ Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS 4, shadcn/ui. Pantal
 
 El navegador **nunca** llama directo a `senda-api` ni al proveedor de LLM — solo al BFF propio (`/api/*` de este repo). La única excepción es el botón de **"Acceder con Google"** (`src/components/auth/google-sign-in-button.tsx`), que carga Google Identity Services solo si `NEXT_PUBLIC_GOOGLE_CLIENT_ID` está definido (la política de contenido de `next.config.ts` abre `accounts.google.com/gsi` solo entonces); el ID token que entrega Google va al BFF (`/api/auth/google`), nunca a senda-api directo. Ver `../senda-api/docs/google-sign-in.md`.
 
+**App instalable (PWA):** `src/app/manifest.ts` (nombre, colores, abre en `/inicio` en ventana propia), íconos en `public/icons/` (192, 512 y maskable) y `src/app/apple-icon.png` (iPhone). El botón "Instalar Senda" (`src/components/pwa/`) va en Perfil e Iniciar sesión: en Chrome, Edge y Android abre la ventana de instalación del sistema; en iPhone/iPad explica "Compartir → Añadir a pantalla de inicio"; no aparece si ya está instalada. Sin service worker ni caché sin conexión, a propósito: instalarla no guarda ningún texto del estudiante en el dispositivo. El Dockerfile copia `public/` (el modo standalone no lo incluye).
+
 ## 1. Tecnologías
 
 | Tecnología | Uso |

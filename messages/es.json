@@ -742,5 +742,12 @@
     "3": "Regular",
     "4": "Bien",
     "5": "Muy bien"
+  },
+  "install": {
+    "title": "Instala Senda",
+    "hint": "Tenla con su ícono en tu celular o tu laptop y ábrela como una app, en su propia ventana.",
+    "cta": "Instalar Senda",
+    "iosStep1": "En Safari, toca Compartir (el cuadrado con la flecha).",
+    "iosStep2": "Elige «Añadir a pantalla de inicio» y toca «Añadir»."
   }
 }

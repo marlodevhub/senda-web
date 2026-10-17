@@ -12,6 +12,8 @@ export const metadata: Metadata = {
   title: "Senda",
   description: "Un acompañamiento diario para hablarte con más amabilidad.",
   robots: { index: false, follow: false },
+  // Instalada en iPhone/iPad (Compartir → Añadir a pantalla de inicio): ventana propia y su nombre bajo el ícono.
+  appleWebApp: { capable: true, title: "Senda", statusBarStyle: "default" },
 };
 
 export const viewport: Viewport = {

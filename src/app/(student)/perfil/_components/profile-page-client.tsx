@@ -17,6 +17,7 @@ import { RecoveryCodeForm } from "@/features/profile/components/recovery-code-fo
 import { SetUpPasswordForm } from "@/features/profile/components/set-up-password-form";
 import { ThemeSelector } from "@/features/profile/components/theme-selector";
 import { GlassSettingsForm } from "@/features/appearance/glass-settings-form";
+import { InstallApp } from "@/components/pwa/install-app";
 import { StartingPointForm } from "@/features/welcome/components/starting-point-form";
 import { cn } from "@/lib/utils";
 
@@ -61,6 +62,9 @@ export function ProfilePageClient() {
           <span className="text-base">{t("profile.helpTourHint")}</span>
         </span>
       </button>
+
+      {/* Instalar Senda con su ícono (PWA); no aparece si ya está instalada o si el navegador no la instala. */}
+      <InstallApp intro className="rounded-lg bg-card p-5 shadow-card md:col-span-2 lg:col-span-6" />
 
       <Tile title={t("profile.identityTitle")} className="md:col-span-2 lg:col-span-6">
         {isPending ? (
