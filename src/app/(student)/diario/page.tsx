@@ -6,10 +6,10 @@ export default async function DiarioPage() {
 
   return (
     <>
-      {/* Cielo suave detrás de todo el Diario; la barra lateral (z-10) y el dock (z-20) quedan encima. */}
+      {/* Cielo suave detrás de todo el Diario (.journal-sky); la barra lateral (z-10) y el dock (z-20) quedan encima. */}
       <div
         aria-hidden
-        className="pointer-events-none fixed inset-0 z-0 bg-[radial-gradient(ellipse_at_20%_0%,var(--flow-tint),transparent_55%),radial-gradient(ellipse_at_90%_10%,var(--bloom-tint),transparent_50%)]"
+        className="journal-sky pointer-events-none fixed inset-0 z-0"
       />
       <div className="relative z-[1] mx-auto flex w-full max-w-2xl flex-col gap-6">
         {/* En móvil no se muestra ni ocupa lugar (más espacio para escribir); queda para lectores de pantalla. */}

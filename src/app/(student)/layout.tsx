@@ -23,7 +23,7 @@ export default async function StudentLayout({ children }: { children: React.Reac
         {/* overflow-x-clip: lo que sale a pantalla completa (jardín) no crea scroll horizontal. */}
         {/* group/shell: si la pantalla trae un panel derecho fijo (Inicio en escritorio), el contenido y la campana le
             dejan su espacio. */}
-        <div className="participant-no-select group/shell min-h-screen overflow-x-clip bg-background md:flex">
+        <div className="student-shell participant-no-select group/shell min-h-screen overflow-x-clip bg-background md:flex">
           <a
             href="#contenido"
             className="sr-only z-20 rounded-md bg-card px-4 py-2 font-semibold text-foreground focus:not-sr-only focus:fixed focus:top-4 focus:left-4"
