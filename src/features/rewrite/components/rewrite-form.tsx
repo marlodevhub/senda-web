@@ -311,7 +311,7 @@ function RewriteOutcomeView({
             setMood(value);
             feedbackMutation.mutate({ moodAfter: value });
           }}
-          className="bg-card/80 backdrop-blur"
+          className="bg-card/90"
         />
       </section>
 

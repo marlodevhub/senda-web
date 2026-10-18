@@ -65,7 +65,8 @@ export function MoodPicker({
                 value !== undefined && !active && "scale-95",
               )}
             >
-              <MoodOrb mood={mood} animated decorative className={orbSize} />
+              {/* Solo se mueve la elegida (sin elegir, todas, para invitar): cinco animaciones sin parar cuestan en el celular. */}
+              <MoodOrb mood={mood} animated={value === undefined || active} decorative className={orbSize} />
             </span>
             {/* Burbuja con el nombre que sube y se desvanece: no ocupa lugar, la tarjeta no cambia de tamaño.
                 El lector de pantalla ya anuncia el ánimo en el botón. */}

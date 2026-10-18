@@ -32,8 +32,8 @@ export function ContextPicker({
             onClick={() => onChange(option)}
             className={cn(
               // shadow-(--shadow-card) y no .shadow-card: la clase propia pisaría el anillo del elegido.
-              "flex w-[calc((100%-1.5rem)/4)] flex-col items-center gap-1.5 rounded-[1.25rem] px-1 py-3 sm:w-[calc((100%-3rem)/7)] text-base text-foreground shadow-(--shadow-card) backdrop-blur transition-all duration-200 hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-ring",
-              active ? "bg-flow-tint ring-2 ring-flow" : "bg-card/80",
+              "flex w-[calc((100%-1.5rem)/4)] flex-col items-center gap-1.5 rounded-[1.25rem] px-1 py-3 sm:w-[calc((100%-3rem)/7)] text-base text-foreground shadow-(--shadow-card) transition-all duration-200 hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-ring",
+              active ? "bg-flow-tint ring-2 ring-flow" : "bg-card/90",
             )}
           >
             <span className={cn("flex size-9 items-center justify-center rounded-full", tone)}>

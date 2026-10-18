@@ -967,6 +967,9 @@
  */
 .screen-top-backdrop {
   background-color: var(--background);
+}
+/* `fixed` obliga a repintar la cabecera en cada cuadro del scroll: solo donde el fondo es un degradado. */
+.student-shell:has(.garden-scene, .journal-sky) .screen-top-backdrop {
   background-attachment: fixed;
 }
 .student-shell:has(.garden-scene) .screen-top-backdrop {

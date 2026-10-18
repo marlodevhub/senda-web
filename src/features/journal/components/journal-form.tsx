@@ -151,7 +151,7 @@ export function JournalForm({ checkinMood, chosenMood }: { checkinMood?: Mood | 
               label={t("journal.moodLabel")}
               value={field.value as Mood | undefined}
               onChange={field.onChange}
-              className="bg-card/80 backdrop-blur"
+              className="bg-card/90"
             />
           )}
         />

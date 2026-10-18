@@ -59,7 +59,7 @@ export async function AuthHero({ className }: { className?: string }) {
         </div>
       ))}
 
-      <div className="auth-float absolute top-[-2%] right-[30%] rounded-[1.25rem] bg-card/90 px-4 py-3 shadow-card backdrop-blur-md">
+      <div className="auth-float absolute top-[-2%] right-[30%] rounded-[1.25rem] bg-card px-4 py-3 shadow-card">
         <p className="text-sm font-semibold text-foreground">{t("access.showcaseMood")}</p>
         <div className="mt-2 flex gap-1.5 text-flow-ink">
           {([1, 2, 3, 4, 5] as Mood[]).map((mood) => (
@@ -74,7 +74,7 @@ export async function AuthHero({ className }: { className?: string }) {
         </div>
       </div>
 
-      <ul className="auth-float absolute -bottom-[6%] left-[30%] flex flex-col gap-1.5 rounded-[1.25rem] bg-card/90 px-4 py-3 text-sm text-foreground shadow-card backdrop-blur-md [animation-delay:-3s]">
+      <ul className="auth-float absolute -bottom-[6%] left-[30%] flex flex-col gap-1.5 rounded-[1.25rem] bg-card px-4 py-3 text-sm text-foreground shadow-card [animation-delay:-3s]">
         {POINTS.map((key) => (
           <li key={key} className="flex items-center gap-2">
             <Check className="size-4 text-sprout-ink" />
@@ -83,7 +83,7 @@ export async function AuthHero({ className }: { className?: string }) {
         ))}
       </ul>
 
-      <div className="auth-float absolute top-[38%] -right-[8%] w-48 rounded-[1.25rem] bg-card/90 p-4 text-foreground shadow-card backdrop-blur-md [animation-delay:-1.5s]">
+      <div className="auth-float absolute top-[38%] -right-[8%] w-48 rounded-[1.25rem] bg-card p-4 text-foreground shadow-card [animation-delay:-1.5s]">
         <p className="flex items-center gap-1.5 font-heading text-base font-bold">
           <Sparkles className="size-4 text-bloom-ink" />
           {t("access.showcaseJarTitle")}

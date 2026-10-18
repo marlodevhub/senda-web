@@ -19,7 +19,7 @@ export function JournalModeToggle({ value, onChange }: { value: Mode; onChange: 
     <div
       role="radiogroup"
       aria-label={t("journal.title")}
-      className="mx-auto flex w-full max-w-sm gap-1 rounded-full bg-card/80 p-1 shadow-card backdrop-blur"
+      className="mx-auto flex w-full max-w-sm gap-1 rounded-full bg-card/90 p-1 shadow-card"
     >
       {OPTIONS.map(({ mode, labelKey, icon: Icon }) => {
         const active = value === mode;

@@ -83,7 +83,7 @@ function Mouth({ mood }: { mood: Mood }) {
 }
 
 /** Ojos: puntos que parpadean; con "muy bien", arcos de ojos sonrientes. */
-function Eyes({ mood }: { mood: Mood }) {
+function Eyes({ mood, blink }: { mood: Mood; blink: boolean }) {
   if (mood === 5) {
     return (
       <g stroke={INK} strokeWidth={2.6} strokeLinecap="round" fill="none">
@@ -94,7 +94,8 @@ function Eyes({ mood }: { mood: Mood }) {
   }
   const y = mood <= 2 ? 21.5 : 20.5;
   return (
-    <g className="mood-blink" fill={INK}>
+    // Parpadea solo la carita que se mueve: las quietas no gastan una animación sin fin.
+    <g className={blink ? "mood-blink" : undefined} fill={INK}>
       <circle cx="18.5" cy={y} r="2.3" />
       <circle cx="29.5" cy={y} r="2.3" />
       {mood === 1 && (
@@ -140,7 +141,7 @@ export function MoodOrb({
       style={{ background: `radial-gradient(circle at 32% 28%, ${light}, ${base} 72%)` }}
     >
       <svg viewBox="0 0 48 48" className="size-full" aria-hidden focusable="false">
-        <Eyes mood={mood} />
+        <Eyes mood={mood} blink={animated} />
         <Mouth mood={mood} />
       </svg>
     </span>

@@ -32,7 +32,7 @@ export function PillTabs({
     <div
       role="tablist"
       aria-label={label}
-      className="relative z-10 mx-auto flex w-full max-w-md gap-1 rounded-full bg-card/80 p-1 shadow-card backdrop-blur"
+      className="relative z-10 mx-auto flex w-full max-w-md gap-1 rounded-full bg-card/90 p-1 shadow-card"
     >
       {tabs.map(({ href, label: tabLabel, icon: Icon, active }) => (
         <Link
