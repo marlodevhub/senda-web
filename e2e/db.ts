@@ -1,4 +1,5 @@
 import { execFileSync } from "node:child_process";
+import { createHash, randomBytes } from "node:crypto";
 import path from "node:path";
 
 /** Datos de prueba directo en la base `senda_e2e` (solo E2E; nunca toca la base de desarrollo). */
@@ -56,4 +57,23 @@ export function seedSentMessage(participantCode: string): void {
       `action_type, created_at) SELECT id, ${LIMA_TODAY}, 'EVENING_REVIEW', 'R7', 0, 'v1', 'SENT', 'WRITE', now() ` +
       `FROM participant WHERE code = '${participantCode}';`,
   );
+}
+
+/**
+ * CU-28: una invitación vigente de un administrador ya existente (que en esta prueba no entra, así que su contraseña y
+ * su TOTP son de relleno). Devuelve el código; la base solo guarda su SHA-256, como el backend.
+ */
+export function seedAdminInvitation(): string {
+  const raw = randomBytes(9).toString("hex").toUpperCase().slice(0, 12);
+  const code = `${raw.slice(0, 4)}-${raw.slice(4, 8)}-${raw.slice(8)}`;
+  const hash = createHash("sha256").update(raw).digest("hex");
+  const inviterId = sql(
+    "INSERT INTO admin_user (email, password_hash, totp_secret_encrypted, created_at) " +
+      `VALUES ('invita-${raw.toLowerCase()}@senda.test', 'x', 'x', now()) RETURNING id;`,
+  );
+  sql(
+    "INSERT INTO admin_invitation (code_hash, created_by_admin_id, created_at, expires_at) " +
+      `VALUES ('${hash}', ${inviterId}, now(), now() + interval '1 day');`,
+  );
+  return code;
 }

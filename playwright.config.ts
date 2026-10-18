@@ -40,7 +40,7 @@ export default defineConfig({
       url: "http://localhost:3100/login",
       timeout: 240_000,
       reuseExistingServer: false,
-      env: { BACKEND_URL: "http://localhost:8081" },
+      env: { BACKEND_URL: "http://localhost:8081", ADMIN_INVITES_ENABLED: "true" },
     },
   ],
 });

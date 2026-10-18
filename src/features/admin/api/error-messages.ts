@@ -18,6 +18,11 @@ const ADMIN_CODE_TO_MESSAGE_KEY: Record<string, string> = {
   COHORT_NOT_FOUND: "admin.cohortNotFound",
   RESET_NOT_ALLOWED: "admin.resetNotAllowed",
   UNAUTHENTICATED: "admin.sessionExpired",
+  INVITATIONS_DISABLED: "admin.invite.disabled",
+  INVITATION_INVALID: "admin.invite.invalid",
+  ADMIN_EMAIL_TAKEN: "admin.invite.emailTaken",
+  WEAK_ADMIN_PASSWORD: "admin.invite.weakPassword",
+  ENROLLMENT_NOT_STARTED: "admin.invite.notStarted",
 };
 
 export function adminErrorMessageKey(code: string): string {

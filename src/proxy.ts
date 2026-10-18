@@ -25,9 +25,18 @@ const PROTECTED_PREFIXES = [
 /** Pantallas para entrar: con sesión iniciada no tienen sentido y llevan a Inicio. */
 const STUDENT_ENTRY_ROUTES = ["/", "/login", "/activar", "/recuperar"];
 
-/** RS-AD-04: nunca se enlazan desde las del estudiante; /login y /verificar quedan públicas (CU-23 pasos 1-3). */
-const ADMIN_PROTECTED_PREFIXES = ["/admin/cohortes", "/admin/participantes", "/admin/adherencia", "/admin/auditoria"];
-const ADMIN_ENTRY_ROUTES = ["/admin/login", "/admin/verificar"];
+/**
+ * RS-AD-04: nunca se enlazan desde las del estudiante; /login, /verificar y /invitacion (crear la cuenta con un código,
+ * CU-28) quedan públicas.
+ */
+const ADMIN_PROTECTED_PREFIXES = [
+  "/admin/cohortes",
+  "/admin/participantes",
+  "/admin/adherencia",
+  "/admin/auditoria",
+  "/admin/invitaciones",
+];
+const ADMIN_ENTRY_ROUTES = ["/admin/login", "/admin/verificar", "/admin/invitacion"];
 
 /** `refreshToken` null: renovación en el período de gracia (RS-AC-05); la cookie de renovación se deja como está. */
 type StudentTokens = { token: string; refreshToken: string | null };
@@ -142,9 +151,11 @@ export const config = {
     "/perfil/:path*",
     "/admin/login",
     "/admin/verificar",
+    "/admin/invitacion",
     "/admin/cohortes/:path*",
     "/admin/participantes/:path*",
     "/admin/adherencia/:path*",
     "/admin/auditoria/:path*",
+    "/admin/invitaciones/:path*",
   ],
 };

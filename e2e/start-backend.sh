@@ -15,4 +15,6 @@ export LLM_PROVIDER="anthropic"
 export LLM_MODEL="mock-llm-e2e"
 export LLM_BASE_URL="http://localhost:${MOCK_LLM_PORT:-4010}"
 export LLM_API_KEY="e2e"
+# CU-28: invitar administradores (como en staging).
+export ADMIN_INVITES_ENABLED="true"
 exec ./mvnw -q spring-boot:run -Dspring-boot.run.arguments="--server.port=8081 --spring.docker.compose.enabled=false --spring.datasource.url=jdbc:postgresql://localhost:5432/senda_e2e"

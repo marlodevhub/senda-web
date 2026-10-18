@@ -1,4 +1,6 @@
+import Link from "next/link";
 import { getTranslations } from "next-intl/server";
+import { adminInvitesEnabled } from "@/config/admin-flags";
 import { AdminLoginForm } from "@/features/admin/components/admin-login-form";
 
 export default async function AdminLoginPage() {
@@ -11,6 +13,12 @@ export default async function AdminLoginPage() {
         <p className="text-sm text-muted-foreground">{t("admin.loginSubtitle")}</p>
       </div>
       <AdminLoginForm />
+      {/* CU-28: quien recibió un código de invitación crea aquí su cuenta y vincula su app autenticadora. */}
+      {adminInvitesEnabled() && (
+        <Link href="/admin/invitacion" className="text-center text-sm font-medium text-bloom-ink underline">
+          {t("admin.invite.loginLink")}
+        </Link>
+      )}
     </div>
   );
 }

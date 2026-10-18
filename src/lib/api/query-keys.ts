@@ -27,4 +27,5 @@ export const queryKeys = {
   adminAuditLogs: (filters: { from: string; to: string; action?: string; page: number }) =>
     ["admin-audit-logs", filters.from, filters.to, filters.action ?? null, filters.page] as const,
   adminConfig: () => ["admin-config"] as const,
+  adminInvitations: () => ["admin-invitations"] as const,
 };

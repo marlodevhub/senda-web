@@ -13,7 +13,10 @@ import {
 type ChallengeResult = { challengeToken: string };
 type SessionResult = { token: string };
 
-/** BFF de sesión del administrador (CU-23): el navegador nunca ve el desafío ni el JWT, solo cookies httpOnly. */
+/**
+ * BFF de sesión del administrador (CU-23): el navegador nunca ve el desafío ni el JWT, solo cookies httpOnly. También
+ * crear la cuenta con un código de invitación (CU-28), que no abre sesión: después se entra por el ingreso normal.
+ */
 export async function POST(request: Request, { params }: { params: Promise<{ action: string }> }) {
   const crossOrigin = rejectCrossOrigin(request);
   if (crossOrigin) {
@@ -28,6 +31,10 @@ export async function POST(request: Request, { params }: { params: Promise<{ act
       return handleVerify(request);
     case "logout":
       return handleLogout();
+    case "invitation-start":
+      return forwardInvitation(request, "/api/v1/admin/auth/invitations/start");
+    case "invitation-confirm":
+      return forwardInvitation(request, "/api/v1/admin/auth/invitations/confirm");
     default:
       return NextResponse.json(
         { code: "NOT_FOUND", message: "Esa acción no existe." } satisfies BackendErrorBody,
@@ -87,4 +94,18 @@ async function handleLogout() {
   }
   await clearAdminSession();
   return new NextResponse(null, { status: 204 });
+}
+
+/** CU-28: pasa el paso tal cual al backend (sin cookies: la cuenta se crea, pero la sesión se abre al ingresar). */
+async function forwardInvitation(request: Request, path: string) {
+  const res = await backendFetch(path, {
+    method: "POST",
+    headers: forwardedHeaders(request),
+    body: await request.text(),
+  });
+  if (res.status === 204) {
+    return new NextResponse(null, { status: 204 });
+  }
+  const data = await readJsonSafely<BackendErrorBody>(res);
+  return NextResponse.json(data, { status: res.status });
 }

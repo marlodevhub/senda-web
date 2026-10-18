@@ -6,6 +6,25 @@ export const adminLoginFormSchema = z.object({
 });
 export type AdminLoginFormValues = z.infer<typeof adminLoginFormSchema>;
 
+/** CU-28 paso 1 (RN-AD-02): código de invitación, correo y una contraseña de 12+ con letras, números y un símbolo. */
+export const adminEnrollmentFormSchema = z
+  .object({
+    code: z.string().trim().min(1, "validation.codeRequired"),
+    email: z.string().trim().min(1, "validation.emailRequired").email("validation.emailFormat"),
+    password: z
+      .string()
+      .min(12, "validation.adminPasswordTooShort")
+      .regex(/\p{L}/u, "validation.passwordNeedsLetter")
+      .regex(/\d/, "validation.passwordNeedsNumber")
+      .regex(/[^\p{L}\d]/u, "validation.adminPasswordNeedsSymbol"),
+    confirmPassword: z.string(),
+  })
+  .refine((values) => values.password === values.confirmPassword, {
+    message: "validation.passwordMismatch",
+    path: ["confirmPassword"],
+  });
+export type AdminEnrollmentFormValues = z.infer<typeof adminEnrollmentFormSchema>;
+
 /** RN-AD-02: TOTP de 6 dígitos. */
 export const adminVerifyFormSchema = z.object({
   code: z.string().regex(/^\d{6}$/, "validation.totpFormat"),
