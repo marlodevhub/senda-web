@@ -1,11 +1,11 @@
 /*
  * Service worker de Senda (PWA). Solo guarda en el teléfono lo que no es del estudiante:
- *   - la pantalla de arranque (/abrir.html) y su logo, para que la app instalada abra al instante;
+ *   - la pantalla de arranque (/abrir.html) y su logotipo, para que la app instalada abra al instante;
  *   - los archivos de la app con hash (/_next/static/...), que nunca cambian, para no descargarlos cada vez.
  * Ninguna página, respuesta de la API ni texto del estudiante pasa por la caché: todo lo demás va directo a la red.
  */
-const VERSION = "senda-v1";
-const SHELL = ["/abrir.html", "/icons/splash-logo.svg"];
+const VERSION = "senda-v2";
+const SHELL = ["/abrir.html", "/icons/splash-lockup.svg"];
 const MAX_STATIC_ENTRIES = 200;
 
 self.addEventListener("install", (event) => {

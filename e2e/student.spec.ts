@@ -370,8 +370,17 @@ test("Senda se puede instalar como app, con su nombre, su ícono y abriendo en I
       .map((request) => new URL(request.url).pathname),
   );
   const allowed = (path: string) =>
-    ["/abrir.html", "/icons/splash-logo.svg"].includes(path) || path.startsWith("/_next/static/");
+    ["/abrir.html", "/icons/splash-lockup.svg"].includes(path) || path.startsWith("/_next/static/");
   expect(cached.every(allowed)).toBe(true);
+
+  // iPhone/iPad arrancan con la misma imagen (logotipo y "Senda" en el centro), una por tamaño de pantalla.
+  const startupImages = await page.locator('link[rel="apple-touch-startup-image"]').evaluateAll((links) =>
+    links.map((link) => link.getAttribute("href") ?? ""),
+  );
+  expect(startupImages.length).toBeGreaterThan(10);
+  for (const href of startupImages) {
+    expect((await page.request.get(href)).ok()).toBe(true);
+  }
 
   // Desde el arranque pasa sola a la app (sin sesión, al ingreso).
   await page.goto("/abrir.html");

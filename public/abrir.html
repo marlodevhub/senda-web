@@ -7,9 +7,10 @@
     <meta name="robots" content="noindex, nofollow" />
     <title>Senda</title>
     <!--
-      Pantalla de arranque de la app instalada (start_url del manifiesto). El service worker (sw.js) la guarda en el
-      teléfono, así que aparece al instante aunque el servidor tarde en despertar; cuando el servidor responde, pasa a
-      Inicio. No guarda ni muestra nada del estudiante.
+      Pantalla de arranque de la app instalada (start_url del manifiesto): el logotipo con "Senda" a la derecha, quieto
+      en el centro, sobre el degradado rojo; es la misma imagen que el arranque de iPhone/iPad (splash/*.png), así que
+      no se nota el paso. El service worker (sw.js) la guarda en el teléfono, así que aparece al instante aunque el
+      servidor tarde en despertar; cuando el servidor responde, pasa a Inicio. No guarda ni muestra nada del estudiante.
     -->
     <style>
       html,
@@ -26,19 +27,17 @@
         -webkit-user-select: none;
         user-select: none;
       }
-      main {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 1.5rem;
-      }
       img {
-        width: 7rem;
+        width: 13rem;
         height: auto;
       }
+      /* El aviso va abajo, aparte: el logotipo queda siempre en el centro exacto. */
       p {
+        position: fixed;
+        inset-inline: 0;
+        bottom: 18%;
         margin: 0;
-        min-height: 1.5rem;
+        text-align: center;
         font-size: 1rem;
         opacity: 0;
         transition: opacity 0.4s;
@@ -46,37 +45,20 @@
       p.visible {
         opacity: 0.9;
       }
-      @media (prefers-reduced-motion: no-preference) {
-        img {
-          animation: breathe 2.4s ease-in-out infinite;
-        }
-        @keyframes breathe {
-          50% {
-            transform: scale(1.06);
-          }
-        }
-      }
     </style>
   </head>
   <body>
-    <main>
-      <img src="/icons/splash-logo.svg" alt="Senda" />
-      <p id="status" role="status"></p>
-    </main>
+    <img src="/icons/splash-lockup.svg" alt="Senda" />
+    <p id="status" role="status"></p>
     <script>
       (function () {
         var status = document.getElementById("status");
         var tries = 0;
-        // Si el servidor tarda (plan que se duerme), se dice sin alarma; sin conexión, se reintenta solo.
-        var slow = setTimeout(function () {
-          status.textContent = "Abriendo Senda…";
-          status.className = "visible";
-        }, 4000);
+        // Sin conexión, se dice sin alarma y se reintenta solo.
         function open() {
           fetch("/manifest.webmanifest", { cache: "no-store" })
             .then(function (response) {
               if (!response.ok) throw new Error(String(response.status));
-              clearTimeout(slow);
               location.replace("/inicio");
             })
             .catch(function () {

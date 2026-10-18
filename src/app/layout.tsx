@@ -10,12 +10,45 @@ import { Providers } from "./providers";
 import { PALETTE_COOKIE, parsePalette } from "@/lib/palette";
 import "./globals.css";
 
+/**
+ * Arranque de la app instalada en iPhone/iPad: la misma pantalla que /abrir.html (degradado rojo con el logotipo y
+ * "Senda" en el centro), una imagen por tamaño de pantalla en public/splash/ ([ancho CSS, alto CSS, densidad]). Así el
+ * sistema muestra el splash desde el primer instante y no se nota el paso a la página.
+ */
+const APPLE_SPLASH_SCREENS: [number, number, number][] = [
+  [440, 956, 3],
+  [402, 874, 3],
+  [430, 932, 3],
+  [393, 852, 3],
+  [428, 926, 3],
+  [390, 844, 3],
+  [375, 812, 3],
+  [414, 896, 3],
+  [414, 896, 2],
+  [414, 736, 3],
+  [375, 667, 2],
+  [320, 568, 2],
+  [1024, 1366, 2],
+  [834, 1194, 2],
+  [820, 1180, 2],
+  [810, 1080, 2],
+  [768, 1024, 2],
+];
+
 export const metadata: Metadata = {
   title: "Senda",
   description: "Un acompañamiento diario para hablarte con más amabilidad.",
   robots: { index: false, follow: false },
   // Instalada en iPhone/iPad (Compartir → Añadir a pantalla de inicio): ventana propia y su nombre bajo el ícono.
-  appleWebApp: { capable: true, title: "Senda", statusBarStyle: "default" },
+  appleWebApp: {
+    capable: true,
+    title: "Senda",
+    statusBarStyle: "default",
+    startupImage: APPLE_SPLASH_SCREENS.map(([width, height, ratio]) => ({
+      url: `/splash/apple-splash-${width * ratio}x${height * ratio}.jpg`,
+      media: `(device-width: ${width}px) and (device-height: ${height}px) and (-webkit-device-pixel-ratio: ${ratio}) and (orientation: portrait)`,
+    })),
+  },
 };
 
 /** El fondo de cada tema, claro y oscuro (los `--paper` de globals.css), para la barra del sistema. */
