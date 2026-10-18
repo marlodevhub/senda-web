@@ -9,13 +9,13 @@ export const baloo = localFont({
   display: "swap",
 });
 
-export const figtree = localFont({
-  src: [
-    { path: "./Figtree-400.woff2", weight: "400", style: "normal" },
-    { path: "./Figtree-600.woff2", weight: "600", style: "normal" },
-    { path: "./Figtree-700.woff2", weight: "700", style: "normal" },
-  ],
-  variable: "--font-figtree",
+/**
+ * La letra del sistema: Roboto, fuente variable (pesos 100 a 900 en un solo archivo, subconjunto latino, que incluye
+ * las tildes, la ñ y los signos ¿ ¡ del español). Licencia SIL Open Font License.
+ */
+export const roboto = localFont({
+  src: [{ path: "./Roboto-Variable.woff2", weight: "100 900", style: "normal" }],
+  variable: "--font-roboto",
   display: "swap",
 });
 

@@ -38,9 +38,9 @@ export const DIMENSION_CARD: Record<Dimension, string> = {
   D3: "bg-dim3-tint",
 };
 
-/** Fondo suave con texto legible (resaltado de una frase dentro del texto). */
+/** Resaltador: la frase dentro del texto, con el color saturado de su dimensión (como un marcador). */
 export const DIMENSION_TINT: Record<Dimension, string> = {
-  D1: "bg-dim1-tint text-dim1-ink",
-  D2: "bg-dim2-tint text-dim2-ink",
-  D3: "bg-dim3-tint text-dim3-ink",
+  D1: "bg-dim1-mark text-foreground",
+  D2: "bg-dim2-mark text-foreground",
+  D3: "bg-dim3-mark text-foreground",
 };

@@ -19,7 +19,7 @@ import { CareMessage } from "@/components/feedback/care-message";
 import type { SubmitRewriteResult } from "@/features/rewrite/api/submit-rewrite";
 import { BffError } from "@/lib/api/client";
 import { errorMessageKey } from "@/lib/api/error-messages";
-import { DIMENSION_CARD, DIMENSION_DOT } from "@/lib/dimension-style";
+import { DIMENSION_CARD, DIMENSION_DOT, DIMENSION_TINT } from "@/lib/dimension-style";
 import { HighlightedText } from "@/components/feedback/highlighted-text";
 import { patternLabelKey } from "@/lib/pattern-labels";
 import { routes } from "@/lib/routes";
@@ -140,8 +140,8 @@ export function RewriteForm({
                     key: guide.findingId,
                     start: context.start,
                     end: context.end,
-                    // Sobre el fondo de su dimensión, la frase resalta en blanco.
-                    className: "bg-card font-semibold text-foreground shadow-sm",
+                    // Como un resaltador: el color saturado de su dimensión sobre el fondo suave.
+                    className: cn("font-semibold", DIMENSION_TINT[guide.dimension]),
                   },
                 ]}
               />

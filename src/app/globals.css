@@ -14,15 +14,18 @@
   --color-dim1: var(--dim1);
   --color-dim1-tint: var(--dim1-tint);
   --color-dim1-ink: var(--dim1-ink);
+  --color-dim1-mark: var(--dim1-mark);
   --color-dim2: var(--dim2);
   --color-dim2-tint: var(--dim2-tint);
   --color-dim2-ink: var(--dim2-ink);
+  --color-dim2-mark: var(--dim2-mark);
   --color-dim3: var(--dim3);
   --color-dim3-tint: var(--dim3-tint);
   --color-dim3-ink: var(--dim3-ink);
+  --color-dim3-mark: var(--dim3-mark);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-figtree);
+  --font-sans: var(--font-roboto);
   --font-display: var(--font-baloo);
   --font-heading: var(--font-baloo);
   --font-hand: var(--font-playpen);
@@ -90,12 +93,15 @@
   --dim1: #9F80B8;
   --dim1-tint: #EFE6F3;
   --dim1-ink: #5A3E6E;
+  --dim1-mark: #DCC6EC;
   --dim2: #8580C2;
   --dim2-tint: #E7E6F5;
   --dim2-ink: #43407A;
+  --dim2-mark: #CFCBF0;
   --dim3: #6F60AB;
   --dim3-tint: #E2DCF1;
   --dim3-ink: #3F3270;
+  --dim3-mark: #C8BDEB;
   /* Tarjeta "Tu senda" de Inicio (JourneyBanner): degradado, hojas y etiquetas del tema; texto blanco AA. */
   --banner-from: #B8436A;
   --banner-to: #7C2747;
@@ -207,12 +213,15 @@
   --dim1: #D2BDE0;
   --dim1-tint: #33283B;
   --dim1-ink: #EADFF1;
+  --dim1-mark: #5A3F70;
   --dim2: #BDB8E6;
   --dim2-tint: #2B2A42;
   --dim2-ink: #E2E1F6;
+  --dim2-mark: #48447E;
   --dim3: #A99CD6;
   --dim3-tint: #2C2540;
   --dim3-ink: #DDD6F2;
+  --dim3-mark: #4A3D80;
   /* Tarjeta "Tu senda" de Inicio (JourneyBanner): degradado, hojas y etiquetas del tema; texto blanco AA. */
   --banner-from: #5A2338;
   --banner-to: #3A1626;
@@ -308,18 +317,22 @@
  * texto blanco de los botones sobre --grad-hero cumple 4,5:1.
  */
 [data-palette="ocean"] {
-  /* Categorías de las frases (D1 Errores, D2 Valoración, D3 Exigencia), hombre, claro: tono, fondo y texto. */
-  --dim1: #4096A8;
-  --dim1-tint: #E3F1F4;
-  --dim1-ink: #1F5560;
-  --dim2: #3A8C96;
-  --dim2-tint: #D9EEF0;
-  --dim2-ink: #1C4F55;
-  --dim3: #2C7A75;
-  --dim3-tint: #D3E9E7;
-  --dim3-ink: #1A4A47;
+  /* Categorías de las frases (D1 Errores, D2 Valoración, D3 Exigencia), hombre, claro: tono, fondo, texto y
+     resaltador. Tres tonos bien distintos (verde azulado, azul y violeta) para reconocerlas de un vistazo. */
+  --dim1: #1F9A94;
+  --dim1-tint: #D3F1EE;
+  --dim1-ink: #0F5551;
+  --dim1-mark: #9FE3DC;
+  --dim2: #3B7FD9;
+  --dim2-tint: #DCE8FA;
+  --dim2-ink: #1C4277;
+  --dim2-mark: #B5D1F7;
+  --dim3: #7A6CD0;
+  --dim3-tint: #E6E3F8;
+  --dim3-ink: #3E3480;
+  --dim3-mark: #CAC3F3;
   /* Tarjeta "Tu senda" de Inicio (JourneyBanner): degradado, hojas y etiquetas del tema; texto blanco AA. */
-  --banner-from: #2D67AE;
+  --banner-from: #1E66D0;
   --banner-to: #183F72;
   --banner-leaf-a: #7FB0E6;
   --banner-leaf-b: #C7DDF6;
@@ -333,13 +346,13 @@
   /* Fondo con un toque azulado en lugar del verdoso (solo en modo claro). */
   --paper: #EAEDF4;
   --paper-sunken: #DFE4EE;
-  --bloom: #6496D2;
+  --bloom: #4D8FE6;
   --bloom-ink: #1D3A63;
   --bloom-tint: #E0EBF8;
-  --prompt-red: #2D67AE;
+  --prompt-red: #1E66D0;
   --prompt-red-foreground: #FFFFFF;
   --primary-foreground: #0F2340;
-  --grad-hero: linear-gradient(135deg, #2D67AE 0%, #22727E 100%);
+  --grad-hero: linear-gradient(135deg, #1E66D0 0%, #11798A 100%);
   --grad-dawn: linear-gradient(135deg, #6496D2 0%, #3A9AA6 100%);
   --grad-dawn-soft: linear-gradient(135deg, #E0EBF8 0%, #DDF0F1 100%);
   --shadow-bloom: 0 10px 24px -8px rgba(100, 150, 210, .5);
@@ -347,15 +360,18 @@
 
 .dark[data-palette="ocean"] {
   /* Categorías de las frases (D1 Errores, D2 Valoración, D3 Exigencia), hombre, oscuro: tono, fondo y texto. */
-  --dim1: #9FD3DE;
-  --dim1-tint: #1E3236;
-  --dim1-ink: #D7EEF2;
-  --dim2: #86C6CE;
-  --dim2-tint: #1B3236;
-  --dim2-ink: #CDEBEE;
-  --dim3: #6FBAB4;
-  --dim3-tint: #1A302E;
-  --dim3-ink: #C9E7E4;
+  --dim1: #5CCBC3;
+  --dim1-tint: #17332F;
+  --dim1-ink: #D2F2EE;
+  --dim1-mark: #1E6B66;
+  --dim2: #7FB0F0;
+  --dim2-tint: #1A2840;
+  --dim2-ink: #DCE8FB;
+  --dim2-mark: #2A5590;
+  --dim3: #A79CEB;
+  --dim3-tint: #262341;
+  --dim3-ink: #E3DFF9;
+  --dim3-mark: #4B4295;
   /* Tarjeta "Tu senda" de Inicio (JourneyBanner): degradado, hojas y etiquetas del tema; texto blanco AA. */
   --banner-from: #1E3A66;
   --banner-to: #12243F;

@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { cookies } from "next/headers";
 import { NextIntlClientProvider } from "next-intl";
 import { Toaster } from "@/components/ui/sonner";
-import { baloo, figtree, playpen } from "./fonts";
+import { baloo, playpen, roboto } from "./fonts";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Providers } from "./providers";
 import { PALETTE_COOKIE, parsePalette } from "@/lib/palette";
@@ -34,7 +34,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
       lang="es"
       data-palette={palette}
       suppressHydrationWarning
-      className={`${baloo.variable} ${figtree.variable} ${playpen.variable} antialiased`}
+      className={`${baloo.variable} ${roboto.variable} ${playpen.variable} antialiased`}
     >
       <body className="min-h-screen">
         <NextIntlClientProvider>
