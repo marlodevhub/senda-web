@@ -240,7 +240,8 @@
     }
   },
   "rewrite": {
-    "title": "Di lo mismo como se lo dirías a un buen amigo",
+    "title": "Reescribir",
+    "subtitle": "Dilo como se lo dirías a un buen amigo.",
     "yourPhrase": "Tu frase",
     "seeExample": "Ver un ejemplo",
     "textLabel": "Tu reescritura",

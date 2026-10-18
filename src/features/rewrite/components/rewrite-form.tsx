@@ -231,7 +231,7 @@ export function RewriteForm({
   );
 }
 
-/** Título de la Reescritura con el ícono de pluma. */
+/** Título de la Reescritura ("Reescribir") con el ícono de pluma y la invitación debajo. */
 function RewriteHeader() {
   const t = useTranslations();
   return (
@@ -242,7 +242,13 @@ function RewriteHeader() {
       >
         <Feather className="size-5" />
       </span>
-      <h1 className="font-heading text-xl leading-tight font-bold text-foreground md:text-2xl">{t("rewrite.title")}</h1>
+      {/* El nombre de la pantalla en una palabra (dónde estoy) y, debajo, la invitación. */}
+      <div className="flex flex-col">
+        <h1 className="font-heading text-2xl leading-tight font-bold text-foreground md:text-3xl">
+          {t("rewrite.title")}
+        </h1>
+        <p className="text-base text-muted-foreground">{t("rewrite.subtitle")}</p>
+      </div>
     </header>
   );
 }
