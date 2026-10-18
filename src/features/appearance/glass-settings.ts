@@ -4,13 +4,14 @@ import { useEffect, useSyncExternalStore } from "react";
 
 /**
  * Apariencia de este dispositivo: el vidrio de toda la app (opacidad y línea de luz; el desenfoque es fijo, 16 px,
- * en globals.css) y si se muestran las barras de desplazamiento (por defecto, no). Preferencia de este dispositivo: vive en
+ * en globals.css), si se muestran las barras de desplazamiento (por defecto, no) y si la barra lateral va tintada con
+ * el degradado del tema (por defecto, no). Preferencia de este dispositivo: vive en
  * localStorage, nunca en el servidor; si el almacenamiento falla (modo
  * privado, bloqueado) se usan los valores por defecto.
  */
-export type GlassSettings = { opacity: number; sheen: boolean; scrollbars: boolean };
+export type GlassSettings = { opacity: number; sheen: boolean; scrollbars: boolean; tintedSidebar: boolean };
 
-export const GLASS_DEFAULTS: GlassSettings = { opacity: 70, sheen: true, scrollbars: false };
+export const GLASS_DEFAULTS: GlassSettings = { opacity: 70, sheen: true, scrollbars: false, tintedSidebar: false };
 export const GLASS_LIMITS = { opacity: { min: 40, max: 100, step: 5 } } as const;
 
 const STORAGE_KEY = "senda.glass";
@@ -43,6 +44,8 @@ function read(): GlassSettings {
       opacity: clamp(parsed.opacity, GLASS_LIMITS.opacity.min, GLASS_LIMITS.opacity.max, GLASS_DEFAULTS.opacity),
       sheen: typeof parsed.sheen === "boolean" ? parsed.sheen : GLASS_DEFAULTS.sheen,
       scrollbars: typeof parsed.scrollbars === "boolean" ? parsed.scrollbars : GLASS_DEFAULTS.scrollbars,
+      tintedSidebar:
+        typeof parsed.tintedSidebar === "boolean" ? parsed.tintedSidebar : GLASS_DEFAULTS.tintedSidebar,
     };
   } catch {
     cachedSettings = GLASS_DEFAULTS;
@@ -87,4 +90,8 @@ export function useApplyGlassSettings() {
   useEffect(() => {
     document.documentElement.classList.toggle("show-scrollbars", settings.scrollbars);
   }, [settings.scrollbars]);
+  // Barra lateral tintada: el degradado de la tarjeta "Tu senda" (globals.css, `.tinted-sidebar`).
+  useEffect(() => {
+    document.documentElement.classList.toggle("tinted-sidebar", settings.tintedSidebar);
+  }, [settings.tintedSidebar]);
 }

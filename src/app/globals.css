@@ -351,8 +351,8 @@
   --celeste: #E4F1FB;
   --celeste-strong: #D2E7F8;
   /* Fondo con un toque azulado en lugar del verdoso (solo en modo claro). */
-  --paper: #EAEDF4;
-  --paper-sunken: #DFE4EE;
+  --paper: #E6ECF5;
+  --paper-sunken: #D9E2EF;
   --bloom: #5E8FD0;
   --bloom-ink: #1D3A63;
   --bloom-tint: #E0EBF8;
@@ -389,12 +389,17 @@
   --banner-chip-soft: #9CC2F5;
   --banner-chip-soft-ink: #0F1B2E;
   --chart-accent: #93B9EA;
-  --celeste: #262F48;
-  --celeste-strong: #2F3A57;
-  /* El fondo de "ocean" claro pisaría el oscuro (misma especificidad que .dark): se repite el de .dark. */
-  --paper: #211C2B;
-  /* Relleno suave en modo oscuro: un poco más claro que las tarjetas, no un hueco negro. */
-  --paper-sunken: #352D42;
+  --celeste: #24384E;
+  --celeste-strong: #2C4560;
+  /*
+    Fondos azul noche, como los de Steam (#1B2838 de fondo, paneles un poco más claros), en vez del morado del tema
+    rosado: fondo, tarjeta y relleno suave (un poco más claro que las tarjetas, no un hueco negro).
+  */
+  --paper: #1B2838;
+  --paper-raised: #213244;
+  --paper-sunken: #2A3D52;
+  --ink-soft: #A3B3C4;
+  --line: #33475E;
   --bloom: #8FB8EC;
   --bloom-ink: #DCE9FA;
   --bloom-tint: #1E2B42;
@@ -566,8 +571,7 @@
  * en el oscuro. El texto del panel verde y del cielo cumple AA sobre su fondo.
  */
 .garden-scene,
-.garden-tokens,
-.student-shell:has(.garden-scene) .screen-top-backdrop {
+.garden-tokens {
   --garden-sky-top: #c8efe4;
   --garden-sky-bottom: #f1f8ec;
   --garden-sky-ink: #1e4d33;
@@ -598,8 +602,7 @@
 }
 
 .dark .garden-scene,
-.dark .garden-tokens,
-.dark .student-shell:has(.garden-scene) .screen-top-backdrop {
+.dark .garden-tokens {
   --garden-sky-top: #1c2140;
   --garden-sky-bottom: #2f3a5c;
   --garden-sky-ink: #e6ecff;
@@ -900,21 +903,28 @@
 }
 
 /*
- * Fondo de la cabecera fija del móvil al bajar: el mismo fondo de arriba de cada pantalla. Por defecto, el color de
- * fondo; en el Jardín, su cielo; en el Diario, su degradado. `background-attachment: fixed` lo calcula sobre la
- * pantalla, igual que esos fondos (que son fijos), así la cabecera empalma con ellos sin corte.
+ * Barra lateral tintada (Perfil → Apariencia): el panel toma el degradado de la tarjeta "Tu senda" de Inicio
+ * (--banner-from → --banner-to, de cada tema y modo) y, dentro de él, los colores pasan a blanco: texto, iconos,
+ * rellenos suaves y el elemento activo. Escribir se vuelve blanco con el texto del tema, como las etiquetas de esa
+ * tarjeta, para no perderse sobre el degradado. Texto blanco AA sobre los tonos más claros del degradado.
  */
-.screen-top-backdrop {
-  background-color: var(--background);
-  background-attachment: fixed;
+.tinted-sidebar [data-sidebar-panel] {
+  background: linear-gradient(160deg, var(--banner-from) 0%, var(--banner-to) 100%);
+  --foreground: #ffffff;
+  --muted-foreground: rgb(255 255 255 / 0.92);
+  --muted: rgb(255 255 255 / 0.14);
+  --border: rgb(255 255 255 / 0.22);
+  --background: rgb(255 255 255 / 0.24);
+  --bloom-tint: rgb(255 255 255 / 0.2);
+  --bloom-ink: #ffffff;
+  --prompt-red: #ffffff;
+  --ring: #ffffff;
+  color: #ffffff;
 }
-.student-shell:has(.garden-scene) .screen-top-backdrop {
-  background-image: linear-gradient(to bottom, var(--garden-sky-top), var(--garden-sky-bottom) 55%);
-}
-.student-shell:has(.journal-sky) .screen-top-backdrop {
-  background-image:
-    radial-gradient(ellipse at 20% 0%, var(--flow-tint), transparent 55%),
-    radial-gradient(ellipse at 90% 10%, var(--bloom-tint), transparent 50%);
+.tinted-sidebar [data-sidebar-panel] .btn-hero {
+  background-image: none;
+  background-color: var(--banner-chip);
+  color: var(--banner-chip-ink);
 }
 
 /*

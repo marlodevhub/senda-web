@@ -49,6 +49,14 @@ export function GlassSettingsForm() {
         />
         <Label htmlFor="showScrollbars">{t("profile.showScrollbars")}</Label>
       </div>
+      <div className="flex items-center gap-3">
+        <Checkbox
+          id="tintedSidebar"
+          checked={settings.tintedSidebar}
+          onCheckedChange={(checked) => saveGlassSettings({ ...settings, tintedSidebar: checked === true })}
+        />
+        <Label htmlFor="tintedSidebar">{t("profile.tintedSidebar")}</Label>
+      </div>
       <Button variant="ghost" className="self-start" onClick={() => saveGlassSettings(GLASS_DEFAULTS)}>
         {t("profile.glassReset")}
       </Button>

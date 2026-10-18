@@ -31,7 +31,11 @@ export function StudentSidebar() {
 
   return (
     <aside className="sticky top-0 z-10 hidden h-screen shrink-0 py-5 pl-5 md:block md:w-24 lg:w-72">
-      <div className="flex h-full flex-col items-center gap-6 overflow-y-auto rounded-lg bg-card px-2 py-5 shadow-card lg:items-stretch lg:gap-7 lg:p-5">
+      {/* data-sidebar-panel: con "Barra lateral tintada" (Perfil → Apariencia) toma el degradado del tema. */}
+      <div
+        data-sidebar-panel
+        className="flex h-full flex-col items-center gap-6 overflow-y-auto rounded-lg bg-card px-2 py-5 shadow-card lg:items-stretch lg:gap-7 lg:p-5"
+      >
         <Link
           href="/inicio"
           title="Senda"
