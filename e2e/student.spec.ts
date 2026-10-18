@@ -328,6 +328,27 @@ test("Senda se puede instalar como app, con su nombre, su ícono y abriendo en I
   expect(installabilityErrors.map((error) => error.errorId)).toEqual([]);
 });
 
+test("Volver sube un nivel: del Espejo al registro y del registro al Historial, sin dar vueltas", async ({ page }) => {
+  await activateAndConsent(page);
+  await page.goto("/diario");
+  await page.getByRole("radio", { name: "Mal", exact: true }).click();
+  await page.getByRole("radio", { name: "Libre" }).click();
+  await page.getByLabel("Escribe lo que quieras contar").fill(ENTRY);
+  await page.getByRole("radio", { name: "Estudios" }).click();
+  await page.getByRole("button", { name: "Guardar" }).click();
+  await expect(page).toHaveURL(/\/historial\/\d+\/espejo$/);
+
+  await page.getByRole("link", { name: "Volver" }).click();
+  await expect(page).toHaveURL(/\/historial\/\d+$/);
+  await page.getByRole("link", { name: "Ver el espejo" }).click();
+  await expect(page).toHaveURL(/\/espejo$/);
+  await page.getByRole("link", { name: "Volver" }).click();
+  await expect(page).toHaveURL(/\/historial\/\d+$/);
+  // Del registro, al Historial (no de vuelta al Espejo).
+  await page.getByRole("link", { name: "Volver" }).click();
+  await expect(page).toHaveURL(/\/historial$/);
+});
+
 test("en tablet la barra lateral es un riel de iconos con nombres accesibles", async ({ page }) => {
   await activateAndConsent(page);
   await page.setViewportSize({ width: 834, height: 1112 });

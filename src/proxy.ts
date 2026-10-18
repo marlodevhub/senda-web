@@ -29,7 +29,8 @@ const STUDENT_ENTRY_ROUTES = ["/", "/login", "/activar", "/recuperar"];
 const ADMIN_PROTECTED_PREFIXES = ["/admin/cohortes", "/admin/participantes", "/admin/adherencia", "/admin/auditoria"];
 const ADMIN_ENTRY_ROUTES = ["/admin/login", "/admin/verificar"];
 
-type StudentTokens = { token: string; refreshToken: string };
+/** `refreshToken` null: renovación en el período de gracia (RS-AC-05); la cookie de renovación se deja como está. */
+type StudentTokens = { token: string; refreshToken: string | null };
 
 /**
  * RS-AC-05: la cookie de acceso dura 30 min y la de renovación 7 días. Si
@@ -56,10 +57,12 @@ async function refreshStudentSession(request: NextRequest): Promise<StudentToken
 
 function withStudentSession(response: NextResponse, tokens: StudentTokens): NextResponse {
   response.cookies.set(ACCESS_COOKIE, tokens.token, { ...studentCookieOptions, maxAge: STUDENT_ACCESS_TTL_SECONDS });
-  response.cookies.set(REFRESH_COOKIE, tokens.refreshToken, {
-    ...studentCookieOptions,
-    maxAge: STUDENT_REFRESH_TTL_SECONDS,
-  });
+  if (tokens.refreshToken) {
+    response.cookies.set(REFRESH_COOKIE, tokens.refreshToken, {
+      ...studentCookieOptions,
+      maxAge: STUDENT_REFRESH_TTL_SECONDS,
+    });
+  }
   return response;
 }
 
@@ -117,7 +120,9 @@ export async function proxy(request: NextRequest) {
   }
   // La página de esta misma petición también tiene que ver el token nuevo, no solo el navegador.
   request.cookies.set(ACCESS_COOKIE, tokens.token);
-  request.cookies.set(REFRESH_COOKIE, tokens.refreshToken);
+  if (tokens.refreshToken) {
+    request.cookies.set(REFRESH_COOKIE, tokens.refreshToken);
+  }
   return withStudentSession(NextResponse.next({ request }), tokens);
 }
 

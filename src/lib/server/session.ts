@@ -10,16 +10,22 @@ import {
   studentCookieOptions as baseCookie,
 } from "@/lib/session-cookies";
 
-export type StudentTokens = { token: string; refreshToken: string };
+/**
+ * `refreshToken` null: el servidor renovó con el token anterior en su período de gracia (otra petición simultánea ya
+ * lo rotó, RS-AC-05); se deja la cookie de renovación como está, con el token nuevo que guardó esa otra petición.
+ */
+export type StudentTokens = { token: string; refreshToken: string | null };
 
 /** El navegador nunca ve estos valores: solo viajan como cookies httpOnly entre el BFF y el propio navegador. */
 export async function setStudentSession(tokens: StudentTokens) {
   const store = await cookies();
   store.set(ACCESS_COOKIE, tokens.token, { ...baseCookie, maxAge: ACCESS_TTL_SECONDS });
-  store.set(REFRESH_COOKIE, tokens.refreshToken, { ...baseCookie, maxAge: REFRESH_TTL_SECONDS });
+  if (tokens.refreshToken) {
+    store.set(REFRESH_COOKIE, tokens.refreshToken, { ...baseCookie, maxAge: REFRESH_TTL_SECONDS });
+  }
 }
 
-export async function getStudentSession(): Promise<Partial<StudentTokens>> {
+export async function getStudentSession(): Promise<{ token?: string; refreshToken?: string }> {
   const store = await cookies();
   return {
     token: store.get(ACCESS_COOKIE)?.value,

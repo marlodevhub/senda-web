@@ -47,7 +47,7 @@ async function proxy(request: Request, pathSegments: string[]) {
       body: JSON.stringify({ refreshToken }),
     });
     const refreshed = refreshResponse.ok
-      ? await readJsonSafely<{ token: string; refreshToken: string }>(refreshResponse)
+      ? await readJsonSafely<{ token: string; refreshToken: string | null }>(refreshResponse)
       : null;
     if (!refreshed) {
       await clearStudentSession();

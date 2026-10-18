@@ -8,9 +8,10 @@ import { ChevronLeft } from "lucide-react";
 /**
  * "‹ Volver", siempre arriba a la izquierda, antes del título, en toda pantalla secundaria (las pestañas principales
  * no lo llevan): el mismo lugar y la misma forma en toda la app, como en una app nativa.
- * - `href`: a dónde va.
- * - `preferHistory`: vuelve a la pantalla anterior si la hay (se llega desde varios lugares); si se abrió directo,
- *   va a `href`.
+ * - `href`: a dónde va: un nivel arriba en la jerarquía (Historial ‹ registro ‹ Espejo), así nunca hay vueltas en
+ *   círculo entre dos pantallas que se enlazan entre sí.
+ * - `preferHistory`: solo para pantallas a las que se llega desde varios lugares y que no enlazan de vuelta a ellos
+ *   (Reescribir, Mensajes): vuelve a la anterior si la hay; si se abrió directo, va a `href`.
  */
 export function BackLink({ href, preferHistory = false }: { href: string; preferHistory?: boolean }) {
   const t = useTranslations();

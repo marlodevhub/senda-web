@@ -11,7 +11,7 @@ export default async function HistorialDetailPage({ params }: { params: Promise<
 
   return (
     <div className="flex flex-col gap-4">
-      <BackLink href="/historial" preferHistory />
+      <BackLink href="/historial" />
       <EntryDetail journalEntryId={journalEntryId} />
     </div>
   );
