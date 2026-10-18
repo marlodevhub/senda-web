@@ -571,7 +571,8 @@
  * en el oscuro. El texto del panel verde y del cielo cumple AA sobre su fondo.
  */
 .garden-scene,
-.garden-tokens {
+.garden-tokens,
+.student-shell:has(.garden-scene) .screen-top-backdrop {
   --garden-sky-top: #c8efe4;
   --garden-sky-bottom: #f1f8ec;
   --garden-sky-ink: #1e4d33;
@@ -602,7 +603,8 @@
 }
 
 .dark .garden-scene,
-.dark .garden-tokens {
+.dark .garden-tokens,
+.dark .student-shell:has(.garden-scene) .screen-top-backdrop {
   --garden-sky-top: #1c2140;
   --garden-sky-bottom: #2f3a5c;
   --garden-sky-ink: #e6ecff;
@@ -898,6 +900,24 @@
 /* Diario (CU-01): cielo suave detrás de toda la pantalla. */
 .journal-sky {
   background:
+    radial-gradient(ellipse at 20% 0%, var(--flow-tint), transparent 55%),
+    radial-gradient(ellipse at 90% 10%, var(--bloom-tint), transparent 50%);
+}
+
+/*
+ * Color de la cabecera fija del móvil (bajo su vidrio): el mismo fondo de arriba de cada pantalla. Por defecto, el
+ * color de fondo; en el Jardín, su cielo; en el Diario, su degradado. `background-attachment: fixed` lo calcula sobre la
+ * pantalla, igual que esos fondos (que son fijos), así la cabecera empalma con ellos sin corte.
+ */
+.screen-top-backdrop {
+  background-color: var(--background);
+  background-attachment: fixed;
+}
+.student-shell:has(.garden-scene) .screen-top-backdrop {
+  background-image: linear-gradient(to bottom, var(--garden-sky-top), var(--garden-sky-bottom) 55%);
+}
+.student-shell:has(.journal-sky) .screen-top-backdrop {
+  background-image:
     radial-gradient(ellipse at 20% 0%, var(--flow-tint), transparent 55%),
     radial-gradient(ellipse at 90% 10%, var(--bloom-tint), transparent 50%);
 }
