@@ -3,6 +3,7 @@ import type { Dimension } from "@/types/dimension";
 /**
  * Cómo se ve cada dimensión de autoaceptación en toda la app (D1 Errores/Raíces, D2 Valoración/Flores, D3
  * Exigencia/Ritmo). Un solo lugar: el jardín, los gráficos, el Espejo, el historial y los filtros usan lo mismo.
+ * Los colores (`--dim1..3` en globals.css) son por tema: lilas para Mujer y Otro, turquesas para Hombre.
  */
 export const DIMENSIONS = ["D1", "D2", "D3"] as const satisfies readonly Dimension[];
 
@@ -15,16 +16,16 @@ export const DIMENSION_SHORT_KEY: Record<Dimension, string> = {
 
 /** Color de la serie en gráficos y del frasco (variable CSS). */
 export const DIMENSION_COLOR: Record<Dimension, string> = {
-  D1: "var(--root)",
-  D2: "var(--bloom)",
-  D3: "var(--flow)",
+  D1: "var(--dim1)",
+  D2: "var(--dim2)",
+  D3: "var(--dim3)",
 };
 
 /** Punto de color junto al tipo de frase. */
 export const DIMENSION_DOT: Record<Dimension, string> = {
-  D1: "bg-root",
-  D2: "bg-bloom",
-  D3: "bg-flow",
+  D1: "bg-dim1",
+  D2: "bg-dim2",
+  D3: "bg-dim3",
 };
 
 /**
@@ -32,14 +33,14 @@ export const DIMENSION_DOT: Record<Dimension, string> = {
  * dimensión, para distinguir de un vistazo Errores, Valoración y Exigencia. Los registros van en el color del tema.
  */
 export const DIMENSION_CARD: Record<Dimension, string> = {
-  D1: "bg-root-tint",
-  D2: "bg-bloom-tint",
-  D3: "bg-flow-tint",
+  D1: "bg-dim1-tint",
+  D2: "bg-dim2-tint",
+  D3: "bg-dim3-tint",
 };
 
 /** Fondo suave con texto legible (resaltado de una frase dentro del texto). */
 export const DIMENSION_TINT: Record<Dimension, string> = {
-  D1: "bg-root-tint text-root-ink",
-  D2: "bg-bloom-tint text-bloom-ink",
-  D3: "bg-flow-tint text-flow-ink",
+  D1: "bg-dim1-tint text-dim1-ink",
+  D2: "bg-dim2-tint text-dim2-ink",
+  D3: "bg-dim3-tint text-dim3-ink",
 };

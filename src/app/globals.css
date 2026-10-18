@@ -11,6 +11,15 @@
   Ver Senda/docs/casos-de-uso/ para el significado de cada dimensión.
 */
 @theme inline {
+  --color-dim1: var(--dim1);
+  --color-dim1-tint: var(--dim1-tint);
+  --color-dim1-ink: var(--dim1-ink);
+  --color-dim2: var(--dim2);
+  --color-dim2-tint: var(--dim2-tint);
+  --color-dim2-ink: var(--dim2-ink);
+  --color-dim3: var(--dim3);
+  --color-dim3-tint: var(--dim3-tint);
+  --color-dim3-ink: var(--dim3-ink);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-figtree);
@@ -77,6 +86,16 @@
 }
 
 :root {
+  /* Categorías de las frases (D1 Errores, D2 Valoración, D3 Exigencia), mujer y Otro, claro: tono, fondo y texto. */
+  --dim1: #9F80B8;
+  --dim1-tint: #EFE6F3;
+  --dim1-ink: #5A3E6E;
+  --dim2: #8580C2;
+  --dim2-tint: #E7E6F5;
+  --dim2-ink: #43407A;
+  --dim3: #6F60AB;
+  --dim3-tint: #E2DCF1;
+  --dim3-ink: #3F3270;
   /* Tarjeta "Tu senda" de Inicio (JourneyBanner): degradado, hojas y etiquetas del tema; texto blanco AA. */
   --banner-from: #B8436A;
   --banner-to: #7C2747;
@@ -184,6 +203,16 @@
 }
 
 .dark {
+  /* Categorías de las frases (D1 Errores, D2 Valoración, D3 Exigencia), mujer y Otro, oscuro: tono, fondo y texto. */
+  --dim1: #D2BDE0;
+  --dim1-tint: #33283B;
+  --dim1-ink: #EADFF1;
+  --dim2: #BDB8E6;
+  --dim2-tint: #2B2A42;
+  --dim2-ink: #E2E1F6;
+  --dim3: #A99CD6;
+  --dim3-tint: #2C2540;
+  --dim3-ink: #DDD6F2;
   /* Tarjeta "Tu senda" de Inicio (JourneyBanner): degradado, hojas y etiquetas del tema; texto blanco AA. */
   --banner-from: #5A2338;
   --banner-to: #3A1626;
@@ -279,6 +308,16 @@
  * texto blanco de los botones sobre --grad-hero cumple 4,5:1.
  */
 [data-palette="ocean"] {
+  /* Categorías de las frases (D1 Errores, D2 Valoración, D3 Exigencia), hombre, claro: tono, fondo y texto. */
+  --dim1: #4096A8;
+  --dim1-tint: #E3F1F4;
+  --dim1-ink: #1F5560;
+  --dim2: #3A8C96;
+  --dim2-tint: #D9EEF0;
+  --dim2-ink: #1C4F55;
+  --dim3: #2C7A75;
+  --dim3-tint: #D3E9E7;
+  --dim3-ink: #1A4A47;
   /* Tarjeta "Tu senda" de Inicio (JourneyBanner): degradado, hojas y etiquetas del tema; texto blanco AA. */
   --banner-from: #2D67AE;
   --banner-to: #183F72;
@@ -307,6 +346,16 @@
 }
 
 .dark[data-palette="ocean"] {
+  /* Categorías de las frases (D1 Errores, D2 Valoración, D3 Exigencia), hombre, oscuro: tono, fondo y texto. */
+  --dim1: #9FD3DE;
+  --dim1-tint: #1E3236;
+  --dim1-ink: #D7EEF2;
+  --dim2: #86C6CE;
+  --dim2-tint: #1B3236;
+  --dim2-ink: #CDEBEE;
+  --dim3: #6FBAB4;
+  --dim3-tint: #1A302E;
+  --dim3-ink: #C9E7E4;
   /* Tarjeta "Tu senda" de Inicio (JourneyBanner): degradado, hojas y etiquetas del tema; texto blanco AA. */
   --banner-from: #1E3A66;
   --banner-to: #12243F;
