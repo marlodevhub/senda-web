@@ -307,6 +307,11 @@ test("en escritorio, la cara elegida en Inicio llega al Diario por cualquier Esc
 
   // Un borrador del Diario con otra cara.
   await page.goto("/diario");
+  // RN-DI-02: el Diario abre en modo libre, la primera opción.
+  const modes = page.getByRole("radiogroup", { name: "Diario" }).getByRole("radio");
+  await expect(modes.first()).toHaveAccessibleName("Libre");
+  await expect(modes.first()).toHaveAttribute("aria-checked", "true");
+  await page.getByRole("radio", { name: "Guiado" }).click();
   await page.getByRole("radio", { name: "Bien", exact: true }).click();
   await page.getByLabel("¿Qué pasó?").fill("Empecé a escribir algo y lo dejé");
   await page.waitForTimeout(800);
@@ -324,21 +329,34 @@ test("el panel de ánimo abre con cómo va el día, sigue con la semana y termin
   page,
 }) => {
   await activateAndConsent(page);
+  const panelOrder = (scope: string) =>
+    page
+      .locator(`${scope} section:is([aria-labelledby^='home-mood'], [aria-labelledby='home-goal'])`)
+      .evaluateAll((sections) =>
+        sections
+          .filter((section) => (section as HTMLElement).offsetParent !== null)
+          .map((section) => section.getAttribute("aria-labelledby")),
+      );
 
-  // Sin ánimo de hoy, la mascota espera sin reproche.
-  const today = page.getByRole("region", { name: "Así va tu día" });
+  // Móvil: "Así va tu día" va debajo del saludo y antes de la pregunta del check-in; sin ánimo, espera sin reproche.
+  const today = page.getByRole("region", { name: "Así va tu día" }).filter({ visible: true });
   await expect(today).toContainText("Aún no marcas cómo estás hoy.");
+  const greetingBox = await page.getByRole("heading", { level: 1 }).boundingBox();
+  const todayBox = await today.boundingBox();
+  const questionBox = await page.getByRole("heading", { name: "¿Cómo estás hoy?" }).boundingBox();
+  expect(todayBox!.y).toBeGreaterThan(greetingBox!.y);
+  expect(todayBox!.y).toBeLessThan(questionBox!.y);
 
   await page.getByRole("radio", { name: "Bien", exact: true }).click();
   await expect(today).toContainText("Bien");
-  const order = await page
-    .locator("aside[data-right-rail] section:is([aria-labelledby^='home-mood'], [aria-labelledby='home-goal'])")
-    .evaluateAll((sections) => sections.map((section) => section.getAttribute("aria-labelledby")));
-  expect(order).toEqual(["home-mood-today", "home-mood-week", "home-goal"]);
+  // Debajo del calendario (que abre en la semana), el ánimo de la semana y la meta.
+  await expect(page.getByRole("button", { name: "Semana" })).toHaveAttribute("aria-pressed", "true");
+  expect(await panelOrder("aside[data-right-rail]")).toEqual(["home-mood-week", "home-goal"]);
   await expectAccessible(page);
 
+  // Escritorio: en su columna, cómo va el día, el ánimo de la semana y la meta.
   await page.setViewportSize({ width: 1440, height: 900 });
-  await expect(today).toBeVisible();
+  expect(await panelOrder("main")).toEqual(["home-mood-today", "home-mood-week", "home-goal"]);
   await expectAccessible(page);
 });
 

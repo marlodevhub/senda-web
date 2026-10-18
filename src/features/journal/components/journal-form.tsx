@@ -68,7 +68,8 @@ export function JournalForm({ checkinMood, chosenMood }: { checkinMood?: Mood | 
     reset,
   } = useForm<JournalFormValues>({
     resolver: zodResolver(journalFormSchema),
-    defaultValues: { mode: "GUIDED" },
+    // RN-DI-02: el Diario abre en modo libre (un borrador recuperado manda su propio modo).
+    defaultValues: { mode: "FREE" },
   });
 
   const draftStatus = useJournalDraft({

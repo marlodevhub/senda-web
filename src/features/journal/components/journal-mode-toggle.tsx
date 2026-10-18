@@ -7,11 +7,11 @@ import { cn } from "@/lib/utils";
 type Mode = "GUIDED" | "FREE";
 
 const OPTIONS: { mode: Mode; labelKey: string; icon: typeof Sparkles }[] = [
-  { mode: "GUIDED", labelKey: "journal.modeGuided", icon: Sparkles },
   { mode: "FREE", labelKey: "journal.modeFree", icon: Feather },
+  { mode: "GUIDED", labelKey: "journal.modeGuided", icon: Sparkles },
 ];
 
-/** RN-DI-02: Guiado (3 preguntas) o Libre, en una píldora. */
+/** RN-DI-02: Libre (primera opción y la que abre por defecto) o Guiado (3 preguntas), en una píldora. */
 export function JournalModeToggle({ value, onChange }: { value: Mode; onChange: (mode: Mode) => void }) {
   const t = useTranslations();
 

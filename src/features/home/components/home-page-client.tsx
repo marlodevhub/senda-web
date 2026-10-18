@@ -51,12 +51,14 @@ export function HomePageClient() {
     />
   );
 
-  const moodPanel = (
+  const todayCard = <MoodTodayCard average={home.todayMoodAverage ?? null} />;
+  // El ánimo de la semana y la meta; en escritorio, encabezados por cómo va el día (en móvil va arriba, tras el saludo).
+  const moodPanel = (withToday: boolean) => (
     <>
-      {/* El recuadro de hoy ocupa todo el ancho aunque debajo vayan dos columnas. */}
-      <div className="sm:col-span-2 @[30rem]:col-span-2 @[42rem]:col-span-1">
-        <MoodTodayCard average={home.todayMoodAverage ?? null} />
-      </div>
+      {withToday && (
+        // El recuadro de hoy ocupa todo el ancho aunque debajo vayan dos columnas.
+        <div className="@[30rem]:col-span-2 @[42rem]:col-span-1">{todayCard}</div>
+      )}
       <MoodWeek days={home.weekDays} />
       {home.goal && <GoalRing daysWithEntry={home.goal.daysWithEntry} goal={home.goal.goal} />}
     </>
@@ -124,6 +126,8 @@ export function HomePageClient() {
           <div className="@container">
             <div className="flex flex-col gap-5 @[42rem]:grid @[42rem]:grid-cols-[minmax(0,1fr)_16rem] @[42rem]:items-start @[56rem]:grid-cols-[minmax(0,1fr)_18rem]">
               <div className="flex flex-col gap-5">
+                {/* Móvil y tablet: cómo va el día, debajo del saludo y antes de la pregunta del check-in. */}
+                <div className="lg:hidden">{todayCard}</div>
                 {/* El botón Escribir aparece dentro del check-in al marcar una cara. */}
                 <CheckIn initialMood={home.checkinMood} initialMarkedAt={home.checkinAt} />
 
@@ -157,7 +161,7 @@ export function HomePageClient() {
               {/* Primero cómo va el día, luego el ánimo de la semana y al final la meta. Apiladas, el ánimo de la
                   semana y la meta van lado a lado si caben. */}
               <div className="hidden gap-5 lg:grid @[30rem]:grid-cols-2 @[42rem]:grid-cols-1">
-                {moodPanel}
+                {moodPanel(true)}
               </div>
             </div>
           </div>
@@ -168,7 +172,7 @@ export function HomePageClient() {
             className="flex flex-col gap-5 lg:fixed lg:inset-y-0 lg:right-0 lg:z-10 lg:w-[22rem] lg:py-5 lg:pr-5 xl:w-[24rem]"
           >
             <div className="lg:h-full lg:overflow-y-auto lg:rounded-lg lg:bg-card lg:shadow-card">{weekCalendar}</div>
-            <div className="grid gap-5 sm:grid-cols-2 lg:hidden">{moodPanel}</div>
+            <div className="grid gap-5 sm:grid-cols-2 lg:hidden">{moodPanel(false)}</div>
           </aside>
         </div>
       )}
