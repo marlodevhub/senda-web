@@ -71,7 +71,7 @@ export function WeekOverview({
         <div
           className={cn(
             view === "month" ? "block" : "hidden lg:block",
-            "lg:sticky lg:top-0 lg:z-10 lg:-mx-5 lg:-mt-5 lg:border-b lg:border-foreground/5 lg:bg-card/70 lg:px-5 lg:pt-5 lg:pb-3 lg:backdrop-blur-xl",
+            "lg:glass-fill lg:glass-fade-bottom lg:sticky lg:top-0 lg:z-10 lg:-mx-5 lg:-mt-5 lg:px-5 lg:pt-5 lg:pb-1",
           )}
         >
           <MonthCalendar days={journeyDays} today={today} selectedDay={selectedDay} onSelectDay={setSelectedDay} />
@@ -130,7 +130,7 @@ export function WeekOverview({
       {selected && <DayDetails day={selected} today={today} />}
 
       {/* Al pie: en qué va de su senda, en una tarjeta destacada (en escritorio, abajo del panel). */}
-      <div className="lg:sticky lg:bottom-0 lg:z-10 lg:-mx-5 lg:-mb-5 lg:mt-auto lg:border-t lg:border-foreground/5 lg:bg-card/70 lg:px-5 lg:pt-3 lg:pb-5 lg:backdrop-blur-xl">
+      <div className="lg:glass-fill lg:glass-fade-top lg:sticky lg:bottom-0 lg:z-10 lg:-mx-5 lg:-mb-5 lg:mt-auto lg:px-5 lg:pt-1 lg:pb-5">
         <JourneyBanner today={today} week={week} goal={goal} />
       </div>
     </section>

@@ -1,13 +1,13 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { DIMENSION_DOT } from "@/lib/dimension-style";
+import { DIMENSION_CARD, DIMENSION_DOT } from "@/lib/dimension-style";
 import type { Dimension } from "@/types/dimension";
 
 /**
  * Una frase dura detectada (Espejo CU-03, detalle CU-11, Inicio CU-05): el fragmento que escribió el estudiante y, debajo,
  * su tipo en lenguaje amable (RN-ES-13), nunca el nombre técnico del patrón. Con `href` es un acceso a reescribirla
- * (CU-04): crece un poco al pasar el mouse y lleva una flecha. El fondo sigue al tema (rosado; celeste con Hombre).
+ * (CU-04): crece un poco al pasar el mouse y lleva una flecha. El fondo es el tono de su dimensión (DIMENSION_CARD).
  */
 export function FindingRow({
   fragment,
@@ -60,11 +60,14 @@ export function FindingRow({
     <Link
       href={href}
       aria-label={linkLabel}
-      className="group flex items-center gap-3 rounded-md bg-celeste px-4 py-3 transition-[transform,background-color,box-shadow] duration-200 hover:scale-[1.03] hover:bg-celeste-strong hover:shadow-card focus-visible:scale-[1.03] focus-visible:outline-2 focus-visible:outline-ring motion-reduce:transition-none motion-reduce:hover:scale-100"
+      className={cn(
+        "group flex items-center gap-3 rounded-md px-4 py-3 transition-[transform,filter,box-shadow] duration-200 hover:scale-[1.03] hover:shadow-card hover:brightness-[0.97] focus-visible:scale-[1.03] focus-visible:outline-2 focus-visible:outline-ring motion-reduce:transition-none motion-reduce:hover:scale-100",
+        DIMENSION_CARD[dimension],
+      )}
     >
       {body}
     </Link>
   ) : (
-    <div className="flex items-center gap-3 rounded-md bg-celeste px-4 py-3">{body}</div>
+    <div className={cn("flex items-center gap-3 rounded-md px-4 py-3", DIMENSION_CARD[dimension])}>{body}</div>
   );
 }

@@ -4,6 +4,7 @@ import { StudentSidebar } from "./_components/student-sidebar";
 import { MessagesBell, MessagesCenterProvider } from "./_components/messages-center";
 import { TourProvider } from "@/components/tour/app-tour";
 import { PaletteSync } from "./_components/palette-sync";
+import { GlassSync } from "./_components/glass-sync";
 import { MobileHeaderBackdrop } from "./_components/mobile-header-backdrop";
 import { ParticipantNoSelect } from "@/components/layout/participant-no-select";
 import { SendaLogo } from "@/components/brand/senda-logo";
@@ -19,6 +20,7 @@ export default async function StudentLayout({ children }: { children: React.Reac
     <MessagesCenterProvider>
       <TourProvider>
         <PaletteSync />
+        <GlassSync />
         <ParticipantNoSelect />
         {/* overflow-x-clip: lo que sale a pantalla completa (jardín) no crea scroll horizontal. */}
         {/* group/shell: si la pantalla trae un panel derecho fijo (Inicio en escritorio), el contenido y la campana le

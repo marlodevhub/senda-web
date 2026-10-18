@@ -19,7 +19,7 @@ import { CareMessage } from "@/components/feedback/care-message";
 import type { SubmitRewriteResult } from "@/features/rewrite/api/submit-rewrite";
 import { BffError } from "@/lib/api/client";
 import { errorMessageKey } from "@/lib/api/error-messages";
-import { DIMENSION_DOT, DIMENSION_TINT } from "@/lib/dimension-style";
+import { DIMENSION_CARD, DIMENSION_DOT } from "@/lib/dimension-style";
 import { HighlightedText } from "@/components/feedback/highlighted-text";
 import { patternLabelKey } from "@/lib/pattern-labels";
 import { routes } from "@/lib/routes";
@@ -118,7 +118,10 @@ export function RewriteForm({
       <RewriteHeader />
 
       {/* La frase dentro del párrafo donde la escribió, resaltada, con su tipo en lenguaje amable. */}
-      <section aria-labelledby="rewrite-phrase" className="flex flex-col gap-2 rounded-[1.75rem] bg-celeste px-5 py-4">
+      <section
+        aria-labelledby="rewrite-phrase"
+        className={cn("flex flex-col gap-2 rounded-[1.75rem] px-5 py-4", DIMENSION_CARD[guide.dimension])}
+      >
         <h2 id="rewrite-phrase" className="text-sm font-bold tracking-wide text-muted-foreground uppercase">
           {context && context.total > 1
             ? t("rewrite.phraseOf", { number: context.number, total: context.total })
@@ -137,7 +140,8 @@ export function RewriteForm({
                     key: guide.findingId,
                     start: context.start,
                     end: context.end,
-                    className: cn("font-semibold", DIMENSION_TINT[guide.dimension]),
+                    // Sobre el fondo de su dimensión, la frase resalta en blanco.
+                    className: "bg-card font-semibold text-foreground shadow-sm",
                   },
                 ]}
               />

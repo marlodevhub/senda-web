@@ -1,6 +1,6 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
+import { useEffect, useSyncExternalStore } from "react";
 
 /**
  * Apariencia del vidrio (barra inferior y botón de mensajes): opacidad y
@@ -73,7 +73,13 @@ export function saveGlassSettings(settings: GlassSettings) {
   window.dispatchEvent(new Event(CHANGE_EVENT));
 }
 
-/** Las variables CSS que lee la clase `.glass` de globals.css. */
-export function glassStyle(settings: GlassSettings): React.CSSProperties {
-  return { "--glass-alpha": `${settings.opacity}%` } as React.CSSProperties;
+/**
+ * Aplica la opacidad elegida a todo el vidrio de la app: `--glass-alpha` en <html>, que leen `--glass-bg` y las
+ * clases de vidrio de globals.css (un solo vidrio para toda la app).
+ */
+export function useApplyGlassSettings() {
+  const settings = useGlassSettings();
+  useEffect(() => {
+    document.documentElement.style.setProperty("--glass-alpha", `${settings.opacity}%`);
+  }, [settings.opacity]);
 }

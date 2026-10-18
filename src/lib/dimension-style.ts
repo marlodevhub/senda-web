@@ -27,6 +27,16 @@ export const DIMENSION_DOT: Record<Dimension, string> = {
   D3: "bg-flow",
 };
 
+/**
+ * Fondo de la tarjeta de una frase detectada (Espejo, detalle del registro, Inicio, Reescritura): el tono suave de su
+ * dimensión, para distinguir de un vistazo Errores, Valoración y Exigencia. Los registros van en el color del tema.
+ */
+export const DIMENSION_CARD: Record<Dimension, string> = {
+  D1: "bg-root-tint",
+  D2: "bg-bloom-tint",
+  D3: "bg-flow-tint",
+};
+
 /** Fondo suave con texto legible (resaltado de una frase dentro del texto). */
 export const DIMENSION_TINT: Record<Dimension, string> = {
   D1: "bg-root-tint text-root-ink",

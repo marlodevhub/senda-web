@@ -13,7 +13,7 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
-import { glassStyle, useGlassSettings } from "@/features/appearance/glass-settings";
+import { useGlassSettings } from "@/features/appearance/glass-settings";
 import { useMessages } from "@/features/guidance/api/use-messages";
 import { MessageInbox } from "@/features/guidance/components/message-inbox";
 import { loadNotifiedIds, pickUnnotified, saveNotifiedIds } from "@/features/guidance/notified-messages";
@@ -71,7 +71,7 @@ export function MessagesCenterProvider({ children }: { children: React.ReactNode
           data-sheen={glass.sheen}
           // Flotante como el dock: separado de los bordes; vaul parte de fuera de la pantalla contando ese margen
           // y sin su relleno ::after, que solo sirve para un panel pegado al borde.
-          style={{ ...glassStyle(glass), "--initial-transform": "calc(100% + 2rem)" } as React.CSSProperties}
+          style={{ "--initial-transform": "calc(100% + 2rem)" } as React.CSSProperties}
           className="glass rounded-[1.75rem] shadow-card after:hidden data-[vaul-drawer-direction=bottom]:inset-x-3 data-[vaul-drawer-direction=bottom]:bottom-[max(0.75rem,env(safe-area-inset-bottom))] data-[vaul-drawer-direction=bottom]:max-h-[85vh] data-[vaul-drawer-direction=bottom]:rounded-[1.75rem] data-[vaul-drawer-direction=right]:inset-y-3 data-[vaul-drawer-direction=right]:right-3 data-[vaul-drawer-direction=right]:w-[min(26rem,calc(100vw-1.5rem))] data-[vaul-drawer-direction=right]:rounded-[1.75rem] data-[vaul-drawer-direction=right]:sm:max-w-none"
         >
           <DrawerHeader className="flex-row items-center justify-between gap-2 text-left group-data-[vaul-drawer-direction=bottom]/drawer-content:text-left md:pt-6">
@@ -111,7 +111,6 @@ export function MessagesBell() {
       aria-label={t("guidance.bellLabel", { count: unread })}
       title={t("guidance.title")}
       data-sheen={glass.sheen}
-      style={glassStyle(glass)}
       className="glass relative flex size-11 items-center justify-center rounded-full text-foreground focus-visible:outline-2 focus-visible:outline-ring"
     >
       <Bell className="size-5" aria-hidden />

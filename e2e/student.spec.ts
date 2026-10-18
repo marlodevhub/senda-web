@@ -443,7 +443,7 @@ test("las notificaciones por correo muestran a qué correo llegan, enmascarado, 
   await expect(card.getByRole("button", { name: "Activar notificaciones" })).toBeVisible();
 });
 
-test("la barra de vidrio se ajusta desde Perfil y se recuerda", async ({ page }) => {
+test("el vidrio de la app se ajusta desde Perfil y se recuerda", async ({ page }) => {
   await activateAndConsent(page);
   await page.goto("/perfil");
 
@@ -452,9 +452,11 @@ test("la barra de vidrio se ajusta desde Perfil y se recuerda", async ({ page })
 
   const bar = page.getByRole("navigation", { name: "Navegación principal" }).locator(".glass");
   await expect(bar).toHaveAttribute("data-sheen", "false");
-  await expect(bar).toHaveAttribute("style", /--glass-alpha: 90%/);
+  // Un solo vidrio para toda la app: la opacidad se aplica en <html> y la leen todas las superficies de vidrio.
+  const html = page.locator("html");
+  await expect(html).toHaveAttribute("style", /--glass-alpha: 90%/);
   await page.reload();
-  await expect(bar).toHaveAttribute("style", /--glass-alpha: 90%/);
+  await expect(html).toHaveAttribute("style", /--glass-alpha: 90%/);
   await expect(page.getByLabel("Desenfoque")).toHaveCount(0);
   await expectAccessible(page);
 });

@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { STUDENT_NAV_ITEMS } from "./student-nav-items";
-import { glassStyle, useGlassSettings } from "@/features/appearance/glass-settings";
+import { useGlassSettings } from "@/features/appearance/glass-settings";
 
 /**
  * Móvil: cápsula flotante de vidrio con las 5 pestañas (opacidad,
@@ -24,7 +24,6 @@ export function BottomNav() {
     >
       <div
         data-sheen={glass.sheen}
-        style={glassStyle(glass)}
         className="glass pointer-events-auto flex w-full max-w-md justify-between rounded-full px-1.5 py-1.5"
       >
         {STUDENT_NAV_ITEMS.map((item) => {
