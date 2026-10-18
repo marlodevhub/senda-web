@@ -85,7 +85,7 @@ export function PendingPhraseList({ phrases }: { phrases: HomePendingPhrase[] })
           ref={listRef}
           style={{ maxHeight }}
           onScroll={onScroll}
-          className="flex flex-col gap-2 overflow-y-auto px-5 py-2 [scrollbar-color:var(--border)_transparent] [scrollbar-width:thin]"
+          className="flex flex-col gap-2 overflow-y-auto px-5 py-2"
         >
           {phrases.map((phrase) => (
             <li key={phrase.findingId} className="relative hover:z-10 focus-within:z-10">
@@ -148,10 +148,9 @@ function ScrollFade({ side, visible }: { side: "top" | "bottom"; visible: boolea
     <div
       aria-hidden
       className={cn(
-        "pointer-events-none absolute inset-x-0 right-3 h-10 backdrop-blur-[2px] transition-opacity duration-200",
-        side === "top"
-          ? "top-0 bg-linear-to-b from-card to-transparent [mask-image:linear-gradient(to_bottom,black,transparent)]"
-          : "bottom-0 bg-linear-to-t from-card to-transparent [mask-image:linear-gradient(to_top,black,transparent)]",
+        // El mismo vidrio que se desvanece del calendario de Inicio (glass-edge-* en globals.css); deja libre la barra.
+        "pointer-events-none absolute inset-x-0 right-3 h-10 transition-opacity duration-200",
+        side === "top" ? "glass-edge-down top-0" : "glass-edge-up bottom-0",
         visible ? "opacity-100" : "opacity-0",
       )}
     />
