@@ -3,13 +3,16 @@ import { renderWithProviders, screen } from "@/testing/test-utils";
 import { MoodTodayCard } from "@/features/home/components/mood-today-card";
 
 describe("MoodTodayCard (RN-IN-08)", () => {
-  it("muestra el ánimo de hoy en el color sólido de esa carita", () => {
+  it("muestra el ánimo de hoy en un degradado del color de esa carita", () => {
     renderWithProviders(<MoodTodayCard average={4} />);
 
     const card = screen.getByRole("region", { name: "Así va tu día" });
     expect(card).toHaveTextContent("Bien");
     expect(card).toHaveTextContent("Es el promedio de las caritas que marcaste hoy.");
-    expect(card).toHaveStyle({ backgroundColor: "#9fd27a" });
+    // De #d4efb4 a #9fd27a (el navegador los guarda en rgb).
+    expect(card.style.backgroundImage).toBe(
+      "linear-gradient(135deg, rgb(212, 239, 180) 0%, rgb(159, 210, 122) 100%)",
+    );
   });
 
   it("sin ánimo de hoy invita sin reproche y no nombra ningún ánimo", () => {
@@ -25,7 +28,7 @@ describe("MoodTodayCard (RN-IN-08)", () => {
 
     const card = screen.getByRole("region", { name: "Así va tu día" });
     // A medio camino entre el amarillo (#f2c95c) y el verde (#9fd27a).
-    expect(card).toHaveStyle({ backgroundColor: "#c9ce6b" });
+    expect(card.style.backgroundImage).toContain("rgb(201, 206, 107) 100%");
     expect(card).toHaveTextContent("Bien");
   });
 });
