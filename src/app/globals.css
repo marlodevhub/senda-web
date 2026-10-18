@@ -482,11 +482,38 @@
   }
 }
 
-:root [data-sonner-toaster][data-sonner-theme="light"] {
-  --error-text: #b3001b;
-  --success-text: #1f6b3a;
-  --warning-text: #8a4b00;
-  --info-text: #1e4fa3;
+/*
+ * Toasts de éxito, error, aviso e información: fondo sólido con texto blanco, iguales en los dos temas y en claro y
+ * oscuro (blanco sobre cada color ≥ 4,5:1). Los toasts sin tipo siguen con el fondo de la app.
+ */
+:root [data-sonner-toaster][data-sonner-theme] {
+  --success-bg: #15803d;
+  --success-border: #15803d;
+  --success-text: #ffffff;
+  --error-bg: #b91c1c;
+  --error-border: #b91c1c;
+  --error-text: #ffffff;
+  --warning-bg: #b45309;
+  --warning-border: #b45309;
+  --warning-text: #ffffff;
+  --info-bg: #1d4ed8;
+  --info-border: #1d4ed8;
+  --info-text: #ffffff;
+}
+:root [data-sonner-toaster] [data-rich-colors="true"]:is([data-type="success"], [data-type="error"], [data-type="warning"], [data-type="info"]) {
+  [data-description] {
+    color: inherit;
+    opacity: 0.9;
+  }
+  [data-button] {
+    background: rgb(255 255 255 / 0.2);
+    color: inherit;
+  }
+  [data-close-button] {
+    background: inherit;
+    border-color: rgb(255 255 255 / 0.4);
+    color: inherit;
+  }
 }
 
 /*
