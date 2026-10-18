@@ -112,6 +112,8 @@ test("ciclo diario completo: activar → diario → espejo → reescritura → f
   await expectAccessible(page);
   // Como una app: el texto no se selecciona al hacer clic y arrastrar.
   expect(await page.evaluate(() => getComputedStyle(document.body).userSelect)).toBe("none");
+  // Sin zooms accidentales: el doble toque no acerca (el pellizco sí, por accesibilidad).
+  expect(await page.evaluate(() => getComputedStyle(document.documentElement).touchAction)).toBe("manipulation");
 
   // CU-01: registro en modo libre.
   // Cambia de cara antes de escribir: el Diario abre con la última elegida.
@@ -126,6 +128,10 @@ test("ciclo diario completo: activar → diario → espejo → reescritura → f
   // Donde se escribe, sí (para editar).
   expect(await page.getByLabel("Escribe lo que quieras contar").evaluate((el) => getComputedStyle(el).userSelect)).toBe(
     "text",
+  );
+  // En iPhone, un campo con letra menor a 16 px acerca la pantalla al tocarlo.
+  expect(await page.getByLabel("Escribe lo que quieras contar").evaluate((el) => getComputedStyle(el).fontSize)).toBe(
+    "16px",
   );
   // RN-DI-05: sin contexto no se envía.
   await page.getByRole("button", { name: "Guardar" }).click();

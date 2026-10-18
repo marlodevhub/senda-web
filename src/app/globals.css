@@ -432,6 +432,23 @@
   }
   html {
     @apply font-sans;
+    /* Como una app nativa, sin zooms accidentales: el doble toque no acerca (touch-action) y la página no rebota
+       ni arrastra el fondo al llegar al borde del scroll. El pellizco con dos dedos sigue disponible para quien lo
+       necesite (WCAG 2.1 AA, 1.4.4: el texto se puede ampliar). */
+    touch-action: manipulation;
+    overscroll-behavior: none;
+  }
+}
+
+/*
+ * iPhone acerca la pantalla al tocar un campo con letra menor a 16 px: en móvil, los campos van a 16 px. Fuera de
+ * @layer para pesar más que las clases de tamaño de los componentes (text-base es 15 px en móvil).
+ */
+@media (width < 48rem) {
+  input,
+  textarea,
+  select {
+    font-size: 16px;
   }
 }
 
