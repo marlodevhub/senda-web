@@ -111,6 +111,7 @@ export function StudentSidebar() {
               <Link
                 key={item.href}
                 href={item.href}
+                prefetch
                 data-tour={item.href.slice(1)}
                 title={label}
                 aria-current={active ? "page" : undefined}

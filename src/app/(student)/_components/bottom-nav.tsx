@@ -31,9 +31,11 @@ export function BottomNav() {
           const active = pathname.startsWith(item.href);
           const Icon = item.icon;
           return (
+            // prefetch: las 5 pestañas quedan descargadas de antemano y abren al instante.
             <Link
               key={item.href}
               href={item.href}
+              prefetch
               data-tour={item.href.slice(1)}
               aria-current={active ? "page" : undefined}
               className="flex-1 rounded-full focus-visible:outline-2 focus-visible:outline-ring"

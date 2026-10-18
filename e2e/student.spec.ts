@@ -342,6 +342,30 @@ test("el panel de ánimo abre con cómo va el día, sigue con la semana y termin
   await expectAccessible(page);
 });
 
+test("cambiar de pestaña en la barra inferior no vuelve a pedir la pantalla al servidor", async ({ page }) => {
+  await activateAndConsent(page);
+  const nav = page.getByRole("navigation", { name: "Navegación principal" });
+  // Primera vuelta por las pestañas (ya precargadas desde la barra).
+  for (const name of ["Historial", "Progreso", "Inicio"]) {
+    await nav.getByRole("link", { name }).click();
+    await expect(page).toHaveURL(new RegExp(name === "Progreso" ? "/progreso" : `/${name.toLowerCase()}`));
+  }
+  await page.waitForLoadState("networkidle");
+
+  // Volver a una pestaña ya visitada: sin pedir la pantalla de nuevo (solo los datos, por la API).
+  const screenRequests: string[] = [];
+  page.on("request", (request) => {
+    if (request.headers()["rsc"] && !request.headers()["next-router-prefetch"]) {
+      screenRequests.push(request.url());
+    }
+  });
+  await nav.getByRole("link", { name: "Historial" }).click();
+  await expect(page).toHaveURL(/\/historial/);
+  await nav.getByRole("link", { name: "Inicio" }).click();
+  await expect(page).toHaveURL(/\/inicio/);
+  expect(screenRequests).toEqual([]);
+});
+
 test("las pantallas de ingreso no desbordan a 360 px (sin perder los márgenes)", async ({ page }) => {
   for (const path of ["/activar", "/login", "/recuperar"]) {
     await page.goto(path);

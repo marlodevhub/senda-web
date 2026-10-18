@@ -47,6 +47,12 @@ const nextConfig: NextConfig = {
   devIndicators: false,
   output: "standalone",
   poweredByHeader: false,
+  experimental: {
+    // Navegación instantánea entre pestañas: una pantalla ya visitada (o precargada desde la barra) se reusa 5 minutos
+    // sin volver a pedirla al servidor. Las pantallas solo traen su estructura; los datos del estudiante llegan aparte
+    // por TanStack Query, que los refresca solo.
+    staleTimes: { dynamic: 300 },
+  },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
