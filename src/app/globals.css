@@ -1103,3 +1103,12 @@ html:not(.show-scrollbars):has(.participant-no-select)::-webkit-scrollbar,
 html:not(.show-scrollbars):has(.participant-no-select) *::-webkit-scrollbar {
   display: none;
 }
+
+/* Borde de abajo de la ventana (tablet y escritorio): el contenido se desvanece en el color del fondo. */
+.page-bottom-fade {
+  background: linear-gradient(to top, var(--background), color-mix(in oklab, var(--background) 70%, transparent) 45%, transparent);
+}
+/* En el Jardín el paisaje llega al borde a propósito: sin desvanecido. */
+.student-shell:has(.garden-scene) .page-bottom-fade {
+  display: none;
+}

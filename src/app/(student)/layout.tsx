@@ -57,6 +57,14 @@ export default async function StudentLayout({ children }: { children: React.Reac
               {children}
             </main>
           </div>
+          {/*
+            Tablet y escritorio: el contenido se desvanece en el color del fondo al llegar al borde de abajo de la
+            ventana, en vez de cortarse en seco. Queda debajo de la barra lateral y del panel del calendario (z-10).
+          */}
+          <div
+            aria-hidden
+            className="page-bottom-fade pointer-events-none fixed inset-x-0 bottom-0 z-[5] hidden h-12 md:block"
+          />
           <BottomNav />
         </div>
       </TourProvider>
