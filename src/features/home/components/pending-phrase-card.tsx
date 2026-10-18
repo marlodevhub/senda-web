@@ -14,17 +14,30 @@ import { cn } from "@/lib/utils";
  * Tarjeta "frase pendiente" de Inicio (RN-IN-02): el hallazgo visible más
  * reciente sin reescribir. Toca el botón → abre CU-04 con ese hallazgo.
  */
-export function PendingPhraseCard({ fragment, onRewrite }: { fragment: string; onRewrite?: () => void }) {
+export function PendingPhraseCard({
+  fragment,
+  onRewrite,
+}: {
+  fragment: string;
+  onRewrite?: () => void;
+}) {
   const t = useTranslations();
 
   return (
     <div className="flex flex-col gap-2.5 rounded-lg bg-grad-dawn-soft p-4 shadow-card">
-      <span className="text-xs font-bold tracking-wide text-root-ink uppercase">{t("home.pendingLabel")}</span>
+      <span className="text-xs font-bold tracking-wide text-root-ink uppercase">
+        {t("home.pendingLabel")}
+      </span>
       <p className="font-display text-base leading-snug text-foreground before:content-['“'] after:content-['”']">
         {fragment}
       </p>
       {/* Mismo ancho y forma que el botón Escribir del check-in. */}
-      <Button variant="hero" size="xl" className="w-full rounded-full" onClick={onRewrite}>
+      <Button
+        variant="hero"
+        size="xl"
+        className="w-full rounded-full"
+        onClick={onRewrite}
+      >
         <Feather className="size-4" aria-hidden />
         {t("home.pendingRewrite")}
       </Button>
@@ -47,79 +60,95 @@ export function NoPendingPhrase() {
  * CU-04 con ese hallazgo; debajo, su tipo en lenguaje amable (el mismo del Espejo) como texto, con un punto del
  * color de su dimensión. Nunca como etiqueta clínica.
  */
-export function PendingPhraseList({ phrases }: { phrases: HomePendingPhrase[] }) {
+export function PendingPhraseList({
+  phrases,
+}: {
+  phrases: HomePendingPhrase[];
+}) {
   const t = useTranslations();
-  const listRef = useRef<HTMLUListElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
   const maxHeight = useHeightToViewportBottom(listRef);
-  const { canScrollUp, canScrollDown, onScroll } = useScrollEdges(listRef, phrases.length, maxHeight);
+  const { canScrollDown, onScroll } = useScrollEdges(
+    listRef,
+    phrases.length,
+    maxHeight,
+  );
 
   return (
     <section
       aria-labelledby="pending-list"
-      className="flex flex-col gap-4 overflow-hidden rounded-lg bg-card p-5 shadow-card"
+      className="relative overflow-hidden rounded-lg bg-card shadow-card"
     >
-      <header className="flex items-start gap-3">
-        <span
-          aria-hidden
-          className="flex size-10 shrink-0 items-center justify-center rounded-full bg-celeste text-bloom-ink"
-        >
-          <Feather className="size-5" />
-        </span>
-        <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-          <h2 id="pending-list" className="font-heading text-lg font-bold text-foreground">
-            {t("home.pendingListTitle")}
-          </h2>
-          <p className="text-base text-muted-foreground">{t("home.pendingListHint")}</p>
-        </div>
-        <span className="rounded-full bg-celeste px-3 py-0.5 text-base font-bold text-foreground tabular-nums">
-          {phrases.length}
-        </span>
-      </header>
-
       {/*
-        La lista llega hasta los bordes de la tarjeta (-mx-5): la barra de scroll queda pegada al borde derecho. Arriba
-        y abajo, un desvanecido con desenfoque indica que hay más frases (solo cuando las hay).
+        Toda la tarjeta se desplaza: la cabecera queda fija arriba sobre vidrio (el mismo del calendario de Inicio,
+        glass-fill y glass-fade-bottom) y las frases pasan por debajo; abajo, otro desvanecido de vidrio indica que
+        hay más (solo cuando las hay). Ambos van por encima de la frase con el mouse (z-20), así no se cortan.
       */}
-      <div className="relative -mx-5 -mb-2">
-        <ul
-          ref={listRef}
-          style={{ maxHeight }}
-          onScroll={onScroll}
-          className="flex flex-col gap-2 overflow-y-auto px-5 py-2"
-        >
+      <div
+        ref={listRef}
+        style={{ maxHeight }}
+        onScroll={onScroll}
+        className="overflow-y-auto"
+      >
+        <header className="glass-fill glass-fade-bottom sticky top-0 z-20 flex items-start gap-3 px-5 pt-5 pb-3">
+          <span
+            aria-hidden
+            className="flex size-10 shrink-0 items-center justify-center rounded-full bg-celeste text-bloom-ink"
+          >
+            <Feather className="size-5" />
+          </span>
+          <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+            <h2
+              id="pending-list"
+              className="font-heading text-lg font-bold text-foreground"
+            >
+              {t("home.pendingListTitle")}
+            </h2>
+            <p className="text-base text-muted-foreground">
+              {t("home.pendingListHint")}
+            </p>
+          </div>
+          <span className="rounded-full bg-celeste px-3 py-0.5 text-base font-bold text-foreground tabular-nums">
+            {phrases.length}
+          </span>
+        </header>
+        <ul className="flex flex-col gap-2 px-5 pt-2 pb-5">
           {phrases.map((phrase) => (
-            <li key={phrase.findingId} className="relative hover:z-10 focus-within:z-10">
+            <li
+              key={phrase.findingId}
+              className="relative hover:z-10 focus-within:z-10"
+            >
               <FindingRow
                 fragment={phrase.fragment}
                 label={t(patternLabelKey(phrase.pattern))}
                 dimension={phrase.dimension}
                 href={routes.rewrite(phrase.journalEntryId, phrase.findingId)}
-                linkLabel={t("home.pendingRewriteThis", { fragment: phrase.fragment })}
+                linkLabel={t("home.pendingRewriteThis", {
+                  fragment: phrase.fragment,
+                })}
               />
             </li>
           ))}
         </ul>
-        <ScrollFade side="top" visible={canScrollUp} />
-        <ScrollFade side="bottom" visible={canScrollDown} />
       </div>
+      <ScrollFade visible={canScrollDown} />
     </section>
   );
 }
 
-/**
- * Lo que queda debajo de la lista: el padding de abajo de la lista (0,5rem), el de la tarjeta menos lo que la lista
- * se mete en él (1,25rem − 0,5rem) y el de main en escritorio (2,5rem).
- */
-const BOTTOM_SPACE_PX = 60;
-/** Al menos una frase completa, aunque la ventana sea muy baja. */
-const MIN_LIST_PX = 176;
+/** Lo que queda debajo de la tarjeta: el padding de main en escritorio (2,5rem). */
+const BOTTOM_SPACE_PX = 40;
+/** La cabecera y al menos una frase completa, aunque la ventana sea muy baja. */
+const MIN_LIST_PX = 260;
 
 /**
  * El alto de la lista para que la tarjeta llegue justo al borde de abajo de la ventana (sin pasarse), según el
  * alto de la pantalla y lo que haya arriba (p. ej. la invitación del check-in). Se recalcula al cambiar el tamaño de
  * la ventana o del contenido.
  */
-function useHeightToViewportBottom(ref: React.RefObject<HTMLElement | null>): number | undefined {
+function useHeightToViewportBottom(
+  ref: React.RefObject<HTMLElement | null>,
+): number | undefined {
   const [maxHeight, setMaxHeight] = useState<number>();
 
   useEffect(() => {
@@ -127,7 +156,12 @@ function useHeightToViewportBottom(ref: React.RefObject<HTMLElement | null>): nu
     if (!element) return;
     const update = () => {
       const top = element.getBoundingClientRect().top + window.scrollY;
-      setMaxHeight(Math.max(MIN_LIST_PX, Math.floor(window.innerHeight - top - BOTTOM_SPACE_PX)));
+      setMaxHeight(
+        Math.max(
+          MIN_LIST_PX,
+          Math.floor(window.innerHeight - top - BOTTOM_SPACE_PX),
+        ),
+      );
     };
     update();
     const observer = new ResizeObserver(update);
@@ -143,14 +177,13 @@ function useHeightToViewportBottom(ref: React.RefObject<HTMLElement | null>): nu
 }
 
 /** Desvanecido con desenfoque en el borde de arriba o de abajo de la lista; deja libre la barra de scroll. */
-function ScrollFade({ side, visible }: { side: "top" | "bottom"; visible: boolean }) {
+function ScrollFade({ visible }: { visible: boolean }) {
   return (
     <div
       aria-hidden
       className={cn(
-        // El mismo vidrio que se desvanece del calendario de Inicio (glass-edge-* en globals.css); deja libre la barra.
-        "pointer-events-none absolute inset-x-0 right-3 h-10 transition-opacity duration-200",
-        side === "top" ? "glass-edge-down top-0" : "glass-edge-up bottom-0",
+        // El mismo vidrio que se desvanece del calendario de Inicio (glass-edge-up en globals.css), sobre todo (z-20).
+        "glass-edge-up pointer-events-none absolute inset-x-0 bottom-0 z-20 h-10 transition-opacity duration-200",
         visible ? "opacity-100" : "opacity-0",
       )}
     />
@@ -158,16 +191,25 @@ function ScrollFade({ side, visible }: { side: "top" | "bottom"; visible: boolea
 }
 
 /** Si la lista tiene más contenido arriba o abajo del que se ve (para mostrar los desvanecidos). */
-function useScrollEdges(ref: React.RefObject<HTMLElement | null>, itemCount: number, maxHeight: number | undefined) {
-  const [edges, setEdges] = useState({ canScrollUp: false, canScrollDown: false });
+function useScrollEdges(
+  ref: React.RefObject<HTMLElement | null>,
+  itemCount: number,
+  maxHeight: number | undefined,
+) {
+  const [edges, setEdges] = useState({
+    canScrollUp: false,
+    canScrollDown: false,
+  });
 
   const measure = useCallback(() => {
     const element = ref.current;
     if (!element) return;
     const canScrollUp = element.scrollTop > 1;
-    const canScrollDown = element.scrollTop + element.clientHeight < element.scrollHeight - 1;
+    const canScrollDown =
+      element.scrollTop + element.clientHeight < element.scrollHeight - 1;
     setEdges((previous) =>
-      previous.canScrollUp === canScrollUp && previous.canScrollDown === canScrollDown
+      previous.canScrollUp === canScrollUp &&
+      previous.canScrollDown === canScrollDown
         ? previous
         : { canScrollUp, canScrollDown },
     );

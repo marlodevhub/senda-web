@@ -79,9 +79,9 @@
   --color-celeste-strong: var(--celeste-strong);
 
   /* escala de radios: cada tamaño tiene un trabajo fijo, no es rounded-lg genérico */
-  --radius-sm: 0.75rem;   /* 12px — chips, etiquetas */
-  --radius-md: 1.25rem;   /* 20px — botones, inputs */
-  --radius-lg: 1.75rem;   /* 28px — tarjetas, pantallas */
+  --radius-sm: 0.75rem; /* 12px — chips, etiquetas */
+  --radius-md: 1.25rem; /* 20px — botones, inputs */
+  --radius-lg: 1.75rem; /* 28px — tarjetas, pantallas */
   --radius-xl: 1.75rem;
   --radius-2xl: 2rem;
   --radius-3xl: 2rem;
@@ -90,34 +90,34 @@
 
 :root {
   /* Categorías de las frases (D1 Errores, D2 Valoración, D3 Exigencia), mujer y Otro, claro: tono, fondo y texto. */
-  --dim1: #9F80B8;
-  --dim1-tint: #EFE6F3;
-  --dim1-ink: #5A3E6E;
-  --dim1-mark: #DCC6EC;
-  --dim2: #8580C2;
-  --dim2-tint: #E7E6F5;
-  --dim2-ink: #43407A;
-  --dim2-mark: #CFCBF0;
-  --dim3: #6F60AB;
-  --dim3-tint: #E2DCF1;
-  --dim3-ink: #3F3270;
-  --dim3-mark: #C8BDEB;
+  --dim1: #9f80b8;
+  --dim1-tint: #efe6f3;
+  --dim1-ink: #5a3e6e;
+  --dim1-mark: #dcc6ec;
+  --dim2: #8580c2;
+  --dim2-tint: #e7e6f5;
+  --dim2-ink: #43407a;
+  --dim2-mark: #cfcbf0;
+  --dim3: #6f60ab;
+  --dim3-tint: #e2dcf1;
+  --dim3-ink: #3f3270;
+  --dim3-mark: #c8bdeb;
   /* Tarjeta "Tu senda" de Inicio (JourneyBanner): degradado, hojas y etiquetas del tema; texto blanco AA. */
-  --banner-from: #B8436A;
-  --banner-to: #7C2747;
-  --banner-leaf-a: #E68CA8;
-  --banner-leaf-b: #F7C6D4;
-  --banner-chip: #FFFFFF;
-  --banner-chip-ink: #7C2747;
-  --banner-chip-soft: #F9D3DF;
-  --banner-chip-soft-ink: #6B1F3C;
-  --paper: #F2F4EA;
-  --paper-raised: #FFFFFF;
+  --banner-from: #b8436a;
+  --banner-to: #7c2747;
+  --banner-leaf-a: #e68ca8;
+  --banner-leaf-b: #f7c6d4;
+  --banner-chip: #ffffff;
+  --banner-chip-ink: #7c2747;
+  --banner-chip-soft: #f9d3df;
+  --banner-chip-soft-ink: #6b1f3c;
+  --paper: #f2f4ea;
+  --paper-raised: #ffffff;
   /* Relleno suave (días pasados, campos, tarjetas grises): rosa grisáceo, acorde al acento rosado. */
-  --paper-sunken: #EEE6E7;
-  --ink: #2B2430;
-  --ink-soft: #6B5F6E;
-  --line: #DCDFCF;
+  --paper-sunken: #eee6e7;
+  --ink: #2b2430;
+  --ink-soft: #6b5f6e;
+  --line: #dcdfcf;
 
   --background: var(--paper);
   --foreground: var(--ink);
@@ -126,51 +126,51 @@
   --popover: var(--paper-raised);
   --popover-foreground: var(--ink);
 
-  --bloom: #E8738A;
-  --bloom-ink: #7A2E3C;
-  --bloom-tint: #FBE4E8;
-  --root: #C77B4D;
-  --root-ink: #6B3A1C;
-  --root-tint: #F6E3D3;
-  --flow: #6E71AA;
-  --flow-ink: #34355C;
-  --flow-tint: #E4E4F3;
-  --sprout: #A6DB92;
-  --sprout-ink: #33452E;
-  --sprout-tint: #E4EBDD;
+  --bloom: #e8738a;
+  --bloom-ink: #7a2e3c;
+  --bloom-tint: #fbe4e8;
+  --root: #c77b4d;
+  --root-ink: #6b3a1c;
+  --root-tint: #f6e3d3;
+  --flow: #6e71aa;
+  --flow-ink: #34355c;
+  --flow-tint: #e4e4f3;
+  --sprout: #a6db92;
+  --sprout-ink: #33452e;
+  --sprout-tint: #e4ebdd;
   /* Texto sobre el verde lleno (día con registro, respuesta elegida): oscuro, 11:1. */
-  --sprout-foreground: #16240F;
+  --sprout-foreground: #16240f;
   /*
    * Fondo suave de las frases por reescribir ("strong" al pasar el mouse) y de "N por reescribir". Sigue al tema:
    * rosado con Mujer u Otro, azul (celeste) con Hombre ("ocean").
    */
-  --celeste: #FBEAEE;
-  --celeste-strong: #F6DAE1;
+  --celeste: #fbeaee;
+  --celeste-strong: #f6dae1;
   /* Día en que solo marcó su ánimo (check-in, sin registro): amarillo, con texto oscuro encima. */
-  --checkin: #F6D978;
-  --checkin-foreground: #3A2C05;
+  --checkin: #f6d978;
+  --checkin-foreground: #3a2c05;
   /* Píldora activa de Progreso: los verdes del pasto del jardín. */
   --leaf-from: #dcf5e1;
   --leaf-to: #b5e5c0;
   --leaf-ink: #1e4d33;
   /* Degradado naranja de las pestañas de Historial. */
-  --ember-from: #FFE1C4;
-  --ember-to: #FFBE86;
-  --ember-ink: #5A2C0E;
+  --ember-from: #ffe1c4;
+  --ember-to: #ffbe86;
+  --ember-ink: #5a2c0e;
   /* Preguntas del Diario: el rojo del botón principal (4,8:1 sobre la hoja blanca). */
-  --prompt-red: #C4466A;
-  --prompt-red-foreground: #FFFFFF;
+  --prompt-red: #c4466a;
+  --prompt-red-foreground: #ffffff;
 
   --primary: var(--bloom);
   /* WCAG 2.1 AA (RS-TR): el blanco sobre bloom da 2,9:1; este vino oscuro da 5,7:1 (igual que en modo oscuro). */
-  --primary-foreground: #2B1A20;
+  --primary-foreground: #2b1a20;
   --secondary: var(--flow-tint);
   --secondary-foreground: var(--flow-ink);
   --muted: var(--paper-sunken);
   --muted-foreground: var(--ink-soft);
   --accent: var(--sprout-tint);
   --accent-foreground: var(--sprout-ink);
-  --destructive: #C84A3C;
+  --destructive: #c84a3c;
   --border: var(--line);
   --input: var(--line);
   --ring: var(--bloom);
@@ -181,63 +181,68 @@
   --chart-4: var(--sprout);
   --chart-5: var(--ink-soft);
   /* Serie principal de "Mis datos": el acento del tema en pastel (rosa; azul con Hombre). Nunca rojo. */
-  --chart-accent: #EFA7B8;
+  --chart-accent: #efa7b8;
 
   --radius: 1.25rem;
 
   --sidebar: var(--paper-sunken);
   --sidebar-foreground: var(--ink);
   --sidebar-primary: var(--flow);
-  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-primary-foreground: #ffffff;
   --sidebar-accent: var(--paper-raised);
   --sidebar-accent-foreground: var(--ink);
   --sidebar-border: var(--line);
   --sidebar-ring: var(--flow);
 
   --grad-dawn: linear-gradient(135deg, var(--bloom) 0%, var(--root) 100%);
-  --grad-dawn-soft: linear-gradient(135deg, var(--bloom-tint) 0%, var(--root-tint) 100%);
+  --grad-dawn-soft: linear-gradient(
+    135deg,
+    var(--bloom-tint) 0%,
+    var(--root-tint) 100%
+  );
   /* Botón principal: más profundo que --grad-dawn para que la letra blanca pase AA (≥ 4,7:1 en todo el degradado). */
-  --grad-hero: linear-gradient(135deg, #C4466A 0%, #B4593A 100%);
+  --grad-hero: linear-gradient(135deg, #c4466a 0%, #b4593a 100%);
   --grad-dusk: linear-gradient(135deg, var(--flow) 0%, var(--bloom) 100%);
 
-  --shadow-card: 0 1px 2px rgba(43, 36, 48, .05), 0 16px 32px -14px rgba(43, 36, 48, .16);
-  --shadow-bloom: 0 10px 24px -8px rgba(232, 115, 138, .55);
-  --shadow-flow: 0 10px 24px -8px rgba(110, 113, 170, .45);
-  --shadow-sprout: 0 10px 24px -8px rgba(166, 219, 146, .45);
+  --shadow-card:
+    0 1px 2px rgba(43, 36, 48, 0.05), 0 16px 32px -14px rgba(43, 36, 48, 0.16);
+  --shadow-bloom: 0 10px 24px -8px rgba(232, 115, 138, 0.55);
+  --shadow-flow: 0 10px 24px -8px rgba(110, 113, 170, 0.45);
+  --shadow-sprout: 0 10px 24px -8px rgba(166, 219, 146, 0.45);
 
   color-scheme: light;
 }
 
 .dark {
   /* Categorías de las frases (D1 Errores, D2 Valoración, D3 Exigencia), mujer y Otro, oscuro: tono, fondo y texto. */
-  --dim1: #D2BDE0;
-  --dim1-tint: #33283B;
-  --dim1-ink: #EADFF1;
-  --dim1-mark: #5A3F70;
-  --dim2: #BDB8E6;
-  --dim2-tint: #2B2A42;
-  --dim2-ink: #E2E1F6;
-  --dim2-mark: #48447E;
-  --dim3: #A99CD6;
-  --dim3-tint: #2C2540;
-  --dim3-ink: #DDD6F2;
-  --dim3-mark: #4A3D80;
+  --dim1: #d2bde0;
+  --dim1-tint: #33283b;
+  --dim1-ink: #eadff1;
+  --dim1-mark: #5a3f70;
+  --dim2: #bdb8e6;
+  --dim2-tint: #2b2a42;
+  --dim2-ink: #e2e1f6;
+  --dim2-mark: #48447e;
+  --dim3: #a99cd6;
+  --dim3-tint: #2c2540;
+  --dim3-ink: #ddd6f2;
+  --dim3-mark: #4a3d80;
   /* Tarjeta "Tu senda" de Inicio (JourneyBanner): degradado, hojas y etiquetas del tema; texto blanco AA. */
-  --banner-from: #5A2338;
-  --banner-to: #3A1626;
-  --banner-leaf-a: #B5577A;
-  --banner-leaf-b: #E39AB2;
-  --banner-chip: #FDE3E8;
-  --banner-chip-ink: #4A1A2C;
-  --banner-chip-soft: #E9A6BB;
-  --banner-chip-soft-ink: #3A1626;
-  --paper: #211C2B;
-  --paper-raised: #2B2436;
+  --banner-from: #5a2338;
+  --banner-to: #3a1626;
+  --banner-leaf-a: #b5577a;
+  --banner-leaf-b: #e39ab2;
+  --banner-chip: #fde3e8;
+  --banner-chip-ink: #4a1a2c;
+  --banner-chip-soft: #e9a6bb;
+  --banner-chip-soft-ink: #3a1626;
+  --paper: #211c2b;
+  --paper-raised: #2b2436;
   /* Relleno suave en modo oscuro: un poco más claro que las tarjetas, no un hueco negro. */
-  --paper-sunken: #352D42;
-  --ink: #F3EEE9;
-  --ink-soft: #C9BFC6;
-  --line: #3B3248;
+  --paper-sunken: #352d42;
+  --ink: #f3eee9;
+  --ink-soft: #c9bfc6;
+  --line: #3b3248;
 
   --background: var(--paper);
   --foreground: var(--ink);
@@ -246,39 +251,39 @@
   --popover: var(--paper-raised);
   --popover-foreground: var(--ink);
 
-  --bloom: #F0A0AF;
-  --bloom-ink: #FDE3E8;
-  --bloom-tint: #3E2530;
-  --root: #E3A06C;
-  --root-ink: #FBE8D4;
-  --root-tint: #3A2A1D;
-  --flow: #A3A6E0;
-  --flow-ink: #E7E7F7;
+  --bloom: #f0a0af;
+  --bloom-ink: #fde3e8;
+  --bloom-tint: #3e2530;
+  --root: #e3a06c;
+  --root-ink: #fbe8d4;
+  --root-tint: #3a2a1d;
+  --flow: #a3a6e0;
+  --flow-ink: #e7e7f7;
   --flow-tint: #272645;
-  --sprout-ink: #E4EEDD;
+  --sprout-ink: #e4eedd;
   --sprout-tint: #223023;
-  --celeste: #3A2633;
-  --celeste-strong: #47303F;
-  --checkin: #E8C95E;
+  --celeste: #3a2633;
+  --celeste-strong: #47303f;
+  --checkin: #e8c95e;
   /* Pestañas en modo oscuro: pastel claro con texto oscuro (verde de Progreso, naranja de Historial). */
-  --leaf-from: #C3EBCB;
-  --leaf-to: #9FD9AF;
+  --leaf-from: #c3ebcb;
+  --leaf-to: #9fd9af;
   --leaf-ink: #143322;
-  --ember-from: #FAD3B0;
-  --ember-to: #F5B98C;
-  --ember-ink: #3A1A06;
-  --prompt-red: #F0A0AF;
-  --prompt-red-foreground: #2B1A20;
+  --ember-from: #fad3b0;
+  --ember-to: #f5b98c;
+  --ember-ink: #3a1a06;
+  --prompt-red: #f0a0af;
+  --prompt-red-foreground: #2b1a20;
 
   --primary: var(--bloom);
-  --primary-foreground: #2B1A20;
+  --primary-foreground: #2b1a20;
   --secondary: var(--flow-tint);
   --secondary-foreground: var(--flow-ink);
   --muted: var(--paper-sunken);
   --muted-foreground: var(--ink-soft);
   --accent: var(--sprout-tint);
   --accent-foreground: var(--sprout-ink);
-  --destructive: #E98B83;
+  --destructive: #e98b83;
   --border: var(--line);
   --input: var(--line);
   --ring: var(--bloom);
@@ -288,25 +293,30 @@
   --chart-3: var(--flow);
   --chart-4: var(--sprout);
   --chart-5: var(--ink-soft);
-  --chart-accent: #E9A2B4;
+  --chart-accent: #e9a2b4;
 
   --sidebar: var(--paper-sunken);
   --sidebar-foreground: var(--ink);
   --sidebar-primary: var(--flow);
-  --sidebar-primary-foreground: #14132A;
+  --sidebar-primary-foreground: #14132a;
   --sidebar-accent: var(--paper-raised);
   --sidebar-accent-foreground: var(--ink);
   --sidebar-border: var(--line);
   --sidebar-ring: var(--flow);
 
   --grad-dawn: linear-gradient(135deg, var(--bloom) 0%, var(--root) 100%);
-  --grad-dawn-soft: linear-gradient(135deg, var(--bloom-tint) 0%, var(--root-tint) 100%);
+  --grad-dawn-soft: linear-gradient(
+    135deg,
+    var(--bloom-tint) 0%,
+    var(--root-tint) 100%
+  );
   --grad-dusk: linear-gradient(135deg, var(--flow) 0%, var(--bloom) 100%);
 
-  --shadow-card: 0 1px 2px rgba(0, 0, 0, .3), 0 20px 40px -16px rgba(0, 0, 0, .55);
-  --shadow-bloom: 0 10px 26px -8px rgba(240, 160, 175, .35);
-  --shadow-flow: 0 10px 26px -8px rgba(163, 166, 224, .3);
-  --shadow-sprout: 0 10px 26px -8px rgba(166, 219, 146, .3);
+  --shadow-card:
+    0 1px 2px rgba(0, 0, 0, 0.3), 0 20px 40px -16px rgba(0, 0, 0, 0.55);
+  --shadow-bloom: 0 10px 26px -8px rgba(240, 160, 175, 0.35);
+  --shadow-flow: 0 10px 26px -8px rgba(163, 166, 224, 0.3);
+  --shadow-sprout: 0 10px 26px -8px rgba(166, 219, 146, 0.3);
 
   color-scheme: dark;
 }
@@ -319,84 +329,84 @@
 [data-palette="ocean"] {
   /* Categorías de las frases (D1 Errores, D2 Valoración, D3 Exigencia), hombre, claro: tono, fondo, texto y
      resaltador. Tres tonos bien distintos (verde azulado, azul y violeta) para reconocerlas de un vistazo. */
-  --dim1: #1F9A94;
-  --dim1-tint: #D3F1EE;
-  --dim1-ink: #0F5551;
-  --dim1-mark: #9FE3DC;
-  --dim2: #3B7FD9;
-  --dim2-tint: #DCE8FA;
-  --dim2-ink: #1C4277;
-  --dim2-mark: #B5D1F7;
-  --dim3: #7A6CD0;
-  --dim3-tint: #E6E3F8;
-  --dim3-ink: #3E3480;
-  --dim3-mark: #CAC3F3;
+  --dim1: #1f9a94;
+  --dim1-tint: #d3f1ee;
+  --dim1-ink: #0f5551;
+  --dim1-mark: #9fe3dc;
+  --dim2: #3b7fd9;
+  --dim2-tint: #dce8fa;
+  --dim2-ink: #1c4277;
+  --dim2-mark: #b5d1f7;
+  --dim3: #7a6cd0;
+  --dim3-tint: #e6e3f8;
+  --dim3-ink: #3e3480;
+  --dim3-mark: #cac3f3;
   /* Tarjeta "Tu senda" de Inicio (JourneyBanner): degradado, hojas y etiquetas del tema; texto blanco AA. */
-  --banner-from: #1E66D0;
-  --banner-to: #183F72;
-  --banner-leaf-a: #7FB0E6;
-  --banner-leaf-b: #C7DDF6;
-  --banner-chip: #FFFFFF;
-  --banner-chip-ink: #183F72;
-  --banner-chip-soft: #D3E5F8;
-  --banner-chip-soft-ink: #14355F;
-  --chart-accent: #8DB2E2;
-  --celeste: #E4F1FB;
-  --celeste-strong: #D2E7F8;
+  --banner-from: #2f68bf;
+  --banner-to: #183f72;
+  --banner-leaf-a: #7fb0e6;
+  --banner-leaf-b: #c7ddf6;
+  --banner-chip: #ffffff;
+  --banner-chip-ink: #183f72;
+  --banner-chip-soft: #d3e5f8;
+  --banner-chip-soft-ink: #14355f;
+  --chart-accent: #8db2e2;
+  --celeste: #e4f1fb;
+  --celeste-strong: #d2e7f8;
   /* Fondo con un toque azulado en lugar del verdoso (solo en modo claro). */
-  --paper: #EAEDF4;
-  --paper-sunken: #DFE4EE;
-  --bloom: #4D8FE6;
-  --bloom-ink: #1D3A63;
-  --bloom-tint: #E0EBF8;
-  --prompt-red: #1E66D0;
-  --prompt-red-foreground: #FFFFFF;
-  --primary-foreground: #0F2340;
-  --grad-hero: linear-gradient(135deg, #1E66D0 0%, #11798A 100%);
-  --grad-dawn: linear-gradient(135deg, #6496D2 0%, #3A9AA6 100%);
-  --grad-dawn-soft: linear-gradient(135deg, #E0EBF8 0%, #DDF0F1 100%);
-  --shadow-bloom: 0 10px 24px -8px rgba(100, 150, 210, .5);
+  --paper: #eaedf4;
+  --paper-sunken: #dfe4ee;
+  --bloom: #5e8fd0;
+  --bloom-ink: #1d3a63;
+  --bloom-tint: #e0ebf8;
+  --prompt-red: #2f68bf;
+  --prompt-red-foreground: #ffffff;
+  --primary-foreground: #0f2340;
+  --grad-hero: linear-gradient(135deg, #2f68bf 0%, #1f7384 100%);
+  --grad-dawn: linear-gradient(135deg, #6496d2 0%, #3a9aa6 100%);
+  --grad-dawn-soft: linear-gradient(135deg, #e0ebf8 0%, #ddf0f1 100%);
+  --shadow-bloom: 0 10px 24px -10px rgba(47, 104, 191, 0.35);
 }
 
 .dark[data-palette="ocean"] {
   /* Categorías de las frases (D1 Errores, D2 Valoración, D3 Exigencia), hombre, oscuro: tono, fondo y texto. */
-  --dim1: #5CCBC3;
-  --dim1-tint: #17332F;
-  --dim1-ink: #D2F2EE;
-  --dim1-mark: #1E6B66;
-  --dim2: #7FB0F0;
-  --dim2-tint: #1A2840;
-  --dim2-ink: #DCE8FB;
-  --dim2-mark: #2A5590;
-  --dim3: #A79CEB;
+  --dim1: #5ccbc3;
+  --dim1-tint: #17332f;
+  --dim1-ink: #d2f2ee;
+  --dim1-mark: #1e6b66;
+  --dim2: #7fb0f0;
+  --dim2-tint: #1a2840;
+  --dim2-ink: #dce8fb;
+  --dim2-mark: #2a5590;
+  --dim3: #a79ceb;
   --dim3-tint: #262341;
-  --dim3-ink: #E3DFF9;
-  --dim3-mark: #4B4295;
+  --dim3-ink: #e3dff9;
+  --dim3-mark: #4b4295;
   /* Tarjeta "Tu senda" de Inicio (JourneyBanner): degradado, hojas y etiquetas del tema; texto blanco AA. */
-  --banner-from: #1E3A66;
-  --banner-to: #12243F;
-  --banner-leaf-a: #4F7FBF;
-  --banner-leaf-b: #9CC2F5;
-  --banner-chip: #DCE9FA;
-  --banner-chip-ink: #12243F;
-  --banner-chip-soft: #9CC2F5;
-  --banner-chip-soft-ink: #0F1B2E;
-  --chart-accent: #93B9EA;
-  --celeste: #262F48;
-  --celeste-strong: #2F3A57;
+  --banner-from: #1e3a66;
+  --banner-to: #12243f;
+  --banner-leaf-a: #4f7fbf;
+  --banner-leaf-b: #9cc2f5;
+  --banner-chip: #dce9fa;
+  --banner-chip-ink: #12243f;
+  --banner-chip-soft: #9cc2f5;
+  --banner-chip-soft-ink: #0f1b2e;
+  --chart-accent: #93b9ea;
+  --celeste: #262f48;
+  --celeste-strong: #2f3a57;
   /* El fondo de "ocean" claro pisaría el oscuro (misma especificidad que .dark): se repite el de .dark. */
-  --paper: #211C2B;
+  --paper: #211c2b;
   /* Relleno suave en modo oscuro: un poco más claro que las tarjetas, no un hueco negro. */
-  --paper-sunken: #352D42;
-  --bloom: #8FB8EC;
-  --bloom-ink: #DCE9FA;
-  --bloom-tint: #1E2B42;
-  --prompt-red: #9CC2F5;
-  --prompt-red-foreground: #0F1B2E;
-  --primary-foreground: #0F1B2E;
-  --grad-dawn: linear-gradient(135deg, #8FB8EC 0%, #7CC3CB 100%);
-  --grad-dawn-soft: linear-gradient(135deg, #1E2B42 0%, #1B3236 100%);
-  --shadow-bloom: 0 10px 26px -8px rgba(143, 184, 236, .35);
+  --paper-sunken: #352d42;
+  --bloom: #8fb8ec;
+  --bloom-ink: #dce9fa;
+  --bloom-tint: #1e2b42;
+  --prompt-red: #9cc2f5;
+  --prompt-red-foreground: #0f1b2e;
+  --primary-foreground: #0f1b2e;
+  --grad-dawn: linear-gradient(135deg, #8fb8ec 0%, #7cc3cb 100%);
+  --grad-dawn-soft: linear-gradient(135deg, #1e2b42 0%, #1b3236 100%);
+  --shadow-bloom: 0 10px 26px -8px rgba(143, 184, 236, 0.35);
 }
 
 @layer base {
@@ -412,12 +422,22 @@
 }
 
 @layer utilities {
-  .shadow-card { box-shadow: var(--shadow-card); }
-  .shadow-bloom { box-shadow: var(--shadow-bloom); }
-  .shadow-flow { box-shadow: var(--shadow-flow); }
-  .shadow-sprout { box-shadow: var(--shadow-sprout); }
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+  .shadow-bloom {
+    box-shadow: var(--shadow-bloom);
+  }
+  .shadow-flow {
+    box-shadow: var(--shadow-flow);
+  }
+  .shadow-sprout {
+    box-shadow: var(--shadow-sprout);
+  }
 
-  .bg-grad-dawn-soft { background-image: var(--grad-dawn-soft); }
+  .bg-grad-dawn-soft {
+    background-image: var(--grad-dawn-soft);
+  }
 
   /* botón con borde degradado — mask trick, sin pseudo-duplicar el componente */
   .border-grad {
@@ -439,9 +459,14 @@
     background-image: var(--grad-hero);
     background-size: 160% 160%;
     background-position: 0% 50%;
-    transition: background-position .5s ease, box-shadow .25s ease, transform .18s cubic-bezier(.34,1.56,.64,1);
+    transition:
+      background-position 0.5s ease,
+      box-shadow 0.25s ease,
+      transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
-  .btn-hero:hover { background-position: 100% 50%; }
+  .btn-hero:hover {
+    background-position: 100% 50%;
+  }
 }
 
 /*
@@ -474,7 +499,11 @@
  * - `glass-edge-down` / `glass-edge-up`: una franja suelta que se desvanece (los bordes de una lista con scroll).
  */
 :root {
-  --glass-bg: color-mix(in oklab, var(--card) var(--glass-alpha, 70%), transparent);
+  --glass-bg: color-mix(
+    in oklab,
+    var(--card) var(--glass-alpha, 70%),
+    transparent
+  );
   --glass-filter: blur(16px) saturate(160%);
 }
 /* Accesibilidad: con "Reducir transparencia" del sistema, vidrio sólido. */
@@ -587,7 +616,11 @@
 
 /* Solo la capa del cielo pinta el fondo; .garden-tokens comparte los colores sin el cielo. */
 .garden-scene {
-  background: linear-gradient(to bottom, var(--garden-sky-top), var(--garden-sky-bottom) 55%);
+  background: linear-gradient(
+    to bottom,
+    var(--garden-sky-top),
+    var(--garden-sky-bottom) 55%
+  );
 }
 
 .dark .garden-scene,
@@ -609,7 +642,6 @@
   --garden-canopy-root: #3f8571;
   --garden-canopy-bloom: #4c9a5c;
 }
-
 
 @media (prefers-reduced-motion: no-preference) {
   .garden-petal {
@@ -665,7 +697,7 @@
     animation: emo-blink 4.5s infinite;
   }
   .mood-pop {
-    animation: mood-pop 0.6s cubic-bezier(.2, .9, .3, 1.2);
+    animation: mood-pop 0.6s cubic-bezier(0.2, 0.9, 0.3, 1.2);
   }
   .mood-bubble {
     animation: mood-bubble 1.5s linear forwards;
@@ -694,17 +726,45 @@
 }
 
 @keyframes liquid-rise {
-  0% { transform: translateY(-26px) scale(0.08, 0.12); border-radius: 50%; animation-timing-function: cubic-bezier(.2, .8, .3, 1); }
-  28% { transform: translateY(0) scale(0.3, 1.08); border-radius: 45% 45% 40% 40%; animation-timing-function: cubic-bezier(.3, .7, .3, 1); }
-  48% { transform: scale(1.06, 0.9); border-radius: 30px 22px 28px 20px; animation-timing-function: ease-in-out; }
-  64% { transform: scale(0.97, 1.05); border-radius: 18px 26px 20px 24px; animation-timing-function: ease-in-out; }
-  80% { transform: scale(1.015, 0.985); }
-  100% { transform: none; }
+  0% {
+    transform: translateY(-26px) scale(0.08, 0.12);
+    border-radius: 50%;
+    animation-timing-function: cubic-bezier(0.2, 0.8, 0.3, 1);
+  }
+  28% {
+    transform: translateY(0) scale(0.3, 1.08);
+    border-radius: 45% 45% 40% 40%;
+    animation-timing-function: cubic-bezier(0.3, 0.7, 0.3, 1);
+  }
+  48% {
+    transform: scale(1.06, 0.9);
+    border-radius: 30px 22px 28px 20px;
+    animation-timing-function: ease-in-out;
+  }
+  64% {
+    transform: scale(0.97, 1.05);
+    border-radius: 18px 26px 20px 24px;
+    animation-timing-function: ease-in-out;
+  }
+  80% {
+    transform: scale(1.015, 0.985);
+  }
+  100% {
+    transform: none;
+  }
 }
 
 @keyframes liquid-text {
-  0%, 50% { opacity: 0; transform: translateY(6px); }
-  85%, 100% { opacity: 1; transform: none; }
+  0%,
+  50% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  85%,
+  100% {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 /* Con menos movimiento la burbuja no sube: solo aparece y se desvanece. */
@@ -724,17 +784,42 @@
  * después flota mientras se desvanece. Cada tramo lleva su propia curva.
  */
 @keyframes mood-bubble {
-  0% { opacity: 0; transform: translateY(20px) scale(0.4); animation-timing-function: cubic-bezier(.05, .9, .25, 1); }
-  20% { opacity: 1; transform: translateY(-16px) scale(1.1); animation-timing-function: ease-in-out; }
-  30% { transform: translateY(-8px) scale(0.97); animation-timing-function: ease-out; }
-  38% { transform: translateY(-10px) scale(1); animation-timing-function: ease-in; }
-  75% { opacity: 1; transform: translateY(-22px); }
-  100% { opacity: 0; transform: translateY(-34px); }
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.4);
+    animation-timing-function: cubic-bezier(0.05, 0.9, 0.25, 1);
+  }
+  20% {
+    opacity: 1;
+    transform: translateY(-16px) scale(1.1);
+    animation-timing-function: ease-in-out;
+  }
+  30% {
+    transform: translateY(-8px) scale(0.97);
+    animation-timing-function: ease-out;
+  }
+  38% {
+    transform: translateY(-10px) scale(1);
+    animation-timing-function: ease-in;
+  }
+  75% {
+    opacity: 1;
+    transform: translateY(-22px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-34px);
+  }
 }
 
 @keyframes mood-bubble-fade {
-  0%, 70% { opacity: 1; }
-  100% { opacity: 0; }
+  0%,
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 
 .mood-blink {
@@ -743,40 +828,81 @@
 }
 
 @keyframes mood-droop {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(4%) rotate(-4deg); }
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(4%) rotate(-4deg);
+  }
 }
 
 @keyframes mood-wobble {
-  0%, 100% { transform: rotate(0deg); }
-  25% { transform: rotate(-5deg); }
-  75% { transform: rotate(5deg); }
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-5deg);
+  }
+  75% {
+    transform: rotate(5deg);
+  }
 }
 
 @keyframes mood-float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-4%); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4%);
+  }
 }
 
 @keyframes mood-bob {
-  0%, 100% { transform: translateY(0) scale(1); }
-  50% { transform: translateY(-8%) scale(1.03); }
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-8%) scale(1.03);
+  }
 }
 
 @keyframes mood-bounce {
-  0%, 100% { transform: translateY(0) scale(1, 1); }
-  30% { transform: translateY(-14%) scale(0.97, 1.04); }
-  55% { transform: translateY(0) scale(1.06, 0.94); }
-  70% { transform: translateY(-4%) scale(1, 1); }
+  0%,
+  100% {
+    transform: translateY(0) scale(1, 1);
+  }
+  30% {
+    transform: translateY(-14%) scale(0.97, 1.04);
+  }
+  55% {
+    transform: translateY(0) scale(1.06, 0.94);
+  }
+  70% {
+    transform: translateY(-4%) scale(1, 1);
+  }
 }
 
 /* Al elegirla, la carita hace zoom: crece de golpe (y dispara la burbuja), rebota y se asienta. */
 @keyframes mood-pop {
-  0% { transform: scale(1); }
-  30% { transform: scale(1.45); }
-  55% { transform: scale(0.95); }
-  75% { transform: scale(1.08); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(1.45);
+  }
+  55% {
+    transform: scale(0.95);
+  }
+  75% {
+    transform: scale(1.08);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 /* Personajes de emociones (pantallas de entrada y tutorial). */
@@ -791,37 +917,78 @@
 }
 
 @keyframes emo-breathe {
-  0%, 100% { transform: scale(1, 1); }
-  50% { transform: scale(1.04, 0.97) translateY(2%); }
+  0%,
+  100% {
+    transform: scale(1, 1);
+  }
+  50% {
+    transform: scale(1.04, 0.97) translateY(2%);
+  }
 }
 
 @keyframes emo-bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-7%) rotate(-2deg); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-7%) rotate(-2deg);
+  }
 }
 
 @keyframes emo-spin {
-  0%, 100% { transform: rotate(0deg); }
-  50% { transform: rotate(18deg) translateY(-4%); }
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(18deg) translateY(-4%);
+  }
 }
 
 @keyframes emo-shiver {
-  0%, 70%, 100% { transform: translateX(0); }
-  74% { transform: translateX(-2%); }
-  78% { transform: translateX(2%); }
-  82% { transform: translateX(-2%); }
-  86% { transform: translateX(1%); }
+  0%,
+  70%,
+  100% {
+    transform: translateX(0);
+  }
+  74% {
+    transform: translateX(-2%);
+  }
+  78% {
+    transform: translateX(2%);
+  }
+  82% {
+    transform: translateX(-2%);
+  }
+  86% {
+    transform: translateX(1%);
+  }
 }
 
 @keyframes emo-blink {
-  0%, 92%, 100% { transform: scaleY(1); }
-  95% { transform: scaleY(0.1); }
+  0%,
+  92%,
+  100% {
+    transform: scaleY(1);
+  }
+  95% {
+    transform: scaleY(0.1);
+  }
 }
 
 @keyframes emo-tear {
-  0% { transform: translateY(0); opacity: 0; }
-  20% { opacity: 1; }
-  100% { transform: translateY(14px); opacity: 0; }
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(14px);
+    opacity: 0;
+  }
 }
 
 .garden-petal {
@@ -829,31 +996,61 @@
 }
 
 @keyframes garden-petal-fall {
-  0% { transform: translate(0, -12px) rotate(0deg); opacity: 0; }
-  10% { opacity: 0.85; }
-  85% { opacity: 0.85; }
-  100% { transform: translate(-36px, 270px) rotate(320deg); opacity: 0; }
+  0% {
+    transform: translate(0, -12px) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.85;
+  }
+  85% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translate(-36px, 270px) rotate(320deg);
+    opacity: 0;
+  }
 }
 
 @keyframes garden-drop {
-  0% { transform: translateY(-4px); opacity: 0; }
-  30% { opacity: 1; }
-  100% { transform: translateY(10px); opacity: 0; }
+  0% {
+    transform: translateY(-4px);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(10px);
+    opacity: 0;
+  }
 }
 
 @keyframes garden-sway {
-  from { transform: rotate(-3deg); }
-  to { transform: rotate(3deg); }
+  from {
+    transform: rotate(-3deg);
+  }
+  to {
+    transform: rotate(3deg);
+  }
 }
 
 @keyframes auth-float {
-  from { transform: translateY(0); }
-  to { transform: translateY(-10px); }
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-10px);
+  }
 }
 
 @keyframes garden-flutter {
-  from { transform: scaleX(1); }
-  to { transform: scaleX(0.55); }
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0.55);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -902,7 +1099,11 @@
   background-attachment: fixed;
 }
 .student-shell:has(.garden-scene) .screen-top-backdrop {
-  background-image: linear-gradient(to bottom, var(--garden-sky-top), var(--garden-sky-bottom) 55%);
+  background-image: linear-gradient(
+    to bottom,
+    var(--garden-sky-top),
+    var(--garden-sky-bottom) 55%
+  );
 }
 .student-shell:has(.journal-sky) .screen-top-backdrop {
   background-image:
@@ -927,8 +1128,12 @@
   .welcome-desk-in > * {
     animation: welcome-desk-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
-  .welcome-desk-in > :nth-child(2) { animation-delay: 0.08s; }
-  .welcome-desk-in > :nth-child(3) { animation-delay: 0.16s; }
+  .welcome-desk-in > :nth-child(2) {
+    animation-delay: 0.08s;
+  }
+  .welcome-desk-in > :nth-child(3) {
+    animation-delay: 0.16s;
+  }
   .welcome-blob {
     animation: welcome-blob 14s ease-in-out infinite alternate;
   }
@@ -941,25 +1146,62 @@
   border-radius: 42% 58% 63% 37% / 41% 44% 56% 59%;
 }
 @keyframes welcome-art-in-next {
-  from { opacity: 0; transform: translateX(48px) scale(0.96); filter: blur(6px); }
-  to { opacity: 1; transform: none; filter: none; }
+  from {
+    opacity: 0;
+    transform: translateX(48px) scale(0.96);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
 }
 @keyframes welcome-art-in-prev {
-  from { opacity: 0; transform: translateX(-48px) scale(0.96); filter: blur(6px); }
-  to { opacity: 1; transform: none; filter: none; }
+  from {
+    opacity: 0;
+    transform: translateX(-48px) scale(0.96);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
 }
 @keyframes welcome-art-pop {
-  from { opacity: 0; transform: translateY(16px) scale(0.94); }
-  to { opacity: 1; transform: none; }
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 @keyframes welcome-desk-in {
-  from { opacity: 0; transform: translateY(16px); }
-  to { opacity: 1; transform: none; }
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 @keyframes welcome-blob {
-  0% { border-radius: 42% 58% 63% 37% / 41% 44% 56% 59%; transform: translate(0, 0) rotate(0deg); }
-  50% { border-radius: 58% 42% 38% 62% / 52% 61% 39% 48%; transform: translate(-20px, 16px) rotate(8deg); }
-  100% { border-radius: 37% 63% 51% 49% / 60% 37% 63% 40%; transform: translate(14px, -12px) rotate(-6deg); }
+  0% {
+    border-radius: 42% 58% 63% 37% / 41% 44% 56% 59%;
+    transform: translate(0, 0) rotate(0deg);
+  }
+  50% {
+    border-radius: 58% 42% 38% 62% / 52% 61% 39% 48%;
+    transform: translate(-20px, 16px) rotate(8deg);
+  }
+  100% {
+    border-radius: 37% 63% 51% 49% / 60% 37% 63% 40%;
+    transform: translate(14px, -12px) rotate(-6deg);
+  }
 }
 
 /*
@@ -984,7 +1226,8 @@
   }
   .tour-launch-reveal {
     clip-path: circle(0% at 50% 50%);
-    animation: tour-launch-reveal 0.75s cubic-bezier(0.65, 0, 0.35, 1) 2.15s both;
+    animation: tour-launch-reveal 0.75s cubic-bezier(0.65, 0, 0.35, 1) 2.15s
+      both;
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -993,15 +1236,35 @@
   }
 }
 @keyframes tour-launch-device {
-  from { opacity: 0; transform: translateY(28px) scale(0.92); filter: blur(4px); }
-  to { opacity: 1; transform: none; filter: none; }
+  from {
+    opacity: 0;
+    transform: translateY(28px) scale(0.92);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
 }
 @keyframes tour-launch-nav {
-  0%, 100% { background-color: transparent; color: #2b2430; transform: none; }
-  35%, 65% { background-color: var(--launch-accent); color: #fff; transform: scale(1.06); }
+  0%,
+  100% {
+    background-color: transparent;
+    color: #2b2430;
+    transform: none;
+  }
+  35%,
+  65% {
+    background-color: var(--launch-accent);
+    color: #fff;
+    transform: scale(1.06);
+  }
 }
 @keyframes tour-launch-reveal {
-  to { clip-path: circle(75% at 50% 50%); }
+  to {
+    clip-path: circle(75% at 50% 50%);
+  }
 }
 
 /*
@@ -1020,7 +1283,9 @@
   initial-value: #2f8550;
 }
 .welcome-backdrop {
-  transition: --wb-from 0.9s ease, --wb-to 0.9s ease;
+  transition:
+    --wb-from 0.9s ease,
+    --wb-to 0.9s ease;
 }
 .welcome-backdrop-sky {
   background: linear-gradient(
@@ -1076,12 +1341,20 @@
   }
 }
 @keyframes welcome-twinkle {
-  from { opacity: 0.25; }
-  to { opacity: 0.95; }
+  from {
+    opacity: 0.25;
+  }
+  to {
+    opacity: 0.95;
+  }
 }
 @keyframes welcome-drift {
-  from { transform: translateX(-3vw); }
-  to { transform: translateX(3vw); }
+  from {
+    transform: translateX(-3vw);
+  }
+  to {
+    transform: translateX(3vw);
+  }
 }
 /* En móvil la luna va con la ilustración (en su mismo lugar); la del paisaje solo en escritorio. */
 @media (max-width: 1023.98px) {
@@ -1092,7 +1365,13 @@
 .welcome-moon-inline {
   translate: -50% -50%;
   border-radius: 9999px;
-  background: radial-gradient(circle, #fff 0 52%, rgb(255 255 255 / 0.35) 53% 64%, rgb(255 255 255 / 0.15) 65% 80%, transparent 81%);
+  background: radial-gradient(
+    circle,
+    #fff 0 52%,
+    rgb(255 255 255 / 0.35) 53% 64%,
+    rgb(255 255 255 / 0.15) 65% 80%,
+    transparent 81%
+  );
   box-shadow: 0 0 90px 30px rgb(255 255 255 / 0.25);
 }
 /* La luna y sus halos en un solo degradado radial (sin capas desenfocadas que dejen bordes cuadrados). */
@@ -1110,7 +1389,9 @@
 }
 /* Parallax del paisaje de la bienvenida: cada capa se desliza a su velocidad y el paisaje que se va se desvanece. */
 .welcome-layer {
-  transition: transform 0.95s cubic-bezier(0.65, 0, 0.35, 1), opacity 0.7s ease;
+  transition:
+    transform 0.95s cubic-bezier(0.65, 0, 0.35, 1),
+    opacity 0.7s ease;
 }
 @media (prefers-reduced-motion: reduce) {
   .welcome-layer {
@@ -1138,19 +1419,43 @@
 }
 
 /* Paradas de los degradados del paisaje (WelcomeBackdrop). */
-.wb-stop-far-top { stop-color: color-mix(in oklab, var(--wb-from) 70%, white); }
-.wb-stop-far-bottom { stop-color: color-mix(in oklab, var(--wb-from) 45%, var(--wb-to)); }
-.wb-stop-mid-top { stop-color: color-mix(in oklab, var(--wb-from) 55%, var(--wb-to)); }
-.wb-stop-mid-bottom { stop-color: color-mix(in oklab, var(--wb-to) 82%, #0b0a1a); }
-.wb-stop-near-top { stop-color: color-mix(in oklab, var(--wb-to) 88%, #0b0a1a); }
-.wb-stop-near-bottom { stop-color: color-mix(in oklab, var(--wb-to) 48%, #0b0a1a); }
-.wb-stop-tree-top { stop-color: color-mix(in oklab, var(--wb-to) 62%, #0b0a1a); }
-.wb-stop-tree-bottom { stop-color: color-mix(in oklab, var(--wb-to) 34%, #0b0a1a); }
-.wb-stop-water-top { stop-color: color-mix(in oklab, var(--wb-from) 60%, var(--wb-to)); }
-.wb-stop-water-bottom { stop-color: color-mix(in oklab, var(--wb-to) 60%, #0b0a1a); }
+.wb-stop-far-top {
+  stop-color: color-mix(in oklab, var(--wb-from) 70%, white);
+}
+.wb-stop-far-bottom {
+  stop-color: color-mix(in oklab, var(--wb-from) 45%, var(--wb-to));
+}
+.wb-stop-mid-top {
+  stop-color: color-mix(in oklab, var(--wb-from) 55%, var(--wb-to));
+}
+.wb-stop-mid-bottom {
+  stop-color: color-mix(in oklab, var(--wb-to) 82%, #0b0a1a);
+}
+.wb-stop-near-top {
+  stop-color: color-mix(in oklab, var(--wb-to) 88%, #0b0a1a);
+}
+.wb-stop-near-bottom {
+  stop-color: color-mix(in oklab, var(--wb-to) 48%, #0b0a1a);
+}
+.wb-stop-tree-top {
+  stop-color: color-mix(in oklab, var(--wb-to) 62%, #0b0a1a);
+}
+.wb-stop-tree-bottom {
+  stop-color: color-mix(in oklab, var(--wb-to) 34%, #0b0a1a);
+}
+.wb-stop-water-top {
+  stop-color: color-mix(in oklab, var(--wb-from) 60%, var(--wb-to));
+}
+.wb-stop-water-bottom {
+  stop-color: color-mix(in oklab, var(--wb-to) 60%, #0b0a1a);
+}
 /* La orilla es tierra con pasto: verde aunque la pantalla sea azul. */
-.wb-stop-shore-top { stop-color: #4f9e64; }
-.wb-stop-shore-bottom { stop-color: #1f4a32; }
+.wb-stop-shore-top {
+  stop-color: #4f9e64;
+}
+.wb-stop-shore-bottom {
+  stop-color: #1f4a32;
+}
 .welcome-shore {
   fill: url(#wb-shore);
 }
@@ -1171,7 +1476,12 @@ html:not(.show-scrollbars):has(.participant-no-select) *::-webkit-scrollbar {
 
 /* Borde de abajo de la ventana (tablet y escritorio): el contenido se desvanece en el color del fondo. */
 .page-bottom-fade {
-  background: linear-gradient(to top, var(--background), color-mix(in oklab, var(--background) 70%, transparent) 45%, transparent);
+  background: linear-gradient(
+    to top,
+    var(--background),
+    color-mix(in oklab, var(--background) 70%, transparent) 45%,
+    transparent
+  );
 }
 /* En el Jardín el paisaje llega al borde a propósito: sin desvanecido. */
 .student-shell:has(.garden-scene) .page-bottom-fade {
