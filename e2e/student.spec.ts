@@ -9,7 +9,7 @@ const ENTRY =
 
 /** WCAG 2.1 AA (RS-TR): sin violaciones de axe en la pantalla actual. */
 const NAME = "Lucía";
-const GREETING = `Hola, ${NAME}, ¿cómo estás hoy?`;
+const GREETING = `Hola, ${NAME}.`;
 
 async function expectAccessible(page: Page) {
   // axe mide colores reales: espera a que terminen las animaciones finitas (toasts, drawers, temas).
@@ -530,7 +530,7 @@ test("el nombre sale en el saludo y con Hombre la app usa el tema azul; se cambi
 
   // Al recargar se pinta desde el servidor, sin pasar por el rosado.
   await page.goto("/inicio");
-  await expect(page.getByRole("heading", { name: "Hola, Mario, ¿cómo estás hoy?" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Hola, Mario." })).toBeVisible();
   await expect(html).toHaveAttribute("data-palette", "ocean");
   await expectAccessible(page);
 

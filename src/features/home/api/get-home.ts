@@ -49,7 +49,7 @@ export type Home = {
   weekDays: HomeWeekDay[];
   /** Los 28 días de la senda, para el calendario por mes (escritorio). */
   journeyDays: HomeWeekDay[];
-  /** Cómo quiere que lo llamen ("Hola, Mario, ¿cómo estás hoy?"), o null si todavía no lo dio. */
+  /** Cómo quiere que lo llamen ("Hola, Mario."), o null si todavía no lo dio. */
   preferredName: string | null;
 };
 

@@ -48,12 +48,15 @@ export function CheckIn({ initialMood }: { initialMood: Mood | null }) {
   }
 
   return (
-    // La pregunta va en el saludo de Inicio ("Hola, Hugo, ¿cómo estás hoy?"), en una sola línea; aquí solo las caras y
-    // la invitación. En escritorio, un solo contenedor las agrupa; en móvil van sueltas.
+    // En escritorio, un solo contenedor agrupa las caras y la invitación (la pregunta va en el saludo de Inicio, así que
+    // aquí queda solo para el lector de pantalla); en móvil van sueltos, con la pregunta encima.
     <section
-      aria-label={t("home.checkinQuestion")}
+      aria-labelledby="checkin-question"
       className="flex flex-col gap-2 lg:rounded-[1.75rem] lg:bg-foreground/[0.04] lg:p-3 lg:dark:bg-foreground/[0.06]"
     >
+      <h2 id="checkin-question" className="font-heading text-lg font-bold text-foreground lg:sr-only">
+        {t("home.checkinQuestion")}
+      </h2>
       <MoodPicker label={t("home.checkinQuestion")} value={mood ?? undefined} onChange={handleChange} />
       <div aria-live="polite" className="flex flex-col gap-2">
         {/* La invitación cae de las caras como una gota que se estira y se asienta (liquid-rise en globals.css). */}

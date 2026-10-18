@@ -52,25 +52,34 @@ export function HomePageClient() {
 
   return (
     <div className="flex flex-col gap-5">
-      <header className="flex flex-col gap-1 md:pr-16">
+      <header className="flex items-start justify-between gap-3 md:pr-16 lg:flex-col-reverse lg:justify-start lg:gap-1">
         {/*
-          Como un título grande de app nativa: la fecha de hoy arriba, en pequeño, y debajo el saludo con la pregunta del
-          check-in en una sola línea ("Hola, Hugo, ¿cómo estás hoy?"); el día de la senda va en la tarjeta del
+          Móvil y tablet: el saludo grande con la fecha de hoy a la derecha, y la pregunta del check-in va sobre las caras.
+          Escritorio: como un título grande de app nativa, la fecha arriba en pequeño y debajo el saludo con la pregunta
+          en una sola línea, más pequeña ("Hola, Hugo, ¿cómo estás hoy?"). El día de la senda va en la tarjeta del
           calendario. md:pr-16: desde tablet la campana flota arriba a la derecha.
         */}
-        <p className="text-base text-muted-foreground first-letter:uppercase">
+        <h1 className="font-heading text-3xl leading-tight font-bold text-foreground lg:text-4xl">
+          <span className="lg:hidden">
+            {home.preferredName
+              ? t.rich("home.greetingNamed", { name: home.preferredName, highlight: nameHighlight })
+              : t("home.greeting")}
+          </span>
+          <span className="hidden lg:inline">
+            {home.preferredName
+              ? t.rich("home.greetingNamedAsk", {
+                  name: home.preferredName,
+                  highlight: nameHighlight,
+                  question: greetingQuestion,
+                })
+              : t.rich("home.greetingAsk", { question: greetingQuestion })}
+          </span>
+        </h1>
+        {/* Corta en móvil ("Sáb, 17 oct."), larga en escritorio. */}
+        <p className="mt-2 shrink-0 text-base whitespace-nowrap text-muted-foreground first-letter:uppercase lg:mt-0">
           <span className="lg:hidden">{formatTodayLima({ weekday: "short", day: "numeric", month: "short" })}</span>
           <span className="hidden lg:inline">{formatTodayLima({ weekday: "long", day: "numeric", month: "long" })}</span>
         </p>
-        <h1 className="font-heading text-2xl leading-tight font-bold text-balance text-foreground sm:text-3xl xl:text-4xl">
-          {home.preferredName
-            ? t.rich("home.greetingNamed", {
-                name: home.preferredName,
-                // El nombre en negrita y en el acento del tema (rojo, o azul con el tema "ocean").
-                highlight: (chunks) => <span className="font-extrabold text-(--prompt-red)">{chunks}</span>,
-              })
-            : t("home.greeting")}
-        </h1>
       </header>
 
       {home.status === "READ_ONLY" ? (
@@ -173,4 +182,14 @@ function HomeNotices({ newSummary }: { newSummary: boolean }) {
       )}
     </>
   );
+}
+
+/** El nombre del saludo en negrita y en el acento del tema (rojo, o azul con el tema "ocean"). */
+function nameHighlight(chunks: React.ReactNode) {
+  return <span className="font-extrabold text-(--prompt-red)">{chunks}</span>;
+}
+
+/** En escritorio, la pregunta del check-in junto al saludo, más pequeña y suave que "Hola, Hugo". */
+function greetingQuestion(chunks: React.ReactNode) {
+  return <span className="text-2xl font-semibold text-muted-foreground">{chunks}</span>;
 }

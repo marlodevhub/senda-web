@@ -127,8 +127,10 @@
   },
   "home": {
     "writeCta": "Escribir",
-    "greeting": "Hola, ¿cómo estás hoy?",
-    "greetingNamed": "Hola, <highlight>{name}</highlight>, ¿cómo estás hoy?",
+    "greeting": "Hola.",
+    "greetingAsk": "Hola, <question>¿cómo estás hoy?</question>",
+    "greetingNamed": "Hola, <highlight>{name}</highlight>.",
+    "greetingNamedAsk": "Hola, <highlight>{name}</highlight>, <question>¿cómo estás hoy?</question>",
     "checkinQuestion": "¿Cómo estás hoy?",
     "pendingLabel": "Frase pendiente",
     "pendingRewrite": "Reescribir ✦",
