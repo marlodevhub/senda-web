@@ -113,7 +113,7 @@ export function HomePageClient() {
             <div className="flex flex-col gap-5 @[42rem]:grid @[42rem]:grid-cols-[minmax(0,1fr)_16rem] @[42rem]:items-start @[56rem]:grid-cols-[minmax(0,1fr)_18rem]">
               <div className="flex flex-col gap-5">
                 {/* El botón Escribir aparece dentro del check-in al marcar una cara. */}
-                <CheckIn initialMood={home.checkinMood} />
+                <CheckIn initialMood={home.checkinMood} initialMarkedAt={home.checkinAt} />
 
                 {/* Si hoy escribió, el acceso a su Espejo de hoy. */}
                 {home.todayEntry && <TodayMirrorCard entry={home.todayEntry} />}

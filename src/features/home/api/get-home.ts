@@ -20,7 +20,10 @@ export type HomeTodayEntry = {
   findingsCount: number;
 };
 
-/** CU-05: un día de la semana actual (fecha AAAA-MM-DD en Lima); `mood` es el check-in o el ánimo del registro. */
+/**
+ * CU-05: un día de la semana actual (fecha AAAA-MM-DD en Lima); `mood` es el de los check-ins (el promedio de sus
+ * marcas, redondeado) o el ánimo del registro.
+ */
 export type HomeWeekDay = {
   interventionDay: number;
   date: string;
@@ -33,8 +36,10 @@ export type Home = {
   day: number;
   status: HomeParticipantStatus;
   checkinToday: boolean;
-  /** CU-06: la cara marcada hoy (1..5), o null si todavía no marcó. */
+  /** CU-06: la cara de la última marca de hoy (1..5, RN-IN-03), o null si todavía no marcó. */
   checkinMood: 1 | 2 | 3 | 4 | 5 | null;
+  /** CU-06: la hora de esa marca (ISO 8601), o null. */
+  checkinAt: string | null;
   pendingPhrase: HomePendingPhrase | null;
   /** null si hoy todavía no escribió (o en SOLO_LECTURA). */
   todayEntry: HomeTodayEntry | null;

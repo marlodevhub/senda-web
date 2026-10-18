@@ -11,13 +11,15 @@ import { MoodPicker } from "@/components/forms/mood-picker";
 import { useRecordCheckIn } from "@/features/home/api/use-record-check-in";
 import { BffError } from "@/lib/api/client";
 import { errorMessageKey } from "@/lib/api/error-messages";
+import { formatTime } from "@/lib/format/dates";
 import { cn } from "@/lib/utils";
 
 /**
  * CU-06 Registrar check-in de ánimo: una cara, sin texto (RN-IN-04). Se
- * puede cambiar el mismo día (RN-IN-03). No cuenta para la meta. Al marcar
+ * puede marcar varias veces al día, cada vez con su hora (RN-IN-03); un toque
+ * seguido del anterior lo reemplaza. No cuenta para la meta. Al marcar
  * una cara aparece la invitación a escribir de esa cara con el botón Escribir
- * de Inicio (sin obligar). Sin cara marcada no
+ * de Inicio (sin obligar) y la hora de la última marca. Sin cara marcada no
  * hay botón. El Diario abre con esta cara ya marcada (RN-IN-09).
  */
 /** Cada cara tiene su invitación a escribir (con 1 o 2, la de día difícil, RN-IN-05). */
@@ -26,10 +28,18 @@ const INVITATION_KEY = { 1: "veryLow", 2: "low", 3: "neutral", 4: "good", 5: "ve
   string
 >;
 
-export function CheckIn({ initialMood }: { initialMood: Mood | null }) {
+export function CheckIn({
+  initialMood,
+  initialMarkedAt = null,
+}: {
+  initialMood: Mood | null;
+  initialMarkedAt?: string | null;
+}) {
   const t = useTranslations();
   const recordCheckIn = useRecordCheckIn();
   const [mood, setMood] = useState<Mood | null>(initialMood);
+  // La hora de la última marca guardada: se actualiza solo cuando el servidor la confirma.
+  const [markedAt, setMarkedAt] = useState<string | null>(initialMarkedAt);
   // Cuántas veces se tocó una cara: cada toque vuelve a montar la invitación para repetir la animación. En 0 (el
   // check-in ya estaba hecho al abrir Inicio) aparece quieta.
   const [presses, setPresses] = useState(0);
@@ -40,7 +50,8 @@ export function CheckIn({ initialMood }: { initialMood: Mood | null }) {
     setMood(next);
     setPresses((count) => count + 1);
     try {
-      await recordCheckIn.mutateAsync(next);
+      const result = await recordCheckIn.mutateAsync(next);
+      setMarkedAt(result.recordedAt);
     } catch (error) {
       setMood(previous);
       toast.error(t(error instanceof BffError ? errorMessageKey(error.code) : "common.unexpectedError"));
@@ -59,6 +70,11 @@ export function CheckIn({ initialMood }: { initialMood: Mood | null }) {
       </h2>
       <MoodPicker label={t("home.checkinQuestion")} value={mood ?? undefined} onChange={handleChange} />
       <div aria-live="polite" className="flex flex-col gap-2">
+        {mood !== null && markedAt && (
+          <p className="px-1 text-sm text-muted-foreground">
+            {t("home.checkinMarkedAt", { time: formatTime(markedAt) })}
+          </p>
+        )}
         {/* La invitación cae de las caras como una gota que se estira y se asienta (liquid-rise en globals.css). */}
         {mood !== null && (
           <div

@@ -24,6 +24,11 @@ export function moodGradient(mood: Mood): string {
   return `linear-gradient(135deg, ${light}, ${base})`;
 }
 
+/** El color sólido de cada ánimo (p. ej. las celdas del mapa "Mi día"). */
+export function moodColor(mood: Mood): string {
+  return ORB_COLORS[mood].base;
+}
+
 /** Tinta de las caras: oscura sobre cualquiera de los colores (contraste ≥ 4,5:1). */
 export const MOOD_INK = INK;
 

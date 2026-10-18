@@ -19,7 +19,10 @@ export function useRecordCheckIn() {
       );
       setDraftMood(mood);
     },
-    onSuccess: () => {
+    onSuccess: (result) => {
+      queryClient.setQueryData<Home>(queryKeys.home(), (home) =>
+        home ? { ...home, checkinMood: result.mood, checkinAt: result.recordedAt } : home,
+      );
       void queryClient.invalidateQueries({ queryKey: queryKeys.home() });
       void queryClient.invalidateQueries({ queryKey: queryKeys.stats() });
     },

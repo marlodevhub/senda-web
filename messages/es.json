@@ -132,6 +132,7 @@
     "greetingNamed": "Hola, <highlight>{name}</highlight>.",
     "greetingNamedAsk": "Hola, <highlight>{name}</highlight>, <question>¿cómo estás hoy?</question>",
     "checkinQuestion": "¿Cómo estás hoy?",
+    "checkinMarkedAt": "Lo marcaste a las {time}. Si tu ánimo cambia durante el día, márcalo otra vez.",
     "pendingLabel": "Frase pendiente",
     "pendingRewrite": "Reescribir ✦",
     "pendingListTitle": "Frases por reescribir",
@@ -321,7 +322,25 @@
       "byContextExplanation": "En qué situaciones tu voz interna se pone más exigente.",
       "consistencyTitle": "Mi constancia",
       "consistencyExplanation": "Cuántos días escribiste cada semana.",
-      "consistencyGoal": "Meta"
+      "consistencyGoal": "Meta",
+      "dayPartTitle": "Mi día",
+      "dayPartExplanation": "Cómo te has sentido en cada momento del día, con las caritas que marcaste y lo que escribiste.",
+      "dayPartLightest": "Tus {part} suelen ser tus momentos más livianos.",
+      "dayPartDay": "Día",
+      "dayPartEmpty": "Sin marcar",
+      "dayPartCell": "Día {day}, {part}: {mood}",
+      "dayPart": {
+        "EARLY_MORNING": "Madrugada",
+        "MORNING": "Mañana",
+        "AFTERNOON": "Tarde",
+        "NIGHT": "Noche"
+      },
+      "dayPartPlural": {
+        "EARLY_MORNING": "madrugadas",
+        "MORNING": "mañanas",
+        "AFTERNOON": "tardes",
+        "NIGHT": "noches"
+      }
     },
     "tabJar": "Frasco",
     "jar": {

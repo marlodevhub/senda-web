@@ -105,6 +105,10 @@ test("ciclo diario completo: activar → diario → espejo → reescritura → f
   await expect(page.getByRole("main").getByText("Día 3 de 28", { exact: true })).toBeVisible();
   await page.getByRole("radio", { name: "Bien", exact: true }).click();
   await expect(page.getByText("Qué bueno. Si quieres, cuéntale a tu diario qué te hizo bien hoy.")).toBeVisible();
+  // RN-IN-03: cada marca guarda su hora; se puede volver a marcar cuando el ánimo cambie.
+  await expect(
+    page.getByText(/^Lo marcaste a las .+ Si tu ánimo cambia durante el día, márcalo otra vez\.$/),
+  ).toBeVisible();
   await expectAccessible(page);
   // Como una app: el texto no se selecciona al hacer clic y arrastrar.
   expect(await page.evaluate(() => getComputedStyle(document.body).userSelect)).toBe("none");

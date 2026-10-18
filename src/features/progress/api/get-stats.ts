@@ -3,6 +3,9 @@ import type { Dimension } from "@/types/dimension";
 import type { JournalContext } from "@/types/journal-context";
 
 export type MoodPoint = { interventionDay: number; averageMood: number };
+export type DayPart = "EARLY_MORNING" | "MORNING" | "AFTERNOON" | "NIGHT";
+/** "Mi día" (RN-PR-06): el ánimo de una franja de un día; `marks`, cuántos ánimos hay en ella. */
+export type MoodDayPartPoint = { interventionDay: number; dayPart: DayPart; averageMood: number; marks: number };
 export type BeforeAfterPoint = { interventionDay: number; moodBefore: number; moodAfter: number };
 export type TransformedWeek = { week: number; detected: number; rewritten: number };
 export type VoiceByWeekPoint = { week: number; dimension: Dimension; count: number };
@@ -14,6 +17,8 @@ export type Stats = {
   /** CU-08 1a: "Mi ánimo" aparece con 3 días con registro o check-in. */
   hasEnoughMoodData: boolean;
   mood: MoodPoint[];
+  /** "Mi día": se muestra junto con "Mi ánimo" (`hasEnoughMoodData`). */
+  moodByDayPart: MoodDayPartPoint[];
   beforeAfter: BeforeAfterPoint[];
   transformed: TransformedWeek[];
   voiceByWeek: VoiceByWeekPoint[];

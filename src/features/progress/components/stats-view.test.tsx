@@ -8,6 +8,7 @@ const BASE_STATS: Stats = {
   hasEnoughData: true,
   hasEnoughMoodData: true,
   mood: [{ interventionDay: 1, averageMood: 3 }],
+  moodByDayPart: [{ interventionDay: 1, dayPart: "MORNING", averageMood: 3, marks: 1 }],
   beforeAfter: [],
   transformed: [{ week: 1, detected: 2, rewritten: 1 }],
   voiceByWeek: [{ week: 1, dimension: "D1", count: 1 }],
@@ -23,19 +24,22 @@ describe("StatsView", () => {
       screen.getByText("Aún estamos reuniendo tus datos. Vuelve después de tu tercer registro."),
     ).toBeInTheDocument();
     expect(screen.queryByText("Mi ánimo")).not.toBeInTheDocument();
+    expect(screen.queryByRole("table", { name: "Mi día" })).not.toBeInTheDocument();
   });
 
-  it("muestra solo \"Mi ánimo\" con 3 días de ánimo pero menos de 3 registros (CU-08 1a)", () => {
+  it("muestra solo \"Mi ánimo\" y \"Mi día\" con 3 días de ánimo pero menos de 3 registros (CU-08 1a)", () => {
     renderWithProviders(<StatsView stats={{ ...BASE_STATS, hasEnoughData: false }} />);
 
     expect(screen.getByText("Mi ánimo")).toBeInTheDocument();
+    expect(screen.getByRole("table", { name: "Mi día" })).toBeInTheDocument();
     expect(screen.queryByText("Mi constancia")).not.toBeInTheDocument();
   });
 
-  it("muestra los 6 gráficos cuando hay datos suficientes", () => {
+  it("muestra los 7 gráficos cuando hay datos suficientes", () => {
     renderWithProviders(<StatsView stats={BASE_STATS} />);
 
     expect(screen.getByText("Mi ánimo")).toBeInTheDocument();
+    expect(screen.getByRole("table", { name: "Mi día" })).toBeInTheDocument();
     expect(screen.getByText("Antes y después de reescribir")).toBeInTheDocument();
     expect(screen.getByText("Frases transformadas")).toBeInTheDocument();
     expect(screen.getByText("Mi voz interna por semana")).toBeInTheDocument();

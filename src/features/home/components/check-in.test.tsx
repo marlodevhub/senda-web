@@ -10,7 +10,10 @@ function mockCheckInResponse(mood: number) {
     .spyOn(globalThis, "fetch")
     .mockImplementation(
       async () =>
-        new Response(JSON.stringify({ mood, interventionDay: 3, invitesToWrite: mood <= 2 }), { status: 200 }),
+        new Response(
+          JSON.stringify({ mood, interventionDay: 3, invitesToWrite: mood <= 2, recordedAt: "2026-10-15T20:05:00Z" }),
+          { status: 200 },
+        ),
     );
 }
 
@@ -19,7 +22,7 @@ describe("CheckIn", () => {
     vi.restoreAllMocks();
   });
 
-  it("guarda la cara tocada con PUT /checkins/today e invita a escribir (CU-06)", async () => {
+  it("guarda la cara tocada como una marca con POST /checkins e invita a escribir (CU-06)", async () => {
     const fetchMock = mockCheckInResponse(4);
     const user = userEvent.setup();
     renderWithProviders(<CheckIn initialMood={null} />);
@@ -27,8 +30,8 @@ describe("CheckIn", () => {
     await user.click(screen.getByRole("radio", { name: "Bien" }));
 
     expect(fetchMock).toHaveBeenCalledWith(
-      "/api/v1/checkins/today",
-      expect.objectContaining({ method: "PUT", body: JSON.stringify({ mood: 4 }) }),
+      "/api/v1/checkins",
+      expect.objectContaining({ method: "POST", body: JSON.stringify({ mood: 4 }) }),
     );
     expect(
       await screen.findByText("Qué bueno. Si quieres, cuéntale a tu diario qué te hizo bien hoy."),
@@ -67,9 +70,20 @@ describe("CheckIn", () => {
     expect(screen.queryByText(/Un día a medias/)).not.toBeInTheDocument();
   });
 
-  it("marca la cara del check-in que ya hizo hoy", () => {
-    renderWithProviders(<CheckIn initialMood={3} />);
+  it("marca la cara de la última marca de hoy y dice a qué hora fue (hora de Lima)", () => {
+    renderWithProviders(<CheckIn initialMood={3} initialMarkedAt="2026-10-15T14:30:00Z" />);
 
     expect(screen.getAllByRole("radio")[2]).toHaveAttribute("aria-checked", "true");
+    expect(screen.getByText(/Lo marcaste a las 9:30\sa\.\sm\./)).toBeInTheDocument();
+  });
+
+  it("al marcar otra vez, muestra la hora que guardó el servidor (RN-IN-03)", async () => {
+    mockCheckInResponse(4);
+    const user = userEvent.setup();
+    renderWithProviders(<CheckIn initialMood={3} initialMarkedAt="2026-10-15T14:30:00Z" />);
+
+    await user.click(screen.getByRole("radio", { name: "Bien" }));
+
+    expect(await screen.findByText(/Lo marcaste a las 3:05\sp\.\sm\./)).toBeInTheDocument();
   });
 });

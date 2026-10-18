@@ -1,7 +1,7 @@
 import type { CSSProperties } from "react";
 
 /**
- * Estilo común de los 6 gráficos de "Mis datos" (CU-08), con los colores de la paleta: siguen el tema (rosado con
+ * Estilo común de los 7 gráficos de "Mis datos" (CU-08), con los colores de la paleta: siguen el tema (rosado con
  * Mujer u Otro, azul con Hombre) y el modo claro u oscuro. Nunca rojo para la autocrítica (sección 14 del CLAUDE.md).
  */
 

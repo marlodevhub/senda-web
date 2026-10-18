@@ -159,7 +159,7 @@ Cada feature: `api/` (hooks TanStack Query + llamadas al BFF), `components/`, `s
 
 Ver mapa completo de API en la Especificación v2 (toda petición del estudiante lleva JWT de 30 min + refresh; la de administrador usa su propia cookie de 15 min sin renovación). Endpoints clave para construir el BFF:
 
-- Estudiante: `/auth/{activate,activate/google,login,google,logout,refresh,recover}`, `/consents/current`, `/consent-acceptances`, `/welcome`, `/profile/*`, `/home`, `/check-ins/today`, `/journal-entries*`, `/progress/*`, `/jar*`, `/weekly-summaries*`, `/messages*`.
+- Estudiante: `/auth/{activate,activate/google,login,google,logout,refresh,recover}`, `/consents/current`, `/consent-acceptances`, `/welcome`, `/profile/*`, `/home`, `/checkins`, `/journal-entries*`, `/progress/*`, `/jar*`, `/weekly-summaries*`, `/messages*`.
 - Administrador (`/admin/**`): `/admin/auth/{login,verify,logout}`, `/admin/cohorts*`, `/admin/participants*`, `/admin/adherence`, `/admin/exports/adherence`, `/admin/audit-logs`, `/admin/config/current`.
 
 ## 7. DoD específica de este repo

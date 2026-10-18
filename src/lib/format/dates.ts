@@ -9,6 +9,7 @@ const LOCALE = "es-PE";
 const shortDate = new Intl.DateTimeFormat(LOCALE, { timeZone: LIMA, day: "numeric", month: "short" });
 const numericDate = new Intl.DateTimeFormat(LOCALE, { timeZone: LIMA, dateStyle: "short" });
 const dateTime = new Intl.DateTimeFormat(LOCALE, { timeZone: LIMA, dateStyle: "short", timeStyle: "short" });
+const time = new Intl.DateTimeFormat(LOCALE, { timeZone: LIMA, timeStyle: "short" });
 // Una fecha sin hora (p. ej. "2026-10-14") ya es un día de Lima: se formatea sin moverla de zona.
 const calendarDay = new Intl.DateTimeFormat(LOCALE, { timeZone: "UTC", day: "numeric", month: "long" });
 const isoDay = new Intl.DateTimeFormat("en-CA", { timeZone: LIMA });
@@ -26,6 +27,11 @@ export function formatNumericDate(instant: string): string {
 /** Un instante ISO como "14/10/26, 3:05 p. m.". */
 export function formatDateTime(instant: string): string {
   return dateTime.format(new Date(instant));
+}
+
+/** La hora de Lima de un instante ISO, como "3:05 p. m.". */
+export function formatTime(instant: string): string {
+  return time.format(new Date(instant));
 }
 
 /** Un día de calendario ("2026-10-14") como "14 de octubre". */
