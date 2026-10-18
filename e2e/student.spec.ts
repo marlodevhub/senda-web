@@ -383,12 +383,13 @@ test("Senda se puede instalar como app, con su nombre, su ícono y abriendo en I
   const response = await page.request.get("/manifest.webmanifest");
   expect(response.ok()).toBe(true);
   const manifest = await response.json();
-  // Abre en la pantalla de arranque (degradado rojo con el logo), con el mismo rojo de fondo en el arranque del sistema.
+  // Abre en la pantalla de arranque (degradado rojo con el logo). El fondo del sistema es blanco: Android lo usa también
+  // para la barra de navegación de abajo en toda la app.
   expect(manifest).toMatchObject({
     name: "Senda",
     start_url: "/abrir.html",
     display: "standalone",
-    background_color: "#9B3558",
+    background_color: "#FFFFFF",
   });
   for (const icon of manifest.icons as { src: string }[]) {
     expect((await page.request.get(icon.src)).ok()).toBe(true);

@@ -4,10 +4,10 @@ import type { MetadataRoute } from "next";
  * Senda instalable (PWA): con su ícono en la pantalla de inicio del celular o en el escritorio de la laptop, y en su
  * propia ventana, sin la barra del navegador. Abre en la pantalla de arranque (/abrir.html: degradado rojo con el logo
  * blanco), que el service worker (public/sw.js) guarda en el teléfono para que aparezca al instante aunque el servidor
- * tarde, y de ahí pasa a Inicio (si no hay sesión, el proxy lleva al ingreso). El fondo del arranque del sistema
- * (background_color) es el mismo rojo; las barras del sistema (theme_color) quedan como estaban. Android pone en su
- * arranque el ícono maskable, así que su fondo es ese mismo rojo (#9B3558): no se ve un recuadro, solo el logo. El service worker solo guarda esa pantalla y los archivos de la app: ningún texto del estudiante queda
- * guardado en el dispositivo por instalarla.
+ * tarde, y de ahí pasa a Inicio (si no hay sesión, el proxy lleva al ingreso). background_color es blanco: Android lo
+ * usa para el fondo de su arranque y también para la barra de navegación de abajo en toda la app instalada, que debe
+ * quedar blanca. theme_color (barra de arriba) queda como estaba. El service worker solo guarda esa pantalla y los
+ * archivos de la app: ningún texto del estudiante queda guardado en el dispositivo por instalarla.
  */
 export default function manifest(): MetadataRoute.Manifest {
   return {
@@ -19,7 +19,7 @@ export default function manifest(): MetadataRoute.Manifest {
     start_url: "/abrir.html",
     scope: "/",
     display: "standalone",
-    background_color: "#9B3558",
+    background_color: "#FFFFFF",
     theme_color: "#F2F4EA",
     icons: [
       { src: "/icons/icon-192.png", sizes: "192x192", type: "image/png", purpose: "any" },
