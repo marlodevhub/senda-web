@@ -106,6 +106,13 @@ const SLIDE_STYLE: Record<
   },
 };
 
+/**
+ * Los campos sobre el color de cada pantalla: blancos sólidos, con la letra oscura de la app, iguales en modo claro y
+ * oscuro (como las opciones de "Cuéntanos de ti").
+ */
+const ON_COLOR_FIELD =
+  "bg-white text-[#1D1D1F] placeholder:text-[#6E6E73] hover:bg-white focus-visible:bg-white focus-visible:ring-white";
+
 /** Cuánto dura la animación que presenta el recorrido antes de entrar a Inicio (TourLaunch). */
 const TOUR_LAUNCH_MS = 2900;
 
@@ -241,7 +248,7 @@ export function WelcomeFlow({
           onChange={(e) => setStartingPoint(e.target.value)}
           aria-describedby="startingPointHint"
           rows={4}
-          className="bg-card focus-visible:ring-white"
+          className={ON_COLOR_FIELD}
         />
         <p id="startingPointHint" className="text-base text-white">
           {t("welcome.startingPointHint")}
@@ -259,7 +266,7 @@ export function WelcomeFlow({
             value={name}
             maxLength={MAX_NAME}
             autoComplete="given-name"
-            className="bg-card focus-visible:ring-white"
+            className={ON_COLOR_FIELD}
             aria-invalid={(showIdentityErrors && nameMissing) || undefined}
             onChange={(e) => setName(e.target.value)}
           />
@@ -277,6 +284,7 @@ export function WelcomeFlow({
             onChange={setGender}
             invalid={showIdentityErrors && !gender}
             onColor
+            selectedColor={SLIDE_STYLE.identity.ink}
           />
           {showIdentityErrors && !gender && (
             <FieldError message="welcome.genderRequired" className="font-semibold text-white" />

@@ -70,7 +70,8 @@ export function ConsentView({ consent }: { consent: ConsentContent }) {
       <div
         ref={scrollRef}
         onScroll={handleScroll}
-        className="max-h-[55vh] min-h-64 overflow-y-auto rounded-lg border border-border bg-card p-5 md:p-7"
+        // Sin bordes ni recuadro: en móvil el texto va directo sobre la pantalla; en escritorio, dentro de la tarjeta.
+        className="max-h-[60vh] min-h-64 overflow-y-auto md:max-h-[55vh] md:px-2"
       >
         <ConsentText text={consent.text} />
       </div>
