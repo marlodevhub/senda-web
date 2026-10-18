@@ -11,6 +11,9 @@ WORKDIR /app
 COPY --from=deps /app/node_modules node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
+# Las NEXT_PUBLIC_* se fijan al construir: la plataforma (Render) las pasa como build args. Opcional.
+ARG NEXT_PUBLIC_GOOGLE_CLIENT_ID=""
+ENV NEXT_PUBLIC_GOOGLE_CLIENT_ID=$NEXT_PUBLIC_GOOGLE_CLIENT_ID
 RUN npm run build
 
 FROM node:24-alpine AS run
@@ -23,5 +26,6 @@ COPY --from=build --chown=senda:senda /app/.next/static ./.next/static
 COPY --from=build --chown=senda:senda /app/public ./public
 USER senda
 EXPOSE 3000
-# BACKEND_URL (URL interna de senda-api) llega por entorno al ejecutar.
+# BACKEND_URL (URL de senda-api) y ADMIN_INVITES_ENABLED llegan por entorno al ejecutar. PORT lo puede fijar la
+# plataforma (Render usa 10000); server.js lo respeta.
 CMD ["node", "server.js"]
