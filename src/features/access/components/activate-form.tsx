@@ -238,7 +238,13 @@ export function ActivateForm() {
             <GoogleSignInButton text="continue_with" onCredential={onGoogleCredential} />
           )}
           <OrDivider />
-          <Button type="button" variant="ghost" className="rounded-full" onClick={() => setWithPassword(true)}>
+          {/* El texto largo puede ir en dos líneas: a 360 px no entra en una y desbordaba la pantalla. */}
+          <Button
+            type="button"
+            variant="ghost"
+            className="h-auto min-h-11 rounded-full py-2 text-center whitespace-normal"
+            onClick={() => setWithPassword(true)}
+          >
             {t("access.activateWithPassword")}
           </Button>
         </div>

@@ -6,6 +6,16 @@ import { useTheme } from "next-themes";
 import { GOOGLE_CLIENT_ID, isGoogleSignInEnabled } from "@/config/public-env";
 
 const GIS_SRC = "https://accounts.google.com/gsi/client";
+/**
+ * El botón más grande de Google mide 40 px de alto; los campos de Senda, 48 px. Se dibuja más angosto y se agranda
+ * con `scale` para quedar del mismo alto que los campos y del ancho exacto del formulario.
+ */
+const GIS_HEIGHT = 40;
+const TARGET_HEIGHT = 48;
+const SCALE = TARGET_HEIGHT / GIS_HEIGHT;
+// Google acepta de 200 a 400 px de ancho.
+const GIS_MIN_WIDTH = 200;
+const GIS_MAX_WIDTH = 400;
 
 type CredentialResponse = { credential?: string };
 
@@ -49,6 +59,9 @@ export function GoogleSignInButton({
   text?: "signin_with" | "continue_with";
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLDivElement>(null);
+  // El ancho disponible: se vuelve a medir si cambia (rotar el teléfono, abrir el teclado), así nunca desborda.
+  const [availableWidth, setAvailableWidth] = useState(0);
   const [scriptReady, setScriptReady] = useState(
     () => typeof window !== "undefined" && Boolean(window.google?.accounts),
   );
@@ -61,8 +74,18 @@ export function GoogleSignInButton({
 
   useEffect(() => {
     const container = containerRef.current;
+    if (!container) {
+      return;
+    }
+    const observer = new ResizeObserver(([entry]) => setAvailableWidth(Math.floor(entry.contentRect.width)));
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const button = buttonRef.current;
     const gis = window.google?.accounts.id;
-    if (!scriptReady || !container || !gis) {
+    if (!scriptReady || !button || !gis || availableWidth === 0) {
       return;
     }
     gis.initialize({
@@ -71,18 +94,17 @@ export function GoogleSignInButton({
       use_fedcm_for_button: true,
       context: "signin",
     });
-    container.replaceChildren();
-    gis.renderButton(container, {
+    button.replaceChildren();
+    gis.renderButton(button, {
       type: "standard",
       theme: resolvedTheme === "dark" ? "filled_black" : "outline",
       size: "large",
       text,
       shape: "pill",
       locale: "es",
-      // Google acepta hasta 400 px.
-      width: Math.min(400, Math.max(200, Math.round(container.getBoundingClientRect().width))),
+      width: buttonWidth(availableWidth),
     });
-  }, [scriptReady, resolvedTheme, text]);
+  }, [scriptReady, resolvedTheme, text, availableWidth]);
 
   if (!isGoogleSignInEnabled) {
     return null;
@@ -91,7 +113,18 @@ export function GoogleSignInButton({
   return (
     <>
       <Script src={GIS_SRC} strategy="afterInteractive" onReady={() => setScriptReady(true)} />
-      <div ref={containerRef} className="flex min-h-11 w-full justify-center" />
+      {/* min-w-0 y overflow-hidden: el botón de Google nunca ensancha el formulario. */}
+      <div ref={containerRef} className="flex h-12 w-full min-w-0 justify-center overflow-hidden">
+        <div
+          ref={buttonRef}
+          style={{ width: buttonWidth(availableWidth), transform: `scale(${SCALE})`, transformOrigin: "top center" }}
+        />
+      </div>
     </>
   );
+}
+
+/** El ancho con que se dibuja el botón para que, agrandado, ocupe todo el espacio sin pasarse. */
+function buttonWidth(available: number): number {
+  return Math.min(GIS_MAX_WIDTH, Math.max(GIS_MIN_WIDTH, Math.floor(available / SCALE)));
 }

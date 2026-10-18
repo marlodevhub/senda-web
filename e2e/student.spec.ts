@@ -342,6 +342,19 @@ test("el panel de ánimo abre con cómo va el día, sigue con la semana y termin
   await expectAccessible(page);
 });
 
+test("las pantallas de ingreso no desbordan a 360 px (sin perder los márgenes)", async ({ page }) => {
+  for (const path of ["/activar", "/login", "/recuperar"]) {
+    await page.goto(path);
+    await expect(page.getByRole("main")).toBeVisible();
+    const { inner, scroll } = await page.evaluate(() => ({
+      inner: window.innerWidth,
+      scroll: document.documentElement.scrollWidth,
+    }));
+    expect(scroll, path).toBeLessThanOrEqual(360);
+    expect(inner, path).toBe(360);
+  }
+});
+
 test("Senda se puede instalar como app, con su nombre, su ícono y abriendo en Inicio (PWA)", async ({ page }) => {
   const response = await page.request.get("/manifest.webmanifest");
   expect(response.ok()).toBe(true);
