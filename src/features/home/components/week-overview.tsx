@@ -63,8 +63,17 @@ export function WeekOverview({
         {journeyDays.length > 0 && <ViewToggle value={view} onChange={setView} />}
       </div>
 
+      {/*
+        Escritorio: el calendario queda fijo arriba del panel y la tarjeta "Tu senda" fija abajo, los dos sobre vidrio
+        desenfocado; las tarjetas del día se deslizan por debajo (sticky dentro del panel, que es el que se desplaza).
+      */}
       {journeyDays.length > 0 && (
-        <div className={cn(view === "month" ? "block" : "hidden lg:block")}>
+        <div
+          className={cn(
+            view === "month" ? "block" : "hidden lg:block",
+            "lg:sticky lg:top-0 lg:z-10 lg:-mx-5 lg:-mt-5 lg:border-b lg:border-foreground/5 lg:bg-card/70 lg:px-5 lg:pt-5 lg:pb-3 lg:backdrop-blur-xl",
+          )}
+        >
           <MonthCalendar days={journeyDays} today={today} selectedDay={selectedDay} onSelectDay={setSelectedDay} />
         </div>
       )}
@@ -121,7 +130,7 @@ export function WeekOverview({
       {selected && <DayDetails day={selected} today={today} />}
 
       {/* Al pie: en qué va de su senda, en una tarjeta destacada (en escritorio, abajo del panel). */}
-      <div className="lg:mt-auto">
+      <div className="lg:sticky lg:bottom-0 lg:z-10 lg:-mx-5 lg:-mb-5 lg:mt-auto lg:border-t lg:border-foreground/5 lg:bg-card/70 lg:px-5 lg:pt-3 lg:pb-5 lg:backdrop-blur-xl">
         <JourneyBanner today={today} week={week} goal={goal} />
       </div>
     </section>
