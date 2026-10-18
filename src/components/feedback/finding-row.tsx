@@ -41,13 +41,7 @@ export function FindingRow({
           {fragment}
         </span>
         <span className="flex items-start gap-2 text-base leading-snug text-muted-foreground">
-          <span
-            aria-hidden
-            className={cn(
-              "mt-[0.45rem] size-2 shrink-0 rounded-full",
-              DIMENSION_DOT[dimension],
-            )}
-          />
+          <span aria-hidden className={cn("mt-[0.45rem] size-2 shrink-0 rounded-full", DIMENSION_DOT[dimension])} />
           {label}
         </span>
       </span>
@@ -74,13 +68,6 @@ export function FindingRow({
       {body}
     </Link>
   ) : (
-    <div
-      className={cn(
-        "flex items-center gap-3 rounded-md px-4 py-3",
-        DIMENSION_CARD[dimension],
-      )}
-    >
-      {body}
-    </div>
+    <div className={cn("flex items-center gap-3 rounded-md px-4 py-3", DIMENSION_CARD[dimension])}>{body}</div>
   );
 }

@@ -14,30 +14,17 @@ import { cn } from "@/lib/utils";
  * Tarjeta "frase pendiente" de Inicio (RN-IN-02): el hallazgo visible más
  * reciente sin reescribir. Toca el botón → abre CU-04 con ese hallazgo.
  */
-export function PendingPhraseCard({
-  fragment,
-  onRewrite,
-}: {
-  fragment: string;
-  onRewrite?: () => void;
-}) {
+export function PendingPhraseCard({ fragment, onRewrite }: { fragment: string; onRewrite?: () => void }) {
   const t = useTranslations();
 
   return (
     <div className="flex flex-col gap-2.5 rounded-lg bg-grad-dawn-soft p-4 shadow-card">
-      <span className="text-xs font-bold tracking-wide text-root-ink uppercase">
-        {t("home.pendingLabel")}
-      </span>
+      <span className="text-xs font-bold tracking-wide text-root-ink uppercase">{t("home.pendingLabel")}</span>
       <p className="font-display text-base leading-snug text-foreground before:content-['“'] after:content-['”']">
         {fragment}
       </p>
       {/* Mismo ancho y forma que el botón Escribir del check-in. */}
-      <Button
-        variant="hero"
-        size="xl"
-        className="w-full rounded-full"
-        onClick={onRewrite}
-      >
+      <Button variant="hero" size="xl" className="w-full rounded-full" onClick={onRewrite}>
         <Feather className="size-4" aria-hidden />
         {t("home.pendingRewrite")}
       </Button>
@@ -60,36 +47,20 @@ export function NoPendingPhrase() {
  * CU-04 con ese hallazgo; debajo, su tipo en lenguaje amable (el mismo del Espejo) como texto, con un punto del
  * color de su dimensión. Nunca como etiqueta clínica.
  */
-export function PendingPhraseList({
-  phrases,
-}: {
-  phrases: HomePendingPhrase[];
-}) {
+export function PendingPhraseList({ phrases }: { phrases: HomePendingPhrase[] }) {
   const t = useTranslations();
   const listRef = useRef<HTMLDivElement>(null);
   const maxHeight = useHeightToViewportBottom(listRef);
-  const { canScrollDown, onScroll } = useScrollEdges(
-    listRef,
-    phrases.length,
-    maxHeight,
-  );
+  const { canScrollDown, onScroll } = useScrollEdges(listRef, phrases.length, maxHeight);
 
   return (
-    <section
-      aria-labelledby="pending-list"
-      className="relative overflow-hidden rounded-lg bg-card shadow-card"
-    >
+    <section aria-labelledby="pending-list" className="relative overflow-hidden rounded-lg bg-card shadow-card">
       {/*
         Toda la tarjeta se desplaza: la cabecera queda fija arriba sobre vidrio (el mismo del calendario de Inicio,
         glass-fill y glass-fade-bottom) y las frases pasan por debajo; abajo, otro desvanecido de vidrio indica que
         hay más (solo cuando las hay). Ambos van por encima de la frase con el mouse (z-20), así no se cortan.
       */}
-      <div
-        ref={listRef}
-        style={{ maxHeight }}
-        onScroll={onScroll}
-        className="overflow-y-auto"
-      >
+      <div ref={listRef} style={{ maxHeight }} onScroll={onScroll} className="overflow-y-auto">
         <header className="glass-fill glass-fade-bottom sticky top-0 z-20 flex items-start gap-3 px-5 pt-5 pb-3">
           <span
             aria-hidden
@@ -98,15 +69,10 @@ export function PendingPhraseList({
             <Feather className="size-5" />
           </span>
           <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-            <h2
-              id="pending-list"
-              className="font-heading text-lg font-bold text-foreground"
-            >
+            <h2 id="pending-list" className="font-heading text-lg font-bold text-foreground">
               {t("home.pendingListTitle")}
             </h2>
-            <p className="text-base text-muted-foreground">
-              {t("home.pendingListHint")}
-            </p>
+            <p className="text-base text-muted-foreground">{t("home.pendingListHint")}</p>
           </div>
           <span className="rounded-full bg-celeste px-3 py-0.5 text-base font-bold text-foreground tabular-nums">
             {phrases.length}
@@ -114,18 +80,13 @@ export function PendingPhraseList({
         </header>
         <ul className="flex flex-col gap-2 px-5 pt-2 pb-5">
           {phrases.map((phrase) => (
-            <li
-              key={phrase.findingId}
-              className="relative hover:z-10 focus-within:z-10"
-            >
+            <li key={phrase.findingId} className="relative hover:z-10 focus-within:z-10">
               <FindingRow
                 fragment={phrase.fragment}
                 label={t(patternLabelKey(phrase.pattern))}
                 dimension={phrase.dimension}
                 href={routes.rewrite(phrase.journalEntryId, phrase.findingId)}
-                linkLabel={t("home.pendingRewriteThis", {
-                  fragment: phrase.fragment,
-                })}
+                linkLabel={t("home.pendingRewriteThis", { fragment: phrase.fragment })}
               />
             </li>
           ))}
@@ -136,8 +97,8 @@ export function PendingPhraseList({
   );
 }
 
-/** Lo que queda debajo de la tarjeta: el padding de main en escritorio (2,5rem). */
-const BOTTOM_SPACE_PX = 40;
+/** Lo que queda debajo de la tarjeta: el margen de main en escritorio (1,25rem), igual al de la barra lateral. */
+const BOTTOM_SPACE_PX = 20;
 /** La cabecera y al menos una frase completa, aunque la ventana sea muy baja. */
 const MIN_LIST_PX = 260;
 
@@ -146,9 +107,7 @@ const MIN_LIST_PX = 260;
  * alto de la pantalla y lo que haya arriba (p. ej. la invitación del check-in). Se recalcula al cambiar el tamaño de
  * la ventana o del contenido.
  */
-function useHeightToViewportBottom(
-  ref: React.RefObject<HTMLElement | null>,
-): number | undefined {
+function useHeightToViewportBottom(ref: React.RefObject<HTMLElement | null>): number | undefined {
   const [maxHeight, setMaxHeight] = useState<number>();
 
   useEffect(() => {
@@ -156,12 +115,7 @@ function useHeightToViewportBottom(
     if (!element) return;
     const update = () => {
       const top = element.getBoundingClientRect().top + window.scrollY;
-      setMaxHeight(
-        Math.max(
-          MIN_LIST_PX,
-          Math.floor(window.innerHeight - top - BOTTOM_SPACE_PX),
-        ),
-      );
+      setMaxHeight(Math.max(MIN_LIST_PX, Math.floor(window.innerHeight - top - BOTTOM_SPACE_PX)));
     };
     update();
     const observer = new ResizeObserver(update);
@@ -191,25 +145,16 @@ function ScrollFade({ visible }: { visible: boolean }) {
 }
 
 /** Si la lista tiene más contenido arriba o abajo del que se ve (para mostrar los desvanecidos). */
-function useScrollEdges(
-  ref: React.RefObject<HTMLElement | null>,
-  itemCount: number,
-  maxHeight: number | undefined,
-) {
-  const [edges, setEdges] = useState({
-    canScrollUp: false,
-    canScrollDown: false,
-  });
+function useScrollEdges(ref: React.RefObject<HTMLElement | null>, itemCount: number, maxHeight: number | undefined) {
+  const [edges, setEdges] = useState({ canScrollUp: false, canScrollDown: false });
 
   const measure = useCallback(() => {
     const element = ref.current;
     if (!element) return;
     const canScrollUp = element.scrollTop > 1;
-    const canScrollDown =
-      element.scrollTop + element.clientHeight < element.scrollHeight - 1;
+    const canScrollDown = element.scrollTop + element.clientHeight < element.scrollHeight - 1;
     setEdges((previous) =>
-      previous.canScrollUp === canScrollUp &&
-      previous.canScrollDown === canScrollDown
+      previous.canScrollUp === canScrollUp && previous.canScrollDown === canScrollDown
         ? previous
         : { canScrollUp, canScrollDown },
     );

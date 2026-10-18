@@ -146,7 +146,7 @@ export function HomePageClient() {
           {/* Fuera del @container: un contenedor de consultas sería el bloque contenedor del panel fijo. */}
           <aside
             data-right-rail
-            className="flex flex-col gap-5 lg:fixed lg:inset-y-0 lg:right-0 lg:z-10 lg:w-[22rem] lg:p-4 xl:w-[24rem]"
+            className="flex flex-col gap-5 lg:fixed lg:inset-y-0 lg:right-0 lg:z-10 lg:w-[22rem] lg:py-5 lg:pr-5 xl:w-[24rem]"
           >
             <div className="lg:h-full lg:overflow-y-auto lg:rounded-lg lg:bg-card lg:shadow-card">{weekCalendar}</div>
             <div className="grid gap-5 sm:grid-cols-2 lg:hidden">
