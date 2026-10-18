@@ -17,7 +17,6 @@ import { routes } from "@/lib/routes";
 /** Las 3 preguntas del Diario guardan el texto por campo (RS-ES-06). */
 export type JournalFieldTexts = FieldTexts;
 
-
 const INTENSITY_KEY: Record<string, "low" | "moderate" | "high"> = {
   LOW: "low",
   MODERATE: "moderate",
@@ -102,11 +101,12 @@ export function MirrorView({ journalEntryId, fieldTexts }: { journalEntryId: num
           {t("analysis.recognition")}
         </p>
         <ul className="flex flex-col gap-2">
-          {findings.map((finding) => {
+          {findings.map((finding, index) => {
             const fragment = sliceFinding(finding, fieldTexts);
             return (
               <li key={finding.findingId} className="relative hover:z-10 focus-within:z-10">
                 <FindingRow
+                  number={index + 1}
                   fragment={fragment}
                   label={t(patternLabelKey(finding.pattern))}
                   dimension={finding.dimension}

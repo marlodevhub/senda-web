@@ -20,11 +20,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useEntryDetail, useDeleteEntry } from "@/features/journal/api/use-entries";
-import type {
-  EntryAnalysisField,
-  EntryRewrite,
-  JournalEntryDetail,
-} from "@/features/journal/api/get-entry-detail";
+import type { EntryAnalysisField, EntryRewrite, JournalEntryDetail } from "@/features/journal/api/get-entry-detail";
 import { CONTEXT_ICONS } from "@/features/journal/context-icons";
 import { DIMENSION_TINT } from "@/lib/dimension-style";
 import { sliceFinding, type FieldTexts } from "@/lib/findings";
@@ -142,6 +138,7 @@ export function EntryDetail({ journalEntryId }: { journalEntryId: number }) {
                     start: finding.start,
                     end: finding.end,
                     className: DIMENSION_TINT[finding.dimension],
+                    badge: findings.indexOf(finding) + 1,
                   }))}
                 />
               </p>
@@ -161,9 +158,10 @@ export function EntryDetail({ journalEntryId }: { journalEntryId: number }) {
                 <p className="text-base text-muted-foreground">{t("history.noFindings")}</p>
               ) : (
                 <ul className="flex flex-col gap-2">
-                  {findings.map((finding) => (
+                  {findings.map((finding, index) => (
                     <li key={finding.findingId}>
                       <FindingRow
+                        number={index + 1}
                         fragment={sliceFinding(finding, textsOf(entry))}
                         label={t(patternLabelKey(finding.pattern))}
                         dimension={finding.dimension}

@@ -33,7 +33,15 @@ import { cn } from "@/lib/utils";
  * quedan para un sprint posterior.
  */
 /** La frase dentro del párrafo donde la escribió: la pregunta (o "Lo que escribiste"), su texto y dónde está la frase. */
-export type PhraseContext = { label: string; text: string; start: number; end: number };
+export type PhraseContext = {
+  label: string;
+  text: string;
+  start: number;
+  end: number;
+  /** Qué frase es dentro del registro (1, 2, …) y cuántas tiene. */
+  number: number;
+  total: number;
+};
 
 export function RewriteForm({
   journalEntryId,
@@ -112,7 +120,9 @@ export function RewriteForm({
       {/* La frase dentro del párrafo donde la escribió, resaltada, con su tipo en lenguaje amable. */}
       <section aria-labelledby="rewrite-phrase" className="flex flex-col gap-2 rounded-[1.75rem] bg-celeste px-5 py-4">
         <h2 id="rewrite-phrase" className="text-sm font-bold tracking-wide text-muted-foreground uppercase">
-          {t("rewrite.yourPhrase")}
+          {context && context.total > 1
+            ? t("rewrite.phraseOf", { number: context.number, total: context.total })
+            : t("rewrite.yourPhrase")}
         </h2>
         {context ? (
           <>
@@ -219,7 +229,7 @@ export function RewriteForm({
   );
 }
 
-/** Título de la Reescritura ("Reescribir") con el ícono de pluma y la invitación debajo. */
+/** Título de la Reescritura ("Reescribir"), en una palabra, con el ícono de pluma. */
 function RewriteHeader() {
   const t = useTranslations();
   return (
@@ -230,13 +240,10 @@ function RewriteHeader() {
       >
         <Feather className="size-5" />
       </span>
-      {/* El nombre de la pantalla en una palabra (dónde estoy) y, debajo, la invitación. */}
-      <div className="flex flex-col">
-        <h1 className="font-heading text-2xl leading-tight font-bold text-foreground md:text-3xl">
-          {t("rewrite.title")}
-        </h1>
-        <p className="text-base text-muted-foreground">{t("rewrite.subtitle")}</p>
-      </div>
+      {/* El nombre de la pantalla en una palabra: dónde estoy. */}
+      <h1 className="font-heading text-2xl leading-tight font-bold text-foreground md:text-3xl">
+        {t("rewrite.title")}
+      </h1>
     </header>
   );
 }

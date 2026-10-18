@@ -9,16 +9,13 @@ import { Drawer, DrawerClose, DrawerContent, DrawerHeader, DrawerTitle, DrawerTr
 import { MoodOrb, type Mood } from "@/components/icons/mood-orb";
 import { useHistory } from "@/features/journal/api/use-entries";
 import type { JournalEntrySummary } from "@/features/journal/api/get-entries";
-import {
-  HistoryFilters,
-  type HistoryFilterValues,
-} from "@/features/journal/components/history-filters";
+import { HistoryFilters, type HistoryFilterValues } from "@/features/journal/components/history-filters";
 import { CONTEXT_ICONS } from "@/features/journal/context-icons";
 import { cn } from "@/lib/utils";
 import { DIMENSION_SHORT_KEY } from "@/lib/dimension-style";
 import { formatIsoDay } from "@/lib/format/dates";
+import { numberEntriesByDay } from "@/lib/journey";
 import { JOURNAL_CONTEXT_LABEL_KEY } from "@/types/journal-context";
-
 
 /** Agrupa los registros por semana, en el orden en que llegan (del más reciente al más antiguo). */
 function groupByWeek(items: JournalEntrySummary[]): { week: number; items: JournalEntrySummary[] }[] {
@@ -59,6 +56,8 @@ export function EntryList({ view = "all" }: { view?: EntryListView }) {
     rewritten: view === "rewritten",
   });
   const items = data?.pages.flatMap((p) => p.items) ?? [];
+  // Varios registros en un mismo día: cada uno con su número (Registro 1, 2, …).
+  const entryNumbers = numberEntriesByDay(items);
   const activeCount = [filters.week, filters.dimension, filters.context].filter((v) => v !== undefined).length;
   const hasFilters = activeCount > 0;
 
@@ -175,7 +174,7 @@ export function EntryList({ view = "all" }: { view?: EntryListView }) {
             <ul className="flex flex-col gap-2">
               {group.items.map((item) => (
                 <li key={item.id}>
-                  <EntryRow item={item} />
+                  <EntryRow item={item} number={entryNumbers.get(item.id) ?? 1} />
                 </li>
               ))}
             </ul>
@@ -192,7 +191,7 @@ export function EntryList({ view = "all" }: { view?: EntryListView }) {
   );
 }
 
-function EntryRow({ item }: { item: JournalEntrySummary }) {
+function EntryRow({ item, number }: { item: JournalEntrySummary; number: number }) {
   const t = useTranslations();
   const context = item.context ? CONTEXT_ICONS[item.context] : null;
 
@@ -207,7 +206,10 @@ function EntryRow({ item }: { item: JournalEntrySummary }) {
           <span className="font-heading text-lg font-bold text-foreground">
             {t("history.dayLabel", { day: item.interventionDay })}
           </span>
-          <span className="text-base text-muted-foreground">{formatIsoDay(item.date, { weekday: "short", day: "numeric", month: "short" })}</span>
+          <span className="text-base text-muted-foreground">
+            {formatIsoDay(item.date, { weekday: "short", day: "numeric", month: "short" })}
+          </span>
+          <span className="text-base font-semibold text-bloom-ink">{t("history.entryNumber", { number })}</span>
         </p>
         <div className="flex flex-wrap gap-1.5">
           {item.context && context && (

@@ -21,12 +21,20 @@ export function RewriteWithContext({ journalEntryId, findingId }: { journalEntry
   const { data: entry } = useEntryDetail(journalEntryId);
 
   function phraseContext(activeFindingId: number): PhraseContext | null {
-    const finding = entry?.mirror?.findings.find((candidate) => candidate.findingId === activeFindingId);
+    const findings = entry?.mirror?.findings ?? [];
+    const finding = findings.find((candidate) => candidate.findingId === activeFindingId);
     if (!entry || !finding) return null;
     const { text, labelKey } = FIELD[finding.field];
     const paragraph = entry[text];
     if (typeof paragraph !== "string" || paragraph.length === 0) return null;
-    return { label: t(labelKey), text: paragraph, start: finding.start, end: finding.end };
+    return {
+      label: t(labelKey),
+      text: paragraph,
+      start: finding.start,
+      end: finding.end,
+      number: findings.indexOf(finding) + 1,
+      total: findings.length,
+    };
   }
 
   return <RewriteForm journalEntryId={journalEntryId} findingId={findingId} phraseContext={phraseContext} />;

@@ -14,3 +14,20 @@ export function clampJourneyDay(day: number): number {
 export function weekOfDay(day: number): number {
   return Math.ceil(clampJourneyDay(day) / 7);
 }
+
+/**
+ * Se puede escribir más de un registro por día: el número de cada uno dentro de su día (1, 2, …), en el orden en que
+ * se escribieron (por id). Lo usan el Historial y el calendario de Inicio, para nombrarlos "Registro 1", "Registro 2".
+ */
+export function numberEntriesByDay(entries: { id: number; interventionDay: number }[]): Map<number, number> {
+  const numbers = new Map<number, number>();
+  const sorted = [...entries].sort((a, b) => a.interventionDay - b.interventionDay || a.id - b.id);
+  let day: number | null = null;
+  let count = 0;
+  for (const entry of sorted) {
+    count = entry.interventionDay === day ? count + 1 : 1;
+    day = entry.interventionDay;
+    numbers.set(entry.id, count);
+  }
+  return numbers;
+}

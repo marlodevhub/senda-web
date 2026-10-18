@@ -44,14 +44,56 @@ describe("DayDetails", () => {
       <DayDetails day={{ interventionDay: 3, date: "2026-10-17", hasEntry: true, mood: 2 }} today={3} />,
     );
 
-    expect(await screen.findByText("Escribiste")).toBeInTheDocument();
+    expect(await screen.findByText("Registro 1")).toBeInTheDocument();
     expect(screen.getByText("Estudios · Libre")).toBeInTheDocument();
     expect(screen.getByText("2 frases detectadas · 1 reescrita")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Ver registro" })).toHaveAttribute("href", "/historial/7");
     expect(screen.getByRole("link", { name: "Reescribir" })).toHaveAttribute("href", "/historial/7/reescribir");
     // Solo el registro de ese día, aunque la semana traiga otros.
-    expect(screen.getAllByText("Escribiste")).toHaveLength(1);
+    expect(screen.getAllByText(/^Registro \d$/)).toHaveLength(1);
     expect(String(fetchMock.mock.calls[0][0])).toContain("/api/v1/journal-entries?week=1");
+  });
+
+  it("con varios registros el mismo día, los numera en el orden en que los escribió", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          items: [
+            {
+              id: 12,
+              date: "2026-10-17",
+              interventionDay: 3,
+              moodBefore: 4,
+              mode: "FREE",
+              context: "FRIENDS",
+              findingsCount: 0,
+              rewritesCount: 0,
+              pendingCount: 0,
+            },
+            {
+              id: 9,
+              date: "2026-10-17",
+              interventionDay: 3,
+              moodBefore: 2,
+              mode: "GUIDED",
+              context: "STUDIES",
+              findingsCount: 1,
+              rewritesCount: 0,
+              pendingCount: 1,
+            },
+          ],
+          hasMore: false,
+        }),
+        { status: 200 },
+      ),
+    );
+    renderWithProviders(
+      <DayDetails day={{ interventionDay: 3, date: "2026-10-17", hasEntry: true, mood: 4 }} today={3} />,
+    );
+
+    expect(await screen.findByText("Registro 1")).toBeInTheDocument();
+    expect(screen.getByText("Registro 2")).toBeInTheDocument();
+    expect(screen.getByText("Estudios · Guiado").closest("article")).toHaveTextContent("Registro 1");
   });
 
   it("si solo marcó su ánimo, muestra su carita sin pedir registros", () => {

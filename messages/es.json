@@ -174,7 +174,7 @@
     "moodWeekTitle": "Tu ánimo esta semana",
     "moodWeekEmpty": "Marca cómo llegas cada día para ver tu semana aquí.",
     "moodWeekHint": "Cada cara es un día; solo te compara contigo.",
-    "dayEntryTitle": "Escribiste",
+    "dayEntryTitle": "Registro {number}",
     "dayEntryFindings": "{count, plural, =0 {Sin frases para reescribir} one {# frase detectada} other {# frases detectadas}}",
     "dayEntryRewrites": "{count, plural, one {# reescrita} other {# reescritas}}",
     "dayEntryOpen": "Ver registro",
@@ -241,7 +241,6 @@
   },
   "rewrite": {
     "title": "Reescribir",
-    "subtitle": "Dilo como se lo dirías a un buen amigo.",
     "yourPhrase": "Tu frase",
     "seeExample": "Ver un ejemplo",
     "textLabel": "Tu reescritura",
@@ -262,7 +261,8 @@
     "saveInJar": "Guardar en mi frasco",
     "goHome": "Ir al inicio",
     "guideToggle": "¿No sabes por dónde empezar?",
-    "guideToggleHint": "Piénsalo con 3 preguntas. Son opcionales."
+    "guideToggleHint": "Piénsalo con 3 preguntas. Son opcionales.",
+    "phraseOf": "Frase {number} de {total}"
   },
   "progress": {
     "title": "Progreso",
@@ -390,7 +390,8 @@
     "filtersTitle": "Filtros",
     "filtersButton": "{count, plural, =0 {Filtros} other {Filtros (#)}}",
     "filtersDone": "Listo",
-    "removeFilter": "Quitar filtro: {name}"
+    "removeFilter": "Quitar filtro: {name}",
+    "entryNumber": "Registro {number}"
   },
   "profile": {
     "title": "Perfil",

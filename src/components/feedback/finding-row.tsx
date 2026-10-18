@@ -4,7 +4,6 @@ import { cn } from "@/lib/utils";
 import { DIMENSION_DOT } from "@/lib/dimension-style";
 import type { Dimension } from "@/types/dimension";
 
-
 /**
  * Una frase dura detectada (Espejo CU-03, detalle CU-11, Inicio CU-05): el fragmento que escribió el estudiante y, debajo,
  * su tipo en lenguaje amable (RN-ES-13), nunca el nombre técnico del patrón. Con `href` es un acceso a reescribirla
@@ -16,6 +15,7 @@ export function FindingRow({
   dimension,
   href,
   linkLabel,
+  number,
 }: {
   fragment: string;
   label: string;
@@ -23,9 +23,19 @@ export function FindingRow({
   href?: string;
   /** Nombre accesible del enlace ("Reescribir: “…”"). */
   linkLabel?: string;
+  /** Su número dentro del registro (1, 2, …): un registro puede tener varias frases. */
+  number?: number;
 }) {
   const body = (
     <>
+      {number !== undefined && (
+        <span
+          aria-hidden
+          className="flex size-8 shrink-0 items-center justify-center rounded-full bg-card font-heading text-base font-bold text-bloom-ink tabular-nums"
+        >
+          {number}
+        </span>
+      )}
       <span className="flex min-w-0 flex-1 flex-col gap-1">
         <span className="font-display text-base leading-snug font-semibold text-foreground before:content-['“'] after:content-['”']">
           {fragment}

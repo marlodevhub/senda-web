@@ -7,7 +7,7 @@ import { MoodOrb } from "@/components/icons/mood-orb";
 import type { HomeWeekDay } from "@/features/home/api/get-home";
 import { useWeekEntries } from "@/features/home/api/use-week-entries";
 import { formatIsoDay } from "@/lib/format/dates";
-import { weekOfDay } from "@/lib/journey";
+import { numberEntriesByDay, weekOfDay } from "@/lib/journey";
 import { routes } from "@/lib/routes";
 import { JOURNAL_CONTEXT_LABEL_KEY } from "@/types/journal-context";
 
@@ -21,6 +21,7 @@ export function DayDetails({ day, today }: { day: HomeWeekDay; today: number }) 
   const isFuture = day.interventionDay > today;
   const { data: entries, isPending } = useWeekEntries(weekOfDay(day.interventionDay), day.hasEntry);
   const dayEntries = (entries ?? []).filter((entry) => entry.interventionDay === day.interventionDay);
+  const numbers = numberEntriesByDay(dayEntries);
 
   return (
     <section aria-labelledby="day-details" aria-live="polite" className="flex flex-col gap-2.5">
@@ -33,11 +34,13 @@ export function DayDetails({ day, today }: { day: HomeWeekDay; today: number }) 
           <Loader2 className="size-5 animate-spin text-muted-foreground" aria-label={t("common.loading")} />
         ) : (
           dayEntries.map((entry) => (
-            <article key={entry.id} className="flex flex-col gap-3 rounded-2xl bg-sprout-tint p-3.5">
+            <article key={entry.id} className="flex flex-col gap-3 rounded-2xl bg-celeste p-3.5">
               <div className="flex items-center gap-3">
                 <MoodOrb mood={entry.moodBefore} className="size-9" />
                 <div className="flex min-w-0 flex-1 flex-col">
-                  <span className="font-semibold text-foreground">{t("home.dayEntryTitle")}</span>
+                  <span className="font-semibold text-foreground">
+                    {t("home.dayEntryTitle", { number: numbers.get(entry.id) ?? 1 })}
+                  </span>
                   <span className="truncate text-sm text-muted-foreground">
                     {[
                       entry.context && t(JOURNAL_CONTEXT_LABEL_KEY[entry.context]),
