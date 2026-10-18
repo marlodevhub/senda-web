@@ -26,7 +26,8 @@ export default function AdminAdherencePage() {
         </div>
 
         {cohortId && (
-          <Button asChild variant="outline" className="gap-1.5">
+          // Verde sólido de descarga (blanco sobre verde: 5:1).
+          <Button asChild className="gap-1.5 bg-green-700 text-white hover:bg-green-800">
             <a href={exportUrl(cohortId)}>
               <Download className="size-4" />
               {t("admin.adherence.exportCta")}

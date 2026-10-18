@@ -30,10 +30,10 @@ export function InstallApp({ intro = false, className }: { intro?: boolean; clas
           <p className="text-base text-muted-foreground">{t("install.hint")}</p>
         </div>
       )}
+      {/* Verde sólido de descarga, igual en todos los temas y modos (blanco sobre verde: 5:1). */}
       <Button
         type="button"
-        variant="soft"
-        className="rounded-full"
+        className="rounded-full bg-green-700 text-white hover:bg-green-800"
         aria-expanded={state === "ios" ? showIosSteps : undefined}
         onClick={() => (state === "prompt" ? void install() : setShowIosSteps((open) => !open))}
       >
