@@ -1,8 +1,6 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getTranslations } from "next-intl/server";
-import { ArrowLeft } from "lucide-react";
 import { EntryDetail } from "@/features/journal/components/entry-detail";
+import { BackLink } from "@/components/layout/back-link";
 
 export default async function HistorialDetailPage({ params }: { params: Promise<{ entryId: string }> }) {
   const { entryId } = await params;
@@ -11,17 +9,9 @@ export default async function HistorialDetailPage({ params }: { params: Promise<
     notFound();
   }
 
-  const t = await getTranslations();
-
   return (
     <div className="flex flex-col gap-4">
-      <Link
-        href="/historial"
-        className="flex w-fit items-center gap-1.5 rounded-full px-1 text-base font-semibold text-muted-foreground hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring"
-      >
-        <ArrowLeft className="size-4" aria-hidden />
-        {t("history.back")}
-      </Link>
+      <BackLink href="/historial" preferHistory />
       <EntryDetail journalEntryId={journalEntryId} />
     </div>
   );

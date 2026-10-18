@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
-import { Amphora, ArrowLeft, Check, ChevronDown, Feather, Home, Lightbulb, Loader2 } from "lucide-react";
+import { Amphora, Check, ChevronDown, Feather, Home, Lightbulb, Loader2 } from "lucide-react";
 import { JournalPrompt, JournalTextarea } from "@/components/forms/journal-sheet";
 import { Button } from "@/components/ui/button";
 import { MoodPicker } from "@/components/forms/mood-picker";
@@ -23,6 +23,7 @@ import { DIMENSION_DOT, DIMENSION_TINT } from "@/lib/dimension-style";
 import { HighlightedText } from "@/components/feedback/highlighted-text";
 import { patternLabelKey } from "@/lib/pattern-labels";
 import { routes } from "@/lib/routes";
+import { BackLink } from "@/components/layout/back-link";
 import { cn } from "@/lib/utils";
 
 /**
@@ -45,7 +46,6 @@ export function RewriteForm({
   phraseContext?: (findingId: number) => PhraseContext | null;
 }) {
   const t = useTranslations();
-  const router = useRouter();
   const { data: guide, isPending: isGuidePending } = useRewriteGuide(journalEntryId, findingId);
   const submitMutation = useSubmitRewrite(journalEntryId);
   const [exampleIndex, setExampleIndex] = useState<number | null>(null);
@@ -66,16 +66,6 @@ export function RewriteForm({
         <Loader2 className="size-6 animate-spin text-muted-foreground" aria-hidden />
       </div>
     );
-  }
-
-  // Se llega desde el Espejo, el detalle del registro, Inicio, Historial o un mensaje: "Volver" regresa a donde
-  // estaba. Si la página se abrió directo (sin historial en la pestaña), al detalle del registro.
-  function goBack() {
-    if (window.history.length > 1) {
-      router.back();
-    } else {
-      router.push(routes.entry(journalEntryId));
-    }
   }
 
   async function onSubmit(values: RewriteFormValues) {
@@ -115,6 +105,8 @@ export function RewriteForm({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="mx-auto flex w-full max-w-2xl flex-col gap-5" noValidate>
+      {/* Se llega desde el Espejo, el registro, Inicio, Historial o un mensaje: vuelve a donde estaba. */}
+      <BackLink href={routes.entry(journalEntryId)} preferHistory />
       <RewriteHeader />
 
       {/* La frase dentro del párrafo donde la escribió, resaltada, con su tipo en lenguaje amable. */}
@@ -217,10 +209,6 @@ export function RewriteForm({
         )}
 
         <div className="mt-2 flex flex-wrap items-center justify-between gap-3">
-          <Button type="button" variant="ghost" onClick={goBack}>
-            <ArrowLeft className="size-4" aria-hidden />
-            {t("common.back")}
-          </Button>
           <Button type="submit" variant="hero" size="xl" disabled={isSubmitting} className="ms-auto px-6">
             <Check className="size-4" aria-hidden />
             {isSubmitting ? t("rewrite.submitting") : t("rewrite.submit")}
