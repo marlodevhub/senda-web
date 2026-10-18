@@ -340,7 +340,13 @@ test("Senda se puede instalar como app, con su nombre, su ícono y abriendo en I
   const response = await page.request.get("/manifest.webmanifest");
   expect(response.ok()).toBe(true);
   const manifest = await response.json();
-  expect(manifest).toMatchObject({ name: "Senda", start_url: "/inicio", display: "standalone" });
+  // Abre en la pantalla de arranque (degradado rojo con el logo), con el mismo rojo de fondo en el arranque del sistema.
+  expect(manifest).toMatchObject({
+    name: "Senda",
+    start_url: "/abrir.html",
+    display: "standalone",
+    background_color: "#9B3558",
+  });
   for (const icon of manifest.icons as { src: string }[]) {
     expect((await page.request.get(icon.src)).ok()).toBe(true);
   }
@@ -352,6 +358,24 @@ test("Senda se puede instalar como app, con su nombre, su ícono y abriendo en I
     installabilityErrors: { errorId: string }[];
   };
   expect(installabilityErrors.map((error) => error.errorId)).toEqual([]);
+
+  // El service worker guarda la pantalla de arranque (y nada del estudiante) para que la app abra al instante.
+  await page.evaluate(() => navigator.serviceWorker.ready);
+  await expect
+    .poll(() => page.evaluate(async () => Boolean(await caches.match("/abrir.html"))))
+    .toBe(true);
+  const cached = await page.evaluate(async () =>
+    (await Promise.all((await caches.keys()).map(async (key) => (await caches.open(key)).keys())))
+      .flat()
+      .map((request) => new URL(request.url).pathname),
+  );
+  const allowed = (path: string) =>
+    ["/abrir.html", "/icons/splash-logo.svg"].includes(path) || path.startsWith("/_next/static/");
+  expect(cached.every(allowed)).toBe(true);
+
+  // Desde el arranque pasa sola a la app (sin sesión, al ingreso).
+  await page.goto("/abrir.html");
+  await expect(page).toHaveURL(/\/login/);
 });
 
 test("Volver sube un nivel: del Espejo al registro y del registro al Historial, sin dar vueltas", async ({ page }) => {

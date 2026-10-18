@@ -1,4 +1,5 @@
 import { ThemeColorSync } from "@/components/layout/theme-color-sync";
+import { ServiceWorkerRegister } from "@/components/pwa/service-worker-register";
 import type { Metadata, Viewport } from "next";
 import { cookies } from "next/headers";
 import { NextIntlClientProvider } from "next-intl";
@@ -57,6 +58,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
             <Providers>
               {children}
               <ThemeColorSync />
+              <ServiceWorkerRegister />
               <Toaster position="bottom-right" richColors />
             </Providers>
           </ThemeProvider>

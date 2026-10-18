@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#9B3558" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Senda</title>
+    <!--
+      Pantalla de arranque de la app instalada (start_url del manifiesto). El service worker (sw.js) la guarda en el
+      teléfono, así que aparece al instante aunque el servidor tarde en despertar; cuando el servidor responde, pasa a
+      Inicio. No guarda ni muestra nada del estudiante.
+    -->
+    <style>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+      }
+      body {
+        display: grid;
+        place-items: center;
+        background: linear-gradient(160deg, #c24a72 0%, #9b3558 45%, #6e1f3d 100%) fixed;
+        color: #fff;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        -webkit-user-select: none;
+        user-select: none;
+      }
+      main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+      }
+      img {
+        width: 7rem;
+        height: auto;
+      }
+      p {
+        margin: 0;
+        min-height: 1.5rem;
+        font-size: 1rem;
+        opacity: 0;
+        transition: opacity 0.4s;
+      }
+      p.visible {
+        opacity: 0.9;
+      }
+      @media (prefers-reduced-motion: no-preference) {
+        img {
+          animation: breathe 2.4s ease-in-out infinite;
+        }
+        @keyframes breathe {
+          50% {
+            transform: scale(1.06);
+          }
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <img src="/icons/splash-logo.svg" alt="Senda" />
+      <p id="status" role="status"></p>
+    </main>
+    <script>
+      (function () {
+        var status = document.getElementById("status");
+        var tries = 0;
+        // Si el servidor tarda (plan que se duerme), se dice sin alarma; sin conexión, se reintenta solo.
+        var slow = setTimeout(function () {
+          status.textContent = "Abriendo Senda…";
+          status.className = "visible";
+        }, 4000);
+        function open() {
+          fetch("/manifest.webmanifest", { cache: "no-store" })
+            .then(function (response) {
+              if (!response.ok) throw new Error(String(response.status));
+              clearTimeout(slow);
+              location.replace("/inicio");
+            })
+            .catch(function () {
+              tries += 1;
+              if (!navigator.onLine) {
+                status.textContent = "Sin conexión. Volveremos a intentarlo.";
+                status.className = "visible";
+              }
+              setTimeout(open, Math.min(1000 * tries, 5000));
+            });
+        }
+        open();
+      })();
+    </script>
+  </body>
+</html>
