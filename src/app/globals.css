@@ -946,6 +946,28 @@
   background-color: var(--banner-chip);
   color: var(--banner-chip-ink);
 }
+/* Tema Hombre: siempre el degradado azul noche (el de su modo oscuro), también en modo claro. */
+.tinted-sidebar[data-palette="ocean"] [data-sidebar-panel] {
+  --banner-from: #1E3A66;
+  --banner-to: #12243F;
+  --banner-chip: #DCE9FA;
+  --banner-chip-ink: #12243F;
+}
+
+/*
+ * Móvil: el texto un poco más pequeño en toda la app (un paso menos que la escala de Tailwind). El saludo de Inicio
+ * (text-3xl) y los títulos más grandes no cambian.
+ */
+@media (width < 48rem) {
+  :root {
+    --text-xs: 0.71875rem;
+    --text-sm: 0.84375rem;
+    --text-base: 0.9375rem;
+    --text-lg: 1.0625rem;
+    --text-xl: 1.1875rem;
+    --text-2xl: 1.40625rem;
+  }
+}
 
 /*
  * Bienvenida (CU-17). Entre pantallas: la ilustración entra deslizándose y se enfoca (según se avance o se vuelva), y

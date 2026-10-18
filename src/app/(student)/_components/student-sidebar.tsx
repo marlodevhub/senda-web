@@ -80,7 +80,7 @@ export function StudentSidebar() {
               className="h-1.5 w-full overflow-hidden rounded-full bg-background dark:bg-border"
             >
               <div
-                className="h-full rounded-full bg-[image:var(--grad-dawn)] transition-[width] duration-700 ease-out"
+                className="h-full rounded-full bg-(--prompt-red) transition-[width] duration-700 ease-out"
                 style={{ width: `${(day / INTERVENTION_DAYS) * 100}%` }}
               />
             </div>
