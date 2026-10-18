@@ -184,15 +184,17 @@ export function JournalForm({ checkinMood, chosenMood }: { checkinMood?: Mood | 
           </JournalPrompt>
         )}
 
-        <div className="mt-auto flex flex-wrap items-end justify-between gap-3 pt-4">
-          <div className="flex flex-col gap-1">
-            {/* Siempre en el mismo lugar: la hoja no cambia de tamaño al empezar a escribir. */}
-            <div aria-hidden className="pointer-events-none flex -rotate-2 items-center gap-2">
-              <p className="font-hand text-base whitespace-nowrap text-muted-foreground">{t("journal.handNote")}</p>
-              <EmotionCharacter emotion="calm" className="w-9" />
-            </div>
-            <div className="flex h-9 items-center gap-2">
-              <p className="text-base font-semibold text-foreground tabular-nums">
+        {/* La nota a mano en su propia línea y, debajo, el contador y Guardar en una misma fila (alineados al centro):
+            así no se desacomodan en pantallas angostas. */}
+        <div className="mt-auto flex flex-col gap-2 pt-4">
+          {/* Siempre en el mismo lugar: la hoja no cambia de tamaño al empezar a escribir. */}
+          <div aria-hidden className="pointer-events-none flex -rotate-2 items-center gap-2">
+            <p className="font-hand text-base whitespace-nowrap text-muted-foreground">{t("journal.handNote")}</p>
+            <EmotionCharacter emotion="calm" className="w-9" />
+          </div>
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex min-w-0 items-center gap-2">
+              <p className="text-base font-semibold whitespace-nowrap text-foreground tabular-nums">
                 {t("journal.wordCount", { count: words })}
               </p>
               {draftStatus !== "empty" && (
@@ -202,19 +204,19 @@ export function JournalForm({ checkinMood, chosenMood }: { checkinMood?: Mood | 
                 </>
               )}
             </div>
+            {/* En el color de la cara elegida; sin cara todavía, el del tema. */}
+            <Button
+              type="submit"
+              variant={moodBefore ? "default" : "hero"}
+              size="xl"
+              disabled={isSubmitting}
+              className="shrink-0 rounded-full px-6"
+              style={moodBefore ? moodSolidStyle(moodBefore as Mood) : undefined}
+            >
+              <Check className="size-4" aria-hidden />
+              {isSubmitting ? t("journal.submitting") : t("journal.submit")}
+            </Button>
           </div>
-          {/* En el color de la cara elegida; sin cara todavía, el del tema. */}
-          <Button
-            type="submit"
-            variant={moodBefore ? "default" : "hero"}
-            size="xl"
-            disabled={isSubmitting}
-            className="ms-auto shrink-0 rounded-full px-6"
-            style={moodBefore ? moodSolidStyle(moodBefore as Mood) : undefined}
-          >
-            <Check className="size-4" aria-hidden />
-            {isSubmitting ? t("journal.submitting") : t("journal.submit")}
-          </Button>
         </div>
       </div>
 
