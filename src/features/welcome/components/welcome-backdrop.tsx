@@ -14,7 +14,8 @@ const LAYERS = [
 /**
  * El fondo de la bienvenida (CU-17), a pantalla completa en móvil y escritorio: cielo en degradado, una luna grande
  * con su resplandor, estrellas que titilan, nubes que flotan y, abajo, el paisaje de cada pantalla (`landscapes`, el
- * de `index` a la vista) en tres capas con parallax al pasar de pantalla. Todo sale de
+ * de `index` a la vista) en tres capas con parallax al pasar de pantalla (solo en escritorio; en móvil el paisaje se
+ * cambia con un desvanecido rápido, sin moverse). Todo sale de
  * `from` y `to` (los colores de la pantalla): los demás tonos se mezclan en CSS, así cambia por completo de color con
  * una transición al pasar de pantalla (`.welcome-backdrop` en globals.css). `moon` mueve la luna: detrás de la
  * ilustración (en escritorio, a la derecha; en móvil, arriba). Decorativo.
@@ -93,9 +94,10 @@ export function WelcomeBackdrop({
           landscapes.map((landscape, i) => (
             <g
               key={`${key}-${i}`}
-              className="welcome-layer"
+              className={desktop ? "welcome-layer" : "welcome-layer-quick"}
               style={{
-                transform: `translateX(${(i - index) * 1440 * speed}px)`,
+                // Móvil: sin parallax, cada paisaje en su lugar; solo cambia cuál se ve.
+                transform: desktop ? `translateX(${(i - index) * 1440 * speed}px)` : undefined,
                 opacity: i === index ? 1 : 0,
               }}
             >

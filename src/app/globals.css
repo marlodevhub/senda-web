@@ -1039,9 +1039,6 @@
   .welcome-art-in-prev {
     animation: welcome-art-in-prev 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
-  .welcome-art-pop {
-    animation: welcome-art-pop 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
-  }
   .welcome-desk-in > * {
     animation: welcome-desk-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
@@ -1065,10 +1062,6 @@
 @keyframes welcome-art-in-prev {
   from { opacity: 0; transform: translateX(-48px) scale(0.96); filter: blur(6px); }
   to { opacity: 1; transform: none; filter: none; }
-}
-@keyframes welcome-art-pop {
-  from { opacity: 0; transform: translateY(16px) scale(0.94); }
-  to { opacity: 1; transform: none; }
 }
 @keyframes welcome-desk-in {
   from { opacity: 0; transform: translateY(16px); }
@@ -1233,6 +1226,15 @@
 @media (prefers-reduced-motion: reduce) {
   .welcome-layer {
     transition: opacity 0.3s ease;
+  }
+}
+/* Móvil: el paisaje cambia con un desvanecido rápido, sin parallax; el color del cielo también cambia rápido. */
+.welcome-layer-quick {
+  transition: opacity 0.2s ease;
+}
+@media (max-width: 1023.98px) {
+  .welcome-backdrop {
+    transition: --wb-from 0.25s ease, --wb-to 0.25s ease;
   }
 }
 .welcome-tree-stroke {

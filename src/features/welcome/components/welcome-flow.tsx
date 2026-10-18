@@ -122,8 +122,9 @@ function prefersReducedMotion(): boolean {
  * (con Línea 113 y SAMU 106) y cómo se usa —, la pregunta opcional "Mi punto de partida" y, la primera vez, "Cuéntanos
  * de ti" al final (cómo quiere que lo llamen y su sexo, obligatorios; el sexo elige el tema de color). Se pasa con
  * "Continuar" o deslizando. "Empezar" la marca como vista y lleva a Inicio, donde arranca el tutorial.
- * - Cada pantalla tiene su ilustración (unDraw y una del mismo estilo), pintada con su color. Entre pantallas, la
- *   ilustración entra deslizándose (según se avance o se vuelva) y el texto aparece escalonado.
+ * - Cada pantalla tiene su ilustración (unDraw y una del mismo estilo), pintada con su color. En escritorio, entre
+ *   pantallas la ilustración entra deslizándose (según se avance o se vuelva) y el texto aparece escalonado; en móvil,
+ *   todo cambia con un desvanecido rápido (sin deslizar ni parallax), para pasar rápido con "Continuar".
  * - De fondo, a pantalla completa, un paisaje de noche (WelcomeBackdrop) en el color de cada pantalla.
  * - Escritorio: el texto y los botones a la izquierda; la ilustración grande a la derecha, delante de la luna.
  * - Al tocar "Empezar", una animación presenta el recorrido por la interfaz (TourLaunch) y luego entra a Inicio,
@@ -417,9 +418,9 @@ export function WelcomeFlow({
         landscapes={steps.map((slide) => SLIDE_STYLE[slide].land)}
         index={index}
       />
+      {/* Móvil: las pantallas se cambian con un desvanecido rápido (sin deslizarse); se sigue pudiendo pasar deslizando. */}
       <div
-        className="flex h-full touch-pan-y transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
-        style={{ transform: `translateX(-${index * 100}%)` }}
+        className="relative h-full touch-pan-y"
         onPointerDown={(event) => {
           pointerStartX.current = event.clientX;
         }}
@@ -439,7 +440,10 @@ export function WelcomeFlow({
               aria-label={t("welcome.progressLabel", { step: i + 1, total: steps.length })}
               aria-hidden={!active || undefined}
               inert={!active}
-              className="relative h-full w-full shrink-0 overflow-hidden"
+              className={cn(
+                "absolute inset-0 overflow-hidden transition-opacity duration-200 ease-out motion-reduce:transition-none",
+                active ? "opacity-100" : "pointer-events-none opacity-0",
+              )}
             >
               <div className="relative mx-auto flex h-full w-full max-w-md flex-col overflow-y-auto px-6 pt-20 pb-32">
                 {/* La ilustración, sin caja: delante de una luna que la ilumina. */}
@@ -448,7 +452,6 @@ export function WelcomeFlow({
                     className={cn(
                       "relative w-full",
                       isForm ? "max-w-[10rem]" : "max-w-[17rem]",
-                      active && "welcome-art-pop",
                     )}
                   >
                     <span aria-hidden className="welcome-moon-inline absolute top-1/2 left-1/2 aspect-square w-[92%]" />
@@ -474,7 +477,7 @@ export function WelcomeFlow({
                   {slideTitle(slide)}
                 </h2>
 
-                <div className="mt-5 rounded-3xl bg-black/15 p-5 backdrop-blur-sm">{slideBody(slide)}</div>
+                <div className="mt-5 rounded-3xl bg-black/20 p-5">{slideBody(slide)}</div>
               </div>
             </section>
           );
