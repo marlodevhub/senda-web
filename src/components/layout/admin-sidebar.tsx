@@ -26,7 +26,7 @@ export function AdminSidebar({ onLogout }: { onLogout: () => void }) {
       className="flex h-screen w-56 shrink-0 flex-col justify-between border-r border-border bg-card px-3 py-5"
     >
       <div className="flex flex-col gap-1">
-        <span className="px-2 pb-4 font-heading text-lg font-extrabold text-foreground">Senda</span>
+        <span className="px-2 pb-4 font-brand text-lg font-extrabold text-foreground">Senda</span>
         {items.map((item) => {
           const active = pathname.startsWith(item.href);
           const Icon = item.icon;

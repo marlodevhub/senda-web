@@ -319,7 +319,7 @@ export function WelcomeFlow({
         />
         <div className="relative z-10 flex w-1/2 shrink-0 flex-col overflow-y-auto px-14 py-10 xl:px-20">
           <div className="flex items-center justify-between gap-4">
-            <span className="flex items-center gap-2 font-heading text-xl font-extrabold">
+            <span className="flex items-center gap-2 font-brand text-xl font-extrabold">
               <SendaLogo className="size-7" />
               Senda
             </span>

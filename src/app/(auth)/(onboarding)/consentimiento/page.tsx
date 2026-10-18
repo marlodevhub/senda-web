@@ -35,7 +35,7 @@ export default async function ConsentimientoPage() {
   return (
     // Ancho de lectura cómodo (~70 caracteres por línea en escritorio); en móvil ocupa todo el ancho.
     <div className="flex w-full max-w-3xl flex-col gap-5">
-      <p className="flex items-center justify-center gap-2 font-heading text-2xl font-extrabold text-foreground">
+      <p className="flex items-center justify-center gap-2 font-brand text-2xl font-extrabold text-foreground">
         <SendaLogo className="size-8 text-(--prompt-red)" />
         Senda
       </p>

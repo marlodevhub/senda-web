@@ -50,7 +50,7 @@ export default async function StudentLayout({ children }: { children: React.Reac
               <span className="flex items-center gap-2">
                 {/* El logotipo solo, en el color de acento del tema (rosado; azul con Hombre). */}
                 <SendaLogo className="size-7 text-(--prompt-red)" />
-                <span className="font-heading text-xl font-extrabold text-foreground">Senda</span>
+                <span className="font-brand text-xl font-extrabold text-foreground">Senda</span>
               </span>
               <MessagesBell />
             </header>

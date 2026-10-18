@@ -40,7 +40,7 @@ export function StudentSidebar() {
           {/* El logotipo solo, en el color de acento del tema (rosado; azul con Hombre). */}
           <SendaLogo className="size-9 text-(--prompt-red)" />
           <span className="sr-only lg:not-sr-only lg:flex lg:flex-col">
-            <span className="font-heading text-2xl leading-none font-extrabold text-foreground">Senda</span>
+            <span className="font-brand text-2xl leading-none font-extrabold text-foreground">Senda</span>
             <span className="text-xs text-muted-foreground">{t("sidebar.tagline")}</span>
           </span>
         </Link>

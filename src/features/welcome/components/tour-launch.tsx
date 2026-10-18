@@ -37,7 +37,7 @@ export function TourLaunch({ background, accent }: { background: string; accent:
           className="tour-launch-device hidden aspect-[16/10] w-full max-w-2xl gap-4 rounded-[1.75rem] bg-white p-4 shadow-2xl lg:flex"
         >
           <div className="flex w-[30%] flex-col gap-2 rounded-2xl bg-[#F4F2F6] p-4">
-            <span className="mb-3 flex items-center gap-2 font-heading text-base font-extrabold text-[#2B2430]">
+            <span className="mb-3 flex items-center gap-2 font-brand text-base font-extrabold text-[#2B2430]">
               <span style={{ color: accent }}>
                 <SendaLogo className="size-5" />
               </span>
