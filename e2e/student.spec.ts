@@ -458,6 +458,15 @@ test("el vidrio de la app se ajusta desde Perfil y se recuerda", async ({ page }
   await page.reload();
   await expect(html).toHaveAttribute("style", /--glass-alpha: 90%/);
   await expect(page.getByLabel("Desenfoque")).toHaveCount(0);
+
+  // Las barras de desplazamiento: ocultas por defecto; se activan aquí y se recuerda.
+  const scrollbarWidth = () => page.evaluate(() => getComputedStyle(document.body).scrollbarWidth);
+  expect(await scrollbarWidth()).toBe("none");
+  await page.getByLabel("Mostrar las barras de desplazamiento").check();
+  await expect(html).toHaveClass(/show-scrollbars/);
+  expect(await scrollbarWidth()).not.toBe("none");
+  await page.reload();
+  await expect(html).toHaveClass(/show-scrollbars/);
   await expectAccessible(page);
 });
 

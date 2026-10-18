@@ -1089,3 +1089,17 @@
 .welcome-shore {
   fill: url(#wb-shore);
 }
+
+/*
+ * Barras de desplazamiento: en las pantallas del participante no se muestran por defecto (todo se sigue
+ * desplazando igual, con el dedo, la rueda o el teclado). Perfil → Apariencia las puede activar (clase
+ * `show-scrollbars` en <html>, useApplyGlassSettings). El panel del administrador no se toca.
+ */
+html:not(.show-scrollbars):has(.participant-no-select),
+html:not(.show-scrollbars):has(.participant-no-select) * {
+  scrollbar-width: none;
+}
+html:not(.show-scrollbars):has(.participant-no-select)::-webkit-scrollbar,
+html:not(.show-scrollbars):has(.participant-no-select) *::-webkit-scrollbar {
+  display: none;
+}

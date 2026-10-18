@@ -11,7 +11,7 @@ import {
   useGlassSettings,
 } from "@/features/appearance/glass-settings";
 
-/** Perfil → Apariencia: el vidrio de la barra inferior y del botón de mensajes. Se ve el cambio al instante. */
+/** Perfil → Apariencia: el vidrio de la app y las barras de desplazamiento. Se ve el cambio al instante. */
 export function GlassSettingsForm() {
   const t = useTranslations();
   const settings = useGlassSettings();
@@ -40,6 +40,14 @@ export function GlassSettingsForm() {
           onCheckedChange={(checked) => saveGlassSettings({ ...settings, sheen: checked === true })}
         />
         <Label htmlFor="glassSheen">{t("profile.glassSheen")}</Label>
+      </div>
+      <div className="flex items-center gap-3">
+        <Checkbox
+          id="showScrollbars"
+          checked={settings.scrollbars}
+          onCheckedChange={(checked) => saveGlassSettings({ ...settings, scrollbars: checked === true })}
+        />
+        <Label htmlFor="showScrollbars">{t("profile.showScrollbars")}</Label>
       </div>
       <Button variant="ghost" className="self-start" onClick={() => saveGlassSettings(GLASS_DEFAULTS)}>
         {t("profile.glassReset")}

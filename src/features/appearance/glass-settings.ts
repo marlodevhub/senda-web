@@ -3,14 +3,14 @@
 import { useEffect, useSyncExternalStore } from "react";
 
 /**
- * Apariencia del vidrio (barra inferior y botón de mensajes): opacidad y
- * línea de luz. El desenfoque es fijo (16 px, en globals.css). Preferencia de este dispositivo: vive en
+ * Apariencia de este dispositivo: el vidrio de toda la app (opacidad y línea de luz; el desenfoque es fijo, 16 px,
+ * en globals.css) y si se muestran las barras de desplazamiento (por defecto, no). Preferencia de este dispositivo: vive en
  * localStorage, nunca en el servidor; si el almacenamiento falla (modo
  * privado, bloqueado) se usan los valores por defecto.
  */
-export type GlassSettings = { opacity: number; sheen: boolean };
+export type GlassSettings = { opacity: number; sheen: boolean; scrollbars: boolean };
 
-export const GLASS_DEFAULTS: GlassSettings = { opacity: 70, sheen: true };
+export const GLASS_DEFAULTS: GlassSettings = { opacity: 70, sheen: true, scrollbars: false };
 export const GLASS_LIMITS = { opacity: { min: 40, max: 100, step: 5 } } as const;
 
 const STORAGE_KEY = "senda.glass";
@@ -42,6 +42,7 @@ function read(): GlassSettings {
     cachedSettings = {
       opacity: clamp(parsed.opacity, GLASS_LIMITS.opacity.min, GLASS_LIMITS.opacity.max, GLASS_DEFAULTS.opacity),
       sheen: typeof parsed.sheen === "boolean" ? parsed.sheen : GLASS_DEFAULTS.sheen,
+      scrollbars: typeof parsed.scrollbars === "boolean" ? parsed.scrollbars : GLASS_DEFAULTS.scrollbars,
     };
   } catch {
     cachedSettings = GLASS_DEFAULTS;
@@ -82,4 +83,8 @@ export function useApplyGlassSettings() {
   useEffect(() => {
     document.documentElement.style.setProperty("--glass-alpha", `${settings.opacity}%`);
   }, [settings.opacity]);
+  // Las barras de desplazamiento se ocultan por defecto (globals.css); esta clase las vuelve a mostrar.
+  useEffect(() => {
+    document.documentElement.classList.toggle("show-scrollbars", settings.scrollbars);
+  }, [settings.scrollbars]);
 }
