@@ -24,6 +24,7 @@ import {
   BOOK_LOVER,
   DEEP_WORK,
   MOONLIGHT,
+  MOONLIGHT_CAMPFIRE,
   WAITING_FOR_YOU,
   type Illustration,
 } from "@/features/welcome/illustrations/undraw";
@@ -45,7 +46,16 @@ type Step = (typeof SCREENS)[number] | "question" | "identity";
  */
 const SLIDE_STYLE: Record<
   Step,
-  { from: string; to: string; ink: string; accent: string; accent2: string; art: Illustration; land: Landscape }
+  {
+    from: string;
+    to: string;
+    ink: string;
+    accent: string;
+    accent2: string;
+    art: Illustration;
+    mobileArt?: Illustration;
+    land: Landscape;
+  }
 > = {
   whatItIs: {
     from: "#7CC98C",
@@ -72,6 +82,8 @@ const SLIDE_STYLE: Record<
     accent: "#2B86D1",
     accent2: "#F2C95C",
     art: MOONLIGHT,
+    // En el círculo del móvil no caben los árboles: solo la persona con su fogata.
+    mobileArt: MOONLIGHT_CAMPFIRE,
     land: LANDSCAPES.SEA,
   },
   question: {
@@ -344,7 +356,8 @@ export function WelcomeFlow({
                 {slideTitle(step)}
               </h2>
               <span aria-hidden className="h-1 w-16 rounded-full bg-white/70" />
-              <div className="max-w-lg [&_p]:text-lg">{slideBody(step)}</div>
+              {/* Como en móvil: el texto sobre un panel translúcido con desenfoque, que se lee bien sobre el paisaje. */}
+              <div className="rounded-3xl bg-black/15 p-6 backdrop-blur-md [&_p]:text-lg">{slideBody(step)}</div>
             </section>
 
             <div className="flex flex-wrap items-center gap-3">
@@ -440,7 +453,7 @@ export function WelcomeFlow({
                   >
                     <span aria-hidden className="welcome-moon-inline absolute top-1/2 left-1/2 aspect-square w-[92%]" />
                     <IllustrationArt
-                      art={slideStyle.art}
+                      art={slideStyle.mobileArt ?? slideStyle.art}
                       accent={slideStyle.accent}
                       accent2={slideStyle.accent2}
                       className={cn(

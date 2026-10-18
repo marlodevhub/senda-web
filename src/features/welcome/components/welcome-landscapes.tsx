@@ -25,6 +25,31 @@ function RoundTree({ x, y, r }: { x: number; y: number; r: number }) {
   );
 }
 
+/**
+ * Árbol en forma de hoja, como los de la ilustración del bosque: copa alta y en punta sobre un tronco fino, con la
+ * base en (x, y) y alto h. `cluster` agrupa tres, uno más alto en medio.
+ */
+function LeafTree({ x, y, h, cluster = false }: { x: number; y: number; h: number; cluster?: boolean }) {
+  const one = (cx: number, ch: number) => {
+    const w = ch * 0.34;
+    const top = y - ch;
+    const crownBottom = y - ch * 0.28;
+    return (
+      <g key={cx}>
+        <rect x={cx - ch * 0.012} y={crownBottom - ch * 0.05} width={ch * 0.024} height={y - crownBottom + ch * 0.05} />
+        <path
+          d={`M${cx} ${top} C${cx + w * 0.75} ${top + ch * 0.28} ${cx + w * 0.6} ${crownBottom - ch * 0.04} ${cx} ${crownBottom} C${cx - w * 0.6} ${crownBottom - ch * 0.04} ${cx - w * 0.75} ${top + ch * 0.28} ${cx} ${top} Z`}
+        />
+      </g>
+    );
+  };
+  return (
+    <g className="welcome-tree">
+      {cluster ? [one(x - h * 0.2, h * 0.82), one(x + h * 0.2, h * 0.82), one(x, h)] : one(x, h)}
+    </g>
+  );
+}
+
 /** Cactus saguaro con la base en (x, y) y alto h. */
 function Cactus({ x, y, h }: { x: number; y: number; h: number }) {
   const w = h * 0.16;
@@ -51,7 +76,7 @@ function Cactus({ x, y, h }: { x: number; y: number; h: number }) {
   );
 }
 
-/** Qué es Senda: prados con colinas suaves y árboles redondos. */
+/** Qué es Senda: prados con colinas suaves y árboles en forma de hoja, como los del bosque de la ilustración. */
 const MEADOW: Landscape = {
   far: (
     <path
@@ -65,9 +90,9 @@ const MEADOW: Landscape = {
         className="welcome-mountain-mid"
         d="M0 340 C200 300 360 320 520 338 C700 358 860 300 1040 310 C1200 318 1320 340 1440 330 V520 H0 Z"
       />
-      <RoundTree x={250} y={340} r={58} />
-      <RoundTree x={360} y={344} r={40} />
-      <RoundTree x={1150} y={318} r={52} />
+      <LeafTree x={260} y={346} h={190} cluster />
+      <LeafTree x={400} y={350} h={130} />
+      <LeafTree x={1150} y={322} h={170} cluster />
     </>
   ),
   near: (
@@ -76,8 +101,8 @@ const MEADOW: Landscape = {
         className="welcome-mountain-near"
         d="M0 420 C240 384 420 410 640 400 C860 390 1040 420 1240 404 C1340 396 1400 398 1440 400 V520 H0 Z"
       />
-      <RoundTree x={60} y={470} r={96} />
-      <RoundTree x={1390} y={470} r={104} />
+      <LeafTree x={80} y={500} h={360} cluster />
+      <LeafTree x={1370} y={500} h={380} cluster />
       <g className="welcome-light">
         {[180, 260, 340, 1180, 1260].map((x, i) => (
           <circle key={x} cx={x} cy={452 + (i % 2) * 14} r={5} />
