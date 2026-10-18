@@ -8,7 +8,8 @@ import { STUDENT_NAV_ITEMS } from "./student-nav-items";
 import { useGlassSettings } from "@/features/appearance/glass-settings";
 
 /**
- * Móvil: cápsula flotante de vidrio con las 5 pestañas (opacidad,
+ * Móvil: cápsula flotante de vidrio con las 5 pestañas, la activa como en iOS
+ * (cápsula gris y acento del tema, `--tab-active-*` en globals.css; opacidad,
  * desenfoque y reflejo se ajustan en Perfil → Apariencia). Desde `md` la
  * reemplaza `StudentSidebar`.
  */
@@ -40,7 +41,8 @@ export function BottomNav() {
               <span
                 className={cn(
                   "flex flex-col items-center gap-0.5 rounded-full px-1 py-1.5 text-[0.6875rem] font-semibold transition-all duration-300",
-                  active ? "bg-bloom-tint text-bloom-ink" : "text-foreground",
+                  // Como en iOS: la activa en una cápsula gris neutra con el ícono y el texto en el acento del tema.
+                  active ? "bg-(--tab-active-bg) text-(--tab-active-ink)" : "text-foreground",
                 )}
               >
                 <Icon className={cn("size-5 transition-transform duration-300", active && "scale-110")} aria-hidden />

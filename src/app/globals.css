@@ -136,6 +136,9 @@
   --bloom: #E8738A;
   --bloom-ink: #7A2E3C;
   --bloom-tint: #FBE4E8;
+  /* Pestaña activa de la barra inferior, como en iOS: cápsula gris neutra e ícono y texto en el acento (≥ 4,5:1). */
+  --tab-active-ink: #A82E48;
+  --tab-active-bg: rgb(0 0 0 / 0.07);
   --root: #C77B4D;
   --root-ink: #6B3A1C;
   --root-tint: #F6E3D3;
@@ -256,6 +259,9 @@
   --bloom: #F0A0AF;
   --bloom-ink: #FDE3E8;
   --bloom-tint: #3E2530;
+  /* Pestaña activa de la barra inferior, como en iOS: cápsula gris neutra e ícono y texto en el acento (≥ 4,5:1). */
+  --tab-active-ink: #F0A0AF;
+  --tab-active-bg: rgb(255 255 255 / 0.12);
   --root: #E3A06C;
   --root-ink: #FBE8D4;
   --root-tint: #3A2A1D;
@@ -356,6 +362,9 @@
   --bloom: #5E8FD0;
   --bloom-ink: #1D3A63;
   --bloom-tint: #E0EBF8;
+  /* Pestaña activa de la barra inferior, como en iOS: cápsula gris neutra e ícono y texto en el acento (≥ 4,5:1). */
+  --tab-active-ink: #24549C;
+  --tab-active-bg: rgb(0 0 0 / 0.07);
   --prompt-red: #2F68BF;
   --prompt-red-foreground: #FFFFFF;
   --primary-foreground: #0F2340;
@@ -403,6 +412,9 @@
   --bloom: #8FB8EC;
   --bloom-ink: #DCE9FA;
   --bloom-tint: #1E2B42;
+  /* Pestaña activa de la barra inferior, como en iOS: cápsula gris neutra e ícono y texto en el acento (≥ 4,5:1). */
+  --tab-active-ink: #9CC2F5;
+  --tab-active-bg: rgb(255 255 255 / 0.12);
   --prompt-red: #9CC2F5;
   --prompt-red-foreground: #0F1B2E;
   --primary-foreground: #0F1B2E;
