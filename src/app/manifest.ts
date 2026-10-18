@@ -5,7 +5,8 @@ import type { MetadataRoute } from "next";
  * propia ventana, sin la barra del navegador. Abre en la pantalla de arranque (/abrir.html: degradado rojo con el logo
  * blanco), que el service worker (public/sw.js) guarda en el teléfono para que aparezca al instante aunque el servidor
  * tarde, y de ahí pasa a Inicio (si no hay sesión, el proxy lleva al ingreso). El fondo del arranque del sistema
- * (background_color) es el mismo rojo; las barras del sistema (theme_color) quedan como estaban. El service worker solo guarda esa pantalla y los archivos de la app: ningún texto del estudiante queda
+ * (background_color) es el mismo rojo; las barras del sistema (theme_color) quedan como estaban. Android pone en su
+ * arranque el ícono maskable, así que su fondo es ese mismo rojo (#9B3558): no se ve un recuadro, solo el logo. El service worker solo guarda esa pantalla y los archivos de la app: ningún texto del estudiante queda
  * guardado en el dispositivo por instalarla.
  */
 export default function manifest(): MetadataRoute.Manifest {
