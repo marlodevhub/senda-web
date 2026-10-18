@@ -65,9 +65,9 @@ const MEADOW: Landscape = {
         className="welcome-mountain-mid"
         d="M0 340 C200 300 360 320 520 338 C700 358 860 300 1040 310 C1200 318 1320 340 1440 330 V520 H0 Z"
       />
-      <RoundTree x={240} y={330} r={34} />
-      <RoundTree x={1130} y={312} r={28} />
-      <RoundTree x={1210} y={318} r={20} />
+      <RoundTree x={250} y={340} r={58} />
+      <RoundTree x={360} y={344} r={40} />
+      <RoundTree x={1150} y={318} r={52} />
     </>
   ),
   near: (
@@ -76,8 +76,8 @@ const MEADOW: Landscape = {
         className="welcome-mountain-near"
         d="M0 420 C240 384 420 410 640 400 C860 390 1040 420 1240 404 C1340 396 1400 398 1440 400 V520 H0 Z"
       />
-      <RoundTree x={70} y={430} r={46} />
-      <RoundTree x={1370} y={420} r={52} />
+      <RoundTree x={60} y={470} r={96} />
+      <RoundTree x={1390} y={470} r={104} />
       <g className="welcome-light">
         {[180, 260, 340, 1180, 1260].map((x, i) => (
           <circle key={x} cx={x} cy={452 + (i % 2) * 14} r={5} />
@@ -101,8 +101,8 @@ const DESERT: Landscape = {
         className="welcome-mountain-mid"
         d="M0 340 C180 300 320 296 480 330 C620 358 760 290 960 300 C1140 310 1280 350 1440 320 V520 H0 Z"
       />
-      <Cactus x={300} y={322} h={70} />
-      <Cactus x={1180} y={318} h={56} />
+      <Cactus x={300} y={330} h={110} />
+      <Cactus x={1180} y={326} h={90} />
     </>
   ),
   near: (
@@ -111,8 +111,8 @@ const DESERT: Landscape = {
         className="welcome-mountain-near"
         d="M0 410 C200 370 420 380 620 412 C820 444 1040 380 1240 392 C1340 398 1400 410 1440 404 V520 H0 Z"
       />
-      <Cactus x={110} y={440} h={150} />
-      <Cactus x={1330} y={430} h={128} />
+      <Cactus x={110} y={480} h={250} />
+      <Cactus x={1330} y={470} h={210} />
       <g className="welcome-tree">
         <ellipse cx={520} cy={470} rx={22} ry={8} />
         <ellipse cx={900} cy={462} rx={16} ry={6} />
@@ -121,38 +121,38 @@ const DESERT: Landscape = {
   ),
 };
 
-/** Cómo se usa: el mar de noche, con islas a lo lejos y el reflejo de la luna. */
+/**
+ * Cómo se usa: el mar de noche con el reflejo de la luna y, a la derecha, una orilla verde donde se apoyan los
+ * árboles y la fogata de la ilustración (sin su fondo).
+ */
 const SEA: Landscape = {
   far: (
     <>
       <path
         className="welcome-mountain-far"
-        d="M120 262 C170 220 230 210 300 262 Z M980 262 C1040 214 1110 200 1190 236 C1230 252 1250 258 1270 262 Z"
+        d="M80 262 C140 214 210 204 290 262 Z M1060 262 C1110 226 1170 216 1230 240 C1260 252 1280 258 1300 262 Z"
       />
       <path className="welcome-water-far" d="M0 262 H1440 V520 H0 Z" />
     </>
   ),
   mid: (
     <>
-      <path className="welcome-water" d="M0 320 C240 310 480 330 720 320 C960 310 1200 330 1440 320 V520 H0 Z" />
-      {/* El reflejo de la luna (a la derecha, bajo la luna de escritorio) */}
-      <g fill="#fff" opacity={0.45}>
+      <path className="welcome-water" d="M0 300 C240 290 480 310 720 300 C960 290 1200 310 1440 300 V520 H0 Z" />
+      <g fill="#fff" opacity={0.4}>
         {[0, 1, 2, 3, 4, 5].map((i) => (
-          <rect key={i} x={980 + (i % 2) * 18 - i * 6} y={278 + i * 30} width={150 - i * 16} height={6} rx={3} />
+          <rect key={i} x={420 + (i % 2) * 18 - i * 6} y={310 + i * 26} width={150 - i * 16} height={6} rx={3} />
         ))}
       </g>
     </>
   ),
   near: (
     <>
+      {/* Primero el agua y encima la orilla (sin corte recto donde se juntan). */}
       <path
         className="welcome-water-near"
-        d="M0 420 C120 404 240 436 360 420 C480 404 600 436 720 420 C840 404 960 436 1080 420 C1200 404 1320 436 1440 420 V520 H0 Z"
+        d="M0 430 C120 414 240 446 360 430 C480 414 600 446 720 430 C840 414 960 446 1080 430 V520 H0 Z"
       />
-      <path
-        className="welcome-mountain-near"
-        d="M0 470 C80 450 160 452 260 476 C300 486 330 500 340 520 H0 Z M1100 520 C1150 480 1260 450 1440 452 V520 Z"
-      />
+      <path className="welcome-shore" d="M500 520 C540 300 620 150 740 126 C900 112 1200 112 1440 118 V520 Z" />
     </>
   ),
 };
@@ -198,12 +198,12 @@ const MOUNTAINS: Landscape = {
       />
       <g className="welcome-tree">
         {[
-          [30, 370, 150],
-          [80, 410, 110],
-          [130, 450, 70],
-          [1300, 430, 90],
-          [1350, 380, 140],
-          [1405, 420, 100],
+          [40, 300, 230],
+          [120, 360, 170],
+          [190, 420, 110],
+          [1260, 400, 130],
+          [1340, 300, 230],
+          [1420, 350, 180],
         ].map(([x, y, h]) => (
           <path key={x} d={pine(x, y, h)} />
         ))}
@@ -250,8 +250,8 @@ const CITY: Landscape = {
         className="welcome-mountain-near"
         d="M0 420 C220 392 420 412 640 404 C860 396 1060 420 1260 404 C1360 396 1410 400 1440 402 V520 H0 Z"
       />
-      <RoundTree x={90} y={440} r={42} />
-      <RoundTree x={1350} y={430} r={48} />
+      <RoundTree x={80} y={470} r={88} />
+      <RoundTree x={1370} y={470} r={96} />
     </>
   ),
 };

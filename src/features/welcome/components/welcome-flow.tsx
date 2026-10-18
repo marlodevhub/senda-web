@@ -303,8 +303,9 @@ export function WelcomeFlow({
           to={style.to}
           landscapes={steps.map((slide) => SLIDE_STYLE[slide].land)}
           index={index}
+          desktop
         />
-        <div className="relative z-10 flex w-[44%] max-w-2xl shrink-0 flex-col overflow-y-auto px-14 py-10 xl:px-20">
+        <div className="relative z-10 flex w-1/2 shrink-0 flex-col overflow-y-auto px-14 py-10 xl:px-20">
           <div className="flex items-center justify-between gap-4">
             <span className="flex items-center gap-2 font-heading text-xl font-extrabold">
               <SendaLogo className="size-7" />
@@ -327,50 +328,55 @@ export function WelcomeFlow({
             </ol>
           </div>
 
-          {/* Cada pantalla entra con un leve deslizamiento (key: se vuelve a montar al cambiar). */}
-          <section key={step} aria-live="polite" className="welcome-desk-in my-auto flex flex-col gap-5 py-10">
-            <h2
-              ref={(el) => {
-                headingRefs.current[index] = el;
-              }}
-              tabIndex={-1}
-              className="font-heading text-5xl leading-[1.05] font-extrabold outline-none xl:text-6xl"
-            >
-              {slideTitle(step)}
-            </h2>
-            <span aria-hidden className="h-1 w-16 rounded-full bg-white/70" />
-            <div className="max-w-lg [&_p]:text-lg">{slideBody(step)}</div>
-          </section>
+          {/*
+            El texto y sus botones juntos, centrados en la mitad izquierda (a lo alto y a lo ancho). Cada pantalla entra
+            con un leve deslizamiento (key: se vuelve a montar al cambiar).
+          */}
+          <div className="mx-auto my-auto flex w-full max-w-xl flex-col gap-9 py-10">
+            <section key={step} aria-live="polite" className="welcome-desk-in flex flex-col gap-5">
+              <h2
+                ref={(el) => {
+                  headingRefs.current[index] = el;
+                }}
+                tabIndex={-1}
+                className="font-heading text-5xl leading-[1.05] font-extrabold outline-none xl:text-6xl"
+              >
+                {slideTitle(step)}
+              </h2>
+              <span aria-hidden className="h-1 w-16 rounded-full bg-white/70" />
+              <div className="max-w-lg [&_p]:text-lg">{slideBody(step)}</div>
+            </section>
 
-          <div className="flex flex-wrap items-center gap-3">
-            {index > 0 && (
+            <div className="flex flex-wrap items-center gap-3">
+              {index > 0 && (
+                <button
+                  type="button"
+                  aria-label={t("common.back")}
+                  onClick={() => goTo(index - 1)}
+                  className="flex size-14 items-center justify-center rounded-full bg-white/20 transition-colors hover:bg-white/30 focus-visible:outline-2 focus-visible:outline-white"
+                >
+                  <ArrowLeft className="size-5" aria-hidden />
+                </button>
+              )}
               <button
                 type="button"
-                aria-label={t("common.back")}
-                onClick={() => goTo(index - 1)}
-                className="flex size-14 items-center justify-center rounded-full bg-white/20 transition-colors hover:bg-white/30 focus-visible:outline-2 focus-visible:outline-white"
+                onClick={primaryAction}
+                disabled={complete.isPending}
+                className="h-14 min-w-48 rounded-full bg-white px-8 text-lg font-bold shadow-lg transition-[transform,color] duration-300 hover:scale-[1.02] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white active:scale-[0.98] disabled:opacity-80 motion-reduce:transition-none"
+                style={{ color: style.ink }}
               >
-                <ArrowLeft className="size-5" aria-hidden />
+                {primaryLabel}
               </button>
-            )}
-            <button
-              type="button"
-              onClick={primaryAction}
-              disabled={complete.isPending}
-              className="h-14 min-w-48 rounded-full bg-white px-8 text-lg font-bold shadow-lg transition-[transform,color] duration-300 hover:scale-[1.02] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white active:scale-[0.98] disabled:opacity-80 motion-reduce:transition-none"
-              style={{ color: style.ink }}
-            >
-              {primaryLabel}
-            </button>
-            {!review && questionIndex > index && (
-              <button
-                type="button"
-                onClick={() => goTo(questionIndex)}
-                className="min-h-11 rounded-full px-4 text-base font-semibold text-white hover:bg-white/20 focus-visible:outline-2 focus-visible:outline-white"
-              >
-                {t("welcome.skip")}
-              </button>
-            )}
+              {!review && questionIndex > index && (
+                <button
+                  type="button"
+                  onClick={() => goTo(questionIndex)}
+                  className="min-h-11 rounded-full px-4 text-base font-semibold text-white hover:bg-white/20 focus-visible:outline-2 focus-visible:outline-white"
+                >
+                  {t("welcome.skip")}
+                </button>
+              )}
+            </div>
           </div>
         </div>
 

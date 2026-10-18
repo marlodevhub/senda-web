@@ -1,6 +1,9 @@
 import type { CSSProperties } from "react";
 import type { Landscape } from "@/features/welcome/components/welcome-landscapes";
 
+/** Un degradado vertical por tipo de elemento del paisaje. */
+const GRADIENTS = ["far", "mid", "near", "tree", "water", "shore"] as const;
+
 /** Las tres capas del paisaje y cuánto se mueven al pasar de pantalla (1 = todo el ancho). */
 const LAYERS = [
   { key: "far", speed: 0.25, base: { y: 300, className: "welcome-mountain-far" } },
@@ -21,11 +24,17 @@ export function WelcomeBackdrop({
   to,
   landscapes,
   index,
+  desktop = false,
 }: {
   from: string;
   to: string;
   landscapes: Landscape[];
   index: number;
+  /**
+   * Escritorio: el paisaje se escala por el alto (no por el ancho), así su suelo queda siempre a la altura de la
+   * ilustración, que también depende del alto; a los lados lo completan las bases anchas de cada capa.
+   */
+  desktop?: boolean;
 }) {
   const vars = { "--wb-from": from, "--wb-to": to } as CSSProperties;
   return (
@@ -69,8 +78,17 @@ export function WelcomeBackdrop({
       <svg
         className="absolute inset-x-0 bottom-0 h-[52%] w-full overflow-visible"
         viewBox="0 0 1440 520"
-        preserveAspectRatio="xMidYMax slice"
+        preserveAspectRatio={desktop ? "xMidYMax meet" : "xMidYMax slice"}
       >
+        {/* Degradados de cada capa (claros arriba, más hondos abajo), en el color de la pantalla: `.wb-stop-*`. */}
+        <defs>
+          {GRADIENTS.map((id) => (
+            <linearGradient key={id} id={`wb-${id}`} x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" className={`wb-stop-${id}-top`} />
+              <stop offset="1" className={`wb-stop-${id}-bottom`} />
+            </linearGradient>
+          ))}
+        </defs>
         {LAYERS.map(({ key, speed, base }) =>
           landscapes.map((landscape, i) => (
             <g
@@ -84,6 +102,9 @@ export function WelcomeBackdrop({
               {/* Base ancha bajo cada capa: al deslizarse, no deja ver el cielo por los bordes. */}
               <rect x={-1440} y={base.y} width={4320} height={520 - base.y} className={base.className} />
               {landscape[key]}
+              {/* En pantallas más anchas que el paisaje, una copia en espejo a cada lado lo continúa sin corte. */}
+              <g transform="matrix(-1 0 0 1 0 0)">{landscape[key]}</g>
+              <g transform="matrix(-1 0 0 1 2880 0)">{landscape[key]}</g>
             </g>
           )),
         )}

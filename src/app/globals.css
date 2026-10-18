@@ -912,17 +912,17 @@
   );
 }
 .welcome-mountain-far {
-  fill: color-mix(in oklab, var(--wb-from) 55%, var(--wb-to));
-  opacity: 0.75;
+  fill: url(#wb-far);
+  opacity: 0.85;
 }
 .welcome-mountain-mid {
-  fill: color-mix(in oklab, var(--wb-to) 85%, #0b0a1a);
+  fill: url(#wb-mid);
 }
 .welcome-mountain-near {
-  fill: color-mix(in oklab, var(--wb-to) 62%, #0b0a1a);
+  fill: url(#wb-near);
 }
 .welcome-tree {
-  fill: color-mix(in oklab, var(--wb-to) 45%, #0b0a1a);
+  fill: url(#wb-tree);
 }
 /* La luna: en móvil arriba al centro (detrás de la ilustración); en escritorio, a la derecha. */
 .welcome-moon {
@@ -1012,8 +1012,26 @@
   fill: color-mix(in oklab, var(--wb-from) 40%, var(--wb-to));
 }
 .welcome-water {
-  fill: color-mix(in oklab, var(--wb-to) 80%, #0b0a1a);
+  fill: url(#wb-water);
 }
 .welcome-water-near {
   fill: color-mix(in oklab, var(--wb-to) 58%, #0b0a1a);
+}
+
+/* Paradas de los degradados del paisaje (WelcomeBackdrop). */
+.wb-stop-far-top { stop-color: color-mix(in oklab, var(--wb-from) 70%, white); }
+.wb-stop-far-bottom { stop-color: color-mix(in oklab, var(--wb-from) 45%, var(--wb-to)); }
+.wb-stop-mid-top { stop-color: color-mix(in oklab, var(--wb-from) 55%, var(--wb-to)); }
+.wb-stop-mid-bottom { stop-color: color-mix(in oklab, var(--wb-to) 82%, #0b0a1a); }
+.wb-stop-near-top { stop-color: color-mix(in oklab, var(--wb-to) 88%, #0b0a1a); }
+.wb-stop-near-bottom { stop-color: color-mix(in oklab, var(--wb-to) 48%, #0b0a1a); }
+.wb-stop-tree-top { stop-color: color-mix(in oklab, var(--wb-to) 62%, #0b0a1a); }
+.wb-stop-tree-bottom { stop-color: color-mix(in oklab, var(--wb-to) 34%, #0b0a1a); }
+.wb-stop-water-top { stop-color: color-mix(in oklab, var(--wb-from) 60%, var(--wb-to)); }
+.wb-stop-water-bottom { stop-color: color-mix(in oklab, var(--wb-to) 60%, #0b0a1a); }
+/* La orilla es tierra con pasto: verde aunque la pantalla sea azul. */
+.wb-stop-shore-top { stop-color: #4f9e64; }
+.wb-stop-shore-bottom { stop-color: #1f4a32; }
+.welcome-shore {
+  fill: url(#wb-shore);
 }
