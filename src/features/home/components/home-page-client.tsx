@@ -51,13 +51,11 @@ export function HomePageClient() {
     />
   );
 
-  // El ánimo de hoy: el promedio de las marcas del check-in o, si no marcó, el del registro (RN-IN-08).
-  const todayMood = (home.journeyDays ?? []).find((day) => day.interventionDay === home.day)?.mood ?? null;
   const moodPanel = (
     <>
       {/* El recuadro de hoy ocupa todo el ancho aunque debajo vayan dos columnas. */}
       <div className="sm:col-span-2 @[30rem]:col-span-2 @[42rem]:col-span-1">
-        <MoodTodayCard mood={todayMood} />
+        <MoodTodayCard average={home.todayMoodAverage ?? null} />
       </div>
       <MoodWeek days={home.weekDays} />
       {home.goal && <GoalRing daysWithEntry={home.goal.daysWithEntry} goal={home.goal.goal} />}

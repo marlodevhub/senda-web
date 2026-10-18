@@ -29,9 +29,29 @@ export function moodColor(mood: Mood): string {
   return ORB_COLORS[mood].base;
 }
 
-/** El tono claro de cada ánimo (p. ej. el cuerpo de la mascota sobre el color sólido). */
-export function moodLightColor(mood: Mood): string {
-  return ORB_COLORS[mood].light;
+function mixHex(from: string, to: string, amount: number): string {
+  const channel = (hex: string, index: number) => parseInt(hex.slice(1 + index * 2, 3 + index * 2), 16);
+  return `#${[0, 1, 2]
+    .map((index) => {
+      const value = Math.round(channel(from, index) + (channel(to, index) - channel(from, index)) * amount);
+      return value.toString(16).padStart(2, "0");
+    })
+    .join("")}`;
+}
+
+/**
+ * Los colores de un ánimo con decimales (un promedio, p. ej. 3,5): la mezcla de las dos caritas vecinas en proporción,
+ * así 3,5 queda a medio camino entre el amarillo y el verde. No es una animación: es un color fijo para ese promedio.
+ */
+export function moodBlend(average: number): { light: string; base: string } {
+  const clamped = Math.min(5, Math.max(1, average));
+  const lower = Math.floor(clamped) as Mood;
+  const upper = Math.ceil(clamped) as Mood;
+  const amount = clamped - lower;
+  return {
+    light: mixHex(ORB_COLORS[lower].light, ORB_COLORS[upper].light, amount),
+    base: mixHex(ORB_COLORS[lower].base, ORB_COLORS[upper].base, amount),
+  };
 }
 
 /** Tinta de las caras: oscura sobre cualquiera de los colores (contraste ≥ 4,5:1). */

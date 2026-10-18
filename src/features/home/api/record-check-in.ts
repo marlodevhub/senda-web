@@ -1,8 +1,14 @@
 import { callBff } from "@/lib/api/client";
 import type { Mood } from "@/components/icons/mood-orb";
 
-/** `recordedAt`: la hora del toque (ISO 8601). */
-export type CheckInResult = { mood: Mood; interventionDay: number; invitesToWrite: boolean; recordedAt: string };
+/** `recordedAt`: la hora del toque (ISO 8601); `moodCountToday`: cuántas marcas de esa cara lleva hoy, con esta. */
+export type CheckInResult = {
+  mood: Mood;
+  interventionDay: number;
+  invitesToWrite: boolean;
+  recordedAt: string;
+  moodCountToday: number;
+};
 
 /**
  * CU-06 (RS-IN-04): guarda una marca de ánimo con su hora; se puede marcar varias veces al día (RN-IN-03). Un toque

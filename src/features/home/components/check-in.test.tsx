@@ -11,7 +11,13 @@ function mockCheckInResponse(mood: number) {
     .mockImplementation(
       async () =>
         new Response(
-          JSON.stringify({ mood, interventionDay: 3, invitesToWrite: mood <= 2, recordedAt: "2026-10-15T20:05:00Z" }),
+          JSON.stringify({
+            mood,
+            interventionDay: 3,
+            invitesToWrite: mood <= 2,
+            recordedAt: "2026-10-15T20:05:00Z",
+            moodCountToday: 2,
+          }),
           { status: 200 },
         ),
     );
@@ -38,6 +44,16 @@ describe("CheckIn", () => {
     ).toBeInTheDocument();
     expect(screen.queryByText(/Parece un día difícil/)).not.toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Escribir" })).toHaveAttribute("href", "/diario?animo=4");
+  });
+
+  it("la burbuja de la carita empieza con cuántas veces la marcó hoy", async () => {
+    mockCheckInResponse(4);
+    const user = userEvent.setup();
+    renderWithProviders(<CheckIn initialMood={null} />);
+
+    await user.click(screen.getByRole("radio", { name: "Bien" }));
+
+    expect(await screen.findByTestId("mood-bubble-count")).toHaveTextContent("2");
   });
 
   it("sin una cara marcada no muestra la invitación ni el botón Escribir", () => {

@@ -40,6 +40,8 @@ export type Home = {
   checkinMood: 1 | 2 | 3 | 4 | 5 | null;
   /** CU-06: la hora de esa marca (ISO 8601), o null. */
   checkinAt: string | null;
+  /** "Así va tu día": el ánimo de hoy con decimales (promedio de las marcas o el del registro), o null. */
+  todayMoodAverage: number | null;
   pendingPhrase: HomePendingPhrase | null;
   /** null si hoy todavía no escribió (o en SOLO_LECTURA). */
   todayEntry: HomeTodayEntry | null;

@@ -40,6 +40,8 @@ export function CheckIn({
   const [mood, setMood] = useState<Mood | null>(initialMood);
   // La hora de la última marca guardada: se actualiza solo cuando el servidor la confirma.
   const [markedAt, setMarkedAt] = useState<string | null>(initialMarkedAt);
+  // Cuántas veces marcó hoy cada carita, según el servidor (lo trae cada marca): va al inicio de la burbuja.
+  const [moodCounts, setMoodCounts] = useState<Partial<Record<Mood, number>>>({});
   // Cuántas veces se tocó una cara: cada toque vuelve a montar la invitación para repetir la animación. En 0 (el
   // check-in ya estaba hecho al abrir Inicio) aparece quieta.
   const [presses, setPresses] = useState(0);
@@ -49,9 +51,12 @@ export function CheckIn({
     const previous = mood;
     setMood(next);
     setPresses((count) => count + 1);
+    // Mientras el servidor responde, la burbuja sale sin número (no muestra uno viejo).
+    setMoodCounts((counts) => ({ ...counts, [next]: undefined }));
     try {
       const result = await recordCheckIn.mutateAsync(next);
       setMarkedAt(result.recordedAt);
+      setMoodCounts((counts) => ({ ...counts, [result.mood]: result.moodCountToday }));
     } catch (error) {
       setMood(previous);
       toast.error(t(error instanceof BffError ? errorMessageKey(error.code) : "common.unexpectedError"));
@@ -68,7 +73,12 @@ export function CheckIn({
       <h2 id="checkin-question" className="font-heading text-lg font-bold text-foreground lg:sr-only">
         {t("home.checkinQuestion")}
       </h2>
-      <MoodPicker label={t("home.checkinQuestion")} value={mood ?? undefined} onChange={handleChange} />
+      <MoodPicker
+        label={t("home.checkinQuestion")}
+        value={mood ?? undefined}
+        onChange={handleChange}
+        bubbleCount={moodCounts}
+      />
       <div aria-live="polite" className="flex flex-col gap-2">
         {mood !== null && markedAt && (
           <p className="px-1 text-sm text-muted-foreground">

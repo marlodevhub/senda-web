@@ -1,8 +1,15 @@
-import { MOOD_INK, moodLightColor, type Mood } from "@/components/icons/mood-orb";
+import { MOOD_INK, moodBlend, type Mood } from "@/components/icons/mood-orb";
 import { cn } from "@/lib/utils";
 
 const INK = MOOD_INK;
 const SPROUT = "#6fbf73";
+/** Sin ánimo de hoy, la mascota va en gris claro. */
+const RESTING = "#dcdce2";
+
+/** La carita más cercana a un promedio (3,4 → 3; 3,5 → 4). */
+export function nearestMood(average: number): Mood {
+  return Math.min(5, Math.max(1, Math.round(average))) as Mood;
+}
 
 /** La boca según el ánimo: de una curva hacia abajo (muy mal) a una sonrisa amplia (muy bien). */
 const MOUTH: Record<Mood, string> = {
@@ -56,12 +63,14 @@ function Face({ mood }: { mood: Mood | null }) {
 }
 
 /**
- * La mascota de Senda: un brote redondo con dos hojas. Su cuerpo toma el tono claro del ánimo y su cara, la
- * expresión de ese ánimo (las mismas que las caritas, sin rojo ni gestos de enojo). Se mueve como la carita de su
- * ánimo (`.mood-anim-*`, solo si no se pide menos movimiento). Decorativa: quien la acompaña dice el ánimo en texto.
+ * La mascota de Senda: un brote redondo con dos hojas. Su cuerpo toma el tono claro del ánimo promedio, mezclando las
+ * dos caritas vecinas en proporción (3,5 va entre el amarillo y el verde, `moodBlend`); sin ánimo, gris. Su cara es la
+ * de la carita más cercana (sin rojo ni gestos de enojo) y se mueve como ella (`.mood-anim-*`, solo si no se pide
+ * menos movimiento). Decorativa: quien la acompaña dice el ánimo en texto.
  */
-export function MoodMascot({ mood, className }: { mood: Mood | null; className?: string }) {
-  const body = mood === null ? "#ffffff" : moodLightColor(mood);
+export function MoodMascot({ average, className }: { average: number | null; className?: string }) {
+  const mood = average === null ? null : nearestMood(average);
+  const body = average === null ? RESTING : moodBlend(average).light;
   return (
     <span aria-hidden className={cn("inline-flex", mood !== null && `mood-anim-${mood}`, className)}>
       <svg viewBox="0 0 120 120" className="size-full" focusable="false">

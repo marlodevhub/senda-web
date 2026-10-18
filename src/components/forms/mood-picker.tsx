@@ -11,19 +11,22 @@ const MOODS: Mood[] = [1, 2, 3, 4, 5];
  * Selector de ánimo de 5 caritas animadas. Lo usan CU-01 (Diario), CU-06
  * (check-in de Inicio) y CU-04 (ánimo posterior a una reescritura) — ver
  * Senda/docs/casos-de-uso/{nucleo,acompanamiento}.md. `label` es la pregunta
- * de cada pantalla, con la que se anuncia el grupo.
+ * de cada pantalla, con la que se anuncia el grupo. `bubbleCount` (check-in de
+ * Inicio) pone al inicio de la burbuja cuántas veces marcó hoy esa carita.
  */
 export function MoodPicker({
   label,
   value,
   onChange,
   size = "default",
+  bubbleCount,
   className,
 }: {
   label: string;
   value?: Mood;
   onChange: (mood: Mood) => void;
   size?: "default" | "compact";
+  bubbleCount?: Partial<Record<Mood, number>>;
   className?: string;
 }) {
   const t = useTranslations();
@@ -74,6 +77,14 @@ export function MoodPicker({
                 className="mood-bubble pointer-events-none absolute bottom-[calc(100%+0.75rem)] left-1/2 z-20 rounded-full px-3 py-1 text-base font-semibold whitespace-nowrap shadow-card"
                 style={{ background: moodGradient(mood), color: MOOD_INK }}
               >
+                {bubbleCount?.[mood] !== undefined && (
+                  <span
+                    data-testid="mood-bubble-count"
+                    className="mr-1.5 inline-flex min-w-5 justify-center rounded-full bg-white/70 px-1.5 tabular-nums"
+                  >
+                    {bubbleCount[mood]}
+                  </span>
+                )}
                 {t(`mood.${mood}`)}
               </span>
             )}
