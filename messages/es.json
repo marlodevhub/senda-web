@@ -241,7 +241,6 @@
   },
   "rewrite": {
     "title": "Di lo mismo como se lo dirías a un buen amigo",
-    "guideQuestionsLabel": "Preguntas para pensarlo",
     "yourPhrase": "Tu frase",
     "seeExample": "Ver un ejemplo",
     "textLabel": "Tu reescritura",
@@ -260,7 +259,9 @@
     "tryAgain": "Intentar otra vez",
     "moodAfterLabel": "¿Cómo te sientes ahora?",
     "saveInJar": "Guardar en mi frasco",
-    "goHome": "Ir al inicio"
+    "goHome": "Ir al inicio",
+    "guideToggle": "¿No sabes por dónde empezar?",
+    "guideToggleHint": "Piénsalo con 3 preguntas. Son opcionales."
   },
   "progress": {
     "title": "Progreso",

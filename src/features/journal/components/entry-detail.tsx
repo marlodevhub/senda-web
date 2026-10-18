@@ -22,7 +22,6 @@ import {
 import { useEntryDetail, useDeleteEntry } from "@/features/journal/api/use-entries";
 import type {
   EntryAnalysisField,
-  EntryMirrorFinding,
   EntryRewrite,
   JournalEntryDetail,
 } from "@/features/journal/api/get-entry-detail";
@@ -34,6 +33,7 @@ import { routes } from "@/lib/routes";
 import { BffError } from "@/lib/api/client";
 import { errorMessageKey } from "@/lib/api/error-messages";
 import { cn } from "@/lib/utils";
+import { HighlightedText } from "@/components/feedback/highlighted-text";
 import { JOURNAL_CONTEXT_LABEL_KEY } from "@/types/journal-context";
 
 const RESULT_STYLE: Record<string, { key: string; tone: string }> = {
@@ -44,7 +44,6 @@ const RESULT_STYLE: Record<string, { key: string; tone: string }> = {
   // RN-ES-11: si la reescritura tuvo una señal de cuidado no se compara ni se nombra; solo se dice que se guardó.
   RISK: { key: "history.resultSaved", tone: "bg-muted text-muted-foreground" },
 };
-
 
 const FIELD_TEXT: Record<EntryAnalysisField, keyof Pick<JournalEntryDetail, "q1" | "q2" | "q3" | "freeText">> = {
   Q1: "q1",
@@ -61,32 +60,9 @@ function formatLongDate(date: string): string {
   );
 }
 
-
 /** Los textos del registro por campo, para recortar sus frases. */
 function textsOf(entry: JournalEntryDetail): FieldTexts {
   return { Q1: entry.q1, Q2: entry.q2, Q3: entry.q3, FREE_TEXT: entry.freeText };
-}
-
-/** El texto de una respuesta con sus frases detectadas resaltadas (en el orden en que aparecen). */
-function Highlighted({ text, findings }: { text: string; findings: EntryMirrorFinding[] }) {
-  const sorted = [...findings].sort((a, b) => a.start - b.start);
-  const parts: React.ReactNode[] = [];
-  let cursor = 0;
-  for (const finding of sorted) {
-    if (finding.start < cursor) continue;
-    parts.push(text.slice(cursor, finding.start));
-    parts.push(
-      <mark
-        key={finding.findingId}
-        className={cn("rounded-md px-1 py-0.5 box-decoration-clone", DIMENSION_TINT[finding.dimension])}
-      >
-        {text.slice(finding.start, finding.end)}
-      </mark>,
-    );
-    cursor = finding.end;
-  }
-  parts.push(text.slice(cursor));
-  return <>{parts}</>;
 }
 
 /**
@@ -159,7 +135,15 @@ export function EntryDetail({ journalEntryId }: { journalEntryId: number }) {
                 {t(labelKey)}
               </h2>
               <p className="font-hand text-base leading-relaxed whitespace-pre-line text-foreground md:text-lg">
-                <Highlighted text={entry[FIELD_TEXT[field]] ?? ""} findings={findingsIn(field)} />
+                <HighlightedText
+                  text={entry[FIELD_TEXT[field]] ?? ""}
+                  ranges={findingsIn(field).map((finding) => ({
+                    key: finding.findingId,
+                    start: finding.start,
+                    end: finding.end,
+                    className: DIMENSION_TINT[finding.dimension],
+                  }))}
+                />
               </p>
             </section>
           ))}

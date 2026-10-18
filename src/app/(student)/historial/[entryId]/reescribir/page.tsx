@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { RewriteForm } from "@/features/rewrite/components/rewrite-form";
+import { RewriteWithContext } from "./_components/rewrite-with-context";
 import { parseFindingId } from "@/lib/routes";
 
 /** CU-04: reescribir una frase del registro (`?frase=` elige cuál; sin él, la que propone el servidor). */
@@ -14,5 +14,5 @@ export default async function ReescribirPage({
   if (!Number.isInteger(journalEntryId)) {
     notFound();
   }
-  return <RewriteForm journalEntryId={journalEntryId} findingId={parseFindingId((await searchParams).frase)} />;
+  return <RewriteWithContext journalEntryId={journalEntryId} findingId={parseFindingId((await searchParams).frase)} />;
 }

@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
-import { Amphora, ArrowLeft, Check, Feather, Home, Lightbulb, Loader2 } from "lucide-react";
+import { Amphora, ArrowLeft, Check, ChevronDown, Feather, Home, Lightbulb, Loader2 } from "lucide-react";
 import { JournalPrompt, JournalTextarea } from "@/components/forms/journal-sheet";
 import { Button } from "@/components/ui/button";
 import { MoodPicker } from "@/components/forms/mood-picker";
@@ -19,7 +19,8 @@ import { CareMessage } from "@/components/feedback/care-message";
 import type { SubmitRewriteResult } from "@/features/rewrite/api/submit-rewrite";
 import { BffError } from "@/lib/api/client";
 import { errorMessageKey } from "@/lib/api/error-messages";
-import { DIMENSION_DOT } from "@/lib/dimension-style";
+import { DIMENSION_DOT, DIMENSION_TINT } from "@/lib/dimension-style";
+import { HighlightedText } from "@/components/feedback/highlighted-text";
 import { patternLabelKey } from "@/lib/pattern-labels";
 import { routes } from "@/lib/routes";
 import { cn } from "@/lib/utils";
@@ -30,13 +31,27 @@ import { cn } from "@/lib/utils";
  * alt. 1a) y escribir una frase propia sin hallazgo (RN-RE-12) — ambos
  * quedan para un sprint posterior.
  */
-export function RewriteForm({ journalEntryId, findingId }: { journalEntryId: number; findingId?: number }) {
+/** La frase dentro del párrafo donde la escribió: la pregunta (o "Lo que escribiste"), su texto y dónde está la frase. */
+export type PhraseContext = { label: string; text: string; start: number; end: number };
+
+export function RewriteForm({
+  journalEntryId,
+  findingId,
+  phraseContext,
+}: {
+  journalEntryId: number;
+  findingId?: number;
+  /** Para un hallazgo, su párrafo; si no se tiene (aún cargando), se muestra solo la frase. */
+  phraseContext?: (findingId: number) => PhraseContext | null;
+}) {
   const t = useTranslations();
   const router = useRouter();
   const { data: guide, isPending: isGuidePending } = useRewriteGuide(journalEntryId, findingId);
   const submitMutation = useSubmitRewrite(journalEntryId);
   const [exampleIndex, setExampleIndex] = useState<number | null>(null);
   const [created, setCreated] = useState<SubmitRewriteResult | null>(null);
+  // Las preguntas guía son opcionales (RN-RE-02): plegadas, como ayuda para quien no sabe por dónde empezar.
+  const [guideOpen, setGuideOpen] = useState(false);
 
   const {
     register,
@@ -96,18 +111,41 @@ export function RewriteForm({ journalEntryId, findingId }: { journalEntryId: num
     );
   }
 
+  const context = phraseContext?.(guide.findingId) ?? null;
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="mx-auto flex w-full max-w-2xl flex-col gap-5" noValidate>
       <RewriteHeader />
 
-      {/* La frase que se va a reescribir, en el tono suave del tema, con su tipo en lenguaje amable. */}
-      <section aria-labelledby="rewrite-phrase" className="flex flex-col gap-1.5 rounded-lg bg-celeste px-5 py-4">
+      {/* La frase dentro del párrafo donde la escribió, resaltada, con su tipo en lenguaje amable. */}
+      <section aria-labelledby="rewrite-phrase" className="flex flex-col gap-2 rounded-[1.75rem] bg-celeste px-5 py-4">
         <h2 id="rewrite-phrase" className="text-sm font-bold tracking-wide text-muted-foreground uppercase">
           {t("rewrite.yourPhrase")}
         </h2>
-        <p className="font-display text-lg leading-snug font-semibold text-foreground before:content-['“'] after:content-['”']">
-          {guide.originalPhrase}
-        </p>
+        {context ? (
+          <>
+            <p className="font-hand text-base leading-snug font-medium text-(--prompt-red) md:text-lg">
+              {context.label}
+            </p>
+            <p className="font-hand text-lg leading-relaxed whitespace-pre-line text-foreground md:text-xl">
+              <HighlightedText
+                text={context.text}
+                ranges={[
+                  {
+                    key: guide.findingId,
+                    start: context.start,
+                    end: context.end,
+                    className: cn("font-semibold", DIMENSION_TINT[guide.dimension]),
+                  },
+                ]}
+              />
+            </p>
+          </>
+        ) : (
+          <p className="font-display text-lg leading-snug font-semibold text-foreground before:content-['“'] after:content-['”']">
+            {guide.originalPhrase}
+          </p>
+        )}
         <p className="flex items-start gap-2 text-base leading-snug text-muted-foreground">
           <span
             aria-hidden
@@ -117,25 +155,49 @@ export function RewriteForm({ journalEntryId, findingId }: { journalEntryId: num
         </p>
       </section>
 
-      {/* La hoja, como en el Diario: las preguntas guía y la reescritura con letra manuscrita, sin cajas con borde. */}
-      <div className="flex flex-col gap-2 rounded-[2rem] bg-card p-5 shadow-card md:p-8">
-        <p className="text-base font-semibold text-muted-foreground">{t("rewrite.guideQuestionsLabel")}</p>
-        {guide.questions.map((question, index) => {
-          const id = `guideAnswer${index + 1}` as "guideAnswer1" | "guideAnswer2" | "guideAnswer3";
-          return (
-            <JournalPrompt key={question} id={id} label={question}>
-              <JournalTextarea id={id} rows={2} {...register(id)} />
-            </JournalPrompt>
-          );
-        })}
+      {/* La hoja: primero la reescritura (lo único que se pide); la ayuda, opcional y plegada. */}
+      <div className="flex flex-col gap-3 rounded-[2rem] bg-card p-5 shadow-card md:p-8">
+        <div className="rounded-2xl bg-foreground/[0.04]">
+          <button
+            type="button"
+            aria-expanded={guideOpen}
+            aria-controls="rewrite-guide"
+            onClick={() => setGuideOpen((open) => !open)}
+            className="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left focus-visible:outline-2 focus-visible:outline-ring"
+          >
+            <Lightbulb className="size-5 shrink-0 text-(--prompt-red)" aria-hidden />
+            <span className="flex min-w-0 flex-1 flex-col">
+              <span className="font-semibold text-foreground">{t("rewrite.guideToggle")}</span>
+              <span className="text-sm text-muted-foreground">{t("rewrite.guideToggleHint")}</span>
+            </span>
+            <ChevronDown
+              className={cn("size-5 shrink-0 text-muted-foreground transition-transform", guideOpen && "rotate-180")}
+              aria-hidden
+            />
+          </button>
+          {/* Montadas aunque estén plegadas: lo que escribió no se pierde al cerrar. */}
+          <div id="rewrite-guide" hidden={!guideOpen} className="px-4 pb-4">
+            {guide.questions.map((question, index) => {
+              const id = `guideAnswer${index + 1}` as "guideAnswer1" | "guideAnswer2" | "guideAnswer3";
+              return (
+                <JournalPrompt key={question} id={id} label={question}>
+                  <JournalTextarea id={id} rows={2} {...register(id)} />
+                </JournalPrompt>
+              );
+            })}
+          </div>
+        </div>
+
+        <JournalPrompt id="text" label={t("rewrite.textLabel")} error={errors.text?.message}>
+          <JournalTextarea id="text" rows={4} autoComplete="off" {...register("text")} />
+        </JournalPrompt>
 
         {guide.examples.length > 0 && (
-          <div className="flex flex-col items-start gap-2 py-2">
+          <div className="flex flex-col items-start gap-2">
             <Button
               type="button"
-              variant="outline"
+              variant="ghost"
               size="sm"
-              className="rounded-full"
               aria-expanded={exampleIndex !== null}
               onClick={() => setExampleIndex((i) => (i === null ? 0 : (i + 1) % guide.examples.length))}
             >
@@ -154,23 +216,12 @@ export function RewriteForm({ journalEntryId, findingId }: { journalEntryId: num
           </div>
         )}
 
-        <div className="mt-2 border-t border-dashed border-border pt-3">
-          <JournalPrompt id="text" label={t("rewrite.textLabel")} error={errors.text?.message}>
-            <JournalTextarea id="text" rows={3} autoComplete="off" {...register("text")} />
-          </JournalPrompt>
-        </div>
-
         <div className="mt-2 flex flex-wrap items-center justify-between gap-3">
-          <Button
-            type="button"
-            variant="ghost"
-            className="rounded-full"
-            onClick={goBack}
-          >
+          <Button type="button" variant="ghost" onClick={goBack}>
             <ArrowLeft className="size-4" aria-hidden />
             {t("common.back")}
           </Button>
-          <Button type="submit" variant="hero" size="xl" disabled={isSubmitting} className="ms-auto rounded-full px-6">
+          <Button type="submit" variant="hero" size="xl" disabled={isSubmitting} className="ms-auto px-6">
             <Check className="size-4" aria-hidden />
             {isSubmitting ? t("rewrite.submitting") : t("rewrite.submit")}
           </Button>
