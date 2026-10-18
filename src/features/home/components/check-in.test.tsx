@@ -74,7 +74,7 @@ describe("CheckIn", () => {
     renderWithProviders(<CheckIn initialMood={3} initialMarkedAt="2026-10-15T14:30:00Z" />);
 
     expect(screen.getAllByRole("radio")[2]).toHaveAttribute("aria-checked", "true");
-    expect(screen.getByText(/Lo marcaste a las 9:30\sa\.\sm\./)).toBeInTheDocument();
+    expect(screen.getByText(/^A las 9:30\sa\.\sm\. marcaste tu ánimo\./)).toBeInTheDocument();
   });
 
   it("al marcar otra vez, muestra la hora que guardó el servidor (RN-IN-03)", async () => {
@@ -84,6 +84,6 @@ describe("CheckIn", () => {
 
     await user.click(screen.getByRole("radio", { name: "Bien" }));
 
-    expect(await screen.findByText(/Lo marcaste a las 3:05\sp\.\sm\./)).toBeInTheDocument();
+    expect(await screen.findByText(/^A las 3:05\sp\.\sm\. marcaste tu ánimo\./)).toBeInTheDocument();
   });
 });

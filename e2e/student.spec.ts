@@ -107,7 +107,7 @@ test("ciclo diario completo: activar → diario → espejo → reescritura → f
   await expect(page.getByText("Qué bueno. Si quieres, cuéntale a tu diario qué te hizo bien hoy.")).toBeVisible();
   // RN-IN-03: cada marca guarda su hora; se puede volver a marcar cuando el ánimo cambie.
   await expect(
-    page.getByText(/^Lo marcaste a las .+ Si tu ánimo cambia durante el día, márcalo otra vez\.$/),
+    page.getByText(/^A las .+ marcaste tu ánimo\. Si cambia durante el día, márcalo otra vez\.$/),
   ).toBeVisible();
   await expectAccessible(page);
   // Como una app: el texto no se selecciona al hacer clic y arrastrar.
@@ -312,6 +312,28 @@ test("en escritorio, la cara elegida en Inicio llega al Diario por cualquier Esc
   await expect(page).toHaveURL(/\/diario/);
   await expect(page.getByRole("radio", { name: "Muy mal", exact: true })).toHaveAttribute("aria-checked", "true");
   await expect(page.getByLabel("¿Qué pasó?")).toHaveValue("Empecé a escribir algo y lo dejé");
+});
+
+test("el panel de ánimo abre con cómo va el día, sigue con la semana y termina con la meta (RN-IN-08)", async ({
+  page,
+}) => {
+  await activateAndConsent(page);
+
+  // Sin ánimo de hoy, la mascota espera sin reproche.
+  const today = page.getByRole("region", { name: "Así va tu día" });
+  await expect(today).toContainText("Aún no marcas cómo estás hoy.");
+
+  await page.getByRole("radio", { name: "Bien", exact: true }).click();
+  await expect(today).toContainText("Bien");
+  const order = await page
+    .locator("aside[data-right-rail] section:is([aria-labelledby^='home-mood'], [aria-labelledby='home-goal'])")
+    .evaluateAll((sections) => sections.map((section) => section.getAttribute("aria-labelledby")));
+  expect(order).toEqual(["home-mood-today", "home-mood-week", "home-goal"]);
+  await expectAccessible(page);
+
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await expect(today).toBeVisible();
+  await expectAccessible(page);
 });
 
 test("Senda se puede instalar como app, con su nombre, su ícono y abriendo en Inicio (PWA)", async ({ page }) => {

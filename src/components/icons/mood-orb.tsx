@@ -29,6 +29,11 @@ export function moodColor(mood: Mood): string {
   return ORB_COLORS[mood].base;
 }
 
+/** El tono claro de cada ánimo (p. ej. el cuerpo de la mascota sobre el color sólido). */
+export function moodLightColor(mood: Mood): string {
+  return ORB_COLORS[mood].light;
+}
+
 /** Tinta de las caras: oscura sobre cualquiera de los colores (contraste ≥ 4,5:1). */
 export const MOOD_INK = INK;
 

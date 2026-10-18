@@ -9,6 +9,7 @@ import { useHome } from "@/features/home/api/use-home";
 import { PendingPhraseCard, PendingPhraseList, NoPendingPhrase } from "@/features/home/components/pending-phrase-card";
 import { GoalRing } from "@/features/home/components/goal-ring";
 import { MoodWeek } from "@/features/home/components/mood-week";
+import { MoodTodayCard } from "@/features/home/components/mood-today-card";
 import { WeekOverview } from "@/features/home/components/week-overview";
 import { CheckIn } from "@/features/home/components/check-in";
 import { TodayMirrorCard } from "@/features/home/components/today-mirror-card";
@@ -48,6 +49,19 @@ export function HomePageClient() {
       today={home.day}
       goal={home.goal}
     />
+  );
+
+  // El ánimo de hoy: el promedio de las marcas del check-in o, si no marcó, el del registro (RN-IN-08).
+  const todayMood = (home.journeyDays ?? []).find((day) => day.interventionDay === home.day)?.mood ?? null;
+  const moodPanel = (
+    <>
+      {/* El recuadro de hoy ocupa todo el ancho aunque debajo vayan dos columnas. */}
+      <div className="sm:col-span-2 @[30rem]:col-span-2 @[42rem]:col-span-1">
+        <MoodTodayCard mood={todayMood} />
+      </div>
+      <MoodWeek days={home.weekDays} />
+      {home.goal && <GoalRing daysWithEntry={home.goal.daysWithEntry} goal={home.goal.goal} />}
+    </>
   );
 
   return (
@@ -142,10 +156,10 @@ export function HomePageClient() {
                 <HomeNotices newSummary={home.newSummary} />
               </div>
 
-              {/* Apiladas, la meta y el ánimo van lado a lado si caben. */}
+              {/* Primero cómo va el día, luego el ánimo de la semana y al final la meta. Apiladas, el ánimo de la
+                  semana y la meta van lado a lado si caben. */}
               <div className="hidden gap-5 lg:grid @[30rem]:grid-cols-2 @[42rem]:grid-cols-1">
-                {home.goal && <GoalRing daysWithEntry={home.goal.daysWithEntry} goal={home.goal.goal} />}
-                <MoodWeek days={home.weekDays} />
+                {moodPanel}
               </div>
             </div>
           </div>
@@ -156,10 +170,7 @@ export function HomePageClient() {
             className="flex flex-col gap-5 lg:fixed lg:inset-y-0 lg:right-0 lg:z-10 lg:w-[22rem] lg:py-5 lg:pr-5 xl:w-[24rem]"
           >
             <div className="lg:h-full lg:overflow-y-auto lg:rounded-lg lg:bg-card lg:shadow-card">{weekCalendar}</div>
-            <div className="grid gap-5 sm:grid-cols-2 lg:hidden">
-              {home.goal && <GoalRing daysWithEntry={home.goal.daysWithEntry} goal={home.goal.goal} />}
-              <MoodWeek days={home.weekDays} />
-            </div>
+            <div className="grid gap-5 sm:grid-cols-2 lg:hidden">{moodPanel}</div>
           </aside>
         </div>
       )}
