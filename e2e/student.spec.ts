@@ -192,6 +192,12 @@ test("ciclo diario completo: activar → diario → espejo → reescritura → f
   await expect(page.getByRole("heading", { name: "Tus reescrituras" })).toBeVisible();
   await page.getByRole("link", { name: "Reescribir nuevamente este registro" }).click();
   await expect(page.getByLabel("Tu reescritura")).toHaveValue("");
+  // Su última reescritura se ve clara, y "Limpiar" vacía la caja.
+  await expect(page.getByRole("heading", { name: "Tu última reescritura (intento 1)" })).toBeVisible();
+  await page.getByLabel("Tu reescritura").fill("Un borrador que quiero borrar");
+  await page.getByRole("button", { name: "Limpiar" }).click();
+  await expect(page.getByLabel("Tu reescritura")).toHaveValue("");
+  await expectAccessible(page);
 
   // Después de guardar, el Diario vuelve limpio (sin el texto ni el borrador del registro ya guardado).
   await page.getByRole("navigation", { name: "Navegación principal" }).getByRole("link", { name: "Diario" }).click();

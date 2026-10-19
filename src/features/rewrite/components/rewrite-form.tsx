@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
-import { Amphora, Check, ChevronDown, Feather, Home, Lightbulb, Loader2, RotateCcw } from "lucide-react";
+import { Amphora, Check, ChevronDown, Eraser, Feather, Home, Lightbulb, Loader2, RotateCcw } from "lucide-react";
 import { JournalPrompt, JournalTextarea } from "@/components/forms/journal-sheet";
 import { Button } from "@/components/ui/button";
 import { CareMessage } from "@/components/feedback/care-message";
@@ -98,12 +98,23 @@ function RewriteSheet({
     register,
     handleSubmit,
     reset,
+    setValue,
+    setFocus,
+    control,
     formState: { errors, isSubmitting },
     setError,
   } = useForm<RewriteFormValues>({
     resolver: zodResolver(rewriteFormSchema),
     defaultValues: { text: rewritingAgain ? "" : entryContext.originalText },
   });
+
+  const text = useWatch({ control, name: "text" });
+
+  /** Vacía la caja para empezar a escribir desde cero. */
+  function clearText() {
+    setValue("text", "", { shouldDirty: true });
+    setFocus("text");
+  }
 
   /** Después de llegar a verde: otra reescritura del mismo registro, desde cero. */
   function rewriteAgain() {
@@ -169,7 +180,8 @@ function RewriteSheet({
             </p>
           </div>
         ))}
-        <ul className="flex flex-col gap-1.5">
+        {/* Lo que detectó va aparte de lo que escribió, separado por una línea. */}
+        <ul className="mt-2 flex flex-col gap-1.5 border-t border-foreground/10 pt-4">
           {guide.phrases.map((phrase, index) => (
             <li key={phrase.findingId} className="flex items-start gap-2 text-base leading-snug text-muted-foreground">
               <span aria-hidden className={cn("mt-[0.45rem] size-2 shrink-0 rounded-full", DIMENSION_DOT[phrase.dimension])} />
@@ -182,14 +194,30 @@ function RewriteSheet({
         <p className="text-sm text-muted-foreground">{t("rewrite.phrasesHint")}</p>
       </section>
 
-      {/* El progreso: la carita que la IA le dio a cada intento. */}
-      {progress.length > 0 && (
-        <section aria-labelledby="rewrite-progress" className="flex flex-col gap-2 rounded-lg bg-card p-5 shadow-card">
-          <h2 id="rewrite-progress" className="font-heading text-lg font-bold text-foreground">
-            {t("rewrite.progressTitle")}
+      {/* El progreso: la carita que la IA le dio a cada intento, hasta la meta verde. */}
+      <section aria-labelledby="rewrite-progress" className="flex flex-col gap-2 rounded-lg bg-card p-5 shadow-card">
+        <h2 id="rewrite-progress" className="font-heading text-lg font-bold text-foreground">
+          {t("rewrite.progressTitle")}
+        </h2>
+        <MoodProgress attempts={progress} goal />
+        <p className="text-sm text-muted-foreground">
+          {t(progress.length === 0 ? "rewrite.progressEmpty" : "rewrite.progressHint")}
+        </p>
+      </section>
+
+      {/* Lo último que escribió, bien a la vista, para partir de ahí o escribir de nuevo. */}
+      {lastAttempt && !finalAttempt && (
+        <section
+          aria-labelledby="rewrite-last"
+          className="flex flex-col gap-2 rounded-lg bg-card p-5 shadow-card"
+        >
+          <h2 id="rewrite-last" className="flex items-center gap-2 font-heading text-lg font-bold text-foreground">
+            {lastAttempt.mood !== null && <MoodOrb mood={lastAttempt.mood} decorative className="size-8" />}
+            {t("rewrite.lastRewriteTitle", { n: lastAttempt.attemptNumber })}
           </h2>
-          <MoodProgress attempts={progress} />
-          {!guide.completed && <p className="text-sm text-muted-foreground">{t("rewrite.progressHint")}</p>}
+          <p className="rounded-md bg-muted/60 px-4 py-3 font-hand text-base leading-relaxed whitespace-pre-line text-foreground md:text-lg">
+            {lastAttempt.text}
+          </p>
         </section>
       )}
 
@@ -302,7 +330,11 @@ function RewriteSheet({
             </div>
           )}
 
-          <div className="mt-2 flex items-center justify-end">
+          <div className="mt-2 flex items-center justify-between gap-3">
+            <Button type="button" variant="ghost" onClick={clearText} disabled={!text}>
+              <Eraser className="size-4" aria-hidden />
+              {t("rewrite.clear")}
+            </Button>
             <Button type="submit" variant="hero" size="xl" disabled={isSubmitting} className="px-6">
               {lastResult ? <RotateCcw className="size-4" aria-hidden /> : <Check className="size-4" aria-hidden />}
               {isSubmitting ? t("rewrite.submitting") : lastResult ? t("rewrite.tryAgain") : t("rewrite.submit")}
