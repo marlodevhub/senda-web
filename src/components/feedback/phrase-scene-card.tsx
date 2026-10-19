@@ -3,22 +3,20 @@
 import { useEffect, useId, useRef, useState } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { ArrowRight, Eye, RotateCcw } from "lucide-react";
-import { patternDot, SCENE_ACTION_TEXT, SCENE_ARROW, sceneOf, type Scene } from "@/lib/pattern-style";
+import { Eye, Feather, RotateCcw } from "lucide-react";
+import { patternDot, SCENE_INK, sceneOf, type Scene } from "@/lib/pattern-style";
 import { cn } from "@/lib/utils";
 
 const RADIUS = "rounded-[0.875rem]";
 
 /**
- * Una frase dura como tarjeta de clima (RN-ES-13). De frente, solo el paisaje de su tipo de frase (calcado de las
- * tarjetas de referencia) y su título en blanco; "Ver" la da vuelta y muestra la frase que escribió y su tipo en
- * lenguaje amable. Con `href` (escritorio) lleva además la flechita, lo único que abre el registro de esa frase. "Ver" y
- * la flechita van en el color de su tarjeta.
+ * Una frase dura como tarjeta de clima (RN-ES-13). De frente, solo el paisaje de su tipo de frase y su título con
+ * "Ver" debajo, en letras pastel; toda la tarjeta se toca para darla vuelta. Atrás, la frase que escribió y, con
+ * `href`, el botón "Reescribir", que lleva a reescribir su registro (CU-04); "Ocultar" la regresa.
  */
 export function PhraseSceneCard({
   fragment,
   title,
-  label,
   pattern,
   href,
   linkLabel,
@@ -27,11 +25,10 @@ export function PhraseSceneCard({
   fragment: string;
   /** El nombre corto del tipo de frase (`analysis.patternTitles`). */
   title: string;
-  /** El tipo en lenguaje amable, el mismo del Espejo (`analysis.patterns`). */
-  label: string;
   pattern: string;
+  /** A dónde lleva "Reescribir" (la reescritura de su registro). */
   href?: string;
-  /** Nombre accesible de la flechita ("Ver el registro de “…”"). */
+  /** Nombre accesible de "Reescribir" ("Reescribir: “…”"). */
   linkLabel?: string;
   className?: string;
 }) {
@@ -42,7 +39,7 @@ export function PhraseSceneCard({
   const backButton = useRef<HTMLButtonElement>(null);
   const firstRender = useRef(true);
 
-  // Al dar vuelta la tarjeta, el foco pasa al botón de la cara que queda a la vista.
+  // Al dar vuelta la tarjeta, el foco pasa a la cara que queda a la vista.
   useEffect(() => {
     if (firstRender.current) {
       firstRender.current = false;
@@ -52,93 +49,80 @@ export function PhraseSceneCard({
   }, [flipped]);
 
   return (
-    // La flechita va fuera de las dos caras (una sola, en la misma esquina), para no repetir el enlace.
-    <div className={cn("relative [perspective:1200px]", className)}>
+    <div className={cn("[perspective:1200px]", className)}>
       <div
         className={cn(
-          "grid aspect-[2/1] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] [transform-style:preserve-3d] motion-reduce:transition-none",
+          "grid aspect-[9/5] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] [transform-style:preserve-3d] motion-reduce:transition-none",
           flipped && "[transform:rotateY(180deg)]",
         )}
       >
-        {/* Frente: el paisaje completo y el título. */}
-        <div
+        {/* Frente: toda la tarjeta es el botón que la da vuelta. */}
+        <button
+          ref={frontButton}
+          type="button"
           inert={flipped}
+          aria-label={t("home.pendingFlip", { title })}
+          onClick={() => setFlipped(true)}
           className={cn(
-            "relative isolate flex h-full flex-col justify-between overflow-hidden p-3 shadow-card [grid-area:1/1] [backface-visibility:hidden]",
+            "group relative isolate flex h-full flex-col items-start overflow-hidden p-3 text-left shadow-card transition-[box-shadow,filter] [grid-area:1/1] [backface-visibility:hidden] hover:shadow-bloom hover:brightness-[1.03] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
             RADIUS,
+            SCENE_INK[scene],
           )}
         >
           <SceneArt scene={scene} />
-          {/*
-            Una sombra muy suave solo detrás del título, para que el blanco se lea también en los cielos claros
-            (soleado, nieve, atardecer, bruma: ≥ 3:1, texto grande).
-          */}
+          {/* Una sombra suave arriba a la izquierda, para que las letras pastel se lean en los cielos claros (≥ 4,5:1). */}
           <span
             aria-hidden
-            className="absolute top-0 left-0 -z-10 h-3/4 w-3/4 bg-[radial-gradient(ellipse_at_top_left,rgba(0,0,0,0.24),transparent_70%)]"
+            className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_80%_70%_at_top_left,rgba(0,0,0,0.42),rgba(0,0,0,0.3)_45%,transparent_100%)]"
           />
-          <h3 className="line-clamp-2 pr-8 font-heading text-lg leading-tight font-bold text-white">{title}</h3>
-          <button
-            ref={frontButton}
-            type="button"
-            aria-label={t("home.pendingFlip", { title })}
-            onClick={() => setFlipped(true)}
-            className={cn(
-              "inline-flex items-center gap-1.5 self-start rounded-sm text-[1.1875rem] font-bold underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white",
-              SCENE_ACTION_TEXT[scene],
-            )}
-          >
-            <Eye className="size-5" aria-hidden />
+          <span className="max-w-full truncate pr-8 font-heading text-[1.1875rem] leading-tight font-bold">{title}</span>
+          <span className="mt-1 inline-flex items-center gap-1 text-sm font-semibold underline-offset-4 group-hover:underline">
+            <Eye className="size-4" aria-hidden />
             {t("home.pendingFlipShort")}
-          </button>
-        </div>
+          </span>
+        </button>
 
-        {/* Atrás: la frase que escribió y su tipo. */}
+        {/* Atrás: la frase que escribió, "Ocultar" y "Reescribir". */}
         <div
           inert={!flipped}
           className={cn(
-            "flex h-full flex-col justify-between gap-1 overflow-hidden bg-card p-3.5 shadow-card [grid-area:1/1] [backface-visibility:hidden] [transform:rotateY(180deg)]",
+            "flex h-full flex-col justify-between gap-2 overflow-hidden bg-card p-3 shadow-card [grid-area:1/1] [backface-visibility:hidden] [transform:rotateY(180deg)]",
             RADIUS,
           )}
         >
-          <div className="flex flex-col gap-1">
-            <p className="line-clamp-2 font-display text-base leading-snug font-semibold text-foreground before:content-['“'] after:content-['”']">
-              {fragment}
-            </p>
-            <p className="flex items-start gap-2 text-sm leading-snug text-muted-foreground">
-              <span aria-hidden className={cn("mt-[0.4rem] size-2 shrink-0 rounded-full", patternDot(pattern))} />
-              <span className="line-clamp-1">{label}</span>
-            </p>
+          <p className="flex items-start gap-2 font-display text-[0.9375rem] leading-snug font-semibold text-foreground">
+            <span aria-hidden className={cn("mt-[0.45rem] size-2 shrink-0 rounded-full", patternDot(pattern))} />
+            <span className="line-clamp-2 before:content-['“'] after:content-['”']">{fragment}</span>
+          </p>
+          <div className="flex items-center justify-between gap-2">
+            <button
+              ref={backButton}
+              type="button"
+              aria-label={t("home.pendingFlipBackLabel", { title })}
+              onClick={() => setFlipped(false)}
+              title={t("home.pendingFlipBack")}
+              className="flex size-8 shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+            >
+              <RotateCcw className="size-4" aria-hidden />
+            </button>
+            {href && (
+              <Link
+                href={href}
+                aria-label={linkLabel}
+                className="inline-flex h-8 min-w-0 items-center gap-1.5 rounded-full bg-[image:var(--grad-hero)] px-3.5 text-sm font-semibold text-white shadow-bloom transition-transform active:scale-[0.97] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+              >
+                <Feather className="size-4" aria-hidden />
+                {t("home.pendingRewriteShort")}
+              </Link>
+            )}
           </div>
-          <button
-            ref={backButton}
-            type="button"
-            aria-label={t("home.pendingFlipBackLabel", { title })}
-            onClick={() => setFlipped(false)}
-            className="inline-flex items-center gap-1.5 self-start rounded-sm text-base font-semibold text-muted-foreground underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-          >
-            <RotateCcw className="size-4" aria-hidden />
-            {t("home.pendingFlipBack")}
-          </button>
         </div>
       </div>
-      {href && (
-        <Link
-          href={href}
-          aria-label={linkLabel}
-          className={cn(
-            "absolute right-3 bottom-3 z-10 flex size-9 items-center justify-center rounded-full shadow-card transition-transform hover:translate-x-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring motion-reduce:transition-none",
-            SCENE_ARROW[scene],
-          )}
-        >
-          <ArrowRight className="size-4" aria-hidden />
-        </Link>
-      )}
     </div>
   );
 }
 
-/** El paisaje completo de cada clima, como en las tarjetas de referencia (viewBox 320×160, proporción 2:1). */
+/** El paisaje completo de cada clima, en el estilo de las tarjetas de referencia (viewBox 320×160). */
 function SceneArt({ scene }: { scene: Scene }) {
   const id = useId().replace(/:/g, "");
   return (
@@ -535,129 +519,93 @@ const SCENES: Record<Scene, (id: string) => React.ReactNode> = {
       <path d="M0 84 C50 80 110 92 170 110 C220 124 280 124 320 120 L320 160 L0 160 Z" fill={`url(#${id}-land)`} />
     </>
   ),
-  // Haze: gris azulado a beige, montañas tenues y partículas de bruma.
-  haze: (id) => (
+  // Amanecer: rosa vivo, el sol saliendo, pájaros y cerros con árboles en flor.
+  dawn: (id) => (
     <>
       <Sky
         id={id}
         stops={[
-          [0, "#7F9BAE"],
-          [1, "#B9BEB3"],
+          [0, "#E24F95"],
+          [1, "#FFA6C8"],
         ]}
       />
-      <path
-        d="M40 100 L66 83 Q69 81 72 83 L95 96 L117 73 Q120 70 123 73 L160 100 Z"
-        fill="#9EA9AC"
-        opacity={0.8}
-      />
       <defs>
+        <radialGradient id={`${id}-glow`}>
+          <stop offset="0" stopColor="#FFE9F2" stopOpacity={0.9} />
+          <stop offset="1" stopColor="#FFE9F2" stopOpacity={0} />
+        </radialGradient>
         <Linear
           id={`${id}-land`}
           stops={[
-            [0, "#ACB6AE"],
-            [1, "#C0BDAE"],
+            [0, "#F7A0C4"],
+            [1, "#F27AAE"],
           ]}
           x2={0}
           y2={1}
         />
       </defs>
-      <path
-        d="M0 104 C80 100 170 86 240 80 C280 77 305 82 320 86 L320 160 L0 160 Z"
-        fill={`url(#${id}-land)`}
-      />
-      <Dots
-        opacity={0.4}
-        points={[
-          [162, 31, 3.4],
-          [244, 20, 2],
-          [213, 26, 1.5],
-          [291, 31, 5.8],
-          [288, 58, 2.9],
-          [240, 41, 2.4],
-          [188, 51, 2],
-          [205, 69, 2.9],
-          [232, 65, 2.4],
-          [171, 80, 2.4],
-          [34, 84, 4.4],
-          [110, 80, 2],
-          [86, 97, 2],
-          [141, 102, 2.4],
-          [267, 98, 4.4],
-          [25, 117, 2],
-          [100, 124, 5.4],
-          [195, 124, 2.9],
-          [237, 113, 2],
-          [62, 124, 2],
-          [157, 131, 2.4],
-          [42, 140, 3.4],
-          [237, 140, 4.9],
-          [130, 134, 1.5],
-        ]}
-      />
+      <circle cx="250" cy="92" r="30" fill={`url(#${id}-glow)`} />
+      <circle cx="250" cy="94" r="14" fill="#FFF1F6" />
+      <g fill="none" stroke="#FFF1F6" strokeWidth={1.3} strokeLinecap="round">
+        <path d="M206 30 q4 -4 8 0 q4 -4 8 0" />
+        <path d="M228 44 q3 -3 6 0 q3 -3 6 0" />
+        <path d="M260 24 q3 -3 6 0 q3 -3 6 0" />
+      </g>
+      <path d="M150 106 C200 88 260 84 320 90 L320 160 L150 160 Z" fill="#E86AA3" />
+      <path d="M0 106 C70 94 170 96 230 108 C270 115 300 120 320 124 L320 160 L0 160 Z" fill={`url(#${id}-land)`} />
+      {[
+        [52, 100],
+        [104, 97],
+        [272, 88],
+      ].map(([x, y]) => (
+        <g key={x}>
+          <rect x={x - 0.7} y={y - 4} width={1.4} height={5} fill="#C9558B" />
+          <circle cx={x} cy={y - 7} r={4.2} fill="#FFE1EE" />
+        </g>
+      ))}
     </>
   ),
-  // Cloudy: gris azulado, capas de nubes, montañas pequeñas y dos cerros.
-  cloudy: (id) => (
+  // Laguna: turquesa, sol, una nube, la isla y las olas.
+  lagoon: (id) => (
     <>
       <Sky
         id={id}
         stops={[
-          [0, "#7A90A3"],
-          [1, "#647B8F"],
+          [0, "#0C97C0"],
+          [1, "#52D8E3"],
         ]}
-        x2={0.3}
       />
+      <circle cx="277" cy="30" r="9" fill="#FFF6D8" />
+      <circle cx="277" cy="30" r="15" fill="#FFF6D8" opacity={0.2} />
       <Cloud
         circles={[
-          [2, 20, 12],
-          [20, 26, 10],
+          [262, 54, 6],
+          [273, 50, 8],
+          [285, 54, 6],
         ]}
-        fill="#93A7B8"
+        fill="#E8FBFF"
+        opacity={0.9}
       />
-      <Cloud
-        circles={[
-          [232, 34, 13],
-          [254, 24, 17],
-          [280, 30, 15],
-          [304, 24, 14],
-          [322, 34, 12],
-        ]}
-        fill="#8A9FB2"
-      />
-      <Cloud
-        circles={[
-          [240, 50, 10],
-          [260, 44, 13],
-          [284, 50, 10],
-        ]}
-        fill="#A9B9C7"
-        opacity={0.95}
-      />
-      <Cloud
-        circles={[
-          [296, 58, 9],
-          [314, 54, 11],
-        ]}
-        fill="#B4C2CF"
-        opacity={0.95}
-      />
-      <path d="M50 106 L76 83 Q79 80 82 83 L100 96 L117 73 Q120 70 123 73 L160 106 Z" fill="#8EA4B6" />
-      <path d="M0 102 C90 104 180 100 240 88 C280 80 305 82 320 86 L320 160 L0 160 Z" fill="#879FB2" />
+      <path d="M170 104 C200 80 240 74 270 88 C290 96 305 100 320 102 L320 112 L170 112 Z" fill="#0A86A3" />
       <defs>
         <Linear
           id={`${id}-land`}
           stops={[
-            [0, "#6C8396"],
-            [1, "#617889"],
+            [0, "#25BCD0"],
+            [1, "#0E9DBA"],
           ]}
           x2={0}
           y2={1}
         />
       </defs>
-      <path
-        d="M0 124 C80 116 170 112 240 114 C280 115 305 112 320 110 L320 160 L0 160 Z"
-        fill={`url(#${id}-land)`}
-      />
+      <path d="M0 102 C80 98 200 104 320 106 L320 160 L0 160 Z" fill={`url(#${id}-land)`} />
+      <g fill="none" stroke="#E0FBFF" strokeWidth={1.3} strokeLinecap="round" opacity={0.7}>
+        <path d="M20 122 q8 -4 16 0 t16 0" />
+        <path d="M110 132 q8 -4 16 0 t16 0" />
+        <path d="M210 124 q8 -4 16 0 t16 0" />
+        <path d="M60 146 q8 -4 16 0 t16 0" />
+        <path d="M250 146 q8 -4 16 0 t16 0" />
+      </g>
     </>
   ),
 };

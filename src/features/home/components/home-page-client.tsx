@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -13,7 +12,6 @@ import { MoodTodayCard } from "@/features/home/components/mood-today-card";
 import { WeekOverview } from "@/features/home/components/week-overview";
 import { CheckIn } from "@/features/home/components/check-in";
 import { TodayMirrorCard } from "@/features/home/components/today-mirror-card";
-import { routes } from "@/lib/routes";
 import { formatTodayLima } from "@/lib/format/dates";
 
 /**
@@ -27,7 +25,6 @@ import { formatTodayLima } from "@/lib/format/dates";
  */
 export function HomePageClient() {
   const t = useTranslations();
-  const router = useRouter();
   const { data: home, isPending } = useHome();
 
   if (isPending || !home) {
@@ -142,7 +139,7 @@ export function HomePageClient() {
                       <PendingPhraseCard
                         fragment={pending.fragment}
                         pattern={pending.pattern}
-                        onRewrite={() => router.push(routes.rewrite(pending.journalEntryId))}
+                        journalEntryId={pending.journalEntryId}
                       />
                     ) : (
                       <NoPendingPhrase />

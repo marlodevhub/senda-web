@@ -4,24 +4,23 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Feather } from "lucide-react";
 import { PhraseSceneCard } from "@/components/feedback/phrase-scene-card";
-import { Button } from "@/components/ui/button";
 import type { HomePendingPhrase } from "@/features/home/api/get-home";
-import { patternLabelKey, patternTitleKey } from "@/lib/pattern-labels";
+import { patternTitleKey } from "@/lib/pattern-labels";
 import { routes } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 
 /**
  * Tarjeta "frase pendiente" de Inicio en móvil (RN-IN-02): el hallazgo visible más reciente sin reescribir, como
- * tarjeta de clima de su tipo de frase. Toca el botón → abre CU-04 con su registro.
+ * tarjeta de clima de su tipo de frase. Se toca para darla vuelta y, atrás, "Reescribir" abre CU-04 con su registro.
  */
 export function PendingPhraseCard({
   fragment,
   pattern,
-  onRewrite,
+  journalEntryId,
 }: {
   fragment: string;
   pattern: string;
-  onRewrite?: () => void;
+  journalEntryId: number;
 }) {
   const t = useTranslations();
 
@@ -31,14 +30,10 @@ export function PendingPhraseCard({
       <PhraseSceneCard
         fragment={fragment}
         title={t(patternTitleKey(pattern))}
-        label={t(patternLabelKey(pattern))}
         pattern={pattern}
+        href={routes.rewrite(journalEntryId)}
+        linkLabel={t("home.pendingRewriteThis", { fragment })}
       />
-      {/* Mismo ancho y forma que el botón Escribir del check-in. */}
-      <Button variant="hero" size="xl" className="w-full rounded-full" onClick={onRewrite}>
-        <Feather className="size-4" aria-hidden />
-        {t("home.pendingRewrite")}
-      </Button>
     </div>
   );
 }
@@ -55,8 +50,8 @@ export function NoPendingPhrase() {
 
 /**
  * Escritorio (CU-05): todas las frases por reescribir, de la más reciente, dos por fila. Cada una es una tarjeta de clima
- * de su tipo de frase (pattern-style): de frente, su paisaje y su título; "Ver" la da vuelta y muestra la frase, y la
- * flechita abre su registro (CU-11). Nunca como etiqueta clínica.
+ * de su tipo de frase (pattern-style): de frente, su paisaje y su título; tocarla la da vuelta y muestra la frase, y
+ * atrás "Reescribir" abre la reescritura de su registro (CU-04). Nunca como etiqueta clínica.
  */
 export function PendingPhraseList({ phrases }: { phrases: HomePendingPhrase[] }) {
   const t = useTranslations();
@@ -100,10 +95,9 @@ export function PendingPhraseList({ phrases }: { phrases: HomePendingPhrase[] })
                 className="w-full"
                 fragment={phrase.fragment}
                 title={t(patternTitleKey(phrase.pattern))}
-                label={t(patternLabelKey(phrase.pattern))}
                 pattern={phrase.pattern}
-                href={routes.entry(phrase.journalEntryId)}
-                linkLabel={t("home.pendingOpenEntry", { fragment: phrase.fragment })}
+                href={routes.rewrite(phrase.journalEntryId)}
+                linkLabel={t("home.pendingRewriteThis", { fragment: phrase.fragment })}
               />
             </li>
           ))}

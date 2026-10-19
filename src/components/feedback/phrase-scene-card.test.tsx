@@ -4,39 +4,36 @@ import { renderWithProviders, screen } from "@/testing/test-utils";
 import { PhraseSceneCard } from "@/components/feedback/phrase-scene-card";
 
 describe("PhraseSceneCard", () => {
-  it("de frente solo muestra el título; con Ver se da vuelta, muestra la frase y el foco pasa a Ocultar", async () => {
+  it("toda la tarjeta se toca para darla vuelta; atrás muestra la frase y Reescribir, y el foco pasa a Ocultar", async () => {
     const user = userEvent.setup();
     renderWithProviders(
       <PhraseSceneCard
         fragment="Soy un inútil"
         title="Etiqueta dura"
-        label="Aquí te hablaste con dureza por un error."
         pattern="self_disqualification"
-        href="/historial/7"
-        linkLabel="Ver el registro de “Soy un inútil”"
+        href="/historial/7/reescribir"
+        linkLabel="Reescribir: “Soy un inútil”"
       />,
     );
 
-    expect(screen.getByRole("heading", { name: "Etiqueta dura" })).toBeInTheDocument();
-    // La frase está en la cara de atrás, fuera del alcance mientras la tarjeta no se dé vuelta.
+    // De frente: el título y "Ver"; la frase y "Reescribir" están atrás, fuera de alcance.
+    const front = screen.getByRole("button", { name: "Ver la frase: Etiqueta dura" });
+    expect(front).toHaveTextContent("Etiqueta dura");
     expect(screen.getByText("Soy un inútil").closest("[inert]")).not.toBeNull();
+    expect(screen.getByText("Reescribir").closest("[inert]")).not.toBeNull();
 
-    await user.click(screen.getByRole("button", { name: "Ver la frase: Etiqueta dura" }));
+    await user.click(front);
 
     expect(screen.getByText("Soy un inútil").closest("[inert]")).toBeNull();
     expect(screen.getByRole("button", { name: "Ocultar la frase: Etiqueta dura" })).toHaveFocus();
-    // Una sola flechita, que lleva al registro de esa frase.
-    expect(screen.getAllByRole("link")).toHaveLength(1);
-    expect(screen.getByRole("link", { name: "Ver el registro de “Soy un inútil”" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "Reescribir: “Soy un inútil”" })).toHaveAttribute(
       "href",
-      "/historial/7",
+      "/historial/7/reescribir",
     );
   });
 
-  it("sin href (móvil) no tiene flechita", () => {
-    renderWithProviders(
-      <PhraseSceneCard fragment="Soy un inútil" title="Etiqueta dura" label="…" pattern="self_disqualification" />,
-    );
+  it("sin href no tiene Reescribir", () => {
+    renderWithProviders(<PhraseSceneCard fragment="Soy un inútil" title="Etiqueta dura" pattern="self_disqualification" />);
     expect(screen.queryByRole("link")).not.toBeInTheDocument();
   });
 });

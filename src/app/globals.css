@@ -1342,52 +1342,44 @@ html:not(.show-scrollbars):has(.participant-no-select) *::-webkit-scrollbar {
 }
 
 /*
- * Escenas de las frases (RN-ES-13): una por tipo de frase, calcadas de las tarjetas de clima de referencia (noche,
- * soleado, lluvia, tormenta, nieve, atardecer, bruma, nublado). Iguales en todos los temas. `from`/`to`: el color del
- * cielo; `action`: "Ver" y el fondo de la flechita (≥ 3:1 sobre la parte de abajo, texto grande); `on-action`: el ícono
- * de la flechita; `mark`: el resaltador de la frase en el texto (más oscuro en modo oscuro).
+ * Escenas de las frases (RN-ES-13): una por tipo de frase, en el estilo de las tarjetas de clima de referencia (noche,
+ * soleado, lluvia, tormenta, nieve, atardecer) más dos vivas propias (amanecer rosa y laguna). Iguales en todos los
+ * temas. `from`/`to`: el color del cielo; `ink`: las letras de la tarjeta, en pastel (con la sombra suave de arriba a
+ * la izquierda, ≥ 4,5:1); `mark`: el resaltador de la frase en el texto (más oscuro en modo oscuro).
  */
 :root {
   --scene-night-from: #172763;
   --scene-night-to: #2A6494;
-  --scene-night-action: #FFFFFF;
-  --scene-night-on-action: #193F70;
+  --scene-night-ink: #DCE6FF;
   --scene-night-mark: #CFDAF0;
   --scene-sunny-from: #FC9B3C;
   --scene-sunny-to: #FBBD42;
-  --scene-sunny-action: #5C3200;
-  --scene-sunny-on-action: #FDC236;
+  --scene-sunny-ink: #FFF1D6;
   --scene-sunny-mark: #FDE3B0;
   --scene-rain-from: #3D9891;
   --scene-rain-to: #46BE91;
-  --scene-rain-action: #083A2C;
-  --scene-rain-on-action: #46C390;
+  --scene-rain-ink: #DFFFF2;
   --scene-rain-mark: #C6EDDF;
   --scene-thunder-from: #5F62CD;
   --scene-thunder-to: #8D71E2;
-  --scene-thunder-action: #FFFFFF;
-  --scene-thunder-on-action: #6E5FD3;
+  --scene-thunder-ink: #EEE6FF;
   --scene-thunder-mark: #DDD6FA;
   --scene-snow-from: #4BB3F2;
   --scene-snow-to: #9FD6F8;
-  --scene-snow-action: #0B4A78;
-  --scene-snow-on-action: #FFFFFF;
+  --scene-snow-ink: #EAF7FF;
   --scene-snow-mark: #D3EEFC;
   --scene-sunset-from: #FF9B46;
   --scene-sunset-to: #FF7C50;
-  --scene-sunset-action: #4F1704;
-  --scene-sunset-on-action: #FF9E50;
+  --scene-sunset-ink: #FFE8D9;
   --scene-sunset-mark: #FFD8C4;
-  --scene-haze-from: #829DAE;
-  --scene-haze-to: #BEBCAD;
-  --scene-haze-action: #3A3C3B;
-  --scene-haze-on-action: #E3E1D6;
-  --scene-haze-mark: #E3E6E2;
-  --scene-cloudy-from: #687E93;
-  --scene-cloudy-to: #9DB0BF;
-  --scene-cloudy-action: #FFFFFF;
-  --scene-cloudy-on-action: #4E6475;
-  --scene-cloudy-mark: #DCE3EA;
+  --scene-dawn-from: #E8569A;
+  --scene-dawn-to: #FFA3C7;
+  --scene-dawn-ink: #FFE6F1;
+  --scene-dawn-mark: #FFD9EA;
+  --scene-lagoon-from: #0E9FC4;
+  --scene-lagoon-to: #4FD6E2;
+  --scene-lagoon-ink: #E0FBFF;
+  --scene-lagoon-mark: #CFF3F8;
 }
 .dark {
   --scene-night-mark: #1F3E5E;
@@ -1396,6 +1388,6 @@ html:not(.show-scrollbars):has(.participant-no-select) *::-webkit-scrollbar {
   --scene-thunder-mark: #3E2F78;
   --scene-snow-mark: #1D4A66;
   --scene-sunset-mark: #6A3420;
-  --scene-haze-mark: #4D4632;
-  --scene-cloudy-mark: #3A3F46;
+  --scene-dawn-mark: #6A2A48;
+  --scene-lagoon-mark: #1A4B57;
 }
