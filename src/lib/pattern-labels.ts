@@ -21,6 +21,11 @@ export function patternLabelKey(pattern: string): string {
   return `analysis.patterns.${PATTERN_KEY[pattern] ?? "generic"}`;
 }
 
+/** Nombre corto y amable del tipo de frase, para el título de su tarjeta ("Etiqueta dura", "Todo o nada"). */
+export function patternTitleKey(pattern: string): string {
+  return `analysis.patternTitles.${PATTERN_KEY[pattern] ?? "generic"}`;
+}
+
 /**
  * RN-ES-13: el mensaje del Espejo según el tipo de frase (la de mayor confianza de la dimensión predominante) y la
  * intensidad de esa dimensión, del catálogo congelado (nunca generado). Null si el patrón no está en el catálogo: se usa

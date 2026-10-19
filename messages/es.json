@@ -144,7 +144,11 @@
     "todayMirrorPending": "Todavía estoy leyendo lo que escribiste.",
     "todayMirrorSeen": "Mira lo que noté en lo que escribiste.",
     "pendingListHint": "Elige una para reescribirla con más amabilidad.",
-    "pendingRewriteThis": "Reescribir: “{fragment}”",
+    "pendingOpenEntry": "Ver el registro de “{fragment}”",
+    "pendingFlip": "Ver la frase: {title}",
+    "pendingFlipShort": "Ver",
+    "pendingFlipBack": "Ocultar",
+    "pendingFlipBackLabel": "Ocultar la frase: {title}",
     "noPending": "No tienes frases pendientes. ¿Qué te dijiste hoy?",
     "goalLabel": "Meta de la semana",
     "goalMet": "Cumpliste tu meta de esta semana.",
@@ -230,6 +234,18 @@
       "guiltForResting": "Aquí descansar se sintió como una falta.",
       "allOrNothing": "Aquí solo había perfecto o fracaso.",
       "generic": "Aquí tu voz interna sonó autocrítica."
+    },
+    "patternTitles": {
+      "selfDisqualification": "Etiqueta dura",
+      "errorOvergeneralization": "Un «siempre»",
+      "selfPunishment": "Castigarte",
+      "worthByPerformance": "Valor por resultados",
+      "socialComparison": "Compararte",
+      "needForApproval": "Lo que piensan otros",
+      "shouldAndPerfectionism": "El «debería»",
+      "guiltForResting": "Culpa al descansar",
+      "allOrNothing": "Todo o nada",
+      "generic": "Voz exigente"
     },
     "patternMessages": {
       "selfDisqualification": {

@@ -6,7 +6,7 @@ import { Feather } from "lucide-react";
 import { PhraseSceneCard } from "@/components/feedback/phrase-scene-card";
 import { Button } from "@/components/ui/button";
 import type { HomePendingPhrase } from "@/features/home/api/get-home";
-import { patternLabelKey } from "@/lib/pattern-labels";
+import { patternLabelKey, patternTitleKey } from "@/lib/pattern-labels";
 import { routes } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 
@@ -28,7 +28,12 @@ export function PendingPhraseCard({
   return (
     <div className="flex flex-col gap-2.5 rounded-lg bg-card p-4 shadow-card">
       <span className="text-xs font-bold tracking-wide text-muted-foreground uppercase">{t("home.pendingLabel")}</span>
-      <PhraseSceneCard fragment={fragment} label={t(patternLabelKey(pattern))} pattern={pattern} />
+      <PhraseSceneCard
+        fragment={fragment}
+        title={t(patternTitleKey(pattern))}
+        label={t(patternLabelKey(pattern))}
+        pattern={pattern}
+      />
       {/* Mismo ancho y forma que el botón Escribir del check-in. */}
       <Button variant="hero" size="xl" className="w-full rounded-full" onClick={onRewrite}>
         <Feather className="size-4" aria-hidden />
@@ -50,8 +55,8 @@ export function NoPendingPhrase() {
 
 /**
  * Escritorio (CU-05): todas las frases por reescribir, de la más reciente, dos por fila. Cada una es una tarjeta de clima
- * de su tipo de frase (pattern-style) que lleva directo a reescribir su registro (CU-04); debajo de la frase, su tipo
- * en lenguaje amable (el mismo del Espejo). Nunca como etiqueta clínica.
+ * de su tipo de frase (pattern-style): de frente, su paisaje y su título; "Ver" la da vuelta y muestra la frase, y la
+ * flechita abre su registro (CU-11). Nunca como etiqueta clínica.
  */
 export function PendingPhraseList({ phrases }: { phrases: HomePendingPhrase[] }) {
   const t = useTranslations();
@@ -90,10 +95,11 @@ export function PendingPhraseList({ phrases }: { phrases: HomePendingPhrase[] })
               <PhraseSceneCard
                 className="w-full"
                 fragment={phrase.fragment}
+                title={t(patternTitleKey(phrase.pattern))}
                 label={t(patternLabelKey(phrase.pattern))}
                 pattern={phrase.pattern}
-                href={routes.rewrite(phrase.journalEntryId)}
-                linkLabel={t("home.pendingRewriteThis", { fragment: phrase.fragment })}
+                href={routes.entry(phrase.journalEntryId)}
+                linkLabel={t("home.pendingOpenEntry", { fragment: phrase.fragment })}
               />
             </li>
           ))}

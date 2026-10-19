@@ -1,15 +1,23 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
-import { SCENE_CARD, sceneOf, type Scene } from "@/lib/pattern-style";
+import { useTranslations } from "next-intl";
+import { ArrowRight, Eye, RotateCcw } from "lucide-react";
+import { patternDot, SCENE_CARD, sceneOf, type Scene } from "@/lib/pattern-style";
 import { cn } from "@/lib/utils";
 
+/** Radio de la tarjeta: el de su contenedor (28px) menos su relleno (20px), para que quede proporcional. */
+const RADIUS = "rounded-[0.625rem]";
+
 /**
- * Una frase dura como tarjeta de clima (RN-ES-13): el degradado y el paisaje de su tipo de frase, la frase grande y,
- * debajo, su tipo en lenguaje amable. Con `href` lleva a reescribir su registro (CU-04). El paisaje es decorativo y
- * queda abajo y a la derecha, sin pasar por debajo del texto.
+ * Una frase dura como tarjeta de clima (RN-ES-13). De frente, solo el paisaje de su tipo de frase y su título en
+ * blanco; con "Ver" se da vuelta y muestra la frase que escribió y su tipo en lenguaje amable. Con `href` (escritorio)
+ * lleva además la flechita, que es lo único que abre el registro de esa frase.
  */
 export function PhraseSceneCard({
   fragment,
+  title,
   label,
   pattern,
   href,
@@ -17,54 +25,117 @@ export function PhraseSceneCard({
   className,
 }: {
   fragment: string;
+  /** El nombre corto del tipo de frase (`analysis.patternTitles`). */
+  title: string;
+  /** El tipo en lenguaje amable, el mismo del Espejo (`analysis.patterns`). */
   label: string;
   pattern: string;
   href?: string;
-  /** Nombre accesible del enlace ("Reescribir: “…”"). */
+  /** Nombre accesible de la flechita ("Ver el registro de “…”"). */
   linkLabel?: string;
   className?: string;
 }) {
+  const t = useTranslations();
   const scene = sceneOf(pattern);
-  const body = (
-    <>
-      <SceneArt scene={scene} />
-      <span className="relative flex flex-col gap-1.5 pr-14 pb-10">
-        <span className="font-display text-lg leading-snug font-bold before:content-['“'] after:content-['”']">
-          {fragment}
-        </span>
-        <span className="text-sm leading-snug font-medium">{label}</span>
-      </span>
-      {href && (
-        <span
-          aria-hidden
-          className="absolute right-3 bottom-3 flex size-9 items-center justify-center rounded-full bg-white/90 text-[#1D1D1F] shadow-card transition-transform group-hover:translate-x-0.5"
-        >
-          <ArrowRight className="size-4" />
-        </span>
-      )}
-    </>
-  );
-  const base = cn("relative isolate flex min-h-36 overflow-hidden rounded-2xl p-4 shadow-card", SCENE_CARD[scene], className);
+  const [flipped, setFlipped] = useState(false);
+  const frontButton = useRef<HTMLButtonElement>(null);
+  const backButton = useRef<HTMLButtonElement>(null);
+  const firstRender = useRef(true);
 
-  return href ? (
+  // Al dar vuelta la tarjeta, el foco pasa al botón de la cara que queda a la vista.
+  useEffect(() => {
+    if (firstRender.current) {
+      firstRender.current = false;
+      return;
+    }
+    (flipped ? backButton : frontButton).current?.focus();
+  }, [flipped]);
+
+  const arrow = href && (
     <Link
       href={href}
       aria-label={linkLabel}
-      className={cn(
-        base,
-        "group transition-[transform,box-shadow] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:shadow-bloom focus-visible:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring motion-reduce:transition-none motion-reduce:hover:translate-y-0",
-      )}
+      className="absolute right-4 bottom-4 z-10 flex size-9 items-center justify-center rounded-full bg-white text-[#1D1D1F] shadow-card ring-1 ring-black/10 transition-transform hover:translate-x-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring motion-reduce:transition-none"
     >
-      {body}
+      <ArrowRight className="size-4" aria-hidden />
     </Link>
-  ) : (
-    <div className={base}>{body}</div>
+  );
+
+  return (
+    // La flechita va fuera de las dos caras (una sola, en la misma esquina), para no repetir el enlace.
+    <div className={cn("relative [perspective:1200px]", className)}>
+      <div
+        className={cn(
+          "grid h-full transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] [transform-style:preserve-3d] motion-reduce:transition-none",
+          flipped && "[transform:rotateY(180deg)]",
+        )}
+      >
+        {/* Frente: el paisaje completo y el título. */}
+        <div
+          inert={flipped}
+          className={cn(
+            "relative isolate flex min-h-36 flex-col justify-between overflow-hidden p-4 shadow-card [grid-area:1/1] [backface-visibility:hidden]",
+            RADIUS,
+            SCENE_CARD[scene],
+          )}
+        >
+          <SceneArt scene={scene} />
+          {/* Un velo oscuro arriba para que el título blanco se lea en los paisajes claros (≥ 3:1, texto grande). */}
+          <span aria-hidden className="absolute inset-x-0 top-0 -z-10 h-2/3 bg-linear-to-b from-black/40 via-black/25 to-transparent" />
+          <h3 className="pr-16 font-heading text-xl leading-tight font-bold text-white">{title}</h3>
+          <div className="mt-6 flex items-center justify-between gap-2">
+            <button
+              ref={frontButton}
+              type="button"
+              aria-label={t("home.pendingFlip", { title })}
+              onClick={() => setFlipped(true)}
+              className="inline-flex h-9 items-center gap-1.5 rounded-full bg-white px-4 text-sm font-semibold text-[#1D1D1F] shadow-card focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+            >
+              <Eye className="size-4" aria-hidden />
+              {t("home.pendingFlipShort")}
+            </button>
+          </div>
+        </div>
+
+        {/* Atrás: la frase que escribió y su tipo. */}
+        <div
+          inert={!flipped}
+          className={cn(
+            "flex min-h-36 flex-col justify-between gap-3 bg-card p-4 shadow-card [grid-area:1/1] [backface-visibility:hidden] [transform:rotateY(180deg)]",
+            RADIUS,
+          )}
+        >
+          <div className="flex flex-col gap-1.5">
+            <p className="font-display text-base leading-snug font-semibold text-foreground before:content-['“'] after:content-['”']">
+              {fragment}
+            </p>
+            <p className="flex items-start gap-2 text-sm leading-snug text-muted-foreground">
+              <span aria-hidden className={cn("mt-[0.4rem] size-2 shrink-0 rounded-full", patternDot(pattern))} />
+              {label}
+            </p>
+          </div>
+          <div className="flex items-center justify-between gap-2">
+            <button
+              ref={backButton}
+              type="button"
+              aria-label={t("home.pendingFlipBackLabel", { title })}
+              onClick={() => setFlipped(false)}
+              className="inline-flex h-9 items-center gap-1.5 rounded-full bg-muted px-4 text-sm font-semibold text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+            >
+              <RotateCcw className="size-4" aria-hidden />
+              {t("home.pendingFlipBack")}
+            </button>
+          </div>
+        </div>
+      </div>
+      {arrow}
+    </div>
   );
 }
 
 /**
- * El paisaje en dos piezas de tamaño fijo, para que nunca pase por debajo del texto: el detalle de cada clima (luna,
- * sol, lluvia, rayo, nieve, nubes…) en la esquina de arriba a la derecha y las colinas en una franja abajo.
+ * El paisaje de cada clima, de borde a borde (cielo, montañas y colinas en capas), y su detalle principal (luna, sol,
+ * rayo, nube…) en la esquina de arriba a la derecha, por encima del velo y sin pasar por debajo del título.
  */
 function SceneArt({ scene }: { scene: Scene }) {
   return (
@@ -72,90 +143,169 @@ function SceneArt({ scene }: { scene: Scene }) {
       <svg
         aria-hidden
         focusable="false"
-        viewBox="0 0 64 64"
-        className="pointer-events-none absolute top-2 right-2 -z-10 size-14"
+        viewBox="0 0 320 180"
+        preserveAspectRatio="xMaxYMax slice"
+        className="pointer-events-none absolute inset-0 -z-20 size-full"
       >
-        <SceneDetail scene={scene} />
+        <SceneAtmosphere scene={scene} />
+        <SceneLand scene={scene} />
       </svg>
       <svg
         aria-hidden
         focusable="false"
-        viewBox="0 0 320 48"
-        preserveAspectRatio="none"
-        className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-12 w-full"
+        viewBox="0 0 80 80"
+        className="pointer-events-none absolute top-2 right-2 -z-[5] size-16"
       >
-        {scene === "sunset" && <circle cx="250" cy="34" r="20" fill="#FFE8D8" opacity={0.75} />}
-        <path d="M0 26 C60 8 120 14 180 22 C240 30 280 12 320 8 L320 48 L0 48 Z" fill="#fff" opacity={0.16} />
-        <path d="M0 38 C70 26 150 32 210 38 C260 42 290 34 320 30 L320 48 L0 48 Z" fill="#fff" opacity={0.14} />
+        <SceneCorner scene={scene} />
       </svg>
     </>
   );
 }
 
-function SceneDetail({ scene }: { scene: Scene }) {
+function Stars({ points }: { points: [number, number, number][] }) {
+  return (
+    <g fill="#fff">
+      {points.map(([x, y, r]) => (
+        <circle key={`${x}-${y}`} cx={x} cy={y} r={r} opacity={0.8} />
+      ))}
+    </g>
+  );
+}
+
+function Cloud({ x, y, scale = 1, opacity = 0.9 }: { x: number; y: number; scale?: number; opacity?: number }) {
+  return (
+    <path
+      transform={`translate(${x} ${y}) scale(${scale})`}
+      d="M0 16 a10 10 0 0 1 18 -6 a12 12 0 0 1 22 6 a8 8 0 0 1 0 16 h-38 a8 8 0 0 1 -2 -16 Z"
+      fill="#fff"
+      opacity={opacity}
+    />
+  );
+}
+
+function Rain({ opacity = 0.3 }: { opacity?: number }) {
+  const drops: [number, number][] = [];
+  for (let row = 0; row < 6; row++) {
+    for (let col = 0; col < 12; col++) {
+      drops.push([col * 28 + (row % 2) * 14 + 6, row * 30 + 8]);
+    }
+  }
+  return (
+    <g stroke="#fff" strokeWidth={1.4} strokeLinecap="round" opacity={opacity}>
+      {drops.map(([x, y]) => (
+        <path key={`${x}-${y}`} d={`M${x} ${y} l-4 12`} />
+      ))}
+    </g>
+  );
+}
+
+/** Lo que llena el cielo de borde a borde (estrellas, lluvia, nieve, bruma), suave para no tapar el título. */
+function SceneAtmosphere({ scene }: { scene: Scene }) {
+  switch (scene) {
+    case "night":
+      return <Stars points={[[40, 96, 1.2], [96, 84, 1], [150, 100, 1.3], [200, 76, 1], [120, 112, 0.9]]} />;
+    case "rain":
+      return <Rain />;
+    case "thunder":
+      return <Rain opacity={0.22} />;
+    case "snow":
+      return <Stars points={[[30, 96, 2], [80, 112, 1.6], [130, 90, 1.8], [178, 108, 1.5], [230, 100, 1.7], [60, 124, 1.4]]} />;
+    case "sunset":
+      return <circle cx="200" cy="132" r="28" fill="#FFE8D8" opacity={0.8} />;
+    case "haze":
+      return (
+        <g fill="#fff">
+          <rect x="0" y="96" width="320" height="6" opacity={0.18} />
+          <rect x="0" y="110" width="320" height="6" opacity={0.14} />
+        </g>
+      );
+    case "aurora":
+      return <Stars points={[[50, 100, 1], [130, 90, 1], [190, 108, 1.1]]} />;
+    default:
+      return null;
+  }
+}
+
+/** El detalle principal de cada clima, en su esquina (viewBox 80×80). */
+function SceneCorner({ scene }: { scene: Scene }) {
   switch (scene) {
     case "night":
       return (
-        <g fill="#fff">
-          <path d="M40 14 a14 14 0 1 0 12 22 a11 11 0 1 1 -12 -22 Z" opacity={0.9} />
-          <circle cx="12" cy="12" r="1.4" opacity={0.8} />
-          <circle cx="20" cy="44" r="1.2" opacity={0.7} />
-          <circle cx="56" cy="54" r="1" opacity={0.6} />
+        <g>
+          <path d="M44 14 a22 22 0 1 0 20 34 a17 17 0 1 1 -20 -34 Z" fill="#FFF7D6" opacity={0.95} />
+          <Stars points={[[14, 20, 1.3], [24, 58, 1.1], [70, 70, 1]]} />
         </g>
       );
     case "sunny":
       return (
         <g>
-          <circle cx="36" cy="28" r="20" fill="#fff" opacity={0.25} />
-          <circle cx="36" cy="28" r="12" fill="#FFF6D6" opacity={0.95} />
+          <circle cx="48" cy="32" r="26" fill="#fff" opacity={0.25} />
+          <circle cx="48" cy="32" r="15" fill="#FFF6D6" />
         </g>
       );
     case "rain":
-      return (
-        <g stroke="#fff" strokeWidth={1.8} strokeLinecap="round" opacity={0.55}>
-          {[18, 32, 46, 60, 25, 39, 53].map((x, i) => (
-            <path key={x} d={`M${x} ${i < 4 ? 8 : 34} l-5 13`} />
-          ))}
-        </g>
-      );
+      return <Cloud x={14} y={14} scale={1.2} opacity={0.85} />;
     case "thunder":
-      return <path d="M40 4 L26 32 L38 32 L28 60 L52 24 L40 24 L50 4 Z" fill="#fff" opacity={0.85} />;
+      return <path d="M50 4 L32 40 L46 40 L34 76 L66 30 L50 30 L62 4 Z" fill="#fff" opacity={0.9} />;
     case "snow":
       return (
-        <g fill="#fff">
-          <path d="M14 26 a10 10 0 0 1 18 -6 a12 12 0 0 1 22 6 a8 8 0 0 1 0 16 h-38 a8 8 0 0 1 -2 -16 Z" opacity={0.9} />
-          <circle cx="16" cy="52" r="1.8" opacity={0.8} />
-          <circle cx="36" cy="58" r="1.6" opacity={0.8} />
-          <circle cx="54" cy="52" r="1.4" opacity={0.7} />
+        <g>
+          <Cloud x={12} y={14} scale={1.25} />
+          <Stars points={[[20, 64, 2], [44, 72, 1.8], [64, 62, 1.6]]} />
         </g>
       );
     case "sunset":
-      return (
-        <g fill="#fff" opacity={0.6}>
-          <path d="M20 22 a7 7 0 0 1 12 -4 a9 9 0 0 1 16 4 a6 6 0 0 1 0 12 h-26 a6 6 0 0 1 -2 -12 Z" />
-        </g>
-      );
+      return <Cloud x={14} y={20} scale={1.1} opacity={0.75} />;
     case "haze":
-      return (
-        <g fill="#fff">
-          <circle cx="36" cy="24" r="13" opacity={0.6} />
-          <rect x="8" y="44" width="52" height="4" rx="2" opacity={0.4} />
-          <rect x="18" y="54" width="42" height="4" rx="2" opacity={0.3} />
-        </g>
-      );
+      return <circle cx="44" cy="34" r="17" fill="#fff" opacity={0.55} />;
     case "cloudy":
       return (
-        <g fill="#fff">
-          <circle cx="44" cy="16" r="10" opacity={0.35} />
-          <path d="M10 40 a9 9 0 0 1 16 -5 a11 11 0 0 1 20 5 a7 7 0 0 1 0 14 h-34 a7 7 0 0 1 -2 -14 Z" opacity={0.35} />
+        <g>
+          <circle cx="54" cy="24" r="13" fill="#fff" opacity={0.35} />
+          <Cloud x={8} y={36} scale={1} opacity={0.4} />
         </g>
       );
     case "aurora":
       return (
-        <g fill="none" stroke="#fff" strokeLinecap="round" opacity={0.6}>
-          <path d="M4 26 C18 12 32 36 46 20 S60 16 64 14" strokeWidth={3} />
-          <path d="M4 40 C18 28 32 50 46 36 S60 32 64 30" strokeWidth={2} opacity={0.7} />
+        <g fill="none" stroke="#fff" strokeLinecap="round" opacity={0.65}>
+          <path d="M4 34 C20 16 36 46 52 26 S72 20 80 18" strokeWidth={4} />
+          <path d="M6 52 C22 36 38 62 54 44 S74 38 80 36" strokeWidth={2.5} opacity={0.7} />
         </g>
       );
   }
+}
+
+function SceneLand({ scene }: { scene: Scene }) {
+  // Montañas al fondo solo en los climas de montaña; colinas en dos capas en todos.
+  const mountains = scene === "rain" || scene === "thunder" || scene === "haze" || scene === "cloudy";
+  const snowy = scene === "snow";
+  return (
+    <g>
+      {mountains && (
+        <g fill="#fff" opacity={0.18}>
+          <path d="M150 140 L205 78 L260 140 Z" />
+          <path d="M215 140 L262 92 L310 140 Z" opacity={0.8} />
+        </g>
+      )}
+      {scene === "night" && (
+        <g fill="#0E2A47" opacity={0.55}>
+          <rect x="226" y="104" width="10" height="22" />
+          <path d="M231 96 l9 10 h-18 Z" />
+          {[40, 70, 110, 160, 290].map((x) => (
+            <rect key={x} x={x} y="118" width="2" height="10" />
+          ))}
+        </g>
+      )}
+      <path
+        d="M0 134 C60 112 120 120 180 128 C240 136 280 116 320 110 L320 180 L0 180 Z"
+        fill="#fff"
+        opacity={snowy ? 0.7 : 0.16}
+      />
+      <path
+        d="M0 154 C70 138 150 146 210 152 C260 156 290 144 320 140 L320 180 L0 180 Z"
+        fill="#fff"
+        opacity={snowy ? 0.85 : 0.14}
+      />
+    </g>
+  );
 }
