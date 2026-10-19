@@ -47,10 +47,11 @@ const OUTCOME_KEY = {
 } as const;
 
 /**
- * CU-04 Reescribir un registro: todas sus frases duras en una sola reescritura (no una por frase). Se parte del texto
- * del registro (o del último intento) y se cambia lo que suena duro; la IA le pone a cada intento una carita (1 a 5) y
- * la fila de caritas muestra el progreso. Se puede intentar las veces que haga falta hasta llegar a verde; entonces el
- * registro queda reescrito y se puede guardar en el frasco. La carita no la marca el estudiante.
+ * CU-04 Reescribir un registro: todas sus frases duras en una sola reescritura (no una por frase). La primera vez se
+ * parte del texto del registro y se cambia lo que suena duro; si ya tiene reescrituras ("Reescribir nuevamente"), el
+ * campo empieza en blanco. La IA le pone a cada intento una carita (1 a 5) y la fila de caritas muestra el progreso. Se
+ * puede intentar las veces que haga falta; al llegar a verde se puede guardar en el frasco o reescribir nuevamente. La
+ * carita no la marca el estudiante.
  */
 export function RewriteForm({
   journalEntryId,
@@ -70,7 +71,7 @@ export function RewriteForm({
     );
   }
 
-  // Se monta cuando ya están el registro y los intentos: el campo empieza con el último intento o con el registro.
+  // Se monta cuando ya están el registro y los intentos: el campo empieza con el registro o, si ya lo reescribió, en blanco.
   return <RewriteSheet journalEntryId={journalEntryId} guide={guide} entryContext={entryContext} />;
 }
 
@@ -92,15 +93,24 @@ function RewriteSheet({
   const [lastResult, setLastResult] = useState<SubmitRewriteResult | null>(null);
 
   const lastAttempt = guide.attempts.at(-1);
+  const rewritingAgain = guide.attempts.length > 0;
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors, isSubmitting },
     setError,
   } = useForm<RewriteFormValues>({
     resolver: zodResolver(rewriteFormSchema),
-    defaultValues: { text: lastAttempt?.text ?? entryContext.originalText },
+    defaultValues: { text: rewritingAgain ? "" : entryContext.originalText },
   });
+
+  /** Después de llegar a verde: otra reescritura del mismo registro, desde cero. */
+  function rewriteAgain() {
+    setLastResult(null);
+    setExampleIndex(null);
+    reset({ text: "" });
+  }
 
   if (lastResult?.result === "RISK") {
     return <CareMessage />;
@@ -110,7 +120,7 @@ function RewriteSheet({
     try {
       setLastResult(await submitMutation.mutateAsync(values.text));
     } catch (error) {
-      // Texto corto, igual al registro, ya amable o tope de intentos: el aviso va junto al campo.
+      // Texto corto, igual al registro o tope de intentos: el aviso va junto al campo.
       if (error instanceof BffError) {
         setError("text", { message: errorMessageKey(error.code) });
         return;
@@ -120,7 +130,9 @@ function RewriteSheet({
   }
 
   const progress = guide.attempts.map((attempt) => ({ attemptNumber: attempt.attemptNumber, mood: attempt.mood }));
-  const finalAttempt = guide.completed ? lastAttempt : undefined;
+  // La tarjeta de "quedó reescrito" sale al llegar a verde aquí; al volver a entrar se ofrece reescribir nuevamente.
+  const finalAttempt =
+    lastResult?.completed && lastAttempt?.rewriteId === lastResult.rewriteId ? lastAttempt : undefined;
 
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-col gap-5">
@@ -167,7 +179,7 @@ function RewriteSheet({
             </li>
           ))}
         </ul>
-        {!guide.completed && <p className="text-sm text-muted-foreground">{t("rewrite.phrasesHint")}</p>}
+        <p className="text-sm text-muted-foreground">{t("rewrite.phrasesHint")}</p>
       </section>
 
       {/* El progreso: la carita que la IA le dio a cada intento. */}
@@ -215,6 +227,10 @@ function RewriteSheet({
               <Amphora className="size-4" aria-hidden />
               {finalAttempt.inJar ? t("rewrite.savedInJar") : t("rewrite.saveInJar")}
             </Button>
+            <Button variant="outline" className="rounded-full sm:flex-1" onClick={rewriteAgain}>
+              <RotateCcw className="size-4" aria-hidden />
+              {t("rewrite.rewriteAgain")}
+            </Button>
             <Button variant="hero" className="rounded-full sm:flex-1" onClick={() => router.push("/inicio")}>
               <Home className="size-4" aria-hidden />
               {t("rewrite.goHome")}
@@ -258,7 +274,9 @@ function RewriteSheet({
           <JournalPrompt id="text" label={t("rewrite.textLabel")} error={errors.text?.message}>
             <JournalTextarea id="text" rows={8} autoComplete="off" {...register("text")} />
           </JournalPrompt>
-          <p className="text-sm text-muted-foreground">{t("rewrite.textHint")}</p>
+          <p className="text-sm text-muted-foreground">
+            {t(rewritingAgain ? "rewrite.textHintAgain" : "rewrite.textHint")}
+          </p>
 
           {guide.examples.length > 0 && (
             <div className="flex flex-col items-start gap-2">

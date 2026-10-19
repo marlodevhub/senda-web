@@ -9,6 +9,7 @@ const ENTRY: JournalEntryDetail = {
   id: 22,
   date: "2026-10-14",
   interventionDay: 11,
+  numberInDay: 2,
   mode: "FREE",
   moodBefore: 2,
   q1: null,
@@ -84,5 +85,33 @@ describe("EntryDetail", () => {
     expect(screen.getByText("Intento 2")).toBeInTheDocument();
     expect(screen.getByText("Se suavizó")).toBeInTheDocument();
     expect(screen.getByText("Guardada en el frasco")).toBeInTheDocument();
+  });
+
+  it("se titula con el día y el número del registro en ese día", async () => {
+    vi.spyOn(globalThis, "fetch").mockImplementation(async () => new Response(JSON.stringify(ENTRY), { status: 200 }));
+    renderWithProviders(<EntryDetail journalEntryId={22} />);
+
+    expect(await screen.findByRole("heading", { level: 1, name: "Día 11 · Registro 2" })).toBeInTheDocument();
+  });
+
+  it("con el registro ya reescrito, muestra sus intentos con su texto y ofrece reescribirlo nuevamente (CU-04)", async () => {
+    const rewritten: JournalEntryDetail = {
+      ...ENTRY,
+      rewrites: [
+        { ...ENTRY.rewrites[1], id: 7, findingId: null, attemptNumber: 1, moodAfter: 2, inJar: false, text: "Primer intento" },
+        { ...ENTRY.rewrites[1], id: 8, findingId: null, attemptNumber: 2, moodAfter: 5, text: "Segundo intento" },
+      ],
+    };
+    vi.spyOn(globalThis, "fetch").mockImplementation(
+      async () => new Response(JSON.stringify(rewritten), { status: 200 }),
+    );
+    renderWithProviders(<EntryDetail journalEntryId={22} />);
+
+    expect(await screen.findByText("Primer intento")).toBeInTheDocument();
+    expect(screen.getByText("Segundo intento")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Reescribir nuevamente este registro" })).toHaveAttribute(
+      "href",
+      "/historial/22/reescribir",
+    );
   });
 });

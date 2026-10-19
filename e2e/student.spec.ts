@@ -161,6 +161,7 @@ test("ciclo diario completo: activar → diario → espejo → reescritura → f
   // CU-04: se reescribe el registro completo; la caja empieza con lo que escribió.
   await page.getByRole("link", { name: "Reescribir este registro" }).click();
   await expect(page).toHaveURL(/\/historial\/\d+\/reescribir$/);
+  const entryUrl = page.url().replace(/\/reescribir$/, "");
   await expect(page.getByLabel("Tu reescritura")).toHaveValue(/Soy un inútil/);
   await page
     .getByLabel("Tu reescritura")
@@ -183,6 +184,14 @@ test("ciclo diario completo: activar → diario → espejo → reescritura → f
   await expect(page.getByText("Lo regaste con")).toBeVisible();
   await expect(page.getByText(/Brote · 1 brote/)).toBeVisible();
   await expectAccessible(page);
+
+  // CU-11: el detalle se titula con el día y el número del registro; sus reescrituras van debajo de lo que escribió
+  // y se puede reescribir nuevamente, desde una caja en blanco.
+  await page.goto(entryUrl);
+  await expect(page.getByRole("heading", { level: 1, name: "Día 3 · Registro 1" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Tus reescrituras" })).toBeVisible();
+  await page.getByRole("link", { name: "Reescribir nuevamente este registro" }).click();
+  await expect(page.getByLabel("Tu reescritura")).toHaveValue("");
 
   // Después de guardar, el Diario vuelve limpio (sin el texto ni el borrador del registro ya guardado).
   await page.getByRole("navigation", { name: "Navegación principal" }).getByRole("link", { name: "Diario" }).click();

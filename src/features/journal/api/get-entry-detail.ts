@@ -44,6 +44,8 @@ export type JournalEntryDetail = {
   id: number;
   date: string;
   interventionDay: number;
+  /** El número del registro dentro de su día (1, 2, …), igual que en el Historial y el calendario de Inicio. */
+  numberInDay: number;
   mode: "GUIDED" | "FREE";
   moodBefore: number;
   q1: string | null;

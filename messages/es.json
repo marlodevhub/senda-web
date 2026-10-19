@@ -215,6 +215,7 @@
     "careLine113": "Línea 113, opción 5 (gratis, 24 horas)",
     "careSamu106": "SAMU 106 (emergencias)",
     "rewriteThisEntry": "Reescribir este registro",
+    "rewriteEntryAgain": "Reescribir nuevamente este registro",
     "goHome": "Ir al inicio",
     "goToProgress": "Ver mi progreso",
     "seeEntry": "Ver el registro",
@@ -229,6 +230,53 @@
       "guiltForResting": "Aquí descansar se sintió como una falta.",
       "allOrNothing": "Aquí solo había perfecto o fracaso.",
       "generic": "Aquí tu voz interna sonó autocrítica."
+    },
+    "patternMessages": {
+      "selfDisqualification": {
+        "low": "Un mal momento no dice quién eres.",
+        "moderate": "En estos días se ha repetido la dureza contigo por tus errores. Una etiqueta dura no dice quién eres.",
+        "high": "Últimamente te has exigido mucho por tus errores. Prueba a describir lo que pasó sin ponerte una etiqueta."
+      },
+      "errorOvergeneralization": {
+        "low": "Un error es un momento, no toda tu historia.",
+        "moderate": "En estos días se ha repetido la dureza contigo por tus errores. Ese \"siempre\" no cuenta las veces que sí te salió.",
+        "high": "Últimamente te has exigido mucho por tus errores. Prueba a mirar solo lo que pasó esta vez, sin el \"siempre\"."
+      },
+      "selfPunishment": {
+        "low": "Equivocarte no te hace merecer un trato duro.",
+        "moderate": "En estos días se ha repetido la dureza contigo por tus errores. También mereces un trato amable cuando algo sale mal.",
+        "high": "Últimamente te has exigido mucho por tus errores. Prueba a hablarte como le hablarías a un amigo que se equivocó."
+      },
+      "worthByPerformance": {
+        "low": "Vales más que una nota o un resultado.",
+        "moderate": "En estos días tu valor ha dependido varias veces de lo de afuera. Un resultado mide una tarea, no lo que vales.",
+        "high": "Últimamente lo de afuera ha pesado mucho en cómo te valoras. Prueba a nombrar algo que valoras de ti y que no dependa de una nota."
+      },
+      "socialComparison": {
+        "low": "Cada quien va a su propio paso.",
+        "moderate": "En estos días tu valor ha dependido varias veces de lo de afuera. Tu camino no se mide con el de otros.",
+        "high": "Últimamente lo de afuera ha pesado mucho en cómo te valoras. Prueba a comparar cómo estás hoy con cómo estabas antes, no con otra persona."
+      },
+      "needForApproval": {
+        "low": "Tu valor no depende de lo que otros piensen.",
+        "moderate": "En estos días tu valor ha dependido varias veces de lo de afuera. Lo que otros piensan no decide lo que vales.",
+        "high": "Últimamente lo de afuera ha pesado mucho en cómo te valoras. Prueba a reconocerte algo tú, sin esperar que otro lo diga."
+      },
+      "shouldAndPerfectionism": {
+        "low": "Hacerlo bien no tiene que ser hacerlo perfecto.",
+        "moderate": "En estos días la exigencia contigo se ha repetido. No todo \"debería\" es una obligación.",
+        "high": "Últimamente te has exigido mucho, con poco descanso. Prueba a cambiar un \"debería\" por un \"me gustaría\"."
+      },
+      "guiltForResting": {
+        "low": "Descansar también es parte de avanzar.",
+        "moderate": "En estos días la exigencia contigo se ha repetido. Descansar no es una falta: también es cuidarte.",
+        "high": "Últimamente te has exigido mucho, con poco descanso. Prueba a darte un descanso sin tener que ganártelo."
+      },
+      "allOrNothing": {
+        "low": "Entre perfecto y fracaso hay mucho espacio.",
+        "moderate": "En estos días la exigencia contigo se ha repetido. Entre todo y nada hay muchos puntos medios.",
+        "high": "Últimamente te has exigido mucho, con poco descanso. Prueba a nombrar lo que sí salió, aunque no haya sido todo."
+      }
     },
     "dimensionMessages": {
       "d1": {
@@ -255,12 +303,12 @@
     "seeExample": "Ver un ejemplo",
     "textLabel": "Tu reescritura",
     "textHint": "Empieza desde tu texto y cambia lo que suena duro.",
+    "textHintAgain": "Escribe de nuevo tu registro, esta vez hablándote con más amabilidad.",
     "submit": "Listo",
     "submitting": "Leyendo…",
     "tooShort": "Escribe un poco más; con 5 palabras basta.",
     "same": "Prueba a cambiar alguna parte; por ahora es el mismo texto.",
     "maxAttemptsReached": "Llegaste al máximo de intentos para este registro.",
-    "alreadyKind": "Tu reescritura ya suena amable; este registro quedó reescrito.",
     "notAllowed": "No puedes reescribir en este registro.",
     "findingNotFound": "Este registro no tiene frases para reescribir.",
     "softened": "Se suavizó. Así también se puede hablar contigo.",
@@ -275,6 +323,7 @@
     "completedTitle": "Tu registro quedó reescrito",
     "saveInJar": "Guardar en mi frasco",
     "savedInJar": "Guardada en tu frasco",
+    "rewriteAgain": "Reescribir nuevamente",
     "goHome": "Ir al inicio",
     "guideToggle": "¿No sabes por dónde empezar?",
     "guideToggleHint": "Piénsalo con 3 preguntas."
@@ -394,6 +443,7 @@
     "filterContextLabel": "Contexto",
     "weekLabel": "Semana {week}",
     "dayLabel": "Día {day}",
+    "entryTitle": "Día {day} · Registro {number}",
     "findingsCount": "{count, plural, =0 {Sin frases} one {# frase} other {# frases}}",
     "rewritesCount": "{count, plural, =0 {Sin reescrituras} one {# reescritura} other {# reescrituras}}",
     "loadMore": "Ver más",

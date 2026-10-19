@@ -20,3 +20,13 @@ const PATTERN_KEY: Record<string, string> = {
 export function patternLabelKey(pattern: string): string {
   return `analysis.patterns.${PATTERN_KEY[pattern] ?? "generic"}`;
 }
+
+/**
+ * RN-ES-13: el mensaje del Espejo según el tipo de frase (la de mayor confianza de la dimensión predominante) y la
+ * intensidad de esa dimensión, del catálogo congelado (nunca generado). Null si el patrón no está en el catálogo: se usa
+ * el mensaje general de la dimensión.
+ */
+export function patternMessageKey(pattern: string, intensity: "low" | "moderate" | "high"): string | null {
+  const key = PATTERN_KEY[pattern];
+  return key ? `analysis.patternMessages.${key}.${intensity}` : null;
+}

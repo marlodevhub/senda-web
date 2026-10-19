@@ -6,12 +6,13 @@ import { useTranslations } from "next-intl";
 import { BookOpen, Feather, Home, Loader2, ScanFace } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useMirror, useConfirmMirror } from "@/features/analysis/api/use-mirror";
+import type { MirrorFinding } from "@/features/analysis/api/get-mirror";
 import { FindingRow } from "@/components/feedback/finding-row";
 import { ConfirmationPills, type ConfirmationAnswer } from "@/features/analysis/components/confirmation-pills";
 import { CareMessage } from "@/components/feedback/care-message";
 import { MirrorMoment } from "@/features/analysis/components/mirror-moment";
 import { sliceFinding, type FieldTexts } from "@/lib/findings";
-import { patternLabelKey } from "@/lib/pattern-labels";
+import { patternLabelKey, patternMessageKey } from "@/lib/pattern-labels";
 import { routes } from "@/lib/routes";
 
 /** Las 3 preguntas del Diario guardan el texto por campo (RS-ES-06). */
@@ -83,9 +84,18 @@ export function MirrorView({ journalEntryId, fieldTexts }: { journalEntryId: num
     );
   }
 
+  // El mensaje habla del tipo de frase que más pesó en la dimensión predominante (no siempre el mismo por dimensión).
+  const mainFinding = findings
+    .filter((finding) => finding.dimension === mirror.predominantDimension)
+    .reduce<MirrorFinding | null>(
+      (best, finding) => (!best || finding.confidence > best.confidence ? finding : best),
+      null,
+    );
+  const intensity = mirror.intensity ? INTENSITY_KEY[mirror.intensity] : null;
+  const patternMessage = mainFinding && intensity ? patternMessageKey(mainFinding.pattern, intensity) : null;
   const dimensionMessage =
-    mirror.predominantDimension && mirror.intensity
-      ? t(`analysis.dimensionMessages.${mirror.predominantDimension.toLowerCase()}.${INTENSITY_KEY[mirror.intensity]}`)
+    mirror.predominantDimension && intensity
+      ? t(patternMessage ?? `analysis.dimensionMessages.${mirror.predominantDimension.toLowerCase()}.${intensity}`)
       : null;
 
   return (
@@ -124,7 +134,9 @@ export function MirrorView({ journalEntryId, fieldTexts }: { journalEntryId: num
         <Button variant="hero" size="xl" className="rounded-full sm:self-start" asChild>
           <Link href={routes.rewrite(journalEntryId)}>
             <Feather className="size-4" aria-hidden />
-            {t("analysis.rewriteThisEntry")}
+            {t(
+              findings.some((finding) => finding.rewritten) ? "analysis.rewriteEntryAgain" : "analysis.rewriteThisEntry",
+            )}
           </Link>
         </Button>
       </section>

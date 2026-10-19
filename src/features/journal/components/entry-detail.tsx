@@ -64,9 +64,9 @@ function textsOf(entry: JournalEntryDetail): FieldTexts {
 
 /**
  * CU-11 Consultar detalle (RN-HI-03/04), CU-12 Eliminar registro (RN-HI-05/06). Con el mismo lenguaje del Diario:
- * arriba el día, la cara y el contexto; la hoja con la letra manuscrita y las frases duras resaltadas en el tono de
- * su dimensión; al lado (escritorio) lo que notó el Espejo, cada frase con su acceso a Reescribir, y las
- * reescrituras. Eliminar queda discreto, al final.
+ * arriba el día, el número del registro en ese día, la cara y el contexto; la hoja con la letra manuscrita y las frases
+ * duras resaltadas en el tono de su dimensión y, debajo de ella, sus reescrituras; al lado (escritorio) lo que notó el
+ * Espejo con el acceso a reescribir el registro. Eliminar queda discreto, al final.
  */
 export function EntryDetail({ journalEntryId }: { journalEntryId: number }) {
   const t = useTranslations();
@@ -82,8 +82,8 @@ export function EntryDetail({ journalEntryId }: { journalEntryId: number }) {
   const entryAttempts = entry.rewrites
     .filter((rewrite) => rewrite.findingId === null)
     .sort((a, b) => a.attemptNumber - b.attemptNumber);
-  const rewrittenToKind = (entryAttempts.at(-1)?.moodAfter ?? 0) >= 4;
-  const canRewrite = !isRisk && entry.status === "COMPLETED" && findings.length > 0 && !rewrittenToKind;
+  // Con reescrituras, se puede reescribir nuevamente (el campo empieza en blanco).
+  const canRewrite = !isRisk && entry.status === "COMPLETED" && findings.length > 0;
   const context = entry.context ? CONTEXT_ICONS[entry.context] : null;
   const findingsIn = (field: EntryAnalysisField) => findings.filter((finding) => finding.field === field);
 
@@ -102,7 +102,7 @@ export function EntryDetail({ journalEntryId }: { journalEntryId: number }) {
         <MoodOrb mood={entry.moodBefore as Mood} className="size-14 shrink-0" />
         <div className="flex min-w-0 flex-1 flex-col gap-1.5">
           <h1 className="font-heading text-2xl font-bold text-foreground">
-            {t("history.dayLabel", { day: entry.interventionDay })}
+            {t("history.entryTitle", { day: entry.interventionDay, number: entry.numberInDay })}
           </h1>
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-base text-muted-foreground">
             <span className="first-letter:uppercase">{formatLongDate(entry.date)}</span>
@@ -129,31 +129,54 @@ export function EntryDetail({ journalEntryId }: { journalEntryId: number }) {
       </header>
 
       <div className="flex flex-col gap-5 lg:grid lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] lg:items-start lg:gap-6">
-        {/* La hoja: lo que escribió, con la letra del Diario. */}
-        <article
-          aria-label={t("history.detailTitle")}
-          className="flex flex-col gap-4 rounded-[2rem] bg-card p-6 shadow-card md:p-8"
-        >
-          {answers.map(({ field, labelKey }) => (
-            <section key={field} className="flex flex-col gap-1">
-              <h2 className="font-hand text-lg leading-snug font-medium text-(--prompt-red) md:text-xl">
-                {t(labelKey)}
+        <div className="flex flex-col gap-5">
+          {/* La hoja: lo que escribió, con la letra del Diario. */}
+          <article
+            aria-label={t("history.detailTitle")}
+            className="flex flex-col gap-4 rounded-[2rem] bg-card p-6 shadow-card md:p-8"
+          >
+            {answers.map(({ field, labelKey }) => (
+              <section key={field} className="flex flex-col gap-1">
+                <h2 className="font-hand text-lg leading-snug font-medium text-(--prompt-red) md:text-xl">
+                  {t(labelKey)}
+                </h2>
+                <p className="font-hand text-base leading-relaxed whitespace-pre-line text-foreground md:text-lg">
+                  <HighlightedText
+                    text={entry[FIELD_TEXT[field]] ?? ""}
+                    ranges={findingsIn(field).map((finding) => ({
+                      key: finding.findingId,
+                      start: finding.start,
+                      end: finding.end,
+                      className: DIMENSION_TINT[finding.dimension],
+                      badge: findings.indexOf(finding) + 1,
+                    }))}
+                  />
+                </p>
+              </section>
+            ))}
+          </article>
+
+          {!isRisk && entry.rewrites.length > 0 && (
+            <section
+              aria-labelledby="entry-rewrites"
+              className="flex flex-col gap-3 rounded-lg bg-card p-5 shadow-card"
+            >
+              <h2 id="entry-rewrites" className="font-heading text-lg font-bold text-foreground">
+                {t("history.rewritesTitle")}
               </h2>
-              <p className="font-hand text-base leading-relaxed whitespace-pre-line text-foreground md:text-lg">
-                <HighlightedText
-                  text={entry[FIELD_TEXT[field]] ?? ""}
-                  ranges={findingsIn(field).map((finding) => ({
-                    key: finding.findingId,
-                    start: finding.start,
-                    end: finding.end,
-                    className: DIMENSION_TINT[finding.dimension],
-                    badge: findings.indexOf(finding) + 1,
-                  }))}
-                />
-              </p>
+              {/* La reescritura del registro: el progreso de caritas (que puso la IA) y el último intento. */}
+              {entryAttempts.length > 0 && <EntryRewriteProgress attempts={entryAttempts} />}
+              {/* Reescrituras anteriores, por frase. */}
+              <ul className="flex flex-col gap-3">
+                {groupByFinding(entry.rewrites.filter((rewrite) => rewrite.findingId !== null)).map((versions) => (
+                  <li key={versions[0].findingId}>
+                    <RewriteGroup versions={versions} />
+                  </li>
+                ))}
+              </ul>
             </section>
-          ))}
-        </article>
+          )}
+        </div>
 
         <div className="flex flex-col gap-5">
           {isRisk && <CareMessage />}
@@ -184,31 +207,10 @@ export function EntryDetail({ journalEntryId }: { journalEntryId: number }) {
                 <Button variant="hero" className="rounded-full sm:self-start" asChild>
                   <Link href={routes.rewrite(entry.id)}>
                     <Feather className="size-4" aria-hidden />
-                    {t("analysis.rewriteThisEntry")}
+                    {t(entryAttempts.length > 0 ? "analysis.rewriteEntryAgain" : "analysis.rewriteThisEntry")}
                   </Link>
                 </Button>
               )}
-            </section>
-          )}
-
-          {!isRisk && entry.rewrites.length > 0 && (
-            <section
-              aria-labelledby="entry-rewrites"
-              className="flex flex-col gap-3 rounded-lg bg-card p-5 shadow-card"
-            >
-              <h2 id="entry-rewrites" className="font-heading text-lg font-bold text-foreground">
-                {t("history.rewritesTitle")}
-              </h2>
-              {/* La reescritura del registro: el progreso de caritas (que puso la IA) y el último intento. */}
-              {entryAttempts.length > 0 && <EntryRewriteProgress attempts={entryAttempts} />}
-              {/* Reescrituras anteriores, por frase. */}
-              <ul className="flex flex-col gap-3">
-                {groupByFinding(entry.rewrites.filter((rewrite) => rewrite.findingId !== null)).map((versions) => (
-                  <li key={versions[0].findingId}>
-                    <RewriteGroup versions={versions} />
-                  </li>
-                ))}
-              </ul>
             </section>
           )}
 
@@ -229,10 +231,9 @@ function groupByFinding(rewrites: EntryRewrite[]): EntryRewrite[][] {
   return [...groups.values()].map((versions) => versions.sort((a, b) => a.attemptNumber - b.attemptNumber));
 }
 
-/** La reescritura del registro completo: la fila de caritas de cada intento y el texto del último. */
+/** La reescritura del registro completo: la fila de caritas de cada intento y, debajo, cada intento con su texto. */
 function EntryRewriteProgress({ attempts }: { attempts: EntryRewrite[] }) {
   const t = useTranslations();
-  const last = attempts[attempts.length - 1];
   return (
     <div className="flex flex-col gap-3 rounded-md bg-muted/50 p-4">
       <p className="text-sm font-semibold text-muted-foreground">{t("rewrite.progressTitle")}</p>
@@ -242,15 +243,29 @@ function EntryRewriteProgress({ attempts }: { attempts: EntryRewrite[] }) {
           mood: (attempt.moodAfter ?? null) as Mood | null,
         }))}
       />
-      <p className="rounded-md bg-card px-4 py-3 font-hand text-base leading-relaxed whitespace-pre-line text-foreground shadow-card md:text-lg">
-        {last.text}
-      </p>
-      {last.inJar && (
-        <span className="flex items-center gap-1.5 text-base text-muted-foreground">
-          <Amphora className="size-4" aria-hidden />
-          {t("history.inJar")}
-        </span>
-      )}
+      <ol className="flex flex-col gap-2">
+        {attempts.map((attempt) => (
+          <li key={attempt.id} className="flex flex-col gap-2 rounded-md bg-card px-4 py-3 shadow-card">
+            <div className="flex flex-wrap items-center gap-2">
+              {attempt.moodAfter != null && (
+                <MoodOrb mood={attempt.moodAfter as Mood} className="size-7" />
+              )}
+              <span className="font-semibold text-foreground">
+                {t("history.attemptLabel", { n: attempt.attemptNumber })}
+              </span>
+              {attempt.inJar && (
+                <span className="flex items-center gap-1.5 text-base text-muted-foreground">
+                  <Amphora className="size-4" aria-hidden />
+                  {t("history.inJar")}
+                </span>
+              )}
+            </div>
+            <p className="font-hand text-base leading-relaxed whitespace-pre-line text-foreground md:text-lg">
+              {attempt.text}
+            </p>
+          </li>
+        ))}
+      </ol>
     </div>
   );
 }

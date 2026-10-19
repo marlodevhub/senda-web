@@ -14,6 +14,8 @@ export type MirrorFinding = {
   start: number;
   end: number;
   confidence: number;
+  /** Si su registro ya se reescribió (CU-04): el botón dice "Reescribir nuevamente este registro". */
+  rewritten: boolean;
 };
 
 export type Mirror = {
