@@ -67,12 +67,16 @@ export function PendingPhraseList({ phrases }: { phrases: HomePendingPhrase[] })
   return (
     <section aria-labelledby="pending-list" className="relative overflow-hidden rounded-lg bg-card shadow-card">
       {/*
-        Toda la tarjeta se desplaza: la cabecera queda fija arriba sobre vidrio (el mismo del calendario de Inicio,
-        glass-fill y glass-fade-bottom) y las frases pasan por debajo; abajo, otro desvanecido de vidrio indica que
-        hay más (solo cuando las hay). Ambos van por encima de la frase con el mouse (z-20), así no se cortan.
+        Toda la tarjeta se desplaza: la cabecera queda fija arriba, en blanco, con un difuminado debajo, y las frases
+        pasan por debajo; abajo, un desvanecido de vidrio indica que hay más (solo cuando las hay). Ambos van por encima de la frase con el mouse (z-20), así no se cortan.
       */}
       <div ref={listRef} style={{ maxHeight }} onScroll={onScroll} className="overflow-y-auto">
-        <header className="glass-fill glass-fade-bottom sticky top-0 z-20 flex items-start gap-3 px-5 pt-5 pb-3">
+        <header className="sticky top-0 z-20 flex items-start gap-3 bg-card px-5 pt-5 pb-3">
+          {/* Las tarjetas pasan por debajo del título y se pierden en un difuminado blanco, sin chocar con él. */}
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-x-0 top-full h-5 bg-linear-to-b from-card to-transparent"
+          />
           <span
             aria-hidden
             className="flex size-10 shrink-0 items-center justify-center rounded-full bg-celeste text-bloom-ink"
@@ -89,7 +93,7 @@ export function PendingPhraseList({ phrases }: { phrases: HomePendingPhrase[] })
             {phrases.length}
           </span>
         </header>
-        <ul className="grid grid-cols-2 gap-3 px-5 pt-2 pb-5">
+        <ul className="grid grid-cols-2 gap-3 px-5 pt-5 pb-5">
           {phrases.map((phrase) => (
             <li key={phrase.findingId} className="relative flex hover:z-10 focus-within:z-10">
               <PhraseSceneCard

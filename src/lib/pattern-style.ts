@@ -1,39 +1,49 @@
 /**
- * Cómo se ve cada tipo de frase (RN-ES-13) en toda la app: una "escena" de clima por patrón, con su degradado, el
- * color de su texto y su resaltador (variables `--scene-*` en globals.css, iguales en todos los temas). Los 3 tipos de
- * cada dimensión van en tonos de la misma familia: cálidos para Errores (D1), azules y lilas para Valoración (D2),
- * verdes y grises para Exigencia (D3). Nunca rojo para la autocrítica.
+ * Cómo se ve cada tipo de frase (RN-ES-13) en toda la app: una "escena" de clima calcada de las tarjetas de
+ * referencia (variables `--scene-*` en globals.css, iguales en todos los temas). Hay 8 escenas para 9 tipos: la
+ * tormenta la comparten "Compararte" (D2) y "Todo o nada" (D3). Nunca rojo para la autocrítica.
  */
-export type Scene = "night" | "sunny" | "rain" | "thunder" | "snow" | "sunset" | "haze" | "cloudy" | "aurora";
+export type Scene = "night" | "sunny" | "rain" | "thunder" | "snow" | "sunset" | "haze" | "cloudy";
 
 const PATTERN_SCENE: Record<string, Scene> = {
   self_disqualification: "sunset",
-  error_overgeneralization: "sunny",
+  error_overgeneralization: "cloudy",
   self_punishment: "haze",
-  worth_by_performance: "night",
+  worth_by_performance: "sunny",
   social_comparison: "thunder",
   need_for_approval: "snow",
   should_and_perfectionism: "rain",
-  guilt_for_resting: "aurora",
-  all_or_nothing: "cloudy",
+  guilt_for_resting: "night",
+  all_or_nothing: "thunder",
 };
 
-/** La escena de un tipo de frase; uno desconocido va en gris. */
+/** La escena de un tipo de frase; uno desconocido va nublado. */
 export function sceneOf(pattern: string): Scene {
   return PATTERN_SCENE[pattern] ?? "cloudy";
 }
 
-/** Fondo de la tarjeta (degradado) y color de su texto. */
-export const SCENE_CARD: Record<Scene, string> = {
-  night: "bg-linear-to-br from-(--scene-night-from) to-(--scene-night-to) text-(--scene-night-ink)",
-  sunny: "bg-linear-to-br from-(--scene-sunny-from) to-(--scene-sunny-to) text-(--scene-sunny-ink)",
-  rain: "bg-linear-to-br from-(--scene-rain-from) to-(--scene-rain-to) text-(--scene-rain-ink)",
-  thunder: "bg-linear-to-br from-(--scene-thunder-from) to-(--scene-thunder-to) text-(--scene-thunder-ink)",
-  snow: "bg-linear-to-br from-(--scene-snow-from) to-(--scene-snow-to) text-(--scene-snow-ink)",
-  sunset: "bg-linear-to-br from-(--scene-sunset-from) to-(--scene-sunset-to) text-(--scene-sunset-ink)",
-  haze: "bg-linear-to-br from-(--scene-haze-from) to-(--scene-haze-to) text-(--scene-haze-ink)",
-  cloudy: "bg-linear-to-br from-(--scene-cloudy-from) to-(--scene-cloudy-to) text-(--scene-cloudy-ink)",
-  aurora: "bg-linear-to-br from-(--scene-aurora-from) to-(--scene-aurora-to) text-(--scene-aurora-ink)",
+/** Color de "Ver" (texto grande sobre la parte de abajo de la tarjeta). */
+export const SCENE_ACTION_TEXT: Record<Scene, string> = {
+  night: "text-(--scene-night-action)",
+  sunny: "text-(--scene-sunny-action)",
+  rain: "text-(--scene-rain-action)",
+  thunder: "text-(--scene-thunder-action)",
+  snow: "text-(--scene-snow-action)",
+  sunset: "text-(--scene-sunset-action)",
+  haze: "text-(--scene-haze-action)",
+  cloudy: "text-(--scene-cloudy-action)",
+};
+
+/** La flechita: el fondo del color de "Ver" y el ícono del color de la tarjeta. */
+export const SCENE_ARROW: Record<Scene, string> = {
+  night: "bg-(--scene-night-action) text-(--scene-night-on-action)",
+  sunny: "bg-(--scene-sunny-action) text-(--scene-sunny-on-action)",
+  rain: "bg-(--scene-rain-action) text-(--scene-rain-on-action)",
+  thunder: "bg-(--scene-thunder-action) text-(--scene-thunder-on-action)",
+  snow: "bg-(--scene-snow-action) text-(--scene-snow-on-action)",
+  sunset: "bg-(--scene-sunset-action) text-(--scene-sunset-on-action)",
+  haze: "bg-(--scene-haze-action) text-(--scene-haze-on-action)",
+  cloudy: "bg-(--scene-cloudy-action) text-(--scene-cloudy-on-action)",
 };
 
 /** Resaltador de la frase dentro del texto, con el color de texto normal. */
@@ -46,7 +56,6 @@ const SCENE_MARK: Record<Scene, string> = {
   sunset: "bg-(--scene-sunset-mark) text-foreground",
   haze: "bg-(--scene-haze-mark) text-foreground",
   cloudy: "bg-(--scene-cloudy-mark) text-foreground",
-  aurora: "bg-(--scene-aurora-mark) text-foreground",
 };
 
 /** Punto de color junto al tipo de frase. */
@@ -59,7 +68,6 @@ const SCENE_DOT: Record<Scene, string> = {
   sunset: "bg-(--scene-sunset-from)",
   haze: "bg-(--scene-haze-from)",
   cloudy: "bg-(--scene-cloudy-from)",
-  aurora: "bg-(--scene-aurora-from)",
 };
 
 export function patternMark(pattern: string): string {
