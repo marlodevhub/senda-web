@@ -19,7 +19,7 @@ describe("MoodTodayCard (RN-IN-08)", () => {
     renderWithProviders(<MoodTodayCard average={null} />);
 
     const card = screen.getByRole("region", { name: "Así va tu día" });
-    expect(card).toHaveTextContent("Aún no marcas cómo estás hoy.");
+    expect(card).toHaveTextContent("Aún no marcas cómo te sientes.");
     expect(card).not.toHaveTextContent("Bien");
   });
 

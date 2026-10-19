@@ -113,7 +113,7 @@ test("ciclo diario completo: activar → diario → espejo → reescritura → f
   // El día de la senda va en la tarjeta "Tu senda", al pie del calendario.
   await expect(page.getByRole("main").getByText("Día 3 de 28", { exact: true })).toBeVisible();
   await page.getByRole("radio", { name: "Bien", exact: true }).click();
-  await expect(page.getByText("Qué bueno. Si quieres, cuéntale a tu diario qué te hizo bien hoy.")).toBeVisible();
+  await expect(page.getByText("¡Qué bueno! Si quieres, cuéntale a tu diario qué te hace sentir así.")).toBeVisible();
   // RN-IN-03: cada marca guarda su hora; se puede volver a marcar cuando el ánimo cambie.
   await expect(
     page.getByText(/^A las .+ marcaste tu ánimo\. Si cambia durante el día, márcalo otra vez\.$/),
@@ -355,10 +355,10 @@ test("el panel de ánimo abre con cómo va el día, sigue con la semana y termin
 
   // Móvil: "Así va tu día" va debajo del saludo y antes de la pregunta del check-in; sin ánimo, espera sin reproche.
   const today = page.getByRole("region", { name: "Así va tu día" }).filter({ visible: true });
-  await expect(today).toContainText("Aún no marcas cómo estás hoy.");
+  await expect(today).toContainText("Aún no marcas cómo te sientes.");
   const greetingBox = await page.getByRole("heading", { level: 1 }).boundingBox();
   const todayBox = await today.boundingBox();
-  const questionBox = await page.getByRole("heading", { name: "¿Cómo estás hoy?" }).boundingBox();
+  const questionBox = await page.getByRole("heading", { name: "¿Cómo te sientes ahora?" }).boundingBox();
   expect(todayBox!.y).toBeGreaterThan(greetingBox!.y);
   expect(todayBox!.y).toBeLessThan(questionBox!.y);
 

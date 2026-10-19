@@ -70,7 +70,7 @@ export function HomePageClient() {
         {/*
           Móvil y tablet: el saludo grande con la fecha de hoy a la derecha, y la pregunta del check-in va sobre las caras.
           Escritorio: como un título grande de app nativa, la fecha arriba en pequeño y debajo el saludo con la pregunta
-          en una sola línea, más pequeña ("Hola, Hugo, ¿cómo estás hoy?"). El día de la senda va en la tarjeta del
+          en una sola línea, más pequeña ("Hola, Hugo, ¿cómo te sientes ahora?"). El día de la senda va en la tarjeta del
           calendario. md:pr-16: desde tablet la campana flota arriba a la derecha.
         */}
         <h1 className="font-heading text-3xl leading-tight font-bold text-foreground lg:text-4xl">

@@ -40,9 +40,9 @@ describe("CheckIn", () => {
       expect.objectContaining({ method: "POST", body: JSON.stringify({ mood: 4 }) }),
     );
     expect(
-      await screen.findByText("Qué bueno. Si quieres, cuéntale a tu diario qué te hizo bien hoy."),
+      await screen.findByText("¡Qué bueno! Si quieres, cuéntale a tu diario qué te hace sentir así."),
     ).toBeInTheDocument();
-    expect(screen.queryByText(/Parece un día difícil/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Parece un momento difícil/)).not.toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Escribir" })).toHaveAttribute("href", "/diario?animo=4");
   });
 
@@ -69,7 +69,7 @@ describe("CheckIn", () => {
 
     await user.click(screen.getByRole("radio", { name: "Mal" }));
 
-    expect(await screen.findByText(/Parece un día difícil/)).toBeInTheDocument();
+    expect(await screen.findByText(/Parece un momento difícil/)).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Escribir" })).toHaveAttribute("href", "/diario?animo=2");
   });
 
@@ -79,11 +79,11 @@ describe("CheckIn", () => {
     renderWithProviders(<CheckIn initialMood={null} />);
 
     await user.click(screen.getByRole("radio", { name: "Regular" }));
-    expect(await screen.findByText(/Un día a medias también cuenta/)).toBeInTheDocument();
+    expect(await screen.findByText(/Un momento a medias también cuenta/)).toBeInTheDocument();
 
     await user.click(screen.getByRole("radio", { name: "Muy bien" }));
-    expect(await screen.findByText(/¡Qué buen día!/)).toBeInTheDocument();
-    expect(screen.queryByText(/Un día a medias/)).not.toBeInTheDocument();
+    expect(await screen.findByText(/¡Genial!/)).toBeInTheDocument();
+    expect(screen.queryByText(/Un momento a medias/)).not.toBeInTheDocument();
   });
 
   it("marca la cara de la última marca de hoy y dice a qué hora fue (hora de Lima)", () => {
