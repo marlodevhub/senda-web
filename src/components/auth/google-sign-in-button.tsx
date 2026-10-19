@@ -2,7 +2,6 @@
 
 import { useEffect, useEffectEvent, useRef, useState } from "react";
 import Script from "next/script";
-import { useTheme } from "next-themes";
 import { GOOGLE_CLIENT_ID, isGoogleSignInEnabled } from "@/config/public-env";
 
 const GIS_SRC = "https://accounts.google.com/gsi/client";
@@ -30,7 +29,7 @@ type GoogleAccountsId = {
     parent: HTMLElement,
     options: {
       type: "standard";
-      theme: "outline" | "filled_black";
+      theme: "outline";
       size: "large";
       text: "signin_with" | "continue_with";
       shape: "pill";
@@ -65,7 +64,6 @@ export function GoogleSignInButton({
   const [scriptReady, setScriptReady] = useState(
     () => typeof window !== "undefined" && Boolean(window.google?.accounts),
   );
-  const { resolvedTheme } = useTheme();
   const handleCredential = useEffectEvent((response: CredentialResponse) => {
     if (response.credential) {
       onCredential(response.credential);
@@ -97,14 +95,15 @@ export function GoogleSignInButton({
     button.replaceChildren();
     gis.renderButton(button, {
       type: "standard",
-      theme: resolvedTheme === "dark" ? "filled_black" : "outline",
+      // Siempre el botón blanco de Google, también en modo oscuro.
+      theme: "outline",
       size: "large",
       text,
       shape: "pill",
       locale: "es",
       width: buttonWidth(availableWidth),
     });
-  }, [scriptReady, resolvedTheme, text, availableWidth]);
+  }, [scriptReady, text, availableWidth]);
 
   if (!isGoogleSignInEnabled) {
     return null;
@@ -113,8 +112,15 @@ export function GoogleSignInButton({
   return (
     <>
       <Script src={GIS_SRC} strategy="afterInteractive" onReady={() => setScriptReady(true)} />
-      {/* min-w-0 y overflow-hidden: el botón de Google nunca ensancha el formulario. */}
-      <div ref={containerRef} className="flex h-12 w-full min-w-0 justify-center overflow-hidden">
+      {/*
+        min-w-0 y overflow-hidden: el botón de Google nunca ensancha el formulario. color-scheme light: el botón de
+        Google vive en un iframe claro; si la página está en modo oscuro, el navegador le pone un fondo blanco opaco
+        (las esquinas blancas). Con el mismo esquema, el fondo del iframe queda transparente.
+      */}
+      <div
+        ref={containerRef}
+        className="flex h-12 w-full min-w-0 justify-center overflow-hidden rounded-full [color-scheme:light]"
+      >
         <div
           ref={buttonRef}
           style={{ width: buttonWidth(availableWidth), transform: `scale(${SCALE})`, transformOrigin: "top center" }}

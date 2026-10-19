@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
-import { Loader2 } from "lucide-react";
 import { FieldError } from "@/components/forms/field-error";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -21,6 +20,7 @@ import { activateAccount, activateAccountWithGoogle } from "@/features/access/ap
 import { UsernameAvailabilityIcon, UsernameAvailabilityMessage } from "@/components/forms/username-availability";
 import { useUsernameAvailability } from "@/hooks/use-username-availability";
 import { GoogleSignInButton } from "@/components/auth/google-sign-in-button";
+import { AuthLoadingOverlay } from "@/features/access/components/auth-loading-overlay";
 import { isGoogleSignInEnabled } from "@/config/public-env";
 
 /**
@@ -226,17 +226,8 @@ export function ActivateForm() {
       ) : (
         <div className="flex flex-col gap-4">
           <p className="text-base text-muted-foreground">{t("access.activateGoogleHint")}</p>
-          {activatingWithGoogle ? (
-            <p
-              role="status"
-              className="flex min-h-11 items-center justify-center gap-2 text-base text-muted-foreground"
-            >
-              <Loader2 className="size-5 animate-spin" aria-hidden />
-              {t("access.activating")}
-            </p>
-          ) : (
-            <GoogleSignInButton text="continue_with" onCredential={onGoogleCredential} />
-          )}
+          {activatingWithGoogle && <AuthLoadingOverlay message={t("access.activating")} />}
+          <GoogleSignInButton text="continue_with" onCredential={onGoogleCredential} />
           <OrDivider />
           {/* El texto largo puede ir en dos líneas: a 360 px no entra en una y desbordaba la pantalla. */}
           <Button

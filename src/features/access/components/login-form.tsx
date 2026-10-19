@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -16,6 +17,7 @@ import { errorMessageKey } from "@/lib/api/error-messages";
 import { loginFormSchema, type LoginFormValues } from "@/features/access/schemas/access.schema";
 import { login, loginWithGoogle, type LoginDestination } from "@/features/access/api/login";
 import { GoogleSignInButton } from "@/components/auth/google-sign-in-button";
+import { AuthLoadingOverlay } from "@/features/access/components/auth-loading-overlay";
 import { isGoogleSignInEnabled } from "@/config/public-env";
 
 const DESTINATION_ROUTE: Record<LoginDestination, string> = {
@@ -27,6 +29,8 @@ const DESTINATION_ROUTE: Record<LoginDestination, string> = {
 export function LoginForm() {
   const t = useTranslations();
   const router = useRouter();
+  // Desde que Google entrega la cuenta (o la contraseña es correcta) hasta que abre la pantalla siguiente.
+  const [entering, setEntering] = useState(false);
 
   const {
     register,
@@ -36,10 +40,12 @@ export function LoginForm() {
   } = useForm<LoginFormValues>({ resolver: zodResolver(loginFormSchema) });
 
   async function signInWithGoogle(idToken: string) {
+    setEntering(true);
     try {
       const result = await loginWithGoogle(idToken);
       router.push(DESTINATION_ROUTE[result.destination]);
     } catch (error) {
+      setEntering(false);
       toast.error(t(error instanceof BffError ? errorMessageKey(error.code) : "common.unexpectedError"), {
         duration: 10_000,
       });
@@ -49,6 +55,7 @@ export function LoginForm() {
   async function onSubmit(values: LoginFormValues) {
     try {
       const result = await login(values);
+      setEntering(true);
       router.push(DESTINATION_ROUTE[result.destination]);
     } catch (error) {
       if (error instanceof BffError) {
@@ -65,6 +72,7 @@ export function LoginForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4" noValidate>
+      {entering && <AuthLoadingOverlay message={t("access.loggingIn")} />}
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="username">{t("access.usernameLabel")}</Label>
         <Input
