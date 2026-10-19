@@ -96,7 +96,8 @@ export function CheckIn({
           >
             {/* El texto a la izquierda y Escribir a la derecha. */}
             <div className={cn("flex items-center gap-3", animate && "liquid-rise-text")}>
-              <p className="min-w-0 flex-1 text-base leading-relaxed text-foreground">
+              {/* Móvil: más pequeño y en negrita, para que quepa junto a Escribir; en escritorio, como antes. */}
+              <p className="min-w-0 flex-1 text-sm leading-snug font-semibold text-foreground lg:text-base lg:leading-relaxed lg:font-normal">
                 {t(`home.checkinInvitation.${INVITATION_KEY[mood]}`)}
               </p>
               {/* Sólido en el color de la cara elegida. */}
