@@ -20,6 +20,7 @@ export function MoodPicker({
   onChange,
   size = "default",
   bubbleCount,
+  feedback = true,
   className,
 }: {
   label: string;
@@ -27,6 +28,8 @@ export function MoodPicker({
   onChange: (mood: Mood) => void;
   size?: "default" | "compact";
   bubbleCount?: Partial<Record<Mood, number>>;
+  /** false: sin el salto de la elegida ni la burbuja (el Diario en móvil se cierra al elegir). */
+  feedback?: boolean;
   className?: string;
 }) {
   const t = useTranslations();
@@ -50,7 +53,9 @@ export function MoodPicker({
             aria-checked={active}
             aria-label={t(`mood.${mood}`)}
             onClick={() => {
-              setBubble((previous) => ({ mood, taps: (previous?.taps ?? 0) + 1 }));
+              if (feedback) {
+                setBubble((previous) => ({ mood, taps: (previous?.taps ?? 0) + 1 }));
+              }
               onChange(mood);
             }}
             className="group relative flex flex-1 justify-center rounded-lg py-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
@@ -60,7 +65,7 @@ export function MoodPicker({
               key={active ? "on" : "off"}
               className={cn(
                 "relative z-10 inline-flex rounded-full transition-[scale,filter] duration-300 ease-[cubic-bezier(.34,1.56,.64,1)] group-hover:scale-110",
-                active && "mood-pop scale-115 ring-4 ring-bloom-tint",
+                active && feedback && "mood-pop scale-115 ring-4 ring-bloom-tint",
                 // Las no elegidas siguen con su color (sin apagarlas): solo un poco más chicas, para que la elegida resalte.
                 value !== undefined && !active && "scale-95",
               )}

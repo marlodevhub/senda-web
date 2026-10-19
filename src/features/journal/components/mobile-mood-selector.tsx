@@ -7,14 +7,15 @@ import { MoodOrb, type Mood } from "@/components/icons/mood-orb";
 import { MoodPicker } from "@/components/forms/mood-picker";
 import { cn } from "@/lib/utils";
 
-/** Cuánto se ve la cara elegida antes de cerrar las caritas. */
-const CLOSE_AFTER_MS = 450;
+/** Respaldo por si la animación de cierre no avisa al terminar (pestaña en segundo plano). */
+const CLOSE_FALLBACK_MS = 300;
 
 /**
  * El estado de ánimo del Diario en móvil (RN-DI-03): una barra con un libro, "¿Cómo te sientes?" y la carita elegida
  * (la de Inicio si llegó con Escribir). Sin elegir, la carita va en gris con un halo que invita a tocarla. Al tocar la
  * barra, las 5 caritas se abren encima como agua que se expande desde la carita (`.mood-liquid-open`); al elegir una,
- * se cierran y la barra muestra la nueva. En escritorio sigue la fila de 5 caritas de siempre.
+ * se contraen al instante hacia la carita de la barra (`.mood-liquid-close`, sin salto ni burbuja) y la barra muestra
+ * la nueva. En escritorio sigue la fila de 5 caritas de siempre.
  */
 export function MobileMoodSelector({
   label,
@@ -29,6 +30,9 @@ export function MobileMoodSelector({
 }) {
   const t = useTranslations();
   const [open, setOpen] = useState(false);
+  // Contrayéndose (animación de cierre): ya no se puede elegir otra.
+  const [closing, setClosing] = useState(false);
+  const fallbackRef = useRef<number | null>(null);
   const rootRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const pickerRef = useRef<HTMLDivElement>(null);
@@ -58,12 +62,21 @@ export function MobileMoodSelector({
     };
   }, [open]);
 
+  function finishClosing() {
+    if (fallbackRef.current !== null) {
+      window.clearTimeout(fallbackRef.current);
+      fallbackRef.current = null;
+    }
+    setClosing(false);
+    setOpen(false);
+    triggerRef.current?.focus();
+  }
+
   function choose(mood: Mood) {
+    if (closing) return;
     onChange(mood);
-    window.setTimeout(() => {
-      setOpen(false);
-      triggerRef.current?.focus();
-    }, CLOSE_AFTER_MS);
+    setClosing(true);
+    fallbackRef.current = window.setTimeout(finishClosing, CLOSE_FALLBACK_MS);
   }
 
   return (
@@ -97,8 +110,23 @@ export function MobileMoodSelector({
         // Encima de la barra, como agua que sale de la carita y se extiende.
         // Centrada sobre la barra (sin desplazamientos: la animación usa transform y no deben sumarse).
         <div className="absolute inset-0 z-30 flex items-center">
-          <div ref={pickerRef} className="mood-liquid-open w-full rounded-lg bg-card shadow-card">
-            <MoodPicker label={label} value={value} onChange={choose} className="bg-transparent shadow-none" />
+          <div
+            ref={pickerRef}
+            onAnimationEnd={(event) => {
+              if (closing && event.target === event.currentTarget) finishClosing();
+            }}
+            className={cn(
+              "w-full rounded-lg bg-card shadow-card",
+              closing ? "mood-liquid-close pointer-events-none" : "mood-liquid-open",
+            )}
+          >
+            <MoodPicker
+              label={label}
+              value={value}
+              onChange={choose}
+              feedback={false}
+              className="bg-transparent shadow-none"
+            />
           </div>
         </div>
       )}

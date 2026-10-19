@@ -786,6 +786,11 @@
   .mood-pick-halo {
     animation: mood-pick-halo 1.8s ease-in-out infinite;
   }
+  /* Al elegir: todo se contrae de una hacia la carita de la barra (solo transform y opacidad: barato de dibujar). */
+  .mood-liquid-close {
+    transform-origin: 90% 50%;
+    animation: mood-liquid-close 0.18s cubic-bezier(.4, 0, .6, 1) both;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   .mood-liquid-open {
@@ -798,6 +803,10 @@
   60% { transform: scale(0.98, 1.05); border-radius: 18px 26px 20px 24px; animation-timing-function: ease-in-out; }
   80% { transform: scale(1.01, 0.99); }
   100% { transform: none; }
+}
+@keyframes mood-liquid-close {
+  from { transform: none; opacity: 1; }
+  to { transform: scale(0.14, 0.6); opacity: 0; border-radius: 999px; }
 }
 @keyframes mood-pick-halo {
   0%, 100% { opacity: 0.35; scale: 1; }
