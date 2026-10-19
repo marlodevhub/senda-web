@@ -1367,6 +1367,8 @@ html:not(.show-scrollbars):has(.participant-no-select) *::-webkit-scrollbar {
   --scene-snow-from: #4BB3F2;
   --scene-snow-to: #9FD6F8;
   --scene-snow-ink: #EAF7FF;
+  /* Sobre los cerros blancos de la nieve, "Ver" va en el azul de la tarjeta: el pastel no se vería. */
+  --scene-snow-ver: #1A5385;
   --scene-snow-mark: #D3EEFC;
   --scene-sunset-from: #FF9B46;
   --scene-sunset-to: #FF7C50;

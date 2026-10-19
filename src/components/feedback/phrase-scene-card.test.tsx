@@ -10,6 +10,7 @@ describe("PhraseSceneCard", () => {
       <PhraseSceneCard
         fragment="Soy un inútil"
         title="Etiqueta dura"
+        invite="¿Y si te describes sin ponerte una etiqueta?"
         pattern="self_disqualification"
         href="/historial/7/reescribir"
         linkLabel="Reescribir: “Soy un inútil”"
@@ -26,14 +27,19 @@ describe("PhraseSceneCard", () => {
 
     expect(screen.getByText("Soy un inútil").closest("[inert]")).toBeNull();
     expect(screen.getByRole("button", { name: "Ocultar la frase: Etiqueta dura" })).toHaveFocus();
+    expect(screen.getByText("¿Y si te describes sin ponerte una etiqueta?")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Reescribir: “Soy un inútil”" })).toHaveAttribute(
       "href",
       "/historial/7/reescribir",
     );
+
+    // Tocar cualquier parte de atrás (la frase) la regresa.
+    await user.click(screen.getByText("Soy un inútil"));
+    expect(screen.getByText("Soy un inútil").closest("[inert]")).not.toBeNull();
   });
 
   it("sin href no tiene Reescribir", () => {
-    renderWithProviders(<PhraseSceneCard fragment="Soy un inútil" title="Etiqueta dura" pattern="self_disqualification" />);
+    renderWithProviders(<PhraseSceneCard fragment="Soy un inútil" title="Etiqueta dura" invite="…" pattern="self_disqualification" />);
     expect(screen.queryByRole("link")).not.toBeInTheDocument();
   });
 });

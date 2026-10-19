@@ -34,6 +34,11 @@ export const SCENE_INK: Record<Scene, string> = {
   lagoon: "text-(--scene-lagoon-ink)",
 };
 
+/** "Ver", abajo a la izquierda: el mismo pastel, salvo en la nieve (cerros blancos), donde va en su azul. */
+export const SCENE_VER: Partial<Record<Scene, string>> = {
+  snow: "text-(--scene-snow-ver)",
+};
+
 /** Resaltador de la frase dentro del texto, con el color de texto normal. */
 const SCENE_MARK: Record<Scene, string> = {
   night: "bg-(--scene-night-mark) text-foreground",

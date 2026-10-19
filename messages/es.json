@@ -247,6 +247,18 @@
       "allOrNothing": "Todo o nada",
       "generic": "Voz exigente"
     },
+    "patternInvites": {
+      "selfDisqualification": "¿Y si te describes sin ponerte una etiqueta?",
+      "errorOvergeneralization": "¿Y si lo cuentas solo como lo que pasó esta vez?",
+      "selfPunishment": "¿Y si te hablas como a un amigo que se equivocó?",
+      "worthByPerformance": "¿Y si recuerdas lo que vales más allá de una nota?",
+      "socialComparison": "¿Y si te comparas solo con quien eras antes?",
+      "needForApproval": "¿Y si te reconoces algo tú, sin esperar a otros?",
+      "shouldAndPerfectionism": "¿Y si cambias el «debería» por un «me gustaría»?",
+      "guiltForResting": "¿Y si te das permiso de descansar sin ganártelo?",
+      "allOrNothing": "¿Y si buscas el punto medio entre todo y nada?",
+      "generic": "¿Y si te lo dices con más amabilidad?"
+    },
     "patternMessages": {
       "selfDisqualification": {
         "low": "Un mal momento no dice quién eres.",

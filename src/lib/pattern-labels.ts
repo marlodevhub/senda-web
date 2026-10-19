@@ -35,3 +35,8 @@ export function patternMessageKey(pattern: string, intensity: "low" | "moderate"
   const key = PATTERN_KEY[pattern];
   return key ? `analysis.patternMessages.${key}.${intensity}` : null;
 }
+
+/** Invitación a reescribir una frase de ese tipo, en el dorso de su tarjeta ("¿Y si te comparas solo con…?"). */
+export function patternInviteKey(pattern: string): string {
+  return `analysis.patternInvites.${PATTERN_KEY[pattern] ?? "generic"}`;
+}

@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { Feather } from "lucide-react";
 import { PhraseSceneCard } from "@/components/feedback/phrase-scene-card";
 import type { HomePendingPhrase } from "@/features/home/api/get-home";
-import { patternTitleKey } from "@/lib/pattern-labels";
+import { patternInviteKey, patternTitleKey } from "@/lib/pattern-labels";
 import { routes } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 
@@ -30,6 +30,7 @@ export function PendingPhraseCard({
       <PhraseSceneCard
         fragment={fragment}
         title={t(patternTitleKey(pattern))}
+        invite={t(patternInviteKey(pattern))}
         pattern={pattern}
         href={routes.rewrite(journalEntryId)}
         linkLabel={t("home.pendingRewriteThis", { fragment })}
@@ -95,6 +96,7 @@ export function PendingPhraseList({ phrases }: { phrases: HomePendingPhrase[] })
                 className="w-full"
                 fragment={phrase.fragment}
                 title={t(patternTitleKey(phrase.pattern))}
+                invite={t(patternInviteKey(phrase.pattern))}
                 pattern={phrase.pattern}
                 href={routes.rewrite(phrase.journalEntryId)}
                 linkLabel={t("home.pendingRewriteThis", { fragment: phrase.fragment })}

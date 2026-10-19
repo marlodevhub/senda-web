@@ -4,19 +4,21 @@ import { useEffect, useId, useRef, useState } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { Eye, Feather, RotateCcw } from "lucide-react";
-import { patternDot, SCENE_INK, sceneOf, type Scene } from "@/lib/pattern-style";
+import { patternDot, SCENE_INK, SCENE_VER, sceneOf, type Scene } from "@/lib/pattern-style";
 import { cn } from "@/lib/utils";
 
 const RADIUS = "rounded-[0.875rem]";
 
 /**
- * Una frase dura como tarjeta de clima (RN-ES-13). De frente, solo el paisaje de su tipo de frase y su título con
- * "Ver" debajo, en letras pastel; toda la tarjeta se toca para darla vuelta. Atrás, la frase que escribió y, con
- * `href`, el botón "Reescribir", que lleva a reescribir su registro (CU-04); "Ocultar" la regresa.
+ * Una frase dura como tarjeta de clima (RN-ES-13). De frente, solo el paisaje de su tipo de frase, su título arriba y
+ * "Ver" abajo a la izquierda, en letras pastel; toda la tarjeta se toca para darla vuelta. Atrás, la frase que
+ * escribió, una invitación a reescribirla según su tipo y, con `href`, el botón "Reescribir" (CU-04); tocar cualquier
+ * otra parte de atrás la regresa.
  */
 export function PhraseSceneCard({
   fragment,
   title,
+  invite,
   pattern,
   href,
   linkLabel,
@@ -25,6 +27,8 @@ export function PhraseSceneCard({
   fragment: string;
   /** El nombre corto del tipo de frase (`analysis.patternTitles`). */
   title: string;
+  /** La invitación a reescribirla, según su tipo de frase (`analysis.patternInvites`). */
+  invite: string;
   pattern: string;
   /** A dónde lleva "Reescribir" (la reescritura de su registro). */
   href?: string;
@@ -52,7 +56,7 @@ export function PhraseSceneCard({
     <div className={cn("[perspective:1200px]", className)}>
       <div
         className={cn(
-          "grid aspect-[9/5] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] [transform-style:preserve-3d] motion-reduce:transition-none",
+          "grid h-full grid-cols-1 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] [transform-style:preserve-3d] motion-reduce:transition-none",
           flipped && "[transform:rotateY(180deg)]",
         )}
       >
@@ -64,29 +68,28 @@ export function PhraseSceneCard({
           aria-label={t("home.pendingFlip", { title })}
           onClick={() => setFlipped(true)}
           className={cn(
-            "group relative isolate flex h-full flex-col items-start overflow-hidden p-3 text-left shadow-card transition-[box-shadow,filter] [grid-area:1/1] [backface-visibility:hidden] hover:shadow-bloom hover:brightness-[1.03] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+            "group relative isolate flex aspect-[3/2] h-full w-full min-w-0 flex-col items-start justify-between overflow-hidden p-3 text-left shadow-card transition-[box-shadow,filter] [grid-area:1/1] [backface-visibility:hidden] hover:shadow-bloom hover:brightness-[1.03] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
             RADIUS,
             SCENE_INK[scene],
           )}
         >
           <SceneArt scene={scene} />
-          {/* Una sombra suave arriba a la izquierda, para que las letras pastel se lean en los cielos claros (≥ 4,5:1). */}
-          <span
-            aria-hidden
-            className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_80%_70%_at_top_left,rgba(0,0,0,0.42),rgba(0,0,0,0.3)_45%,transparent_100%)]"
-          />
           <span className="max-w-full truncate pr-8 font-heading text-[1.1875rem] leading-tight font-bold">{title}</span>
-          <span className="mt-1 inline-flex items-center gap-1 text-sm font-semibold underline-offset-4 group-hover:underline">
+          <span className={cn("inline-flex items-center gap-1 text-sm font-semibold underline-offset-4 group-hover:underline", SCENE_VER[scene])}>
             <Eye className="size-4" aria-hidden />
             {t("home.pendingFlipShort")}
           </span>
         </button>
 
-        {/* Atrás: la frase que escribió, "Ocultar" y "Reescribir". */}
+        {/*
+          Atrás: la frase, la invitación y "Reescribir". Tocar cualquier parte (menos "Reescribir") la regresa; con
+          teclado, el botón de la esquina hace lo mismo.
+        */}
         <div
           inert={!flipped}
+          onClick={() => setFlipped(false)}
           className={cn(
-            "flex h-full flex-col justify-between gap-2 overflow-hidden bg-card p-3 shadow-card [grid-area:1/1] [backface-visibility:hidden] [transform:rotateY(180deg)]",
+            "flex h-full w-full min-w-0 cursor-pointer flex-col justify-between gap-1.5 bg-card p-3 shadow-card [grid-area:1/1] [backface-visibility:hidden] [transform:rotateY(180deg)]",
             RADIUS,
           )}
         >
@@ -94,12 +97,16 @@ export function PhraseSceneCard({
             <span aria-hidden className={cn("mt-[0.45rem] size-2 shrink-0 rounded-full", patternDot(pattern))} />
             <span className="line-clamp-2 before:content-['“'] after:content-['”']">{fragment}</span>
           </p>
+          <p className="text-sm leading-snug text-muted-foreground">{invite}</p>
           <div className="flex items-center justify-between gap-2">
             <button
               ref={backButton}
               type="button"
               aria-label={t("home.pendingFlipBackLabel", { title })}
-              onClick={() => setFlipped(false)}
+              onClick={(event) => {
+                event.stopPropagation();
+                setFlipped(false);
+              }}
               title={t("home.pendingFlipBack")}
               className="flex size-8 shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
             >
@@ -109,6 +116,7 @@ export function PhraseSceneCard({
               <Link
                 href={href}
                 aria-label={linkLabel}
+                onClick={(event) => event.stopPropagation()}
                 className="inline-flex h-8 min-w-0 items-center gap-1.5 rounded-full bg-[image:var(--grad-hero)] px-3.5 text-sm font-semibold text-white shadow-bloom transition-transform active:scale-[0.97] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
               >
                 <Feather className="size-4" aria-hidden />
@@ -129,7 +137,7 @@ function SceneArt({ scene }: { scene: Scene }) {
     <svg
       aria-hidden
       focusable="false"
-      viewBox="0 0 320 160"
+      viewBox="0 -54 320 214"
       preserveAspectRatio="xMaxYMax slice"
       className="pointer-events-none absolute inset-0 -z-20 size-full"
     >
@@ -156,7 +164,7 @@ function Sky({ id, stops, x2, y2 }: { id: string; stops: Stop[]; x2?: number; y2
       <defs>
         <Linear id={`${id}-sky`} stops={stops} x2={x2} y2={y2} />
       </defs>
-      <rect width="320" height="160" fill={`url(#${id}-sky)`} />
+      <rect y="-54" width="320" height="214" fill={`url(#${id}-sky)`} />
     </>
   );
 }
@@ -215,9 +223,9 @@ function Windmill({ x, y, color }: { x: number; y: number; color: string }) {
 /** Lluvia en diagonal, como en las tarjetas de lluvia y tormenta. */
 function Rain({ opacity }: { opacity: number }) {
   const drops: [number, number][] = [];
-  for (let row = 0; row < 7; row++) {
+  for (let row = -2; row < 7; row++) {
     for (let col = 0; col < 14; col++) {
-      drops.push([col * 25 + ((row * 11) % 25) + 4, row * 24 + ((col * 7) % 12) - 6]);
+      drops.push([col * 25 + (((row + 2) * 11) % 25) + 4, row * 24 + ((col * 7) % 12) - 6]);
     }
   }
   return (
@@ -431,8 +439,8 @@ const SCENES: Record<Scene, (id: string) => React.ReactNode> = {
       <path d="M0 84 C60 80 130 100 190 108 C240 114 290 104 320 92 L320 160 L0 160 Z" fill={`url(#${id}-land)`} />
       <Rain opacity={0.24} />
       <g fill="none" stroke="#fff" strokeLinejoin="round" strokeLinecap="round">
-        <path d="M231 0 L236 22 L223 46 L241 41 L226 84 M236 22 L249 38 L255 52" strokeWidth={5} opacity={0.2} />
-        <path d="M231 0 L236 22 L223 46 L241 41 L226 84 M236 22 L249 38 L255 52" strokeWidth={1.4} />
+        <path d="M226 -54 L231 0 L236 22 L223 46 L241 41 L226 84 M236 22 L249 38 L255 52" strokeWidth={5} opacity={0.2} />
+        <path d="M226 -54 L231 0 L236 22 L223 46 L241 41 L226 84 M236 22 L249 38 L255 52" strokeWidth={1.4} />
       </g>
     </>
   ),
