@@ -770,6 +770,40 @@
   100% { transform: none; }
 }
 
+/*
+ * Diario en móvil: las 5 caritas salen de la carita de la barra (a la derecha) como agua que se extiende, con el mismo
+ * vaivén de líquido que la invitación del check-in; las caras aparecen cuando el agua ya se asentó. El halo de la carita
+ * gris late suave para invitar a tocarla.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .mood-liquid-open {
+    transform-origin: 90% 50%;
+    animation: mood-liquid-open 0.7s both;
+  }
+  .mood-liquid-open [role="radio"] {
+    animation: liquid-text 0.7s ease-out both;
+  }
+  .mood-pick-halo {
+    animation: mood-pick-halo 1.8s ease-in-out infinite;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mood-liquid-open {
+    animation: mood-bubble-fade 0.2s reverse both;
+  }
+}
+@keyframes mood-liquid-open {
+  0% { transform: scale(0.14, 0.6); border-radius: 999px; opacity: 0.7; animation-timing-function: cubic-bezier(.2, .8, .3, 1); }
+  38% { transform: scale(1.05, 0.9); border-radius: 30px 22px 28px 20px; opacity: 1; animation-timing-function: ease-in-out; }
+  60% { transform: scale(0.98, 1.05); border-radius: 18px 26px 20px 24px; animation-timing-function: ease-in-out; }
+  80% { transform: scale(1.01, 0.99); }
+  100% { transform: none; }
+}
+@keyframes mood-pick-halo {
+  0%, 100% { opacity: 0.35; scale: 1; }
+  50% { opacity: 0.9; scale: 1.12; }
+}
+
 @keyframes liquid-text {
   0%, 50% { opacity: 0; transform: translateY(6px); }
   85%, 100% { opacity: 1; transform: none; }

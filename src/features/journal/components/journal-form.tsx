@@ -14,6 +14,7 @@ import { moodSolidStyle, type Mood } from "@/components/icons/mood-orb";
 import { ContextPicker } from "@/features/journal/components/context-picker";
 import { DraftStatusIcon } from "@/features/journal/components/draft-status";
 import { JournalModeToggle } from "@/features/journal/components/journal-mode-toggle";
+import { MobileMoodSelector } from "@/features/journal/components/mobile-mood-selector";
 import { JournalPrompt, JournalTextarea } from "@/components/forms/journal-sheet";
 import { MoodPicker } from "@/components/forms/mood-picker";
 import { createJournalEntry } from "@/features/journal/api/create-entry";
@@ -166,19 +167,30 @@ export function JournalForm({ checkinMood, chosenMood }: { checkinMood?: Mood | 
       />
 
       <section aria-labelledby="journal-mood" className="flex flex-col gap-2">
-        <h2 id="journal-mood" className="text-center text-base font-semibold text-foreground">
+        {/* En móvil la pregunta va dentro de la barra (MobileMoodSelector); el título queda para lectores de pantalla. */}
+        <h2 id="journal-mood" className="text-center text-base font-semibold text-foreground max-md:sr-only">
           {t("journal.moodLabel")}
         </h2>
         <Controller
           control={control}
           name="moodBefore"
           render={({ field }) => (
-            <MoodPicker
-              label={t("journal.moodLabel")}
-              value={field.value as Mood | undefined}
-              onChange={field.onChange}
-              className="bg-card/90"
-            />
+            <>
+              <MobileMoodSelector
+                label={t("journal.moodLabel")}
+                value={field.value as Mood | undefined}
+                onChange={field.onChange}
+                invalid={Boolean(errors.moodBefore)}
+              />
+              <div className="hidden md:block">
+                <MoodPicker
+                  label={t("journal.moodLabel")}
+                  value={field.value as Mood | undefined}
+                  onChange={field.onChange}
+                  className="bg-card/90"
+                />
+              </div>
+            </>
           )}
         />
         {errors.moodBefore && <FieldError message="journal.missingMood" />}

@@ -37,6 +37,15 @@ test.beforeEach(async ({ context }, testInfo) => {
   }
 });
 
+/**
+ * Diario en móvil: el estado de ánimo va en una barra; se toca para abrir las 5 caritas y se elige una (MobileMoodSelector).
+ */
+async function pickDiaryMood(page: Page, mood: string) {
+  await page.getByRole("button", { name: /^¿Cómo te sientes\?/ }).click();
+  await page.getByRole("radio", { name: mood, exact: true }).click();
+  await expect(page.getByRole("button", { name: `¿Cómo te sientes? ${mood}` })).toBeVisible();
+}
+
 /** El usuario de cada participante de prueba: su código sin guiones, en minúsculas (único y con formato válido). */
 function usernameFor(code: string): string {
   return code.toLowerCase().replaceAll("-", "");
@@ -121,8 +130,9 @@ test("ciclo diario completo: activar → diario → espejo → reescritura → f
   await page.getByRole("radio", { name: "Bien", exact: true }).click();
   await page.getByRole("link", { name: "Escribir" }).first().click();
   await expect(page).toHaveURL(/\/diario\?animo=4/);
-  await expect(page.getByRole("radio", { name: "Bien", exact: true })).toHaveAttribute("aria-checked", "true");
-  await page.getByRole("radio", { name: "Mal", exact: true }).click();
+  // Móvil: la barra trae la cara elegida en Inicio; al tocarla se abren las 5 para cambiarla.
+  await expect(page.getByRole("button", { name: "¿Cómo te sientes? Bien" })).toBeVisible();
+  await pickDiaryMood(page, "Mal");
   await page.getByRole("radio", { name: "Libre" }).click();
   await page.getByLabel("Escribe lo que quieras contar").fill(ENTRY);
   // Donde se escribe, sí (para editar).
@@ -457,7 +467,9 @@ test("Senda se puede instalar como app, con su nombre, su ícono y abriendo en I
 test("Volver sube un nivel: del Espejo al registro y del registro al Historial, sin dar vueltas", async ({ page }) => {
   await activateAndConsent(page);
   await page.goto("/diario");
-  await page.getByRole("radio", { name: "Mal", exact: true }).click();
+  // Sin elegir todavía, la carita va en gris y la barra invita a tocarla.
+  await expect(page.getByRole("button", { name: "¿Cómo te sientes? Toca para elegir cómo te sientes" })).toBeVisible();
+  await pickDiaryMood(page, "Mal");
   await page.getByRole("radio", { name: "Libre" }).click();
   await page.getByLabel("Escribe lo que quieras contar").fill(ENTRY);
   await page.getByRole("radio", { name: "Estudios" }).click();

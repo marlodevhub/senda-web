@@ -17,6 +17,8 @@ const ORB_COLORS: Record<Mood, { light: string; base: string }> = {
 };
 
 const INK = "#3b2a3a";
+/** La carita gris de "todavía no elegiste" (contraste de la cara ≥ 3:1 sobre ella). */
+const MUTED_COLORS = { light: "#ececf0", base: "#b8b8c2" };
 
 /** El degradado de cada ánimo, para lo que lo acompaña (la burbuja con su nombre al elegirlo). */
 export function moodGradient(mood: Mood): string {
@@ -119,15 +121,18 @@ export function MoodOrb({
   mood,
   animated = false,
   decorative = false,
+  muted = false,
   className,
 }: {
   mood: Mood;
   animated?: boolean;
   decorative?: boolean;
+  /** Gris, sin moverse: todavía no se eligió un estado de ánimo (el Diario en móvil). */
+  muted?: boolean;
   className?: string;
 }) {
   const t = useTranslations();
-  const { light, base } = ORB_COLORS[mood];
+  const { light, base } = muted ? MUTED_COLORS : ORB_COLORS[mood];
   return (
     <span
       role={decorative ? undefined : "img"}
@@ -135,13 +140,13 @@ export function MoodOrb({
       aria-hidden={decorative || undefined}
       className={cn(
         "inline-flex shrink-0 rounded-full shadow-[inset_0_-3px_6px_rgb(0_0_0/0.08),inset_0_3px_6px_rgb(255_255_255/0.5)]",
-        animated && `mood-anim-${mood}`,
+        animated && !muted && `mood-anim-${mood}`,
         className,
       )}
       style={{ background: `radial-gradient(circle at 32% 28%, ${light}, ${base} 72%)` }}
     >
       <svg viewBox="0 0 48 48" className="size-full" aria-hidden focusable="false">
-        <Eyes mood={mood} blink={animated} />
+        <Eyes mood={mood} blink={animated && !muted} />
         <Mouth mood={mood} />
       </svg>
     </span>
