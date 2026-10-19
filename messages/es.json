@@ -236,16 +236,16 @@
       "generic": "Aquí tu voz interna sonó autocrítica."
     },
     "patternTitles": {
-      "selfDisqualification": "Etiqueta dura",
-      "errorOvergeneralization": "Un «siempre»",
-      "selfPunishment": "Castigarte",
-      "worthByPerformance": "Valor por notas",
-      "socialComparison": "Compararte",
-      "needForApproval": "Qué dirán",
-      "shouldAndPerfectionism": "El «debería»",
-      "guiltForResting": "Culpa al parar",
+      "selfDisqualification": "Autodescalificación",
+      "errorOvergeneralization": "Sobregeneralización del error",
+      "selfPunishment": "Autocastigo",
+      "worthByPerformance": "Valía condicionada al rendimiento",
+      "socialComparison": "Comparación social",
+      "needForApproval": "Necesidad de aprobación",
+      "shouldAndPerfectionism": "«Debería» y perfeccionismo",
+      "guiltForResting": "Culpa por descansar",
       "allOrNothing": "Todo o nada",
-      "generic": "Voz exigente"
+      "generic": "Voz autocrítica"
     },
     "patternInvites": {
       "selfDisqualification": "¿Y si te describes sin ponerte una etiqueta?",

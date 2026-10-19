@@ -7,17 +7,18 @@ import { Eye, Feather, RotateCcw } from "lucide-react";
 import { patternDot, SCENE_INK, SCENE_VER, sceneOf, type Scene } from "@/lib/pattern-style";
 import { cn } from "@/lib/utils";
 
-const RADIUS = "rounded-[0.875rem]";
+const RADIUS = "rounded-[1.25rem]";
 
 /**
- * Una frase dura como tarjeta de clima (RN-ES-13). De frente, solo el paisaje de su tipo de frase, su título arriba y
- * "Ver" abajo a la izquierda, en letras pastel; toda la tarjeta se toca para darla vuelta. Atrás, la frase que
+ * Una frase dura como tarjeta de clima (RN-ES-13). De frente, solo el paisaje de su tipo de frase, su dimensión y su
+ * tipo arriba y "Ver" abajo a la izquierda, en letras pastel; toda la tarjeta se toca para darla vuelta. Atrás, la frase que
  * escribió, una invitación a reescribirla según su tipo y, con `href`, el botón "Reescribir" (CU-04); tocar cualquier
  * otra parte de atrás la regresa.
  */
 export function PhraseSceneCard({
   fragment,
   title,
+  dimension,
   invite,
   pattern,
   href,
@@ -25,8 +26,10 @@ export function PhraseSceneCard({
   className,
 }: {
   fragment: string;
-  /** El nombre corto del tipo de frase (`analysis.patternTitles`). */
+  /** El nombre del tipo de frase (`analysis.patternTitles`). */
   title: string;
+  /** El nombre de su dimensión ("Errores", "Valoración", "Exigencia"). */
+  dimension: string;
   /** La invitación a reescribirla, según su tipo de frase (`analysis.patternInvites`). */
   invite: string;
   pattern: string;
@@ -68,13 +71,16 @@ export function PhraseSceneCard({
           aria-label={t("home.pendingFlip", { title })}
           onClick={() => setFlipped(true)}
           className={cn(
-            "group relative isolate flex aspect-[3/2] h-full w-full min-w-0 flex-col items-start justify-between overflow-hidden p-3 text-left shadow-card transition-[box-shadow,filter] [grid-area:1/1] [backface-visibility:hidden] hover:shadow-bloom hover:brightness-[1.03] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+            "group relative isolate flex aspect-[2/1] h-full w-full min-w-0 flex-col items-start justify-between overflow-hidden p-3 text-left shadow-card transition-[box-shadow,filter] [grid-area:1/1] [backface-visibility:hidden] hover:shadow-bloom hover:brightness-[1.03] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
             RADIUS,
             SCENE_INK[scene],
           )}
         >
           <SceneArt scene={scene} />
-          <span className="max-w-full truncate pr-8 font-heading text-[1.1875rem] leading-tight font-bold">{title}</span>
+          <span className="flex flex-col gap-0.5 pr-10">
+            <span className="text-xs font-semibold tracking-wide uppercase">{dimension}</span>
+            <span className="line-clamp-3 font-heading text-[0.9375rem] leading-tight font-bold">{title}</span>
+          </span>
           <span className={cn("inline-flex items-center gap-1 text-sm font-semibold underline-offset-4 group-hover:underline", SCENE_VER[scene])}>
             <Eye className="size-4" aria-hidden />
             {t("home.pendingFlipShort")}
@@ -89,15 +95,15 @@ export function PhraseSceneCard({
           inert={!flipped}
           onClick={() => setFlipped(false)}
           className={cn(
-            "flex h-full w-full min-w-0 cursor-pointer flex-col justify-between gap-1.5 bg-card p-3 shadow-card [grid-area:1/1] [backface-visibility:hidden] [transform:rotateY(180deg)]",
+            "flex h-full w-full min-w-0 cursor-pointer flex-col justify-between gap-1 bg-card p-3 shadow-card [grid-area:1/1] [backface-visibility:hidden] [transform:rotateY(180deg)]",
             RADIUS,
           )}
         >
-          <p className="flex items-start gap-2 font-display text-[0.9375rem] leading-snug font-semibold text-foreground">
+          <p className="flex items-start gap-2 font-display text-sm leading-snug font-semibold text-foreground">
             <span aria-hidden className={cn("mt-[0.45rem] size-2 shrink-0 rounded-full", patternDot(pattern))} />
             <span className="line-clamp-2 before:content-['“'] after:content-['”']">{fragment}</span>
           </p>
-          <p className="text-sm leading-snug text-muted-foreground">{invite}</p>
+          <p className="line-clamp-2 text-sm leading-tight text-muted-foreground">{invite}</p>
           <div className="flex items-center justify-between gap-2">
             <button
               ref={backButton}

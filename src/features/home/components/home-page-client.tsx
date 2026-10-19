@@ -139,6 +139,7 @@ export function HomePageClient() {
                       <PendingPhraseCard
                         fragment={pending.fragment}
                         pattern={pending.pattern}
+                        dimension={pending.dimension}
                         journalEntryId={pending.journalEntryId}
                       />
                     ) : (

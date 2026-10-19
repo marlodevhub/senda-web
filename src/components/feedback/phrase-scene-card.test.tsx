@@ -9,7 +9,8 @@ describe("PhraseSceneCard", () => {
     renderWithProviders(
       <PhraseSceneCard
         fragment="Soy un inútil"
-        title="Etiqueta dura"
+        title="Autodescalificación"
+        dimension="Errores"
         invite="¿Y si te describes sin ponerte una etiqueta?"
         pattern="self_disqualification"
         href="/historial/7/reescribir"
@@ -17,16 +18,17 @@ describe("PhraseSceneCard", () => {
       />,
     );
 
-    // De frente: el título y "Ver"; la frase y "Reescribir" están atrás, fuera de alcance.
-    const front = screen.getByRole("button", { name: "Ver la frase: Etiqueta dura" });
-    expect(front).toHaveTextContent("Etiqueta dura");
+    // De frente: la dimensión, el tipo y "Ver"; la frase y "Reescribir" están atrás, fuera de alcance.
+    const front = screen.getByRole("button", { name: "Ver la frase: Autodescalificación" });
+    expect(front).toHaveTextContent("Errores");
+    expect(front).toHaveTextContent("Autodescalificación");
     expect(screen.getByText("Soy un inútil").closest("[inert]")).not.toBeNull();
     expect(screen.getByText("Reescribir").closest("[inert]")).not.toBeNull();
 
     await user.click(front);
 
     expect(screen.getByText("Soy un inútil").closest("[inert]")).toBeNull();
-    expect(screen.getByRole("button", { name: "Ocultar la frase: Etiqueta dura" })).toHaveFocus();
+    expect(screen.getByRole("button", { name: "Ocultar la frase: Autodescalificación" })).toHaveFocus();
     expect(screen.getByText("¿Y si te describes sin ponerte una etiqueta?")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Reescribir: “Soy un inútil”" })).toHaveAttribute(
       "href",
@@ -39,7 +41,13 @@ describe("PhraseSceneCard", () => {
   });
 
   it("sin href no tiene Reescribir", () => {
-    renderWithProviders(<PhraseSceneCard fragment="Soy un inútil" title="Etiqueta dura" invite="…" pattern="self_disqualification" />);
+    renderWithProviders(<PhraseSceneCard
+        fragment="Soy un inútil"
+        title="Autodescalificación"
+        dimension="Errores"
+        invite="…"
+        pattern="self_disqualification"
+      />);
     expect(screen.queryByRole("link")).not.toBeInTheDocument();
   });
 });
