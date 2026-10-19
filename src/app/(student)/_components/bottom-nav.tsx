@@ -25,7 +25,7 @@ export function BottomNav() {
     >
       <div
         data-sheen={glass.sheen}
-        className="glass pointer-events-auto flex w-full max-w-md justify-between rounded-full px-1.5 py-1.5"
+        className="glass pointer-events-auto flex w-full max-w-md justify-between gap-0.5 rounded-full p-1"
       >
         {STUDENT_NAV_ITEMS.map((item) => {
           const active = pathname.startsWith(item.href);
@@ -42,8 +42,9 @@ export function BottomNav() {
             >
               <span
                 className={cn(
-                  "flex flex-col items-center gap-0.5 rounded-full px-1 py-1.5 text-[0.6875rem] font-semibold transition-all duration-300",
-                  // Como en iOS: la activa en una cápsula gris neutra con el ícono y el texto en el acento del tema.
+                  "flex flex-col items-center gap-0.5 rounded-full px-1 py-2 text-[0.6875rem] font-semibold transition-all duration-300",
+                  // Como en iOS: la activa en una cápsula gris neutra con el ícono y el texto en el acento del tema, grande
+                  // y casi al borde de la barra (4 px de margen).
                   active ? "bg-(--tab-active-bg) text-(--tab-active-ink)" : "text-foreground",
                 )}
               >
