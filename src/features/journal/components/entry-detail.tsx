@@ -108,9 +108,12 @@ export function EntryDetail({ journalEntryId }: { journalEntryId: number }) {
             )}
           </div>
         </div>
-        {/* CU-03: volver a ver el Espejo completo (con "¿Esto refleja lo que escribiste?"). */}
+        {/*
+          CU-03: volver a ver el Espejo completo (con "¿Esto refleja lo que escribiste?"). En móvil va en su propia fila,
+          a todo el ancho: al lado apretaba el día y la fecha.
+        */}
         {!isRisk && (
-          <Button asChild variant="outline" className="rounded-full">
+          <Button asChild variant="outline" className="w-full rounded-full sm:w-auto">
             <Link href={routes.mirror(entry.id)}>
               <ScanFace className="size-4" aria-hidden />
               {t("history.seeMirror")}
