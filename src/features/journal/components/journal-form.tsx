@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { useForm, useWatch, Controller } from "react-hook-form";
+import { useForm, useWatch, Controller, type FieldErrors } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
@@ -28,6 +28,8 @@ import { routes } from "@/lib/routes";
 
 /** Un solo aviso aunque el efecto se repita (modo estricto de React en desarrollo). */
 const DRAFT_RECOVERED_TOAST_ID = "journal-draft-recovered";
+/** Uno solo a la vez: tocar Guardar varias veces no apila avisos. */
+const MISSING_FIELDS_TOAST_ID = "journal-missing-fields";
 
 /** El campo junto al que se muestra cada error de validación del servidor (CU-01); el resto va en un toast. */
 function fieldForError(code: string, mode: JournalFormValues["mode"]): keyof JournalFormValues | null {
@@ -131,8 +133,27 @@ export function JournalForm({ checkinMood, chosenMood }: { checkinMood?: Mood | 
     }
   }
 
+  /**
+   * RN-DI-03/RN-DI-05: al tocar Guardar sin el estado de ánimo o sin la categoría, además del aviso junto a cada campo,
+   * un toast dice qué falta (un solo toast, aunque falten las dos cosas).
+   */
+  function onInvalid(fieldErrors: FieldErrors<JournalFormValues>) {
+    const missingMood = Boolean(fieldErrors.moodBefore);
+    const missingContext = Boolean(fieldErrors.context);
+    if (!missingMood && !missingContext) {
+      return;
+    }
+    const key =
+      missingMood && missingContext
+        ? "journal.missingMoodAndContext"
+        : missingMood
+          ? "journal.missingMood"
+          : "journal.missingContext";
+    toast.warning(t(key), { id: MISSING_FIELDS_TOAST_ID });
+  }
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5" noValidate>
+    <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="flex flex-col gap-5" noValidate>
       <EmotionDefs />
       <Controller
         control={control}
