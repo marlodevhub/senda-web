@@ -22,21 +22,16 @@ export type EntryMirror = {
   confirmation: "YES" | "PARTLY" | "NO" | null;
 };
 
+/** Un intento de reescribir el registro completo (CU-04); `moodAfter` es la carita que le puso la IA. */
 export type EntryRewrite = {
   id: number;
-  /**
-   * Null: un intento de reescribir el registro completo (desde oct 2026; `moodAfter` lo puso la IA). Con id: una
-   * reescritura anterior, por frase, que agrupa sus versiones.
-   */
-  findingId: number | null;
   dimension: Dimension | null;
   pattern: string | null;
   result: "SOFTENED" | "ALMOST" | "STILL_HARD" | "PENDING" | "RISK" | null;
   moodAfter: number | null;
   attemptNumber: number;
   inJar: boolean;
-  /** La frase original y el texto de esta versión (solo en el detalle, para su dueño). */
-  originalPhrase: string;
+  /** El texto de este intento (solo en el detalle, para su dueño). */
   text: string;
 };
 

@@ -37,26 +37,22 @@ const ENTRY: JournalEntryDetail = {
   rewrites: [
     {
       id: 3,
-      findingId: 5,
       dimension: "D1",
       pattern: "self_disqualification",
       result: "RISK",
       moodAfter: null,
       attemptNumber: 1,
       inJar: false,
-      originalPhrase: "Soy un inútil",
       text: "Me cuesta, pero sigo",
     },
     {
       id: 4,
-      findingId: 5,
       dimension: "D1",
       pattern: "self_disqualification",
       result: "SOFTENED",
       moodAfter: 4,
       attemptNumber: 2,
       inJar: true,
-      originalPhrase: "Soy un inútil",
       text: "Me equivoqué y puedo aprender de esto",
     },
   ],
@@ -76,14 +72,13 @@ describe("EntryDetail", () => {
     expect(screen.queryByText(/riesgo/i)).not.toBeInTheDocument();
   });
 
-  it("muestra cada versión con su texto bajo la frase original (RN-HI-03)", async () => {
+  it("muestra cada intento con su texto y si está en el frasco (RN-HI-03)", async () => {
     vi.spyOn(globalThis, "fetch").mockImplementation(async () => new Response(JSON.stringify(ENTRY), { status: 200 }));
     renderWithProviders(<EntryDetail journalEntryId={22} />);
 
     expect(await screen.findByText("Me cuesta, pero sigo")).toBeInTheDocument();
     expect(screen.getByText("Me equivoqué y puedo aprender de esto")).toBeInTheDocument();
     expect(screen.getByText("Intento 2")).toBeInTheDocument();
-    expect(screen.getByText("Se suavizó")).toBeInTheDocument();
     expect(screen.getByText("Guardada en el frasco")).toBeInTheDocument();
   });
 
@@ -98,8 +93,8 @@ describe("EntryDetail", () => {
     const rewritten: JournalEntryDetail = {
       ...ENTRY,
       rewrites: [
-        { ...ENTRY.rewrites[1], id: 7, findingId: null, attemptNumber: 1, moodAfter: 2, inJar: false, text: "Primer intento" },
-        { ...ENTRY.rewrites[1], id: 8, findingId: null, attemptNumber: 2, moodAfter: 5, text: "Segundo intento" },
+        { ...ENTRY.rewrites[1], id: 7, attemptNumber: 1, moodAfter: 2, inJar: false, text: "Primer intento" },
+        { ...ENTRY.rewrites[1], id: 8, attemptNumber: 2, moodAfter: 5, text: "Segundo intento" },
       ],
     };
     vi.spyOn(globalThis, "fetch").mockImplementation(

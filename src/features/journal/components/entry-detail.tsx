@@ -33,15 +33,6 @@ import { cn } from "@/lib/utils";
 import { HighlightedText } from "@/components/feedback/highlighted-text";
 import { JOURNAL_CONTEXT_LABEL_KEY } from "@/types/journal-context";
 
-const RESULT_STYLE: Record<string, { key: string; tone: string }> = {
-  SOFTENED: { key: "history.resultSoftened", tone: "bg-sprout-tint text-sprout-ink" },
-  ALMOST: { key: "history.resultAlmost", tone: "bg-root-tint text-root-ink" },
-  STILL_HARD: { key: "history.resultStillHard", tone: "bg-flow-tint text-flow-ink" },
-  PENDING: { key: "history.resultPending", tone: "bg-muted text-muted-foreground" },
-  // RN-ES-11: si la reescritura tuvo una señal de cuidado no se compara ni se nombra; solo se dice que se guardó.
-  RISK: { key: "history.resultSaved", tone: "bg-muted text-muted-foreground" },
-};
-
 const FIELD_TEXT: Record<EntryAnalysisField, keyof Pick<JournalEntryDetail, "q1" | "q2" | "q3" | "freeText">> = {
   Q1: "q1",
   Q2: "q2",
@@ -79,9 +70,7 @@ export function EntryDetail({ journalEntryId }: { journalEntryId: number }) {
   const isRisk = entry.status === "RISK";
   const findings = entry.status === "COMPLETED" && !isRisk ? (entry.mirror?.findings ?? []) : [];
   // CU-04: el registro se reescribe completo; queda reescrito cuando un intento llegó a verde (la IA le puso 4 o 5).
-  const entryAttempts = entry.rewrites
-    .filter((rewrite) => rewrite.findingId === null)
-    .sort((a, b) => a.attemptNumber - b.attemptNumber);
+  const entryAttempts = [...entry.rewrites].sort((a, b) => a.attemptNumber - b.attemptNumber);
   // Con reescrituras, se puede reescribir nuevamente (el campo empieza en blanco).
   const canRewrite = !isRisk && entry.status === "COMPLETED" && findings.length > 0;
   const context = entry.context ? CONTEXT_ICONS[entry.context] : null;
@@ -164,16 +153,8 @@ export function EntryDetail({ journalEntryId }: { journalEntryId: number }) {
               <h2 id="entry-rewrites" className="font-heading text-lg font-bold text-foreground">
                 {t("history.rewritesTitle")}
               </h2>
-              {/* La reescritura del registro: el progreso de caritas (que puso la IA) y el último intento. */}
-              {entryAttempts.length > 0 && <EntryRewriteProgress attempts={entryAttempts} />}
-              {/* Reescrituras anteriores, por frase. */}
-              <ul className="flex flex-col gap-3">
-                {groupByFinding(entry.rewrites.filter((rewrite) => rewrite.findingId !== null)).map((versions) => (
-                  <li key={versions[0].findingId}>
-                    <RewriteGroup versions={versions} />
-                  </li>
-                ))}
-              </ul>
+              {/* La reescritura del registro: el progreso de caritas (que puso la IA) y cada intento. */}
+              <EntryRewriteProgress attempts={entryAttempts} />
             </section>
           )}
         </div>
@@ -221,16 +202,6 @@ export function EntryDetail({ journalEntryId }: { journalEntryId: number }) {
   );
 }
 
-/** Las versiones de cada frase, en orden de intento; las frases en el orden en que se reescribieron por primera vez. */
-function groupByFinding(rewrites: EntryRewrite[]): EntryRewrite[][] {
-  const groups = new Map<number, EntryRewrite[]>();
-  for (const rewrite of [...rewrites].sort((a, b) => a.id - b.id)) {
-    const findingId = rewrite.findingId ?? 0;
-    groups.set(findingId, [...(groups.get(findingId) ?? []), rewrite]);
-  }
-  return [...groups.values()].map((versions) => versions.sort((a, b) => a.attemptNumber - b.attemptNumber));
-}
-
 /** La reescritura del registro completo: la fila de caritas de cada intento y, debajo, cada intento con su texto. */
 function EntryRewriteProgress({ attempts }: { attempts: EntryRewrite[] }) {
   const t = useTranslations();
@@ -253,6 +224,12 @@ function EntryRewriteProgress({ attempts }: { attempts: EntryRewrite[] }) {
               <span className="font-semibold text-foreground">
                 {t("history.attemptLabel", { n: attempt.attemptNumber })}
               </span>
+              {/* RN-ES-11: un intento con señal de cuidado no se compara ni se nombra; solo se dice que se guardó. */}
+              {attempt.result === "RISK" && (
+                <span className="rounded-full bg-muted px-2.5 py-0.5 text-base font-semibold text-muted-foreground">
+                  {t("history.resultSaved")}
+                </span>
+              )}
               {attempt.inJar && (
                 <span className="flex items-center gap-1.5 text-base text-muted-foreground">
                   <Amphora className="size-4" aria-hidden />
@@ -265,55 +242,6 @@ function EntryRewriteProgress({ attempts }: { attempts: EntryRewrite[] }) {
             </p>
           </li>
         ))}
-      </ol>
-    </div>
-  );
-}
-
-/** Una frase reescrita: la original tachada y debajo cada versión, con su texto, resultado, ánimo y frasco. */
-function RewriteGroup({ versions }: { versions: EntryRewrite[] }) {
-  const t = useTranslations();
-  return (
-    <div className="flex flex-col gap-2 rounded-md bg-muted/50 p-4">
-      <p className="font-hand text-base text-muted-foreground line-through decoration-muted-foreground/50 before:content-['“'] after:content-['”'] md:text-lg">
-        {versions[0].originalPhrase}
-      </p>
-      <ol className="flex flex-col gap-2">
-        {versions.map((rewrite) => {
-          const result = RESULT_STYLE[rewrite.result ?? "PENDING"] ?? RESULT_STYLE.PENDING;
-          return (
-            <li key={rewrite.id} className="flex flex-col gap-2 rounded-md bg-card px-4 py-3 shadow-card">
-              <div className="flex flex-wrap items-center gap-2">
-                <Feather className="size-4 text-muted-foreground" aria-hidden />
-                <span className="font-semibold text-foreground">
-                  {t("history.attemptLabel", { n: rewrite.attemptNumber })}
-                </span>
-                <span className={cn("rounded-full px-2.5 py-0.5 text-base font-semibold", result.tone)}>
-                  {t(result.key)}
-                </span>
-              </div>
-              <p className="font-hand text-base leading-relaxed text-foreground before:content-['“'] after:content-['”'] md:text-lg">
-                {rewrite.text}
-              </p>
-              {(rewrite.moodAfter != null || rewrite.inJar) && (
-                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-base text-muted-foreground">
-                  {rewrite.moodAfter != null && (
-                    <span className="flex items-center gap-1.5">
-                      {t("history.moodAfterLabel")}
-                      <MoodOrb mood={rewrite.moodAfter as Mood} className="size-7" />
-                    </span>
-                  )}
-                  {rewrite.inJar && (
-                    <span className="flex items-center gap-1.5">
-                      <Amphora className="size-4" aria-hidden />
-                      {t("history.inJar")}
-                    </span>
-                  )}
-                </div>
-              )}
-            </li>
-          );
-        })}
       </ol>
     </div>
   );
