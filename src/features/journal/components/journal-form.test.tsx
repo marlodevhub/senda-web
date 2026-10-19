@@ -28,6 +28,27 @@ describe("JournalForm", () => {
     );
   });
 
+  it("si al guardar el análisis quedó pendiente, avisa que el registro quedó guardado y se leerá después (RS-ES-03)", async () => {
+    const warning = vi.spyOn(toast, "warning");
+    vi.spyOn(globalThis, "fetch").mockResolvedValue(
+      new Response(JSON.stringify({ journalEntryId: 7, analysisStatus: "PENDING", findings: [] }), { status: 201 }),
+    );
+    const user = userEvent.setup();
+    renderWithProviders(<JournalForm checkinMood={3} />);
+    await waitFor(() => expect(screen.getByRole("radio", { name: "Regular" })).toHaveAttribute("aria-checked", "true"));
+    await user.type(
+      screen.getByLabelText("Escribe lo que quieras contar"),
+      "Hoy tuve un examen difícil y me sentí muy cansado al terminar la tarde en la universidad",
+    );
+    await user.click(screen.getByRole("radio", { name: "Estudios" }));
+
+    await user.click(screen.getByRole("button", { name: "Guardar" }));
+
+    await waitFor(() =>
+      expect(warning).toHaveBeenCalledWith(expect.stringContaining("Tu registro quedó guardado."), expect.anything()),
+    );
+  });
+
   it("si solo falta la categoría, el toast lo dice", async () => {
     const warning = vi.spyOn(toast, "warning");
     const user = userEvent.setup();

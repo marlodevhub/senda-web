@@ -116,6 +116,10 @@ export function JournalForm({ checkinMood, chosenMood }: { checkinMood?: Mood | 
           : { FREE_TEXT: values.freeText ?? "" },
       );
       clearDraft();
+      // RS-ES-03: si el análisis no llegó al guardar, el registro igual quedó guardado y se reintenta solo.
+      if (created.analysisStatus === "PENDING") {
+        toast.warning(t("journal.analysisDelayed"), { duration: 8000 });
+      }
       router.push(routes.mirror(created.journalEntryId));
     } catch (error) {
       if (error instanceof BffError) {

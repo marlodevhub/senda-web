@@ -38,6 +38,8 @@ export type PhraseContext = {
   text: string;
   start: number;
   end: number;
+  /** El resto del registro (en modo guiado, las otras respuestas), para reescribir con todo el contexto. */
+  others?: { label: string; text: string; before: boolean }[];
   /** Qué frase es dentro del registro (1, 2, …) y cuántas tiene. */
   number: number;
   total: number;
@@ -129,6 +131,12 @@ export function RewriteForm({
         </h2>
         {context ? (
           <>
+            {/* El registro completo: las respuestas de antes, la de la frase (resaltada) y las de después. */}
+            {context.others
+              ?.filter((other) => other.before)
+              .map((other) => (
+                <ContextParagraph key={other.label} label={other.label} text={other.text} />
+              ))}
             <p className="font-hand text-base leading-snug font-medium text-(--prompt-red) md:text-lg">
               {context.label}
             </p>
@@ -146,6 +154,11 @@ export function RewriteForm({
                 ]}
               />
             </p>
+            {context.others
+              ?.filter((other) => !other.before)
+              .map((other) => (
+                <ContextParagraph key={other.label} label={other.label} text={other.text} />
+              ))}
           </>
         ) : (
           <p className="font-display text-lg leading-snug font-semibold text-foreground before:content-['“'] after:content-['”']">
@@ -333,6 +346,16 @@ function RewriteOutcomeView({
           {t("rewrite.goHome")}
         </Button>
       </div>
+    </div>
+  );
+}
+
+/** Una respuesta del registro que no tiene la frase: más tenue, para dar contexto sin quitarle foco a la frase. */
+function ContextParagraph({ label, text }: { label: string; text: string }) {
+  return (
+    <div className="flex flex-col gap-0.5 opacity-75">
+      <p className="font-hand text-base leading-snug font-medium text-(--prompt-red) md:text-lg">{label}</p>
+      <p className="font-hand text-lg leading-relaxed whitespace-pre-line text-foreground md:text-xl">{text}</p>
     </div>
   );
 }

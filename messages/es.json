@@ -123,6 +123,7 @@
     "wordCount": "{count, plural, one {# palabra} other {# palabras}}",
     "missingContext": "Elige con qué tiene que ver lo que escribiste.",
     "missingMoodAndContext": "Falta marcar cómo te sientes y elegir con qué tiene que ver lo que escribiste.",
+    "analysisDelayed": "Tu registro quedó guardado. Leerlo está tardando más de lo normal; lo intentaremos de nuevo solos y verás el espejo aquí cuando esté listo.",
     "draftSaved": "Borrador guardado",
     "draftSaving": "Guardando borrador…"
   },

@@ -170,6 +170,11 @@ test("ciclo diario completo: activar → diario → espejo → reescritura → f
   await expect(page.getByText("Lo regaste con")).toBeVisible();
   await expect(page.getByText(/Brote · 1 brote/)).toBeVisible();
   await expectAccessible(page);
+
+  // Después de guardar, el Diario vuelve limpio (sin el texto ni el borrador del registro ya guardado).
+  await page.getByRole("navigation", { name: "Navegación principal" }).getByRole("link", { name: "Diario" }).click();
+  await expect(page).toHaveURL(/\/diario/);
+  await expect(page.getByLabel("Escribe lo que quieras contar")).toHaveValue("");
 });
 
 test("la bienvenida es solo la primera vez y se repasa desde Ayuda e información", async ({ page }) => {
