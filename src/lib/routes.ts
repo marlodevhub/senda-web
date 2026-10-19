@@ -7,15 +7,6 @@ export const routes = {
   entry: (journalEntryId: number) => `/historial/${journalEntryId}`,
   /** CU-03: el Espejo de un registro. */
   mirror: (journalEntryId: number) => `/historial/${journalEntryId}/espejo`,
-  /** CU-04: reescribir una frase de un registro; sin `findingId`, la que propone el servidor (RN-RE-01). */
-  rewrite: (journalEntryId: number, findingId?: number) =>
-    findingId === undefined
-      ? `/historial/${journalEntryId}/reescribir`
-      : `/historial/${journalEntryId}/reescribir?frase=${findingId}`,
+  /** CU-04: reescribir un registro completo (todas sus frases duras en una sola reescritura). */
+  rewrite: (journalEntryId: number) => `/historial/${journalEntryId}/reescribir`,
 } as const;
-
-/** Lee el `?frase=` de la Reescritura: un id entero o nada. */
-export function parseFindingId(frase: string | undefined): number | undefined {
-  const id = frase === undefined ? Number.NaN : Number(frase);
-  return Number.isInteger(id) ? id : undefined;
-}

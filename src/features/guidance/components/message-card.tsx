@@ -15,7 +15,7 @@ function actionHref(message: Message): string | null {
     return "/diario";
   }
   if (message.actionType === "REWRITE" && message.actionJournalEntryId && message.actionFindingId) {
-    return routes.rewrite(message.actionJournalEntryId, message.actionFindingId);
+    return routes.rewrite(message.actionJournalEntryId);
   }
   if (message.actionType === "JAR_PHRASE") {
     return "/progreso/frasco";

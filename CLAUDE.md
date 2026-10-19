@@ -85,7 +85,7 @@ senda-web/
     │   ├── access/            api/{activate,login,recover}.ts · components/{activate-form,login-form,recover-form,consent-view,logout-button}.tsx · schemas/access.schema.ts (RN-AC-01, RN-AC-04)
     │   ├── journal/           journal-form, entry-list, entry-detail · use-create-entry, use-entries, use-check-in
     │   ├── analysis/          mirror-view, finding-card, care-message · use-mirror (consulta cada 2 s si PENDING)
-    │   ├── rewrite/           rewrite-form, rewrite-result · use-rewrite-guide, use-submit-rewrite
+    │   ├── rewrite/           rewrite-form (registro completo, progreso con caritas) · use-rewrite-guide, use-submit-rewrite
     │   ├── home/              today-card, pending-phrase · use-home
     │   ├── progress/          garden, charts/, jar-list, weekly-summary · use-garden, use-stats, use-jar
     │   ├── guidance/          message-inbox, message-card · use-messages
@@ -100,7 +100,7 @@ senda-web/
     │   ├── forms/                    mood-picker, gender-picker, journal-sheet (la hoja manuscrita), field-error
     │   ├── illustrations/            emotion-characters.tsx (personajes de emociones)
     │   ├── tour/                     tutorial guiado por las emociones (app-tour.tsx, tour-steps.ts)
-    │   └── feedback/                 care-message.tsx, finding-row.tsx (frase detectada con su acceso a reescribir)
+    │   └── feedback/                 care-message.tsx, finding-row.tsx (frase detectada, sin acceso propio: se reescribe el registro), mood-progress.tsx (una carita por intento)
     ├── hooks/                        hooks compartidos (use-media-query, use-mounted)
     ├── lib/
     │   ├── api/                      client.ts (fetch al BFF), errors.ts, query-keys.ts

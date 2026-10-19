@@ -24,8 +24,11 @@ export type EntryMirror = {
 
 export type EntryRewrite = {
   id: number;
-  /** La frase (hallazgo) que se reescribió: agrupa las versiones. */
-  findingId: number;
+  /**
+   * Null: un intento de reescribir el registro completo (desde oct 2026; `moodAfter` lo puso la IA). Con id: una
+   * reescritura anterior, por frase, que agrupa sus versiones.
+   */
+  findingId: number | null;
   dimension: Dimension | null;
   pattern: string | null;
   result: "SOFTENED" | "ALMOST" | "STILL_HARD" | "PENDING" | "RISK" | null;

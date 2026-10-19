@@ -1,8 +1,7 @@
 /** Claves de TanStack Query centralizadas (senda-web/CLAUDE.md sección 5). */
 export const queryKeys = {
   mirror: (journalEntryId: number) => ["mirror", journalEntryId] as const,
-  rewriteGuide: (journalEntryId: number, findingId?: number) =>
-    ["rewrite-guide", journalEntryId, findingId ?? null] as const,
+  rewriteGuide: (journalEntryId: number) => ["rewrite-guide", journalEntryId] as const,
   home: () => ["home"] as const,
   homeWeekEntries: (week: number) => ["home-week-entries", week] as const,
   profile: () => ["profile"] as const,

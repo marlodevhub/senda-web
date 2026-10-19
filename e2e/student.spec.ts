@@ -158,15 +158,18 @@ test("ciclo diario completo: activar → diario → espejo → reescritura → f
   await expectAccessible(page);
   await page.getByRole("radio", { name: "Sí", exact: true }).click();
 
-  // CU-04: reescribir la frase.
-  await page.getByRole("link", { name: "Reescribir esta frase" }).click();
-  await expect(page).toHaveURL(/\/historial\/\d+\/reescribir\?frase=\d+$/);
+  // CU-04: se reescribe el registro completo; la caja empieza con lo que escribió.
+  await page.getByRole("link", { name: "Reescribir este registro" }).click();
+  await expect(page).toHaveURL(/\/historial\/\d+\/reescribir$/);
+  await expect(page.getByLabel("Tu reescritura")).toHaveValue(/Soy un inútil/);
   await page
     .getByLabel("Tu reescritura")
     .fill("Hoy me costó, pero equivocarme no me hace inútil; puedo repasar con calma.");
   await page.getByRole("button", { name: "Listo" }).click();
+  // La IA pone la carita del intento (sin elegir el ánimo a mano) y, en verde, el registro queda reescrito.
   await expect(page.getByText("Se suavizó.", { exact: false })).toBeVisible();
-  await page.getByRole("radio", { name: "Bien", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Tu registro quedó reescrito" })).toBeVisible();
+  await expectAccessible(page);
   await page.getByRole("button", { name: "Guardar en mi frasco" }).click();
 
   // CU-09: la frase queda en el frasco.

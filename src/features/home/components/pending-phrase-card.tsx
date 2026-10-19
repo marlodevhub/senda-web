@@ -85,7 +85,7 @@ export function PendingPhraseList({ phrases }: { phrases: HomePendingPhrase[] })
                 fragment={phrase.fragment}
                 label={t(patternLabelKey(phrase.pattern))}
                 dimension={phrase.dimension}
-                href={routes.rewrite(phrase.journalEntryId, phrase.findingId)}
+                href={routes.rewrite(phrase.journalEntryId)}
                 linkLabel={t("home.pendingRewriteThis", { fragment: phrase.fragment })}
               />
             </li>

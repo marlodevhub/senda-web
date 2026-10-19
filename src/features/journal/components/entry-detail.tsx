@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { Amphora, Feather, ScanFace, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { MoodOrb, type Mood } from "@/components/icons/mood-orb";
+import { MoodProgress } from "@/components/feedback/mood-progress";
 import { CareMessage } from "@/components/feedback/care-message";
 import { FindingRow } from "@/components/feedback/finding-row";
 import {
@@ -77,7 +78,12 @@ export function EntryDetail({ journalEntryId }: { journalEntryId: number }) {
 
   const isRisk = entry.status === "RISK";
   const findings = entry.status === "COMPLETED" && !isRisk ? (entry.mirror?.findings ?? []) : [];
-  const canRewrite = !isRisk && entry.status === "COMPLETED" && entry.rewrites.length < 2;
+  // CU-04: el registro se reescribe completo; queda reescrito cuando un intento llegó a verde (la IA le puso 4 o 5).
+  const entryAttempts = entry.rewrites
+    .filter((rewrite) => rewrite.findingId === null)
+    .sort((a, b) => a.attemptNumber - b.attemptNumber);
+  const rewrittenToKind = (entryAttempts.at(-1)?.moodAfter ?? 0) >= 4;
+  const canRewrite = !isRisk && entry.status === "COMPLETED" && findings.length > 0 && !rewrittenToKind;
   const context = entry.context ? CONTEXT_ICONS[entry.context] : null;
   const findingsIn = (field: EntryAnalysisField) => findings.filter((finding) => finding.field === field);
 
@@ -168,12 +174,19 @@ export function EntryDetail({ journalEntryId }: { journalEntryId: number }) {
                         fragment={sliceFinding(finding, textsOf(entry))}
                         label={t(patternLabelKey(finding.pattern))}
                         dimension={finding.dimension}
-                        href={canRewrite ? routes.rewrite(entry.id, finding.findingId) : undefined}
-                        linkLabel={t("home.pendingRewriteThis", { fragment: sliceFinding(finding, textsOf(entry)) })}
                       />
                     </li>
                   ))}
                 </ul>
+              )}
+              {/* CU-04: todas las frases se reescriben juntas, en una reescritura del registro. */}
+              {canRewrite && (
+                <Button variant="hero" className="rounded-full sm:self-start" asChild>
+                  <Link href={routes.rewrite(entry.id)}>
+                    <Feather className="size-4" aria-hidden />
+                    {t("analysis.rewriteThisEntry")}
+                  </Link>
+                </Button>
               )}
             </section>
           )}
@@ -186,8 +199,11 @@ export function EntryDetail({ journalEntryId }: { journalEntryId: number }) {
               <h2 id="entry-rewrites" className="font-heading text-lg font-bold text-foreground">
                 {t("history.rewritesTitle")}
               </h2>
+              {/* La reescritura del registro: el progreso de caritas (que puso la IA) y el último intento. */}
+              {entryAttempts.length > 0 && <EntryRewriteProgress attempts={entryAttempts} />}
+              {/* Reescrituras anteriores, por frase. */}
               <ul className="flex flex-col gap-3">
-                {groupByFinding(entry.rewrites).map((versions) => (
+                {groupByFinding(entry.rewrites.filter((rewrite) => rewrite.findingId !== null)).map((versions) => (
                   <li key={versions[0].findingId}>
                     <RewriteGroup versions={versions} />
                   </li>
@@ -207,9 +223,36 @@ export function EntryDetail({ journalEntryId }: { journalEntryId: number }) {
 function groupByFinding(rewrites: EntryRewrite[]): EntryRewrite[][] {
   const groups = new Map<number, EntryRewrite[]>();
   for (const rewrite of [...rewrites].sort((a, b) => a.id - b.id)) {
-    groups.set(rewrite.findingId, [...(groups.get(rewrite.findingId) ?? []), rewrite]);
+    const findingId = rewrite.findingId ?? 0;
+    groups.set(findingId, [...(groups.get(findingId) ?? []), rewrite]);
   }
   return [...groups.values()].map((versions) => versions.sort((a, b) => a.attemptNumber - b.attemptNumber));
+}
+
+/** La reescritura del registro completo: la fila de caritas de cada intento y el texto del último. */
+function EntryRewriteProgress({ attempts }: { attempts: EntryRewrite[] }) {
+  const t = useTranslations();
+  const last = attempts[attempts.length - 1];
+  return (
+    <div className="flex flex-col gap-3 rounded-md bg-muted/50 p-4">
+      <p className="text-sm font-semibold text-muted-foreground">{t("rewrite.progressTitle")}</p>
+      <MoodProgress
+        attempts={attempts.map((attempt) => ({
+          attemptNumber: attempt.attemptNumber,
+          mood: (attempt.moodAfter ?? null) as Mood | null,
+        }))}
+      />
+      <p className="rounded-md bg-card px-4 py-3 font-hand text-base leading-relaxed whitespace-pre-line text-foreground shadow-card md:text-lg">
+        {last.text}
+      </p>
+      {last.inJar && (
+        <span className="flex items-center gap-1.5 text-base text-muted-foreground">
+          <Amphora className="size-4" aria-hidden />
+          {t("history.inJar")}
+        </span>
+      )}
+    </div>
+  );
 }
 
 /** Una frase reescrita: la original tachada y debajo cada versión, con su texto, resultado, ánimo y frasco. */

@@ -51,7 +51,7 @@ describe("StatsView", () => {
     renderWithProviders(<StatsView stats={BASE_STATS} />);
 
     expect(
-      screen.getByText("Cuando reescribas una frase y marques cómo te sientes después, verás aquí la diferencia."),
+      screen.getByText("Cuando reescribas un registro, verás aquí cómo te sentías al escribirlo y cómo sonó tu reescritura."),
     ).toBeInTheDocument();
   });
 });

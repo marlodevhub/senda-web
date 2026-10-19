@@ -141,7 +141,7 @@ export function HomePageClient() {
                     {pending ? (
                       <PendingPhraseCard
                         fragment={pending.fragment}
-                        onRewrite={() => router.push(routes.rewrite(pending.journalEntryId, pending.findingId))}
+                        onRewrite={() => router.push(routes.rewrite(pending.journalEntryId))}
                       />
                     ) : (
                       <NoPendingPhrase />

@@ -34,6 +34,7 @@ const CODE_TO_MESSAGE_KEY: Record<string, string> = {
   REWRITE_TOO_SHORT: "rewrite.tooShort",
   REWRITE_SAME_AS_ORIGINAL: "rewrite.same",
   MAX_ATTEMPTS_REACHED: "rewrite.maxAttemptsReached",
+  REWRITE_ALREADY_KIND: "rewrite.alreadyKind",
   REWRITE_NOT_ALLOWED: "rewrite.notAllowed",
   FINDING_NOT_FOUND: "rewrite.findingNotFound",
   INCORRECT_PASSWORD: "profile.incorrectPassword",

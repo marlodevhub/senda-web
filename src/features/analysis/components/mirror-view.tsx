@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { BookOpen, Home, Loader2, ScanFace } from "lucide-react";
+import { BookOpen, Feather, Home, Loader2, ScanFace } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useMirror, useConfirmMirror } from "@/features/analysis/api/use-mirror";
 import { FindingRow } from "@/components/feedback/finding-row";
@@ -92,7 +92,7 @@ export function MirrorView({ journalEntryId, fieldTexts }: { journalEntryId: num
     <div className="mx-auto flex w-full max-w-2xl flex-col gap-5">
       <MirrorHeader />
 
-      {/* La hoja del Espejo: lo que notó, cada frase con su acceso a reescribirla (CU-04) y el mensaje de la dimensión. */}
+      {/* La hoja del Espejo: lo que notó, el mensaje de la dimensión y el acceso a reescribir el registro (CU-04). */}
       <section
         aria-labelledby="mirror-recognition"
         className="flex flex-col gap-4 rounded-[2rem] bg-card p-5 shadow-card md:p-8"
@@ -110,8 +110,6 @@ export function MirrorView({ journalEntryId, fieldTexts }: { journalEntryId: num
                   fragment={fragment}
                   label={t(patternLabelKey(finding.pattern))}
                   dimension={finding.dimension}
-                  href={routes.rewrite(journalEntryId, finding.findingId)}
-                  linkLabel={`${t("analysis.rewriteThisPhrase")}: “${fragment}”`}
                 />
               </li>
             );
@@ -122,6 +120,13 @@ export function MirrorView({ journalEntryId, fieldTexts }: { journalEntryId: num
             {dimensionMessage}
           </p>
         )}
+        {/* CU-04: se reescribe el registro completo, con todas sus frases a la vez (no una por una). */}
+        <Button variant="hero" size="xl" className="rounded-full sm:self-start" asChild>
+          <Link href={routes.rewrite(journalEntryId)}>
+            <Feather className="size-4" aria-hidden />
+            {t("analysis.rewriteThisEntry")}
+          </Link>
+        </Button>
       </section>
 
       {/* RN-ES-14: opcional y se puede cambiar; no cambia el análisis. */}

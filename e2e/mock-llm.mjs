@@ -26,13 +26,11 @@ http
     req.on("data", (chunk) => (body += chunk));
     req.on("end", () => {
       const userContent = JSON.parse(body).messages?.[0]?.content ?? "";
-      if (userContent.startsWith("Frase original:")) {
-        reply(res, JSON.stringify({
-          risk: false,
-          patternStillAppears: false,
-          originalNegativeProbability: 0.9,
-          rewrittenNegativeProbability: 0.2,
-        }));
+      if (userContent.startsWith("Registro original:")) {
+        // CU-04: la reescritura del registro completo; la IA le pone la carita (1 a 5).
+        const rewritten = userContent.slice(userContent.lastIndexOf("Reescritura del estudiante:"));
+        const harsh = rewritten.includes("inútil") && !rewritten.includes("no me hace");
+        reply(res, JSON.stringify({ risk: false, mood: harsh ? 2 : 4 }));
         return;
       }
       const findings = userContent.includes("Soy un inútil")
