@@ -1340,3 +1340,58 @@ html:not(.show-scrollbars):has(.participant-no-select) *::-webkit-scrollbar {
 .student-shell:has(.garden-scene) .page-bottom-fade {
   display: none;
 }
+
+/*
+ * Escenas de las frases (RN-ES-13): una por tipo de frase, como tarjetas de clima. Iguales en todos los temas.
+ * `from`/`to`: el degradado de la tarjeta; `ink`: su texto (≥ 4,5:1 sobre los dos extremos); `mark`: el resaltador
+ * de la frase dentro del texto (con el color de texto normal, más oscuro en modo oscuro).
+ */
+:root {
+  --scene-night-from: #24527F;
+  --scene-night-to: #3A78AA;
+  --scene-night-ink: #FFFFFF;
+  --scene-night-mark: #CFE0F2;
+  --scene-sunny-from: #F6A623;
+  --scene-sunny-to: #FBC94E;
+  --scene-sunny-ink: #432600;
+  --scene-sunny-mark: #FDE3A6;
+  --scene-rain-from: #3CC29A;
+  --scene-rain-to: #62D3AC;
+  --scene-rain-ink: #06372A;
+  --scene-rain-mark: #C4EEDF;
+  --scene-thunder-from: #5A3EC8;
+  --scene-thunder-to: #7A5BE0;
+  --scene-thunder-ink: #FFFFFF;
+  --scene-thunder-mark: #DDD3FA;
+  --scene-snow-from: #78C3F0;
+  --scene-snow-to: #B9E3FA;
+  --scene-snow-ink: #0A3756;
+  --scene-snow-mark: #D3EEFC;
+  --scene-sunset-from: #FF9466;
+  --scene-sunset-to: #FFB487;
+  --scene-sunset-ink: #4E1A04;
+  --scene-sunset-mark: #FFD9C6;
+  --scene-haze-from: #CBBF9F;
+  --scene-haze-to: #E4DCC4;
+  --scene-haze-ink: #463D22;
+  --scene-haze-mark: #ECE5D2;
+  --scene-cloudy-from: #4C535C;
+  --scene-cloudy-to: #666D77;
+  --scene-cloudy-ink: #FFFFFF;
+  --scene-cloudy-mark: #DCDFE4;
+  --scene-aurora-from: #6FCFD9;
+  --scene-aurora-to: #A3B2EE;
+  --scene-aurora-ink: #0B2E44;
+  --scene-aurora-mark: #D2E4F7;
+}
+.dark {
+  --scene-night-mark: #1F3E5E;
+  --scene-sunny-mark: #5E4410;
+  --scene-rain-mark: #1B4F40;
+  --scene-thunder-mark: #3E2F78;
+  --scene-snow-mark: #1D4A66;
+  --scene-sunset-mark: #6A3420;
+  --scene-haze-mark: #4D4632;
+  --scene-cloudy-mark: #3A3F46;
+  --scene-aurora-mark: #24485A;
+}

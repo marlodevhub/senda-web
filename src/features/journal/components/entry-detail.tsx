@@ -23,7 +23,7 @@ import {
 import { useEntryDetail, useDeleteEntry } from "@/features/journal/api/use-entries";
 import type { EntryAnalysisField, EntryRewrite, JournalEntryDetail } from "@/features/journal/api/get-entry-detail";
 import { CONTEXT_ICONS } from "@/features/journal/context-icons";
-import { DIMENSION_TINT } from "@/lib/dimension-style";
+import { patternMark } from "@/lib/pattern-style";
 import { sliceFinding, type FieldTexts } from "@/lib/findings";
 import { patternLabelKey } from "@/lib/pattern-labels";
 import { routes } from "@/lib/routes";
@@ -136,7 +136,7 @@ export function EntryDetail({ journalEntryId }: { journalEntryId: number }) {
                       key: finding.findingId,
                       start: finding.start,
                       end: finding.end,
-                      className: DIMENSION_TINT[finding.dimension],
+                      className: patternMark(finding.pattern),
                       badge: findings.indexOf(finding) + 1,
                     }))}
                   />
@@ -177,7 +177,7 @@ export function EntryDetail({ journalEntryId }: { journalEntryId: number }) {
                         number={index + 1}
                         fragment={sliceFinding(finding, textsOf(entry))}
                         label={t(patternLabelKey(finding.pattern))}
-                        dimension={finding.dimension}
+                        pattern={finding.pattern}
                       />
                     </li>
                   ))}

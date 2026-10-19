@@ -20,19 +20,18 @@ import type { SubmitRewriteResult } from "@/features/rewrite/api/submit-rewrite"
 import { rewriteFormSchema, type RewriteFormValues } from "@/features/rewrite/schemas/rewrite.schema";
 import { BffError } from "@/lib/api/client";
 import { errorMessageKey } from "@/lib/api/error-messages";
-import { DIMENSION_CARD, DIMENSION_DOT, DIMENSION_TINT } from "@/lib/dimension-style";
+import { patternDot, patternMark } from "@/lib/pattern-style";
 import { patternLabelKey } from "@/lib/pattern-labels";
 import { routes } from "@/lib/routes";
 import { BackLink } from "@/components/layout/back-link";
 import { cn } from "@/lib/utils";
-import type { Dimension } from "@/types/dimension";
 
 /** El registro tal como lo escribió (en guiado, sus 3 respuestas) con sus frases duras, para reescribirlo completo. */
 export type EntryContext = {
   paragraphs: {
     label: string;
     text: string;
-    ranges: { key: number; start: number; end: number; dimension: Dimension; badge: number }[];
+    ranges: { key: number; start: number; end: number; pattern: string; badge: number }[];
   }[];
   /** El texto con el que empieza la reescritura (las respuestas, una por párrafo). */
   originalText: string;
@@ -154,7 +153,7 @@ function RewriteSheet({
       {/* El registro completo, con todas sus frases duras resaltadas en el tono de su dimensión. */}
       <section
         aria-labelledby="rewrite-entry"
-        className={cn("flex flex-col gap-3 rounded-[1.75rem] px-5 py-4", DIMENSION_CARD[guide.dimension])}
+        className="flex flex-col gap-3 rounded-[1.75rem] bg-card px-5 py-4 shadow-card"
       >
         <h2 id="rewrite-entry" className="text-sm font-bold tracking-wide text-muted-foreground uppercase">
           {t("rewrite.entryLabel")}
@@ -174,7 +173,7 @@ function RewriteSheet({
                   start: range.start,
                   end: range.end,
                   badge: range.badge,
-                  className: cn("font-semibold", DIMENSION_TINT[range.dimension]),
+                  className: cn("font-semibold", patternMark(range.pattern)),
                 }))}
               />
             </p>
@@ -184,7 +183,7 @@ function RewriteSheet({
         <ul className="mt-2 flex flex-col gap-1.5 border-t border-foreground/10 pt-4">
           {guide.phrases.map((phrase, index) => (
             <li key={phrase.findingId} className="flex items-start gap-2 text-base leading-snug text-muted-foreground">
-              <span aria-hidden className={cn("mt-[0.45rem] size-2 shrink-0 rounded-full", DIMENSION_DOT[phrase.dimension])} />
+              <span aria-hidden className={cn("mt-[0.45rem] size-2 shrink-0 rounded-full", patternDot(phrase.pattern))} />
               <span>
                 <span className="font-semibold tabular-nums">{index + 1}.</span> {t(patternLabelKey(phrase.pattern))}
               </span>

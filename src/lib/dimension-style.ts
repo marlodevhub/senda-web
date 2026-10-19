@@ -20,27 +20,3 @@ export const DIMENSION_COLOR: Record<Dimension, string> = {
   D2: "var(--dim2)",
   D3: "var(--dim3)",
 };
-
-/** Punto de color junto al tipo de frase. */
-export const DIMENSION_DOT: Record<Dimension, string> = {
-  D1: "bg-dim1",
-  D2: "bg-dim2",
-  D3: "bg-dim3",
-};
-
-/**
- * Fondo de la tarjeta de una frase detectada (Espejo, detalle del registro, Inicio, Reescritura): el tono suave de su
- * dimensión, para distinguir de un vistazo Errores, Valoración y Exigencia. Los registros van en el color del tema.
- */
-export const DIMENSION_CARD: Record<Dimension, string> = {
-  D1: "bg-dim1-tint",
-  D2: "bg-dim2-tint",
-  D3: "bg-dim3-tint",
-};
-
-/** Resaltador: la frase dentro del texto, con el color saturado de su dimensión (como un marcador). */
-export const DIMENSION_TINT: Record<Dimension, string> = {
-  D1: "bg-dim1-mark text-foreground",
-  D2: "bg-dim2-mark text-foreground",
-  D3: "bg-dim3-mark text-foreground",
-};

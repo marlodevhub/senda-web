@@ -41,7 +41,7 @@ export function RewriteWithContext({ journalEntryId }: { journalEntryId: number 
               key: finding.findingId,
               start: finding.start,
               end: finding.end,
-              dimension: finding.dimension,
+              pattern: finding.pattern,
               badge: findings.indexOf(finding) + 1,
             })),
         },

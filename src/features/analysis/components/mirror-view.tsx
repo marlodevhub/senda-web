@@ -119,7 +119,7 @@ export function MirrorView({ journalEntryId, fieldTexts }: { journalEntryId: num
                   number={index + 1}
                   fragment={fragment}
                   label={t(patternLabelKey(finding.pattern))}
-                  dimension={finding.dimension}
+                  pattern={finding.pattern}
                 />
               </li>
             );

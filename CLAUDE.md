@@ -100,7 +100,7 @@ senda-web/
     │   ├── forms/                    mood-picker, gender-picker, journal-sheet (la hoja manuscrita), field-error
     │   ├── illustrations/            emotion-characters.tsx (personajes de emociones)
     │   ├── tour/                     tutorial guiado por las emociones (app-tour.tsx, tour-steps.ts)
-    │   └── feedback/                 care-message.tsx, finding-row.tsx (frase detectada, sin acceso propio: se reescribe el registro), mood-progress.tsx (una carita por intento)
+    │   └── feedback/                 care-message.tsx, finding-row.tsx (frase detectada, sin acceso propio: se reescribe el registro), mood-progress.tsx (una carita por intento), phrase-scene-card.tsx (frase como tarjeta de clima de su tipo; paleta en lib/pattern-style.ts y `--scene-*` de globals.css, también para resaltar en el texto)
     ├── hooks/                        hooks compartidos (use-media-query, use-mounted)
     ├── lib/
     │   ├── api/                      client.ts (fetch al BFF), errors.ts, query-keys.ts
